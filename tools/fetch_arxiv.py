@@ -65,8 +65,8 @@ def download(url: str, dest: Path) -> bool:
 
 def load_indexes(only: str | None) -> dict[str, list[dict]]:
     out = {}
-    for p in sorted(INDEX_DIR.glob("D*.json")):
-        d = p.stem.split("_")[0]  # D3 或 D3_xxx → D3
+    for p in sorted(INDEX_DIR.glob("*.json")):
+        d = p.stem.split("_")[0]  # D3 或 D3_xxx → D3；P1 → P1
         if only and d != only:
             continue
         with p.open(encoding="utf-8") as f:
