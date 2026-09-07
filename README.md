@@ -87,8 +87,8 @@ superconductivity/
 - [x] 2026-09-08 **P2 启动稿** `theory/derivations/P2_vertex_sign_criterion.md`：从 Mishra 数据反推顶角修正的同位素标度 δ_D/δ_H ≈ 0.66–0.72 ≈ M^{-1/2}；顶角效应 160→200 GPa 增强 3×；LaH10 顶角路径基本关闭
 - [x] 2026-09-08 reviewer 核验 P1 v0.6 §4.1 + P2 v0：无致命；s_λ 更正（0.95→1.27）、交叉项加误差棒（四点同号为主证据）、160 GPa 论证改绝对量、数据集身份（Figshare = 2510.25902）→ P2 v0.1
 - [x] 2026-09-08 求解器第二阶段（DOS + 顶角钩子，40 测试）；常 DOS 路径与 EPW 标定一致到 1–2 K；DOS 路径 α 移动对但 Tc 差 6–8 K
-- [ ] 求解器 `fix_mu="conserve"`：首版参考态用错（常数 DOS 而非真实 N̄(ε)），超调 10×；已指出修正，implementer 重做中
-- [ ] P2：读 cond-mat/9806012 原文核对 P_pol/P_ex 公式 → 数值积分复现 P̄_H ≈ −0.095
+- [x] 2026-09-08 求解器 `fix_mu="conserve"` 三次迭代：参考态修正后非谐 Tc 与 EPW fbw 差 <1 K，谐波差 5–7 K；全带表因求积混叠需 n_eps≥1600（400 s/次）。**定稿：DOS 路径用于 α 差分，不再深挖绝对 Tc**
+- [ ] P2 数值：一阶顶角函数 P(Q, ω_q; N(ε)) 数值积分（implementer 在跑）
 - [ ] 用 Mishra 的 H3S.dos 标定求解器 DOS 实现；扫 DOS×顶角交叉项
 - [ ] 各方向 README 填入现状摘要（D1–D4 优先，D5–D7 降级为参考）
 - [ ] 补核 16 条无 arXiv ID 的元数据（多为 Nature/PRL 正式版，无预印本）
