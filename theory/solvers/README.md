@@ -1,14 +1,17 @@
-# theory/solvers — 各向同性 Eliashberg 求解器 v0
+# theory/solvers — 各向同性 Eliashberg 求解器
 
 对照 `SPEC.md`。目的：为 `theory/derivations/P1_*` 与后续 P2 提供数值验证器，不是生产代码。
 
-本 v0 覆盖 SPEC 的必备功能 1–5 与全部要求测试；功能 6（能量依赖 DOS）、7（模型顶角核钩子）
-在代码里只留了占位/接口位置，未实现（见文末「未实现的 v0 范围外功能」）。
+v0 覆盖 SPEC 的必备功能 1–5 与全部要求测试。第二阶段在此基础上实现了功能 6
+（能量依赖 DOS，见「能量依赖 DOS」一节）与功能 7（模型顶角核钩子，见「顶角核钩子」
+一节），两者默认关闭（`dos=DOS.constant()`、`vertex=None`），不影响 v0 的既有行为
+（`dos=DOS.constant()` 时 `tc()` 直接分派到与 v0 完全相同的代码路径，逐位相同）。
 
 ## 快速上手
 
 ```python
 from eliashberg_iso import Spectrum, Solver
+import numpy as np
 
 sp = Spectrum.einstein(lam=2.0, w0=100.0)          # 或 Spectrum.from_table(w, a2F)
 solver = Solver(sp, mu_star=0.13, w_cut=5 * sp.omega_log())
@@ -19,9 +22,22 @@ alpha, diag = solver.isotope_coefficient(
     {"full": sp}, which="all", mu_star_fixed=False
 )
 s_lam = solver.log_sensitivity("lambda")
+
+# 第二阶段：能量依赖 DOS + 顶角核钩子（默认关闭，不影响以上行为）
+from eliashberg_iso import DOS
+
+dos = DOS.log_vhs(delta=50.0, a=0.3, W=1000.0, cut=5.0)   # 或 DOS.step / DOS.from_table
+solver_dos = Solver(sp, mu_star=0.13, w_cut=5 * sp.omega_log(), dos=dos)
+Tc_dos = solver_dos.tc()
+
+solver_vertex = Solver(sp, mu_star=0.13, w_cut=5 * sp.omega_log(),
+                        vertex=lambda n, m, wn, wm, T: 0.1 * np.ones_like(wn))
+Tc_vertex = solver_vertex.tc()
 ```
 
-运行测试：`pytest theory/solvers/tests -q`。运行示例：`python theory/solvers/examples/p1_first_pass.py`。
+运行测试：`pytest theory/solvers/tests -q`。运行示例：
+`python theory/solvers/examples/p1_first_pass.py`、
+`python theory/solvers/examples/dos_scan.py`。
 
 ## 单位约定
 
@@ -103,7 +119,154 @@ Z_n Δ_n = πT Σ_{m=0}^{N-1} { [λ(n-m)+λ(n+m+1)] - 2μ*(ω_c)θ(ω_c-ω_m) }�
 - **同位素系数差分步长 `eps=0.02`**：默认值，测试里核对过 `eps ∈ {0.01, 0.02, 0.04}`
   下 α 的稳定性（波动 < 0.005）。
 
-## 已知局限
+## 能量依赖 DOS（SPEC 必备功能 6，第二阶段）
+
+### 方程
+
+Mitrović–Carbotte（Can. J. Phys. 61, 758, 1983）/ Pickett（PRB 21, 3897, 1980）把常
+DOS 版本的 `(Z_n, Δ_n)` 两方程推广成 `(Z_n, φ_n, χ_n)` 三方程，多出的 `χ_n` 是能量
+重整化（费米面偏移）；每一项都多一层对准粒子能量 `ε` 的积分，权重是归一化 DOS
+`N̄(ε) ≡ N(ε)/N(0)`：
+
+```
+Z_n ω_n = ω_n + πT Σ_m λ(n−m) · ⟨ ω_m Z_m / D_m(ε) ⟩_ε
+φ_n     = πT Σ_m [λ(n−m) − μ*θ(ω_c−|ω_m|)] · ⟨ φ_m / D_m(ε) ⟩_ε
+χ_n     = −πT Σ_m λ(n−m) · ⟨ (ε + χ_m) / D_m(ε) ⟩_ε
+D_m(ε)  = (ω_m Z_m)² + (ε + χ_m)² + φ_m²
+⟨f(ε)⟩_ε ≡ ∫ dε N̄(ε) f(ε)
+```
+
+`n, m` 现在取全体整数（不再折叠到 `0..N-1`）——原因见下面「为什么放弃折叠技巧」。
+代码里线性化用 `φ→0` 求 Tc：`Z_n、χ_n` 在 `φ=0` 时自成一组自洽方程（不依赖 `φ`），
+先把 `(Z,χ)` 解出来，再对 `φ` 组装线性本征值问题、二分 T 使最大本征值=1，与 v0
+的策略一致。
+
+### 归一化：`N̄(0) ≡ 1` 是定义的直接推论，不是可选项
+
+`N̄(ε)≡N(ε)/N(0)` 在 `ε=0` 处的值按定义就是 `N(0)/N(0)=1`——这不依赖任何模型细节。
+`DOS.step()`、`DOS.log_vhs()` 的构造参数（`delta`、`ratio`、`a`、`W` 等）描述的是一个
+直观的"形状函数" `g(ε)`（例如"远离特征处基线为 1，特征处变成 ratio，或对数发散"），
+真正返回的 `N̄(ε)` 是 `g(ε)/g(0)`，强制满足这个恒等式。`DOS.from_table()` 相反：
+**不做自动归一化**（表格数据的 `ε=0` 点应该就是调用方计算/测量 `N(0)` 的定义点；
+插值到 `ε=0` 处显著偏离 1 时发警告但不改数据，避免掩盖真实的数据准备错误）。
+
+这个归一化选择有一个不直观但数学上无法避免的推论（见「已知局限」第 1 条）：
+**vHs 精确钉在费米面（`delta=0`）时，归一化会把"费米面处 DOS 增强"这个效应本身
+抵消掉**，表现为 Tc 被压低而不是升高；要在这个模型里复现"vHs 靠近费米面提升 Tc"
+的定性图像，`delta` 需要是一个有限但非零的偏移。
+
+### 为什么放弃正频折叠技巧，改用全（未折叠）Matsubara 轴
+
+v0 常 DOS 路径用 `Δ_{-1-n}=Δ_n, Z_{-1-n}=Z_n` 把求和折到 `m=0..N-1`。energy-dependent
+版本里 `χ_n` 在 `n→-1-n` 下是**奇**的（`χ_{-1-n}=-χ_n`，`Z、φ` 仍是偶的）——直接推导
+一个同时处理"偶+奇"三个量的折叠形式，实现出错的风险明显更高。第二阶段的实现选择
+用全体 `n=-n_pos..n_pos-1`（`_full_axis_grid`）直接求解，牺牲 2–8 倍计算量换取更低的
+实现风险，这是一个记录在案的工程取舍，不是"更优"的算法选择。
+
+### 能量积分：tan 代换 + 定点 Gauss-Legendre
+
+`ω_jZ_j, φ_j, χ_j` 是 `ε`-无关的前置系数，三个能量积分可以约化成两个基础积分：
+
+```
+G_j = (1/π) ∫ dε N̄(ε) / D_j(ε)
+H_j = (1/π) ∫ dε N̄(ε) · ε / D_j(ε)
+⟨ω_jZ_j⟩ = ω_jZ_j·G_j，⟨φ_j⟩ = φ_j·G_j，⟨ε+χ_j⟩ = χ_j·G_j + H_j
+```
+
+`D_j(ε)` 是关于 `ε` 的洛伦兹型分母，直接数值积分在极点附近条件差；代码用
+`ε+χ_j = a_j·tanθ`（`a_j=sqrt((ω_jZ_j)²+φ_j²)`）代换掉这个洛伦兹峰，把积分变成
+`θ∈(θ_min,θ_max)` 上的光滑函数，再用固定节点数 `dos_n_eps`（默认 400，
+`functools.lru_cache` 缓存 `np.polynomial.legendre.leggauss` 的节点/权重）做
+Gauss-Legendre 求积。
+
+### 积分范围
+
+`e_max = dos_energy_cutoff_ratio * w_cut`（默认 `dos_energy_cutoff_ratio=20`，对应
+SPEC 要求的"至少 ±20·ω_c"）；`DOS.from_table()` 时会额外取 `max(e_max, |表格边界|)`
+确保积分窗口不小于表格覆盖范围。表格边界外按端点值常数延拓（`np.interp` 默认行为，
+即"flat extrapolation"）。
+
+**这个默认截止本身带来一个 ~0.6% 的系统偏差**（实测：把 `dos_energy_cutoff_ratio`
+从 20 提到 200，一个精确常数 `N̄≡1` 的 step-DOS 相对 v0 解析解的偏差从 0.6% 降到
+0.06%，与截止量级成反比，是有限积分范围的截断误差，不是求积节点不够——加密
+`dos_n_eps` 从 100 到 800 结果完全不变）。SPEC 给出的"至少 ±20·ω_c"本身就意味着
+接受这个量级的截断误差；需要更高精度时可以传入更大的 `dos_energy_cutoff_ratio`
+（计算量基本不变，`(Z,χ)` 自洽和本征值求解不随 `e_max` 增大而变慢，只有积分节点
+覆盖的 `ε` 范围变大）。
+
+### 已知局限
+
+1. **`delta=0`（vHs 精确钉在费米面）不会提升 Tc，反而压低 Tc**：这是上面"归一化"
+   一节讨论的数学推论，在 `a∈{0.05,...,1.0}, cut∈{1,5,20}` 的扫描下稳健成立
+   （无反例）。同位素系数在 `delta=0` 处确实如预期明显低于 0.5（甚至比常数 DOS
+   基线更低），符合 Tsuei (1990) 的定性结论；但"Tc 升高"这部分要用一个有限偏移
+   （例如 `delta≈omega_log` 量级）才能复现，见
+   `tests/test_eliashberg_iso.py` 里两个对照测试的 docstring 和
+   `examples/dos_scan.py` 的完整扫描表（delta/omega_log 从 -3 到 3，可以看到
+   Tc 在 delta=0 处有一个明显的凹陷，两侧各有一个高于常数 DOS 基线的峰）。
+2. **`DOS.log_vhs` 在 `|delta|` 相对 `W` 过大时归一化本身会失效**：`g(0)=1+a·ln(W/|delta|)`
+   在 `|delta|≫W` 时趋于很小甚至变负。`g(0)<=0` 会被构造函数拒绝抛 `ValueError`；
+   `g(0)` 很小但仍为正时不会报错，但 `g(ε)/g(0)` 会把普通量级的 `g(ε)` 放大成远超 1
+   的 `N̄`，且 `g(ε)` 在积分窗口内可能变号（被 `floor` 钳位），这种"陡峭+钳位"的
+   `N̄(ε)` 实测会让 `(Z,χ)` 自洽迭代发散振荡、`dos_max_iter=500` 次不收敛（触发
+   `UserWarning`）。**这不是"delta 越大越接近常数 DOS 因而无所谓"的直觉**——验证
+   "delta 远大于 w_cut 回到常数 DOS"这类极限时，必须同时把 `W` 取得远大于扫描到的
+   `delta`（`nbar()` 会在 `g(0)<0.1` 时发 `UserWarning` 提示这个风险）。
+3. **`fix_mu` 只实现了 `"none"`**（忽略化学势的电子数守恒修正，把它当作能量依赖
+   DOS 的额外自由参数直接忽略，这是 v0.1 范围内的已知简化）。`fix_mu="linear"`
+   （电子数守恒的线性化修正，Mitrović-Carbotte 原文和 Pickett 1980 都讨论过这个
+   修正项）**未实现**；`Solver.__post_init__` 会在 `fix_mu` 取其它值时直接
+   `raise NotImplementedError`，不会静默给出不完整的结果。
+4. **计算成本**：能量依赖 DOS 路径每次 `tc()` 调用里，每个二分迭代点都要做一次
+   `(Z,χ)` 自洽（最多 `dos_max_iter=500` 次线性混合迭代，`dos_mixing=0.3`）+ 一次
+   `M×M`（`M=2*n_pos`）本征值求解，比常数 DOS 路径慢一到两个数量级（典型运行时间
+   0.4–1.3 秒/次 `tc()`，取决于 `dos_n_eps`、`T` 附近所需的 `n_pos`）。
+
+## 顶角核钩子（SPEC 必备功能 7，第二阶段，P2 用）
+
+### 接口
+
+`Solver(..., vertex=None, vertex_in_Z=True)`，`vertex` 是可调用对象：
+
+```python
+def vertex(n_idx, m_idx, omega_n, omega_m, T) -> np.ndarray:
+    ...  # 返回与 lambda(n-m) 同形状的乘子矩阵 V
+```
+
+应用方式：`λ(n−m) → λ(n−m)·[1+V(n,m,ω_n,ω_m,T)]`，**只作用在 φ 方程里的电声子部分**
+（`μ*θ(ω_c−|ω_m|)` 这一项永远不受 `vertex` 影响——顶角修正描述的是电声子顶点本身
+的修正，不应该混进 Coulomb 赝势）。`vertex_in_Z`（默认 `True`）控制 Z 方程是否也用
+同一个 `(1+V)` 修正后的核；设为 `False` 时 Z 方程保持 v0 原始的 `λ(n−m)`，只有 φ
+方程受 `vertex` 影响。
+
+### 实现细节（已知简化）
+
+v0 的折叠核矩阵同时用到 `λ(n−m)`（"直接项"）和 `λ(n+m+1)`（正频折叠产生的"镜像项"，
+见「折叠技巧推导」一节）。第二阶段的实现对两项用**同一个** `V[n,m]`
+（`(1+V)` 同时乘到 `lam_diff` 和 `lam_summ` 上）——这是一个记录在案的简化，没有
+区分正、负 Matsubara 频率结构对顶角修正的不同贡献；更精细的处理留给 P2 按需展开。
+能量依赖 DOS 路径（全轴、未折叠）里则是对同一个 `V[n,m]` 直接应用到全轴的
+`λ(n−m)` 矩阵上，没有折叠项的歧义。
+
+### 占位顶角核：`vertex_pietronero_grimaldi_isotropic`
+
+```python
+vertex_pietronero_grimaldi_isotropic(m_ratio, Qc)
+```
+
+实现 `V = m_ratio · P_V(Qc)`，`P_V(Qc) = 1 − 2·Qc`（`Qc→0` 时为正、`Qc→1` 时为负，
+`m_ratio = ω_log/E_F` 的量级前置因子），返回值与 `(n,m,ω_n,ω_m)` 无关（常数矩阵）。
+**这是一个占位的、非文献推导的示意公式**——真实的 Pietronero-Grimaldi-Strässler
+顶角修正（各向同性极限）的解析形式留给 P2 完成，这里只是为了让顶角钩子接口有一个
+可以立即跑起来、形状/符号定性合理的示例，不能当作物理结果引用。
+
+### 已知局限
+
+- 与能量依赖 DOS 一样，`vertex` 目前不支持依赖 `ε`（顶角修正只作用在 Matsubara
+  求和核上，不进入能量积分）；如果后续需要 `ε`-依赖的顶角修正，需要扩展
+  `_dos_energy_integrals` 的接口。
+
+## 已知局限（v0 核心功能 1–5）
 
 1. **`Spectrum.lorentzian` 不是解析谱**：用数值网格（默认 4001 点、`Simpson` 积分）
    构造并归一化，不像 `einstein`/`two_peak` 那样有闭式的 `λ(ν)`。网格分辨率不够时
@@ -126,11 +289,13 @@ Z_n Δ_n = πT Σ_{m=0}^{N-1} { [λ(n-m)+λ(n+m+1)] - 2μ*(ω_c)θ(ω_c-ω_m) }�
    —— 那条路径里 `w_cut` 与 `μ*` 是按 Tolmachev 关系耦合一起变的，其结果已经独立
    用 P1 式(3.2) 核对过（见「首轮结果」）。`log_sensitivity("w_cut")`/`("mu_star")`
    仅作独立扰动的诊断量，使用时请留意这一点，不要脱离这个限定条件去解读符号。
-5. **常 DOS 近似**：本 v0 全程假设 `N(ε)=N(0)`（SPEC 必备功能 6 的能量依赖 DOS 未实现，
-   只是接口占位）。
-6. **v0 未实现功能 6、7**：能量依赖 DOS（Mitrović–Carbotte/Pickett 推广）和模型顶角核
-   钩子（`λ(n-m) → λ(n-m)·[1+V(n,m;...)]`）都是 SPEC 里标注的"第二阶段"功能，v0 里
-   没有对应代码，需要时再实现。
+5. **常 DOS 是默认值，不是唯一选项**：`Solver` 默认 `dos=DOS.constant()`（`N(ε)=N(0)`），
+   与 v0 行为完全一致；能量依赖 DOS（SPEC 必备功能 6）已实现，见「能量依赖 DOS」
+   一节，需要时显式传入 `dos=...` 即可，不传则不受影响。
+6. **顶角核钩子默认关闭**：`vertex=None`，与 v0 行为完全一致；模型顶角核钩子
+   （SPEC 必备功能 7）已实现，见「顶角核钩子」一节。
+
+
 
 ## IsoME 交叉对照
 
@@ -244,9 +409,54 @@ McMillan 公式本身在强耦合端低估 `∂lnTc/∂lnλ`（这也是 Allen-D
 λ=2、3 时数值解明显更"敏感"（diff +0.14、+0.25，即数值解比 McMillan 认为的对 λ 更敏感）。
 这不是 SPEC 要求的测试项，只是诊断性记录，供后续 P2 参考。
 
-## 未实现的 v0 范围外功能
+## 第二阶段结果（examples/dos_scan.py 的输出）
 
-- SPEC 必备功能 6（能量依赖 DOS，Mitrović–Carbotte/Pickett 推广）：未实现。
-- SPEC 必备功能 7（模型顶角核钩子，`λ(n-m)→λ(n-m)·[1+V(n,m;...)]`）：未实现。
+以下为 `python theory/solvers/examples/dos_scan.py` 的原样输出（2026-09-08 跑的）。
+模型：Einstein 谱 λ=1.84, ω_log=93 meV, μ*=0.16, w_cut=5ω_log=465 meV，
+`DOS.log_vhs(a=0.3, W=1000 meV, cut=5 meV)`，扫 `delta/omega_log ∈ [-3, 3]`。
 
-两者按团队指示列为 v0 范围外，留给需要 P2 数值支持时再开发。
+```
+======================================================================
+DOS scan: log-type van Hove singularity vs distance from E_F
+Einstein spectrum lambda=1.84, omega_log=93.0000 meV, mu_star=0.16, w_cut=465.0000 meV
+DOS.log_vhs(a=0.3, W=1000.0 meV, cut=5.0 meV)
+Baseline (constant DOS): Tc=151.9680 K, alpha=0.4748
+======================================================================
+delta/wlog | delta(meV) |     Tc(K) |  Tc/Tc0 |   alpha
+----------------------------------------------------------------------
+     -3.00 |    -279.00 |  162.7051 |  1.0707 |  0.4818
+     -2.50 |    -232.50 |  162.9381 |  1.0722 |  0.4940
+     -2.00 |    -186.00 |  162.7385 |  1.0709 |  0.4796
+     -1.50 |    -139.50 |  161.7536 |  1.0644 |  0.4660
+     -1.00 |     -93.00 |  158.9358 |  1.0459 |  0.4599
+     -0.50 |     -46.50 |  151.8382 |  0.9991 |  0.4463
+      0.00 |       0.00 |  126.6142 |  0.8332 |  0.4323
+      0.50 |      46.50 |  151.8382 |  0.9991 |  0.4463
+      1.00 |      93.00 |  158.9358 |  1.0459 |  0.4599
+      1.50 |     139.50 |  161.7536 |  1.0644 |  0.4660
+      2.00 |     186.00 |  162.7385 |  1.0709 |  0.4796
+      2.50 |     232.50 |  162.9381 |  1.0722 |  0.4940
+      3.00 |     279.00 |  162.7051 |  1.0707 |  0.4818
+```
+
+### 如实分析：`delta=0` 处 Tc 有凹陷而不是尖峰
+
+这张表关于 `delta=0` 对称（模型只依赖 `|ε-δ|`，符合预期），但形状本身值得说明：
+`delta=0`（vHs 精确钉在费米面）处 Tc 明显**低于**常数 DOS 基线（`Tc/Tc0=0.833`），
+两侧各有一个高出基线约 7% 的峰（`|delta/wlog|≈2.5` 附近），然后随 `|delta|` 继续
+增大逐渐衰减回基线（第 (d) 类极限，见「能量依赖 DOS·已知局限」第 1 条的完整数学
+论证：`N̄(0)≡1` 的归一化在 `delta=0` 处把"费米面处 DOS 增强"这个效应本身抵消掉了，
+只留下"费米面之外全面走低"的效果）。同位素系数 `alpha` 在 `delta=0` 处达到扫描范围
+内的最小值（0.4323，明显低于 0.5 也明显低于常数 DOS 基线 0.4748），随 `|delta|`
+增大单调恢复向基线——这部分与 Tsuei (1990) "vHs 钉在/靠近费米面压制同位素效应"的
+定性结论一致，且是这张表里最稳健的定性结论（不依赖 Tc 升降的符号）。
+
+## 未实现/未覆盖的范围
+
+- **`fix_mu="linear"`**（能量依赖 DOS 路径的化学势-电子数守恒线性修正）：未实现，
+  见「能量依赖 DOS·已知局限」第 3 条；`fix_mu` 目前只接受 `"none"`。
+- **顶角核钩子对 `ε` 的依赖**：`vertex` 目前只作用在 Matsubara 求和核上，不进入
+  能量积分；见「顶角核钩子·已知局限」。
+- **`vertex_pietronero_grimaldi_isotropic` 的真实文献解析形式**：当前实现是占位
+  公式，留给 P2 按需替换为真正推导的 Pietronero-Grimaldi-Strässler 顶角修正。
+- SPEC 必备功能 1–7 均已实现；IsoME 交叉对照按「IsoME 交叉对照」一节所述跳过。

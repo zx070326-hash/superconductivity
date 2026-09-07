@@ -3,3 +3,5 @@ library/pdf/
 __pycache__/
 *.pyc
 .pytest_cache/
+theory/data/external/*
+!theory/data/external/MANIFEST.md

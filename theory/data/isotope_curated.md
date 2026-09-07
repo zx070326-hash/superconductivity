@@ -4,8 +4,8 @@
 
 | system | isotope pair | P_H / P_D (GPa) | Tc_H / Tc_D (K) | alpha_exp | alpha_theory (method, μ* convention) | source | note |
 |---|---|---|---|---|---|---|---|
-| H3S | H/D | >170 区间 | 203 / ~150 | **0.3**（作者：P>170 GPa 区间比较） | 0.35（Errea 2015 SSCHA + iso-ME，μ*=0.16 fixed）；谐波 0.45 | Drozdov 2015 p.3；Errea 2015 Table I | 两点比 203/150 给 0.44，作者不用两点比 |
-| LaH10 (fcc) | H/D | ~170 / ? | 250 / 168（正文）或 160（Ext.Data Fig.5） | **0.57**（作者，fcc 相） | 0.43（Errea 2020 SSCHA + aniso-ME，μ*=0.1 fixed，163/159 GPa）；AD 0.42；SCDFT 0.40 | Drozdov 2019 正文；Errea 2020 Ext.Data Table I | 文献中流传的 0.46–0.47 / 180 K **不在原文**；LaD10 压力与相待抽取 |
+| H3S | H/D | >170 区间 | 203 / ~150 | **0.3**（作者：P>170 GPa 区间比较） | 0.35（Errea 2015 SSCHA + iso-ME，μ*=0.16 fixed）；谐波 0.45。**Mishra 数据集四因子**（200 GPa 非谐 μ*=0.16）：fsr_adia 0.337 / fsr_na 0.252 / fbw_adia 0.343 / fbw_na 0.313；160 GPa fbw_na 0.377。Villa-Cortés 2022（μ* 逐点拟合）：α_el-ph 0.42 + α_el-el −0.09 = 0.33 @162 GPa（N(ε)）；0.26 @250 GPa | Drozdov 2015 p.3；Errea 2015 Table I；Mishra Figshare；Villa-Cortés p.8–9 | 两点比 203/150 给 0.44，作者不用两点比 |
+| LaH10 (fcc) | H/D | 150（H，XRD）/ **未标注**（D，结构**未 XRD**，"we can naturally suppose"） | 250 / 168（正文）或 160（Ext.Data Fig.5） | **0.57**（作者，H 最大 Tc 配 D 最大 Tc，非同压）；同压 150 GPa 配对（249 / ~152）≈ 0.71 | 0.43（Errea 2020 SSCHA + aniso-ME ab initio 库仑，163/159 GPa）；AD 0.42；SCDFT 0.40 | Drozdov 2019 正文 p.4、Ext.Data Fig.4b/5；Errea 2020 Ext.Data Table I | 文献中流传的 0.46 / 180 K **不在 Drozdov 2019（Nature 与 arXiv v1 均无）**，上游是 Errea 2020 p.4 "experimentally reported α of 0.46"（无引用）；LaD10 Ext.Data Fig.4b 读图：~164 K @139、~159 @145、~150 @152 GPa |
 | LaH10 (P4/nmm) | H/D | ? / 142 | 215 / 140 (LaD10.6) | **0.62**（作者） | — | Drozdov 2019 | 竞争相，化学计量 LaD10.6 |
 | YH6 | H/D | 166 / 172 | 224 / 170 | **0.40**（作者） | 谐波 iso-ME μ*(6Ry)=0.10–0.15：Tc 261–272；SSCHA：236–247；对上 Tc 与 α 需 μ*(6Ry)=0.19–0.22；SCDFT Tc=160，μ=0.187。**无 YD6 SSCHA** | Troyan 2021 p.5, p.7–8 | μ*(6 Ry) 约定问题见推导稿 §4.3 |
 | YH6 (Kong) | H/D | 237 / 170 | 227 / 170 | （作者未算；压差 67 GPa） | — | Kong 2021 p.4 | 不可用于 α |

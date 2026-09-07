@@ -22,8 +22,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from eliashberg_iso import (
     Spectrum,
     Solver,
+    DOS,
     mu_star_at_cutoff,
     mu_star_from_bare,
+    vertex_pietronero_grimaldi_isotropic,
     KB_MEV_PER_K,
 )
 
@@ -455,3 +457,221 @@ def test_lorentzian_spectrum_normalization_and_moments():
     # w_log、w_2 应在 w0 附近（宽度远小于中心频率时展宽只带来小修正）
     assert 50.0 < sp.omega_log() < 70.0
     assert 50.0 < sp.omega_2() < 75.0
+
+
+# ==========================================================================
+# 13. SPEC 必备功能 6：能量依赖 DOS（Mitrović–Carbotte/Pickett 推广）
+# ==========================================================================
+#
+# 本节统一用 Einstein 谱 lam=1.84, w0=93 meV, mu_star=0.16（与
+# examples/dos_scan.py 相同的参数组合，方便交叉核对），w_cut=5*omega_log。
+
+_DOS_LAM, _DOS_W0, _DOS_MU_STAR = 1.84, 93.0, 0.16
+
+
+def _dos_test_spectrum_and_solver():
+    sp = Spectrum.einstein(lam=_DOS_LAM, w0=_DOS_W0)
+    w_cut = W_CUT_RATIO * sp.omega_log()
+    solver = Solver(sp, mu_star=_DOS_MU_STAR, w_cut=w_cut)
+    return sp, w_cut, solver
+
+
+def test_dos_constant_matches_v0_bit_identical():
+    """(a) N̄≡1（DOS.constant()）必须与不传 dos 参数的 v0 路径逐位相同。
+
+    这不是"数值上很接近"：Solver.tc() 在 dos.is_constant 为真时直接分派到
+    _tc_constant_dos——与 v0 原始 tc() 是同一段代码，所以两者应该是同一个
+    浮点数（Tc 相对误差 < 1e-8 的要求在这里自动、严格地满足，甚至更强）。
+    """
+    sp, w_cut, solver_v0 = _dos_test_spectrum_and_solver()
+    solver_dos = Solver(sp, mu_star=_DOS_MU_STAR, w_cut=w_cut, dos=DOS.constant())
+    tc_v0 = solver_v0.tc()
+    tc_dos = solver_dos.tc()
+    assert tc_dos == pytest.approx(tc_v0, rel=1e-8)
+
+
+def test_dos_step_ratio_one_matches_constant_dos():
+    """(b) step 型 DOS 取 ratio=1（两侧台阶高度相同，等价于常数 DOS）应与
+    常数 DOS 的 Tc 一致。
+
+    注意：ratio=1 的 step 仍然走"能量依赖 DOS"的数值路径（tan 代换 +
+    Gauss-Legendre 能量积分 + (Z,χ) 自洽迭代），不会像 DOS.constant() 那样
+    被短路到 v0 的解析路径，所以不是逐位相同。实测这条数值路径本身相对
+    v0 解析结果有一个 ~0.6% 的系统偏差，来源是能量积分的**有限截止**
+    `dos_energy_cutoff_ratio`（默认 20，即 ±20*w_cut）——SPEC 要求"积分范围
+    至少 ±20*w_cut"，这就是这个最小推荐值本身带来的截断误差，不是 bug
+    （已核对：加密 Gauss-Legendre 节点数 dos_n_eps 从 100 到 800 结果完全不变，
+    说明误差不是求积节点不够，而是积分区间截断；把 cutoff_ratio 从 20 提到
+    200，误差从 ~0.6% 降到 ~0.06%，与截止成反比，符合"截断误差"的预期）。
+    见 README「能量依赖 DOS·已知局限」。
+    """
+    sp, w_cut, solver_const = _dos_test_spectrum_and_solver()
+    dos_flat = DOS.step(delta=0.0, ratio=1.0, width=1.0)
+    solver_flat = Solver(sp, mu_star=_DOS_MU_STAR, w_cut=w_cut, dos=dos_flat, dos_n_eps=200)
+    tc_const = solver_const.tc()
+    tc_flat = solver_flat.tc()
+    reldiff = abs(tc_flat - tc_const) / tc_const
+    assert reldiff < 0.01, f"reldiff={reldiff:.4%}，超过默认能量截止下的预期系统偏差量级"
+
+
+def test_dos_vhs_pinned_exactly_at_ef_suppresses_both_tc_and_isotope_effect():
+    """如实记录一个偏离 SPEC 测试(c)字面表述的发现：delta=0（vHs 峰值精确落在
+    费米面）时，数值结果是 **Tc 被压低**、同位素系数被压低，而不是 SPEC 测试(c)
+    字面写的"Tc 应更高"。
+
+    根本原因（不是求解器 bug，是 N̄(ε)≡N(ε)/N(0) 这个定义本身的数学推论）：
+    N̄(0)≡1 是定义的直接结果（比值在参考点必为1），而 DOS.log_vhs 的对数
+    形状函数 g(ε)=1+a·ln(W/max(|ε-δ|,cut)) 在 ε=δ 处取到（clip 意义下的）
+    最大值。当 δ=0 时，这个最大值恰好落在归一化的分母 g(0) 上，归一化后
+    N̄(ε)=g(ε)/g(0) 在 ε=0 处被摁成 1，而在其余所有 ε 处都 ≤ g(0)/g(0)=1
+    （因为 g(0) 已经是 g 的最大值）——也就是说"vHs 精确钉在费米面"这个参数
+    选择，在 N̄(0)≡1 的强制归一化下，数学上只能表现成"费米面之外全面走低"的
+    DOS，而不能表现成"费米面处 DOS 额外增强"（增强量在归一化时被定义本身
+    吸收掉了，无法再体现为 N̄>1）。这在 a∈{0.05,...,1.0}、cut∈{1,5,20} 的
+    扫描下是稳健成立的（Tc 全部低于常数 DOS，未发现任何反例）。
+
+    同位素系数确实如 SPEC 预期"明显低于 0.5"（这部分符合 Tsuei 1990 的定性
+    结论），且比常数 DOS 基线（~0.475）压得更低——见下面对 alpha 的断言。
+    """
+    sp, w_cut, solver_const = _dos_test_spectrum_and_solver()
+    tc_const = solver_const.tc()
+    alpha_const, _ = solver_const.isotope_coefficient(
+        {"full": sp}, which="all", mu_star_fixed=False
+    )
+
+    dos_vhs = DOS.log_vhs(delta=0.0, a=0.3, W=1000.0, cut=5.0)
+    solver_vhs = Solver(sp, mu_star=_DOS_MU_STAR, w_cut=w_cut, dos=dos_vhs, dos_n_eps=200)
+    tc_vhs = solver_vhs.tc()
+    alpha_vhs, _ = solver_vhs.isotope_coefficient({"full": sp}, which="all", mu_star_fixed=False)
+
+    assert tc_vhs < tc_const, "delta=0 时 Tc 应被压低（见 docstring 的数学论证），不是升高"
+    assert alpha_vhs < 0.45, f"alpha={alpha_vhs:.4f}，同位素效应压制幅度未达预期"
+    assert alpha_vhs < alpha_const, "vHs 钉在费米面应比常数 DOS 更压制同位素效应"
+
+
+def test_dos_vhs_offset_from_ef_matches_spec_test_c_qualitative_claim():
+    """(c) 用偏离费米面约一个声子能标（delta=omega_log）的 vHs 复现 SPEC 测试(c)
+    字面要求的两条：Tc 高于常数 DOS，且同位素系数明显低于 0.5。
+
+    选择 delta=omega_log 而非字面的 delta=0 的理由见上一个测试的 docstring：
+    delta=0 是 N̄(0)≡1 定义下的一个退化点（该点的归一化把"费米面处增强"这个
+    效应本身抵消掉了），"vHs 钉在/靠近费米面附近" 在这个模型里只有在 delta
+    与 0 有限但不为零的偏移时才能同时表现出 Tc 增强，物理上这对应"vHs 没有
+    精确落在费米面，但足够靠近"（真实材料里 vHs 的位置本来也只能靠掺杂调到
+    一个有限分辨率，不可能做到数学意义上的 delta 严格为 0）。用扫描核实过：
+    Tc 从 delta=0（明显更低）到约 delta≈45meV 附近穿越常数 DOS 值转为更高，
+    delta=omega_log=93meV 处 Tc 已经稳定高出常数 DOS 约 4.6%，同时 alpha 仍
+    明显低于 0.5（也低于常数 DOS 基线），两个要求同时满足。
+    """
+    sp, w_cut, solver_const = _dos_test_spectrum_and_solver()
+    tc_const = solver_const.tc()
+    alpha_const, _ = solver_const.isotope_coefficient(
+        {"full": sp}, which="all", mu_star_fixed=False
+    )
+
+    dos_vhs = DOS.log_vhs(delta=sp.omega_log(), a=0.3, W=1000.0, cut=5.0)
+    solver_vhs = Solver(sp, mu_star=_DOS_MU_STAR, w_cut=w_cut, dos=dos_vhs, dos_n_eps=200)
+    tc_vhs = solver_vhs.tc()
+    alpha_vhs, _ = solver_vhs.isotope_coefficient({"full": sp}, which="all", mu_star_fixed=False)
+
+    assert tc_vhs > tc_const, f"Tc_vhs={tc_vhs:.4f} 应高于 Tc_const={tc_const:.4f}"
+    assert alpha_vhs < 0.48, f"alpha={alpha_vhs:.4f}，未明显低于 0.5"
+    assert alpha_vhs < alpha_const, "vHs 靠近费米面应比常数 DOS 更压制同位素效应"
+
+
+def test_dos_log_vhs_large_delta_recovers_flat_dos():
+    """(d) delta 远大于 w_cut 时，log_vhs 应回到（数值路径意义下的）常数 DOS。
+
+    注意选取 W（背景能标）：必须让 W 显著大于扫描到的最大 delta，否则
+    归一化分母 g(0)=1+a·ln(W/delta) 会随 delta 增大而缩小甚至变负——这不是
+    "delta 越大越接近常数 DOS 因而无所谓 W"的直觉，而是 log_vhs 模型本身的
+    归一化在 |delta|≫W 时先失效（实测 delta=60*w_cut, W=1000meV 时 (Z,χ)
+    自洽迭代发散振荡，500 次不收敛；delta=100*w_cut 时归一化分母直接变负，
+    构造函数报错），见 DOS.log_vhs 文档与 README「已知局限」。这里固定用
+    W=20000 meV（远大于测试到的最大 delta=30*w_cut≈14 keV），确保只测试
+    "delta 远大于 w_cut" 这一个变量。
+
+    对照对象用同一条数值路径下的"精确常数 DOS"（DOS.step(ratio=1)，与
+    test_dos_step_ratio_one_matches_constant_dos 用的是同一个对象），而不是
+    v0 解析 Tc——这样可以把"能量积分有限截止"带来的系统偏差（见该测试的
+    docstring）从"N̄ 的形状是否真的收敛到 1"这个问题里剥离出去，得到一个
+    干净得多的收敛信号。
+    """
+    sp, w_cut, _ = _dos_test_spectrum_and_solver()
+    dos_flat = DOS.step(delta=0.0, ratio=1.0, width=1.0)
+    tc_flat = Solver(sp, mu_star=_DOS_MU_STAR, w_cut=w_cut, dos=dos_flat, dos_n_eps=200).tc()
+
+    reldiffs = []
+    for factor in (10.0, 30.0):
+        dos_far = DOS.log_vhs(delta=factor * w_cut, a=0.3, W=20000.0, cut=5.0)
+        solver_far = Solver(sp, mu_star=_DOS_MU_STAR, w_cut=w_cut, dos=dos_far, dos_n_eps=200)
+        tc_far = solver_far.tc()
+        reldiffs.append(abs(tc_far - tc_flat) / tc_flat)
+
+    assert reldiffs[0] < 0.001, f"delta=10*w_cut 时与常数 DOS 的偏差过大: {reldiffs[0]:.4%}"
+    assert reldiffs[1] < reldiffs[0], "delta 继续增大时应更接近常数 DOS（单调收敛）"
+
+
+# ==========================================================================
+# 14. SPEC 必备功能 7：模型顶角核钩子
+# ==========================================================================
+
+def test_vertex_none_vs_zero_vertex_matches_v0_bit_identical():
+    """V≡0（显式传入恒为零的 vertex 函数）必须与不传 vertex（v0 路径）逐位相同。
+
+    verify: (1+0)=1.0 在 IEEE754 下与不乘是同一个浮点数，_kernels 的
+    vertex 分支在 v≡0 时应该退化成与 v0 完全相同的核矩阵。
+    """
+    sp = Spectrum.einstein(lam=1.5, w0=80.0)
+    w_cut = W_CUT_RATIO * sp.omega_log()
+    solver_v0 = Solver(sp, mu_star=0.13, w_cut=w_cut)
+
+    def vertex_zero(n_idx, m_idx, omega_n, omega_m, T):
+        return np.zeros(np.broadcast(
+            np.asarray(n_idx), np.asarray(m_idx), np.asarray(omega_n), np.asarray(omega_m)
+        ).shape)
+
+    solver_v = Solver(sp, mu_star=0.13, w_cut=w_cut, vertex=vertex_zero)
+    assert solver_v.tc() == pytest.approx(solver_v0.tc(), rel=1e-12)
+
+
+def test_vertex_constant_matches_uniform_lambda_scaling():
+    """V≡常数 c（vertex_in_Z=True，mu*=0）应与直接把整个谱按 (1+c) 缩放的
+    v0 结果一致：两者都等价于把 lambda(n-m) 处处乘以 (1+c)，mu*=0 时
+    电声子部分是唯一进入方程的核，二者应严格相等（受 brentq xtol 限制）。
+    """
+    sp = Spectrum.einstein(lam=1.5, w0=80.0)
+    w_cut = W_CUT_RATIO * sp.omega_log()
+    c = 0.2
+
+    def vertex_const(n_idx, m_idx, omega_n, omega_m, T):
+        return np.full(np.broadcast(
+            np.asarray(n_idx), np.asarray(m_idx), np.asarray(omega_n), np.asarray(omega_m)
+        ).shape, c)
+
+    solver_v = Solver(sp, mu_star=0.0, w_cut=w_cut, vertex=vertex_const, vertex_in_Z=True)
+    tc_v = solver_v.tc()
+
+    sp_scaled = Spectrum.einstein(lam=1.5 * (1 + c), w0=80.0)
+    tc_scaled = Solver(sp_scaled, mu_star=0.0, w_cut=w_cut).tc()
+
+    assert tc_v == pytest.approx(tc_scaled, rel=1e-8)
+
+
+def test_vertex_pietronero_grimaldi_isotropic_placeholder_shape_and_sign():
+    """示例顶角核 vertex_pietronero_grimaldi_isotropic 是明确标注的占位实现
+    （非文献推导公式，真实物理形式留给 P2），这里只检验它的基本形状约定：
+    P_V(Qc)=1-2Qc 在 Qc→0 时为正、Qc→1 时为负，且返回数组的形状与广播后的
+    (n,m,omega_n,omega_m) 一致。
+    """
+    vertex_small_qc = vertex_pietronero_grimaldi_isotropic(m_ratio=0.05, Qc=0.1)
+    vertex_large_qc = vertex_pietronero_grimaldi_isotropic(m_ratio=0.05, Qc=0.9)
+    n_idx = np.array([[0, 1], [0, 1]])
+    m_idx = np.array([[0, 0], [1, 1]])
+    wn = np.array([[10.0, 30.0], [10.0, 30.0]])
+    wm = np.array([[10.0, 10.0], [30.0, 30.0]])
+    v_small = vertex_small_qc(n_idx, m_idx, wn, wm, T=100.0)
+    v_large = vertex_large_qc(n_idx, m_idx, wn, wm, T=100.0)
+    assert v_small.shape == n_idx.shape
+    assert np.all(v_small > 0)
+    assert np.all(v_large < 0)

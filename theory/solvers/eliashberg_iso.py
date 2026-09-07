@@ -322,6 +322,16 @@ class DOS:
                     f"log_vhs 在 ε=0 处的形状函数 g(0)={g0:.4g} <= 0（delta/a/W/cut 组合"
                     "导致归一化分母非正），请调整参数"
                 )
+            if g0 < 0.1:
+                warnings.warn(
+                    f"log_vhs 归一化分母 g(0)={g0:.4g} 接近 0（|delta| 相对 W 过大，"
+                    "即 |ln(W/|0-delta|)| 接近 1/a）：g(ε)/g(0) 会把 g(ε) 的普通量级"
+                    "（~1）放大成远大于 1 的 N̄，且 g(ε) 在积分窗口内可能变号（被 floor"
+                    "强行钳到下限），二者共同作用容易让自洽迭代不收敛或给出不可靠结果。"
+                    "建议增大 W（使其显著大于 |delta|）或缩小 |delta|，见 README「能量"
+                    "依赖 DOS」已知局限",
+                    stacklevel=2,
+                )
             return np.clip(g(eps) / g0, floor, None)
 
         if self.kind == "table":
@@ -364,6 +374,19 @@ class DOS:
         W：背景能量尺度（meV，通常取能带宽量级，例如 ~1 eV）。
         cut：正则化尺度（meV，通常取远小于 W、量级与 k_BTc 或 ω 的最小 Matsubara
              间距相当，避免正则化本身影响感兴趣的物理）。
+
+        参数选取的重要约束（实测踩过的坑，见 README「能量依赖 DOS·已知局限」）：
+        **|delta| 应明显小于 W**（|delta| ≲ few×W 的量级，不要取 |delta|~10W 以上）。
+        归一化用的是 g(ε)/g(0)，g(0)=1+a·ln(W/|delta|)——delta 一旦显著超过 W，
+        ln(W/|delta|) 变成较大的负数，g(0) 可能接近 0 甚至变负（变负会被上面的检查
+        直接拒绝，接近 0 会触发 UserWarning）。g(0)→0 时哪怕 g(ε) 本身量级正常
+        （~1），除出来的 N̄=g(ε)/g(0) 也会被放大到远超 1 的量级，且 g(ε) 在感兴趣的
+        ε 窗口内可能变号（被 floor 钳位），这种"陡峭+钳位"的 N̄(ε) 会让能量积分的
+        自洽迭代（`_solve_z_chi_dos`）难以收敛，实测在 delta=60·w_cut、W=1000 meV
+        时会看到 Z、χ 发散式振荡、500 次迭代不收敛。这不是"delta 越大越接近常数 DOS
+        因而无所谓"的直觉——恰恰相反，delta 相对 W 过大时模型本身的归一化先失效。
+        正确做法：验证"δ≫ω_c 回到常数 DOS"这类极限时，应同时把 W 取得足够大
+        （W ≳ 几倍 delta），而不是固定 W 只增大 delta。
         """
         if W <= 0 or cut <= 0:
             raise ValueError("W, cut 必须 > 0")
@@ -568,13 +591,22 @@ class Solver:
     # ---------------- 公开接口：Tc ----------------
 
     def tc(self, t_bracket_k: Optional[Tuple[float, float]] = None, xtol: float = 1e-10) -> float:
-        """求 Tc（K）：线性化核矩阵最大本征值=1 处，对 ln T 用 brentq 求根。"""
+        """求 Tc（K）。dos.is_constant 时走 v0 折叠代数路径（结果逐位一致于 v0，
+        vertex 钩子已接入该路径，见 _kernels）；否则走能量依赖 DOS 的
+        Mitrović–Carbotte 推广路径（见 README「能量依赖 DOS」）。
+        """
+        if self.dos.is_constant:
+            return self._tc_constant_dos(t_bracket_k, xtol)
+        return self._tc_energy_dependent_dos(t_bracket_k, xtol)
+
+    def _bisect_tc(self, max_eig_fn: Callable[[float], float],
+                    t_bracket_k: Optional[Tuple[float, float]], xtol: float) -> float:
+        """对 ln T 用 brentq 找 max_eig_fn(T_K)=1 的根；两条 Tc 路径共用的二分脚手架
+        （bracket 猜测、区间扩张兜底、报错信息），从原 tc() 里提取出来，逻辑不变。
+        """
 
         def f(ln_t_k: float) -> float:
-            t_k = np.exp(ln_t_k)
-            t_mev = KB_MEV_PER_K * t_k
-            n = self._n_for_T(t_mev)
-            return self._max_eigen_linearized(t_mev, n) - 1.0
+            return max_eig_fn(np.exp(ln_t_k)) - 1.0
 
         if t_bracket_k is None:
             # 用 Allen-Dynes 估计值作为初始区间中心，避免二分区间过宽导致
@@ -607,6 +639,173 @@ class Solver:
             )
         ln_tc = optimize.brentq(f, lo, hi, xtol=xtol)
         return float(np.exp(ln_tc))
+
+    def _tc_constant_dos(self, t_bracket_k: Optional[Tuple[float, float]] = None,
+                          xtol: float = 1e-10) -> float:
+        """v0 路径：线性化核矩阵最大本征值=1 处，对 ln T 用 brentq 求根。"""
+
+        def max_eig(t_k: float) -> float:
+            t_mev = KB_MEV_PER_K * t_k
+            n = self._n_for_T(t_mev)
+            return self._max_eigen_linearized(t_mev, n)
+
+        return self._bisect_tc(max_eig, t_bracket_k, xtol)
+
+    def _tc_energy_dependent_dos(self, t_bracket_k: Optional[Tuple[float, float]] = None,
+                                  xtol: float = 1e-10) -> float:
+        """能量依赖 DOS 路径：在 φ→0 线性化极限下，(Z,χ) 先自洽，再用 φ 的核矩阵
+        求最大本征值=1。方程与折叠约定见 README「能量依赖 DOS」。
+        """
+
+        def max_eig(t_k: float) -> float:
+            t_mev = KB_MEV_PER_K * t_k
+            n_pos = self._n_for_T(t_mev)
+            n_arr, wn = self._full_axis_grid(t_mev, n_pos)
+            lam_full = self._lambda_toeplitz_full(t_mev, n_pos)
+            lam_z, lam_phi = self._apply_vertex_full(lam_full, n_arr, wn, t_mev)
+            e_max = self._dos_e_max()
+            z, chi, converged = self._solve_z_chi_dos(t_mev, lam_z, lam_full, wn, e_max)
+            if not converged:
+                warnings.warn(
+                    f"能量依赖 DOS 路径 (Z,χ) 自洽在 T={t_k:.6g} K 未在 "
+                    f"{self.dos_max_iter} 次迭代内收敛到 tol={self.dos_tol:.2g}"
+                )
+            g_int, _ = self._dos_energy_integrals(z, chi, np.zeros_like(wn), wn, e_max)
+            theta = self._theta_mask_full(wn, t_mev)
+            kernel = (np.pi * t_mev) * (lam_phi - self.mu_star * theta[None, :]) * g_int[None, :]
+            eigvals = np.linalg.eigvals(kernel)
+            i = np.argmax(eigvals.real)
+            if abs(eigvals.imag[i]) > 1e-6 * max(abs(eigvals.real[i]), 1e-12):
+                warnings.warn(f"能量依赖 DOS 路径主导本征值有明显虚部 ({eigvals[i]!r})")
+            return float(eigvals.real[i])
+
+        return self._bisect_tc(max_eig, t_bracket_k, xtol)
+
+    # ---------------- 能量依赖 DOS：全轴（未折叠）辅助方法 ----------------
+
+    @staticmethod
+    @functools.lru_cache(maxsize=32)
+    def _gauss_legendre_nodes(n_eps: int) -> Tuple[np.ndarray, np.ndarray]:
+        """Gauss-Legendre 节点/权重（[-1,1] 上），缓存避免重复计算。"""
+        return np.polynomial.legendre.leggauss(n_eps)
+
+    def _full_axis_grid(self, t_mev: float, n_pos: int) -> Tuple[np.ndarray, np.ndarray]:
+        """全体 Matsubara 指标 n=-n_pos..n_pos-1（共 M=2·n_pos 点，对称覆盖正负频率，
+        不做 v0 式的正频折叠——见 README「能量依赖 DOS」关于为什么在这条路径上放弃
+        折叠：χ_n 在 n→-1-n 下是奇函数（χ_{-1-n}=-χ_n），若要折叠须引入"镜像 DOS"
+        N̄(-ε) 的额外积分，直接在全轴上求解更简单、风险更低，代价是矩阵边长翻倍。
+        """
+        n_arr = np.arange(-n_pos, n_pos)
+        wn = np.pi * t_mev * (2 * n_arr + 1)
+        return n_arr, wn
+
+    def _lambda_toeplitz_full(self, t_mev: float, n_pos: int) -> np.ndarray:
+        """Λ[i,j] = λ(n_i-n_j)，i,j 覆盖全轴 M=2·n_pos 个指标。由于全轴等间距枚举，
+        n_i-n_j = i-j（数组下标之差等于 Matsubara 指标之差，位移抵消），
+        且 λ(ν) 是偶函数，故只需 λ_table[0..M-1] 按 |i-j| 取值。
+        """
+        m = 2 * n_pos
+        lam_k = self.spectrum.lambda_of_nu(2 * np.pi * t_mev * np.arange(m))
+        idx = np.arange(m)
+        diff = np.abs(idx[:, None] - idx[None, :])
+        return lam_k[diff]
+
+    def _apply_vertex_full(self, lam_full: np.ndarray, n_arr: np.ndarray, wn: np.ndarray,
+                            t_mev: float) -> Tuple[np.ndarray, np.ndarray]:
+        """vertex 钩子在全轴路径上的应用：返回 (Λ_Z, Λ_φ)。vertex=None 时两者都
+        原样返回 lam_full（逐位一致）。χ 方程的 Λ 恒不受 vertex 影响（SPEC 只要求
+        vertex 作用于 φ 方程电声部分，Z 方程由 vertex_in_Z 控制，未提及 χ 方程）。
+        """
+        if self.vertex is None:
+            return lam_full, lam_full
+        m = len(n_arr)
+        n_grid = n_arr[:, None] * np.ones((1, m), dtype=int)
+        m_grid = n_arr[None, :] * np.ones((m, 1), dtype=int)
+        wn_n_grid = wn[:, None] * np.ones((1, m))
+        wn_m_grid = wn[None, :] * np.ones((m, 1))
+        v = np.asarray(self.vertex(n_grid, m_grid, wn_n_grid, wn_m_grid, t_mev), dtype=float)
+        lam_phi = lam_full * (1.0 + v)
+        lam_z = lam_phi if self.vertex_in_Z else lam_full
+        return lam_z, lam_phi
+
+    def _dos_e_max(self) -> float:
+        """ε 积分范围的半宽：至少 dos_energy_cutoff_ratio·w_cut，table 型 DOS 再取
+        表格边界（取绝对值较大者）与之的较大值，边界外由 DOS.nbar 自身延拓。
+        """
+        e_max = self.dos_energy_cutoff_ratio * self.w_cut
+        if self.dos.kind == "table":
+            eps_tab = self.dos.params["eps"]
+            e_max = max(e_max, abs(float(eps_tab[0])), abs(float(eps_tab[-1])))
+        return e_max
+
+    def _theta_mask_full(self, wn: np.ndarray, t_mev: float) -> np.ndarray:
+        """θ(ω_c-|ω_m|) 的平滑版本（同 _kernels 里的处理，理由见那里的注释），
+        在全轴上直接用 |ω_m|（ω_m 可正可负）。
+        """
+        return np.clip((self.w_cut - np.abs(wn)) / (2 * np.pi * t_mev) + 0.5, 0.0, 1.0)
+
+    def _dos_energy_integrals(self, z: np.ndarray, chi: np.ndarray, phi: np.ndarray,
+                               wn: np.ndarray, e_max: float) -> Tuple[np.ndarray, np.ndarray]:
+        """能量积分核心：对每个 Matsubara 指标 j，返回
+            G_j = (1/π) ∫dε N̄(ε)/D_j(ε)，
+            H_j = (1/π) ∫dε N̄(ε)·ε/D_j(ε)，
+        D_j(ε) = (ω_j Z_j)² + (ε+χ_j)² + φ_j²。
+
+        由于 (ω_jZ_j)²、φ_j² 都不依赖 ε，三个方程里出现的 ε 积分
+        ⟨ω_jZ_j⟩=ω_jZ_j·G_j、⟨φ_j⟩=φ_j·G_j、⟨ε+χ_j⟩=χ_j·G_j+H_j 都能从这两个
+        基础积分组装出来（见 README 推导），不需要对每个方程分别数值积分。
+
+        数值方法：代换 ε+χ_j = a_j·tanθ（a_j=sqrt((ω_jZ_j)²+φ_j²)），把
+        D_j(ε)=a_j²sec²θ 的 Lorentzian 型分母代换掉，积分变成 θ 上的光滑函数
+        （无极点），再用固定的 Gauss-Legendre 节点数值积分，θ 范围裁剪到对应
+        ε∈[-e_max, e_max] 的区间。这个代换是能量依赖 DOS 数值 Eliashberg 文献
+        （Pickett 1980 附近）的标准做法：既能精确处理低阶 Matsubara 频率处很窄
+        （宽度~πT）的分母峰，又能覆盖远达 e_max 的 DOS 变化，不需要对"窄峰区域"
+        和"远场区域"分别处理。
+
+        归一化核对（N̄≡1 时应回到 v0 的常 DOS 形式）：N̄≡1 时
+            (1/π)∫_{-∞}^{∞} dε/(a²+ε²) = (1/π)·(π/a) = 1/a，
+        即 G_j → 1/a_j = 1/sqrt((ω_jZ_j)²+φ_j²)，H_j → 0（对称区间上奇函数积分为
+        零）。代入 Z_iω_i=ω_i+πTΣ_jΛ[i,j]·ω_jZ_j/a_j，在线性化极限 φ_j→0 时
+        a_j→|ω_j|Z_j，恰好是 v0 折叠前（未折叠）方程的形式，见模块顶部文档字符串。
+        """
+        u, w = self._gauss_legendre_nodes(self.dos_n_eps)
+        a = np.sqrt((wn * z) ** 2 + phi ** 2)
+        theta_max = np.arctan((e_max - chi) / a)
+        theta_min = np.arctan((-e_max - chi) / a)
+        half = 0.5 * (theta_max - theta_min)
+        mid = 0.5 * (theta_max + theta_min)
+        theta = half[:, None] * u[None, :] + mid[:, None]
+        eps = a[:, None] * np.tan(theta) - chi[:, None]
+        nbar_vals = self.dos.nbar(eps)
+        weight = w[None, :] * half[:, None]
+        g_int = (1.0 / np.pi) * np.sum(weight * nbar_vals / a[:, None], axis=1)
+        h_int = (1.0 / np.pi) * np.sum(weight * nbar_vals * eps / a[:, None], axis=1)
+        return g_int, h_int
+
+    def _solve_z_chi_dos(self, t_mev: float, lam_z: np.ndarray, lam_chi: np.ndarray,
+                          wn: np.ndarray, e_max: float) -> Tuple[np.ndarray, np.ndarray, bool]:
+        """Tc 处 (Z,χ) 的自洽解（φ→0，线性混合不动点迭代，与 v0 solve_gap 同思路）。
+
+        Z_i = 1 + (πT/ω_i)·Σ_j Λ_Z[i,j]·ω_j Z_j G_j
+        χ_i = -πT·Σ_j Λ_χ[i,j]·(χ_j G_j + H_j)
+        """
+        z = np.ones_like(wn)
+        chi = np.zeros_like(wn)
+        zero_phi = np.zeros_like(wn)
+        converged = False
+        for _ in range(self.dos_max_iter):
+            g_int, h_int = self._dos_energy_integrals(z, chi, zero_phi, wn, e_max)
+            z_new = 1.0 + (np.pi * t_mev / wn) * (lam_z @ (wn * z * g_int))
+            chi_new = -np.pi * t_mev * (lam_chi @ (chi * g_int + h_int))
+            denom = np.max(np.abs(z_new)) + np.max(np.abs(chi_new)) + 1e-30
+            diff = (np.max(np.abs(z_new - z)) + np.max(np.abs(chi_new - chi))) / denom
+            z = self.dos_mixing * z_new + (1 - self.dos_mixing) * z
+            chi = self.dos_mixing * chi_new + (1 - self.dos_mixing) * chi
+            if diff < self.dos_tol:
+                converged = True
+                break
+        return z, chi, converged
 
     # ---------------- 公开接口：非线性 Δ(T) ----------------
 
@@ -694,9 +893,10 @@ class Solver:
                 mu_star_new = self.mu_star
             else:
                 mu_star_new = mu_star_at_cutoff(self.mu_star, self.w_cut, w_cut_new)
-            solver = Solver(spec, mu_star=mu_star_new, w_cut=w_cut_new,
-                             n_matsubara=self.n_matsubara,
-                             matsubara_oversample=self.matsubara_oversample)
+            # dataclasses.replace 而非手写 Solver(...)：自动带上 dos/vertex/vertex_in_Z
+            # 等 v0 之后新增的字段（它们是电子结构/顶角模型参数，不随同位素质量变化，
+            # 应该原样传给子 Solver），也避免每次加新字段都要回来改这里。
+            solver = dataclasses.replace(self, spectrum=spec, mu_star=mu_star_new, w_cut=w_cut_new)
             return solver.tc(), mu_star_new, w_cut_new
 
         s_plus = np.sqrt(1 + eps)
@@ -727,6 +927,8 @@ class Solver:
         """
         spec = self.spectrum
 
+        # 下面四个 make() 都用 dataclasses.replace(self, ...) 而非手写 Solver(...)：
+        # 自动带上 dos/vertex/vertex_in_Z 等字段，新增字段不需要回来同步这里。
         if param == "lambda":
             def make(delta: float) -> float:
                 comps = []
@@ -736,26 +938,22 @@ class Solver:
                     else:
                         comps.append(dataclasses.replace(c, a2f=c.a2f * (1 + delta)))
                 new_spec = Spectrum(components=comps)
-                return Solver(new_spec, self.mu_star, self.w_cut,
-                              self.n_matsubara, self.matsubara_oversample).tc()
+                return dataclasses.replace(self, spectrum=new_spec).tc()
 
         elif param == "omega_log":
             def make(delta: float) -> float:
                 s = 1.0 / (1 + delta)
                 new_spec = spec.scale_mass(s)
                 new_w_cut = self.w_cut * (1 + delta)
-                return Solver(new_spec, self.mu_star, new_w_cut,
-                              self.n_matsubara, self.matsubara_oversample).tc()
+                return dataclasses.replace(self, spectrum=new_spec, w_cut=new_w_cut).tc()
 
         elif param == "mu_star":
             def make(delta: float) -> float:
-                return Solver(spec, self.mu_star * (1 + delta), self.w_cut,
-                              self.n_matsubara, self.matsubara_oversample).tc()
+                return dataclasses.replace(self, mu_star=self.mu_star * (1 + delta)).tc()
 
         elif param == "w_cut":
             def make(delta: float) -> float:
-                return Solver(spec, self.mu_star, self.w_cut * (1 + delta),
-                              self.n_matsubara, self.matsubara_oversample).tc()
+                return dataclasses.replace(self, w_cut=self.w_cut * (1 + delta)).tc()
 
         else:
             raise ValueError(f"不支持的 param: {param!r}")

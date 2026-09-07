@@ -81,8 +81,11 @@ superconductivity/
 - [x] 2026-09-08 P1 推导 v0 → reviewer 发现 3 个致命问题（McMillan 饱和伪象、主公式结构、部分同位素缺推导）→ **v0.2** 修正并新增"谱重分布通道"（Errea 2015 表 I）与 H3S 第一轮账
 - [x] 2026-09-08 求解器 v0 到位（32 测试全绿）；P1 v0.3（二轮审稿 N1–N4）→ v0.4（数值：闭式高估库仑项 2–4×）
 - [x] 2026-09-08 **第一篇闭环记录** `theory/notes/2026-09-08_P1_round1.md`
-- [ ] 求解器第二阶段（能量依赖 DOS + 顶角核，implementer 在跑）；P1 二轮数据抽取（researcher 读本地 PDF）
-- [ ] s_DOS、s_nad 二维图 → 标出 H3S 差额 +0.12 的参数区；YH6 vs YH9 判别
+- [x] 2026-09-08 二轮/三轮原文抽取：H3S α_exp=0.3（非 0.44）、LaH10 α_exp=0.57/0.62（文献 0.46 无一手来源）、YH9 无数据、LaD10 结构未确认 → `notes/2026-09-08_P1_round2_data.md`
+- [x] 2026-09-08 **Mishra Figshare 数据集**（H3S/D3S × 谐波/非谐 × fsr/fbw × adia/na）→ H3S 四因子数值分解闭合；DOS×顶角交叉项不可忽略 → `notes/2026-09-08_P1_round3_mishra_dataset.md`；推导稿 v0.6
+- [ ] 求解器第二阶段（DOS + 顶角核，implementer 在跑）；P2 顶角公式抄录（researcher 在跑）
+- [ ] P2：LaH10 vs H3S 的 ⟨q⟩/2k_F 与 ω_log/E_F → 顶角符号判据
+- [ ] 用 Mishra 的 H3S.dos 标定求解器 DOS 实现；扫 DOS×顶角交叉项
 - [ ] 各方向 README 填入现状摘要（D1–D4 优先，D5–D7 降级为参考）
 - [ ] 补核 16 条无 arXiv ID 的元数据（多为 Nature/PRL 正式版，无预印本）
 
