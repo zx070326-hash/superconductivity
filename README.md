@@ -83,8 +83,11 @@ superconductivity/
 - [x] 2026-09-08 **第一篇闭环记录** `theory/notes/2026-09-08_P1_round1.md`
 - [x] 2026-09-08 二轮/三轮原文抽取：H3S α_exp=0.3（非 0.44）、LaH10 α_exp=0.57/0.62（文献 0.46 无一手来源）、YH9 无数据、LaD10 结构未确认 → `notes/2026-09-08_P1_round2_data.md`
 - [x] 2026-09-08 **Mishra Figshare 数据集**（H3S/D3S × 谐波/非谐 × fsr/fbw × adia/na）→ H3S 四因子数值分解闭合；DOS×顶角交叉项不可忽略 → `notes/2026-09-08_P1_round3_mishra_dataset.md`；推导稿 v0.6
-- [ ] 求解器第二阶段（DOS + 顶角核，implementer 在跑）；P2 顶角公式抄录（researcher 在跑）
-- [ ] P2：LaH10 vs H3S 的 ⟨q⟩/2k_F 与 ω_log/E_F → 顶角符号判据
+- [x] 2026-09-08 P2 公式抄录到位（PGS 原始论文不在 arXiv；EPL 42,667 = cond-mat/9710159 等替代源；Schrödi 2020 挑战 Q_c 图像）→ `surveys/P2_vertex_formulas_2026-09-08.md`
+- [x] 2026-09-08 **P2 启动稿** `theory/derivations/P2_vertex_sign_criterion.md`：从 Mishra 数据反推顶角修正的同位素标度 δ_D/δ_H ≈ 0.66–0.72 ≈ M^{-1/2}；顶角效应 160→200 GPa 增强 3×；LaH10 顶角路径基本关闭
+- [ ] reviewer 核验 P1 v0.6 §4.1 + P2 v0 的数据推断（不确定度传播）
+- [ ] 求解器第二阶段（DOS + 顶角核，implementer 在跑）
+- [ ] P2：用 cond-mat/9806012 的 P_pol+P_ex 一般式 + Mishra H3S.dos 数值积分复现 P̄_H ≈ −0.13
 - [ ] 用 Mishra 的 H3S.dos 标定求解器 DOS 实现；扫 DOS×顶角交叉项
 - [ ] 各方向 README 填入现状摘要（D1–D4 优先，D5–D7 降级为参考）
 - [ ] 补核 16 条无 arXiv ID 的元数据（多为 Nature/PRL 正式版，无预印本）
