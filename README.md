@@ -77,8 +77,10 @@ superconductivity/
 - [x] 2026-09-08 下载 core/important 级 PDF：86 篇，378 MB（16 条无 arXiv 版）
 - [x] 2026-09-08 横向对比与聚焦建议：`SYNTHESIS_2026-09-08.md`
 - [x] 2026-09-08 **方向已定**：高压超导的强耦合修正理论（理论为主 + 实验落实 + 适度计算验证），见 `decisions/2026-09-08_focus_theory_high_pressure.md` 与 `theory/PROGRAM.md`
-- [x] 2026-09-08 启动氢化物实验数据表 + 同位素公式核对（researcher agent）
-- [ ] P1（同位素系数四因子分解）推导初稿；求解器 v0（需先 `git init` 供 implementer 用 worktree）
+- [x] 2026-09-08 启动氢化物实验数据表 + 同位素公式核对（researcher agent）→ `theory/data/hydrides_experimental.csv`、`surveys/P1_isotope_data_formulas_2026-09-08.md`、`library/index/P1.json`（17 PDF）
+- [x] 2026-09-08 P1 推导 v0 → reviewer 发现 3 个致命问题（McMillan 饱和伪象、主公式结构、部分同位素缺推导）→ **v0.2** 修正并新增"谱重分布通道"（Errea 2015 表 I）与 H3S 第一轮账
+- [ ] 求解器 v0（implementer 在跑）；P1 二轮数据抽取（researcher 读本地 PDF）；v0.2 复审（reviewer）
+- [ ] 第一篇 `theory/notes/` 闭环记录（等三个 agent 回来后汇合）
 - [ ] 各方向 README 填入现状摘要（D1–D4 优先，D5–D7 降级为参考）
 - [ ] 补核 16 条无 arXiv ID 的元数据（多为 Nature/PRL 正式版，无预印本）
 
