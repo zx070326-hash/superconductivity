@@ -2,7 +2,12 @@
 P1 §3.1 / §3.2 的机械推导核对（sympy）。
 运行：python theory/derivations/p1_sympy_checks.py
 """
+import sys
 import sympy as sp
+
+# Windows 控制台默认 GBK
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 print("=== 3.1 库仑项：McMillan 形式下的 alpha ===")
 lam, mu, M, L0 = sp.symbols("lambda mu_star M L0", positive=True)
