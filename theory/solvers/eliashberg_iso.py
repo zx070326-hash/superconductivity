@@ -841,28 +841,54 @@ class Solver:
                 break
         return z, chi, converged
 
+    def _reference_electron_number(self, wn: np.ndarray, e_max: float) -> float:
+        """电子数守恒的参考态：同一个真实 N̄(ε)、同一个 T（同一 wn 网格）、同一个
+        积分截止 e_max，但完全**不含电声自能**（Z≡1、χ≡0、φ≡0，也就是裸/非
+        相互作用格林函数）。这是"打开电声耦合前，这块能带本来有多少电子"，
+        `fix_mu="conserve"` 要守恒的正是这个数，而不是常数 DOS 假想出的一个数。
+
+        以前的实现（已修正，见下面 _electron_number_deviation 的说明）把参考态
+        错误地取成了"常数 DOS、χ≡0"：只要 N̄(ε) 本身不对称（真实材料几乎总是
+        如此），"用常数 DOS 算参考、用真实 N̄(ε) 算实际电子数"这两个量根本不是
+        同一个物理量之差，`mu_shift` 就会被迫去补偿 N̄(ε) 自身的不对称（一个
+        与电声耦合无关、量级可以是几十% 的效应），而不是只补偿 χ_n 带来的小
+        修正——这正是过冲 8~14 倍、且 mu_shift 强烈依赖 `dos_energy_cutoff_ratio`
+        的根源（真实材料的能带不对称在积分域扩大时不会消失，但 χ_n 本身在
+        |ε|≫ω_c 处趋于 0，正确参考态下 mu_shift 应该随截止收敛）。
+
+        返回值：Σ_j H_j(Z=1,χ=0)（chi_eff=0 时 χ_eff_j·G_j 这一项恒为 0，只剩
+        H_j），与 _electron_number_deviation 里"实际电子数"用的是同一个求和
+        组合、同一个符号约定，两者相减才是有意义的 Δn（的一个整体缩放/反号，
+        不影响求根，见 _electron_number_deviation 的符号说明）。
+        """
+        ones = np.ones_like(wn)
+        zeros = np.zeros_like(wn)
+        _, h_ref = self._dos_energy_integrals(ones, zeros, zeros, wn, e_max)
+        return float(np.sum(h_ref))
+
     def _electron_number_deviation(
         self, mu_shift: float, t_mev: float, lam_z: np.ndarray, lam_chi: np.ndarray,
         wn: np.ndarray, e_max: float,
-        z0: Optional[np.ndarray] = None, chi0: Optional[np.ndarray] = None
+        z0: Optional[np.ndarray] = None, chi0: Optional[np.ndarray] = None,
+        n_ref: Optional[float] = None,
     ) -> Tuple[float, np.ndarray, np.ndarray, bool]:
-        """给定 mu_shift，先解 (Z,χ)（_solve_z_chi_dos），再返回电子数偏差。
+        """给定 mu_shift，先解 (Z,χ)（_solve_z_chi_dos），再返回电子数偏差
+        （相对于 _reference_electron_number 定义的裸能带参考态）。
 
-        参考态是"常数 DOS、χ≡0"（正常态、φ=0、mu_shift=0）：在对称积分区间
-        [-e_max, e_max] 上，N̄≡1 时 H_j=(1/π)∫dε·1·ε/D_j(ε)=0 恒成立（被积函数是
-        ε 的奇函数，D_j(ε) 在 χ=0 时是 ε 的偶函数），且 χ=0 是这条件下 χ 方程的
-        精确不动点（RHS=-πTΣΛ[0·G+0]=0）——所以参考电子数（相对量）精确为 0，
-        不需要单独跑一次参考 Solver 来算，直接把待求偏差的目标定为 0 即可。
+        n_ref：参考电子数，见 _reference_electron_number；不依赖 mu_shift，
+        调用方（_solve_mu_shift）应该只算一次然后传进来，这里默认 None 时会
+        现算一次（方便单独调用/测试），但正常路径下不会重复计算。
 
-        待求偏差本身：
-            Δn(mu_shift) ∝ Σ_j [ χ_eff_j·G_j + H_j ]，χ_eff_j = χ_j + mu_shift
+        待求偏差：
+            Δn(mu_shift) ∝ Σ_j [ χ_eff_j·G_j + H_j ] − n_ref，χ_eff_j = χ_j + mu_shift
 
-        这是标准 Matsubara 电子数公式 n=∫dε N(ε) f(ε-μ,T)（虚轴自能形式的严格
-        等价写法）在本模块能量积分基元 G_j=(1/π)∫dε N̄(ε)/D_j(ε)、
-        H_j=(1/π)∫dε N̄(ε)ε/D_j(ε) 下的展开——与 χ 方程 RHS 用的是同一个组合
-        （见 _solve_z_chi_dos 的 chi_new 公式），只是这里对全部 Matsubara 指标
-        直接求和而不再乘 Λ 核。返回值只用于求根（目标=0），比例常数、乃至整体
-        符号都无关紧要（_solve_mu_shift 的二分只看变号，不假设单调方向）。
+        Σ_j [χ_eff_j·G_j + H_j] 是标准 Matsubara 电子数公式 n=∫dε N(ε) f(ε-μ,T)
+        （虚轴自能形式的严格等价写法）在本模块能量积分基元
+        G_j=(1/π)∫dε N̄(ε)/D_j(ε)、H_j=(1/π)∫dε N̄(ε)ε/D_j(ε) 下的展开——与 χ
+        方程 RHS 用的是同一个组合（见 _solve_z_chi_dos 的 chi_new 公式），只是
+        这里对全部 Matsubara 指标直接求和而不再乘 Λ 核。返回值只用于求根
+        （目标=0），比例常数、乃至整体符号都无关紧要（_solve_mu_shift 的二分
+        只看变号，不假设单调方向）。
 
         实测排查过一次容易搞错的符号细节，记录在这里避免下次重新踩坑：
         标准推迟格林函数 G(iω_j,ε)=1/(iω_jZ_j-(ε+χ_eff_j))（φ=0）的实部是
@@ -875,12 +901,14 @@ class Solver:
         见 tests/test_eliashberg_iso.py 里 fix_mu="conserve" 一节的 docstring
         推导，以及 README「能量依赖 DOS·化学势守恒」。
         """
+        if n_ref is None:
+            n_ref = self._reference_electron_number(wn, e_max)
         z, chi, converged = self._solve_z_chi_dos(
             t_mev, lam_z, lam_chi, wn, e_max, mu_shift=mu_shift, z0=z0, chi0=chi0
         )
         chi_eff = chi + mu_shift
         g_int, h_int = self._dos_energy_integrals(z, chi_eff, np.zeros_like(wn), wn, e_max)
-        deviation = float(np.sum(chi_eff * g_int + h_int))
+        deviation = float(np.sum(chi_eff * g_int + h_int)) - n_ref
         return deviation, z, chi, converged
 
     def _solve_mu_shift(
@@ -897,13 +925,20 @@ class Solver:
         对整体性能很重要；brentq 是黑盒实现，不便做这个优化。
 
         括号：从 ±0.05·w_cut 开始（多数物理场景下电子数守恒所需的 mu_shift 相对
-        声子截止是一个小量），双向加倍最多 mu_shift_max_expand 次直到偏差变号；
-        找不到变号（DOS 参数病态，例如 log_vhs 归一化接近失效，见其文档）时报错。
+        声子截止是一个小量——修正的是 O(λ·ω_ph) 量级的自能诱导偏差，不是能带
+        本身的不对称，见 _reference_electron_number），双向加倍最多
+        mu_shift_max_expand 次直到偏差变号；找不到变号（DOS 参数病态，例如
+        log_vhs 归一化接近失效，见其文档）时报错。
+
+        n_ref（参考电子数，见 _reference_electron_number）只依赖 (wn, e_max)，
+        与 mu_shift 无关，这里只算一次，传给每次 dev() 调用，避免在二分的每一步
+        重复计算。
         """
+        n_ref = self._reference_electron_number(wn, e_max)
         z_guess, chi_guess = np.ones_like(wn), np.zeros_like(wn)
 
         def dev(mu: float, z0: np.ndarray, chi0: np.ndarray):
-            return self._electron_number_deviation(mu, t_mev, lam_z, lam_chi, wn, e_max, z0, chi0)
+            return self._electron_number_deviation(mu, t_mev, lam_z, lam_chi, wn, e_max, z0, chi0, n_ref=n_ref)
 
         scale = 0.05 * self.w_cut
         lo, hi = -scale, scale
