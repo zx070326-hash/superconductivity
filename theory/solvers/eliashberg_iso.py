@@ -31,6 +31,7 @@ Tc：线性化（Δ→0，E_m→ω_m）后是标准线性本征值问题
 from __future__ import annotations
 
 import dataclasses
+import functools
 import warnings
 from dataclasses import dataclass, field
 from typing import Callable, Dict, Iterable, List, Optional, Sequence, Tuple, Union
@@ -261,6 +262,176 @@ def mu_star_from_bare(mu: float, e_fermi: float, w_cut: float) -> float:
 
 
 # ==========================================================================
+# DOS: 能量依赖态密度 N̄(ε) ≡ N(ε)/N(0)（SPEC 必备功能 6，第二阶段）
+# ==========================================================================
+
+@dataclass
+class DOS:
+    """归一化态密度 N̄(ε) ≡ N(ε)/N(0) 的模型，供 Mitrović–Carbotte/Pickett 推广用。
+
+    核心不变量：**N̄(0) ≡ 1 恒成立**——这不是可选的归一化，是定义本身的直接推论
+    （N(0) 就是 ε=0 处的值，比值在 ε=0 处必为 1）。各构造器的处理方式：
+
+    - ``constant()``：N̄≡1，显然满足。
+    - ``step()``/``log_vhs()``：内部先写出一个直观的"形状函数" g(ε)（形如
+      "远离特征处基线为 1，特征处/另一侧变成 ratio，或 log 发散"），然后返回
+      g(ε)/g(0) 强制 N̄(0)=1。这样做的物理理由：ε 是相对费米面测量的准粒子能量，
+      "费米面处的 DOS" 天然就是归一化基准，不应该因为 δ（特征相对 E_F 的位置）
+      取到 0 附近就让基准本身漂移。副作用：当 delta 明显偏离 0（特征远离 E_F，
+      正常使用场景）时，g(0)≈基线值≈1，归一化近似是恒等变换，不影响直觉理解；
+      只有 delta→0（特征恰好或接近落在 E_F）时归一化才会显著改变数值——而这恰好
+      是 Tsuei (1990) 式 vHs-钉扎-费米面 场景需要精确处理的地方。
+    - ``from_table()``：**不做自动归一化**。表格数据的 ε=0 点应该就是调用方计算/
+      测量 N(0) 的定义点；如果表里插值到 ε=0 处不是 1，多半是数据准备错误，不应该
+      被静默"修正"掉（会掩盖真实的 bug）。``from_table`` 会在明显偏离时发出警告，
+      但不强制改动数据。
+    """
+    kind: str
+    params: dict = field(default_factory=dict)
+
+    @property
+    def is_constant(self) -> bool:
+        return self.kind == "constant"
+
+    def nbar(self, eps: Union[float, np.ndarray]) -> np.ndarray:
+        """N̄(ε)，ε（meV）可为标量或任意形状数组，返回同形状数组（float64）。"""
+        eps = np.asarray(eps, dtype=float)
+        if self.kind == "constant":
+            return np.ones_like(eps)
+
+        if self.kind == "step":
+            delta, ratio, width = (self.params[k] for k in ("delta", "ratio", "width"))
+
+            def g(e: np.ndarray) -> np.ndarray:
+                return 1.0 + (ratio - 1.0) * 0.5 * (1.0 + np.tanh((e - delta) / width))
+
+            g0 = float(g(np.array(0.0)))
+            return g(eps) / g0
+
+        if self.kind == "log_vhs":
+            delta, a, w_band, cut, floor = (
+                self.params[k] for k in ("delta", "a", "W", "cut", "floor")
+            )
+
+            def g(e: np.ndarray) -> np.ndarray:
+                return 1.0 + a * np.log(w_band / np.maximum(np.abs(e - delta), cut))
+
+            g0 = float(g(np.array(0.0)))
+            if g0 <= 0:
+                raise ValueError(
+                    f"log_vhs 在 ε=0 处的形状函数 g(0)={g0:.4g} <= 0（delta/a/W/cut 组合"
+                    "导致归一化分母非正），请调整参数"
+                )
+            return np.clip(g(eps) / g0, floor, None)
+
+        if self.kind == "table":
+            eps_tab, nbar_tab = self.params["eps"], self.params["nbar"]
+            return np.interp(eps, eps_tab, nbar_tab)  # 表格边界外按端点值延拓（np.interp 默认行为）
+
+        raise ValueError(f"未知 DOS kind: {self.kind!r}")
+
+    # ---- 构造器 ----
+    @classmethod
+    def constant(cls) -> "DOS":
+        """N̄(ε) ≡ 1（v0 的常 DOS 假设）。"""
+        return cls(kind="constant")
+
+    @classmethod
+    def step(cls, delta: float, ratio: float, width: float) -> "DOS":
+        """台阶型：形状函数在 ε≪δ 侧为 1、ε≫δ 侧为 ratio，用 tanh 做宽度 width 的平滑
+        过渡；返回值再除以形状函数在 ε=0 处的值（见类 docstring）。
+
+        典型用法假设 |δ| ≳ 几倍 width（台阶明显偏离费米面），此时归一化近似是恒等
+        变换，"ε≫δ 处 N̄≈ratio" 的直观描述近似成立；δ 落在 0 附近时 N̄(0) 强制为 1，
+        两侧的相对比例仍是 ratio，但绝对基线会相应偏移，这是设计使然，不是 bug。
+        """
+        if width <= 0:
+            raise ValueError("width 必须 > 0")
+        if ratio <= 0:
+            raise ValueError("ratio 必须 > 0（态密度非负）")
+        return cls(kind="step", params=dict(delta=float(delta), ratio=float(ratio), width=float(width)))
+
+    @classmethod
+    def log_vhs(cls, delta: float, a: float, W: float, cut: float, floor: float = 1e-3) -> "DOS":
+        """对数型 van Hove 奇点：形状函数 g(ε) = 1 + a·ln(W/max(|ε-δ|, cut))，
+        cut 正则化 ε=δ 处的对数发散；最终返回 g(ε)/g(0)（见类 docstring），
+        并用 floor 兜底裁剪，避免远离 δ 处（|ε-δ|≫W）g 可能变号/趋于 -∞ 导致
+        N̄ 出现非物理的负值或跳变（真实材料的 DOS 不会是负的；这个模型只在
+        |ε-δ| ≲ W 量级内有意义，floor 只是数值安全网，不是物理内容，用前须知）。
+
+        delta：vHs 相对费米面的位置（meV，可正可负，可为 0）。
+        a：vHs 强度（无量纲，a>0 表示 δ 处是增强峰）。
+        W：背景能量尺度（meV，通常取能带宽量级，例如 ~1 eV）。
+        cut：正则化尺度（meV，通常取远小于 W、量级与 k_BTc 或 ω 的最小 Matsubara
+             间距相当，避免正则化本身影响感兴趣的物理）。
+        """
+        if W <= 0 or cut <= 0:
+            raise ValueError("W, cut 必须 > 0")
+        return cls(kind="log_vhs", params=dict(
+            delta=float(delta), a=float(a), W=float(W), cut=float(cut), floor=float(floor)
+        ))
+
+    @classmethod
+    def from_table(cls, eps_meV: Sequence[float], nbar: Sequence[float]) -> "DOS":
+        """表格 N̄(ε)：eps_meV 严格递增（meV，可含负值，ε=0 应在范围内）；
+        nbar 是对应的 N(ε)/N(0) 数值。线性插值，边界外按端点值延拓。
+
+        不做自动归一化（见类 docstring）；若插值到 ε=0 处显著偏离 1（|差|>1e-3），
+        发出警告但不修改数据——这通常意味着表格没有以 N(0) 归一化，请检查数据来源。
+        """
+        eps_meV = np.asarray(eps_meV, dtype=float)
+        nbar = np.asarray(nbar, dtype=float)
+        if eps_meV.ndim != 1 or nbar.shape != eps_meV.shape:
+            raise ValueError("eps_meV, nbar 必须是等长一维数组")
+        if np.any(np.diff(eps_meV) <= 0):
+            raise ValueError("eps_meV 必须严格递增")
+        if eps_meV[0] > 0 or eps_meV[-1] < 0:
+            raise ValueError("eps_meV 范围必须包含 ε=0（费米面）")
+        n0 = float(np.interp(0.0, eps_meV, nbar))
+        if abs(n0 - 1.0) > 1e-3:
+            warnings.warn(
+                f"DOS.from_table：插值到 ε=0 处 N̄={n0:.4g}，偏离 1 超过 1e-3；"
+                "N̄(ε)≡N(ε)/N(0) 在 ε=0 处按定义应为 1，请检查表格是否已经用 N(0) 归一化"
+                "（本构造器不会自动修正，见类 docstring）。"
+            )
+        return cls(kind="table", params=dict(eps=eps_meV, nbar=nbar))
+
+
+# ==========================================================================
+# 模型顶角核钩子（SPEC 必备功能 7，第二阶段）
+# ==========================================================================
+
+def vertex_pietronero_grimaldi_isotropic(m_ratio: float, Qc: float) -> Callable:
+    """P2 占位顶点核：形式上对应 Pietronero-Grimaldi-Strässler 一类"超越 Migdal"
+    顶点修正的**领头阶、常数近似**——不是从任何具体文献公式精确抄录的结果。
+
+    物理动机（占位，真正的动量/频率依赖形式留给 P2 推导）：非绝热顶点修正的量级
+    应正比于绝热比 m_ratio ≡ ω_log/E_F（Migdal 展开的小参数），符号/相对大小由
+    声子特征动量转移与费米动量之比 Qc（例如 q_c/k_F）调制。这里用一个不依赖任何
+    文献细节的简单解析插值：
+
+        P_V(Qc) = 1 - 2·Qc        （Qc=0 时 P_V=+1，Qc=1 时 P_V=-1，Qc=0.5 时为 0）
+        V ≡ m_ratio · P_V(Qc)      （常数，不依赖 n、m、ω_n、ω_m、T）
+
+    即 Qc→0（前向散射主导，声子动量转移小）时顶点修正为正（增强配对核），
+    Qc→1（大动量转移显著）时符号翻转、抑制配对，与文献里定性报道的趋势一致；
+    但这只是一个占位插值，量级和函数形式都未经过 P2 推导核实，**不要用于任何
+    定量结论**，只用于验证"顶点钩子"这条数值管线本身能正确工作。
+
+    返回的 callable 签名与 ``Solver(vertex=...)`` 要求一致：
+        vertex(n_idx, m_idx, omega_n, omega_m, T) -> ndarray（与输入同形状的 V）
+    """
+    def vertex(n_idx, m_idx, omega_n, omega_m, T):
+        p_v = 1.0 - 2.0 * Qc
+        val = m_ratio * p_v
+        shape = np.broadcast(np.asarray(n_idx), np.asarray(m_idx),
+                              np.asarray(omega_n), np.asarray(omega_m)).shape
+        return np.full(shape, val, dtype=float)
+
+    return vertex
+
+
+# ==========================================================================
 # Solver: Matsubara Eliashberg 方程数值解
 # ==========================================================================
 
@@ -275,14 +446,42 @@ class Solver:
     w_cut    : Matsubara 截止 ω_c（meV），μ* 只作用于 |ω_m| <= w_cut 的 m。
     n_matsubara : 正 Matsubara 频率个数 N；None 时按 T、w_cut 自动估计（见 _n_for_T）。
     matsubara_oversample : 自动估计 N 时的安全系数（>1 表示比"刚好覆盖 w_cut"多留裕量）。
+    dos : 能量依赖 DOS（SPEC 功能 6，第二阶段）。默认 DOS.constant()，此时求解器
+          走与 v0 完全相同的折叠代数路径（结果逐位一致，见 README「能量依赖 DOS」）。
+    fix_mu : 化学势固定策略。v0.1 只实现 "none"（不做电子数守恒修正，见 README
+             已知局限）；传其他值会在构造时报 NotImplementedError。
+    vertex : 模型顶角核钩子（SPEC 功能 7，第二阶段）。None 时无影响（结果与 v0
+             逐位一致）；否则是可调用对象
+             ``vertex(n_idx, m_idx, omega_n, omega_m, T) -> ndarray``，
+             返回与 λ(n−m) 同形状的乘子矩阵 V，作用方式见 README。
+    vertex_in_Z : vertex 是否也作用于 Z 方程的电声部分（默认 True）；恒作用于
+                  φ/Δ 方程的电声部分，从不作用于 μ* 项。
+    dos_n_eps, dos_energy_cutoff_ratio, dos_max_iter, dos_mixing, dos_tol :
+        非常 DOS 路径（Mitrović–Carbotte 推广）的数值参数，见 README。
     """
     spectrum: Spectrum
     mu_star: float
     w_cut: float
     n_matsubara: Optional[int] = None
     matsubara_oversample: float = 3.0
+    dos: DOS = field(default_factory=DOS.constant)
+    fix_mu: str = "none"
+    vertex: Optional[Callable[..., np.ndarray]] = None
+    vertex_in_Z: bool = True
+    dos_n_eps: int = 400
+    dos_energy_cutoff_ratio: float = 20.0
+    dos_max_iter: int = 500
+    dos_mixing: float = 0.3
+    dos_tol: float = 1e-9
     _n_margin: int = 30
     _n_max: int = 20000
+
+    def __post_init__(self) -> None:
+        if self.fix_mu not in ("none",):
+            raise NotImplementedError(
+                f"fix_mu={self.fix_mu!r} 未实现：v0.1 只支持 'none'（忽略化学势的电子数"
+                "守恒修正），见 README「能量依赖 DOS」已知局限"
+            )
 
     # ---------------- 内部：Matsubara 网格与核矩阵 ----------------
 
@@ -307,7 +506,17 @@ class Solver:
         return self.spectrum.lambda_of_nu(nu)
 
     def _kernels(self, t_mev: float, n: int) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-        """构造折叠后的 K1（Z 方程核）、K2（Δ 方程核）、正 Matsubara 频率数组 ω_m。"""
+        """构造折叠后的 K1（Z 方程核）、K2（Δ 方程核）、正 Matsubara 频率数组 ω_m。
+
+        vertex 钩子（SPEC 功能 7）：若 self.vertex 不为 None，把折叠前的两个
+        λ 值 λ(n-m)、λ(n+m+1) 都乘以 (1+V(n,m,ω_n,ω_m,T))——n、m 是折叠后的
+        正频指标 (0..N-1)，ω_n、ω_m 是对应的正频率；即 V 同时施加于"直接项"
+        λ(n-m) 和"折叠镜像项"λ(n+m+1)，不区分二者对应的原始负频率细节
+        （这是 P2 占位钩子的简化，若后续需要精确到 Nambu/正负频结构，需要重新
+        推导，见 README「模型顶角核钩子」）。μ* 项永远不乘 (1+V)；vertex_in_Z
+        控制 K1（Z 方程）是否也乘，K2（φ/Δ 方程电声部分）恒乘。
+        vertex=None 时代码路径与 v0 完全一致（不引入任何额外乘法），逐位相同。
+        """
         lam_k = self._lambda_table(t_mev, n)
         idx = np.arange(n)
         diff = np.abs(idx[:, None] - idx[None, :])
@@ -321,8 +530,27 @@ class Solver:
         # Matsubara 间距→0）时收敛到严格阶跃，只在硬截止边界附近的一项上引入
         # O(1/N) 的修正，物理上可忽略，但换来了 Tc(T) 对 T 连续可导，二分/求根稳定。
         theta = np.clip((self.w_cut - wn) / (2 * np.pi * t_mev) + 0.5, 0.0, 1.0)
-        k1 = lam_k[diff] - lam_k[summ]
-        k2 = lam_k[diff] + lam_k[summ] - 2.0 * self.mu_star * theta[None, :]
+        lam_diff = lam_k[diff]
+        lam_summ = lam_k[summ]
+        if self.vertex is not None:
+            n_grid = idx[:, None] * np.ones((1, n), dtype=int)
+            m_grid = idx[None, :] * np.ones((n, 1), dtype=int)
+            wn_n_grid = wn[:, None] * np.ones((1, n))
+            wn_m_grid = wn[None, :] * np.ones((n, 1))
+            v = np.asarray(
+                self.vertex(n_grid, m_grid, wn_n_grid, wn_m_grid, t_mev), dtype=float
+            )
+            lam_diff_phi = lam_diff * (1.0 + v)
+            lam_summ_phi = lam_summ * (1.0 + v)
+            if self.vertex_in_Z:
+                lam_diff_z, lam_summ_z = lam_diff_phi, lam_summ_phi
+            else:
+                lam_diff_z, lam_summ_z = lam_diff, lam_summ
+        else:
+            lam_diff_phi, lam_summ_phi = lam_diff, lam_summ
+            lam_diff_z, lam_summ_z = lam_diff, lam_summ
+        k1 = lam_diff_z - lam_summ_z
+        k2 = lam_diff_phi + lam_summ_phi - 2.0 * self.mu_star * theta[None, :]
         return k1, k2, wn
 
     def _max_eigen_linearized(self, t_mev: float, n: int) -> float:

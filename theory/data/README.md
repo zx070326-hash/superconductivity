@@ -1,5 +1,14 @@
 # theory/data · 数据表说明
 
+## ⚠ 2026-09-08 二轮更新：`isotope_curated.md` 取代本目录 CSV 中的同位素相关行
+
+researcher 读本地 PDF 原文后发现一轮摘要级表有两处实质错误：
+- **LaD10 Tc=180 K / α=0.46** 不在 Drozdov 2019 原文，是 Durajski 2020 理论值经两篇文献误转引；原文为 α=0.57（fcc）/0.62（P4/nmm），LaD10 Tc ~168 或 ~160 K
+- **YD9 无实验数据**（Kong 2021 只做 YH6/YD6）；唯一来源是已撤稿论文
+- H3S 作者给的 α_H ≈ 0.3（区间比较），不是两点比 0.44
+
+同位素相关的量一律以 `isotope_curated.md` 为准。
+
 ## hydrides_experimental.csv
 
 来源：researcher agent `hydride-exp-data`，2026-09-08，第 1/3 条回传。**原始产出，未手改。**
