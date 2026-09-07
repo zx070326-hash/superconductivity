@@ -471,8 +471,14 @@ class Solver:
     matsubara_oversample : 自动估计 N 时的安全系数（>1 表示比"刚好覆盖 w_cut"多留裕量）。
     dos : 能量依赖 DOS（SPEC 功能 6，第二阶段）。默认 DOS.constant()，此时求解器
           走与 v0 完全相同的折叠代数路径（结果逐位一致，见 README「能量依赖 DOS」）。
-    fix_mu : 化学势固定策略。v0.1 只实现 "none"（不做电子数守恒修正，见 README
-             已知局限）；传其他值会在构造时报 NotImplementedError。
+    fix_mu : 化学势固定策略，仅影响能量依赖 DOS 路径（dos.is_constant 为真时无效——
+             v0 折叠路径假设 DOS 延伸到无穷、φ-e 对称，不需要化学势修正）。
+             "none"（默认）：不做电子数守恒修正，μ_shift 恒为 0（v0.1 行为，逐位
+             不变）。
+             "conserve"：额外求解一个不依赖 Matsubara 指标的标量化学势偏移
+             μ_shift，使线性化（φ→0）正常态电子数相对"常数 DOS、χ≡0"参考态守恒，
+             见 README「能量依赖 DOS·化学势守恒（fix_mu="conserve"）」。传其他值
+             会在构造时报 NotImplementedError。
     vertex : 模型顶角核钩子（SPEC 功能 7，第二阶段）。None 时无影响（结果与 v0
              逐位一致）；否则是可调用对象
              ``vertex(n_idx, m_idx, omega_n, omega_m, T) -> ndarray``，
@@ -481,6 +487,9 @@ class Solver:
                   φ/Δ 方程的电声部分，从不作用于 μ* 项。
     dos_n_eps, dos_energy_cutoff_ratio, dos_max_iter, dos_mixing, dos_tol :
         非常 DOS 路径（Mitrović–Carbotte 推广）的数值参数，见 README。
+    mu_shift_tol, mu_shift_max_expand, mu_shift_max_iter :
+        fix_mu="conserve" 时求解 μ_shift 的数值参数：二分收敛的绝对容差（meV）、
+        括号加倍搜索次数上限、二分迭代次数上限，见 README「化学势守恒」。
     """
     spectrum: Spectrum
     mu_star: float
@@ -496,14 +505,18 @@ class Solver:
     dos_max_iter: int = 500
     dos_mixing: float = 0.3
     dos_tol: float = 1e-9
+    mu_shift_tol: float = 1e-6
+    mu_shift_max_expand: int = 40
+    mu_shift_max_iter: int = 60
     _n_margin: int = 30
     _n_max: int = 20000
 
     def __post_init__(self) -> None:
-        if self.fix_mu not in ("none",):
+        if self.fix_mu not in ("none", "conserve"):
             raise NotImplementedError(
-                f"fix_mu={self.fix_mu!r} 未实现：v0.1 只支持 'none'（忽略化学势的电子数"
-                "守恒修正），见 README「能量依赖 DOS」已知局限"
+                f"fix_mu={self.fix_mu!r} 未实现：目前只支持 'none'（忽略化学势的电子数"
+                "守恒修正）与 'conserve'（能量依赖 DOS 路径下的电子数守恒修正），见 "
+                "README「能量依赖 DOS·化学势守恒」"
             )
 
     # ---------------- 内部：Matsubara 网格与核矩阵 ----------------
@@ -664,13 +677,18 @@ class Solver:
             lam_full = self._lambda_toeplitz_full(t_mev, n_pos)
             lam_z, lam_phi = self._apply_vertex_full(lam_full, n_arr, wn, t_mev)
             e_max = self._dos_e_max()
-            z, chi, converged = self._solve_z_chi_dos(t_mev, lam_z, lam_full, wn, e_max)
+            if self.fix_mu == "conserve":
+                mu_shift, z, chi, converged = self._solve_mu_shift(t_mev, lam_z, lam_full, wn, e_max)
+                chi_eff = chi + mu_shift
+            else:
+                z, chi, converged = self._solve_z_chi_dos(t_mev, lam_z, lam_full, wn, e_max)
+                chi_eff = chi
             if not converged:
                 warnings.warn(
-                    f"能量依赖 DOS 路径 (Z,χ) 自洽在 T={t_k:.6g} K 未在 "
+                    f"能量依赖 DOS 路径 (Z,χ[,μ_shift]) 自洽在 T={t_k:.6g} K 未在 "
                     f"{self.dos_max_iter} 次迭代内收敛到 tol={self.dos_tol:.2g}"
                 )
-            g_int, _ = self._dos_energy_integrals(z, chi, np.zeros_like(wn), wn, e_max)
+            g_int, _ = self._dos_energy_integrals(z, chi_eff, np.zeros_like(wn), wn, e_max)
             theta = self._theta_mask_full(wn, t_mev)
             kernel = (np.pi * t_mev) * (lam_phi - self.mu_star * theta[None, :]) * g_int[None, :]
             eigvals = np.linalg.eigvals(kernel)
@@ -784,20 +802,36 @@ class Solver:
         return g_int, h_int
 
     def _solve_z_chi_dos(self, t_mev: float, lam_z: np.ndarray, lam_chi: np.ndarray,
-                          wn: np.ndarray, e_max: float) -> Tuple[np.ndarray, np.ndarray, bool]:
+                          wn: np.ndarray, e_max: float, mu_shift: float = 0.0,
+                          z0: Optional[np.ndarray] = None, chi0: Optional[np.ndarray] = None
+                          ) -> Tuple[np.ndarray, np.ndarray, bool]:
         """Tc 处 (Z,χ) 的自洽解（φ→0，线性混合不动点迭代，与 v0 solve_gap 同思路）。
 
         Z_i = 1 + (πT/ω_i)·Σ_j Λ_Z[i,j]·ω_j Z_j G_j
-        χ_i = -πT·Σ_j Λ_χ[i,j]·(χ_j G_j + H_j)
+        χ_i = -πT·Σ_j Λ_χ[i,j]·(χ_eff_j G_j + H_j)，χ_eff_j ≡ χ_j + mu_shift
+
+        mu_shift（fix_mu="conserve" 用，见 README「化学势守恒」）：一个不依赖
+        Matsubara 指标的标量化学势偏移。物理上它和 χ_j 处于同一个位置——两者都是
+        正常态格林函数分母 D_j(ε)=(ω_jZ_j)²+(ε+χ_j+mu_shift)²+φ_j² 里"ε+χ_j"这个
+        加法项的一部分——区别在于 χ_j 由声子自能自洽产生（方程左边就是它），
+        mu_shift 是外加的常数，由电子数守恒条件在 _solve_mu_shift 里单独定出，
+        不出现在这个自洽方程的左边。mu_shift=0（默认，fix_mu="none" 的路径）时
+        chi_eff≡chi，这个函数与 v0.1 原始实现完全一致（逐位不变）。
+
+        z0、chi0：可选的自洽迭代起点。默认 z=1、chi=0，与原始行为一致；
+        _solve_mu_shift 用它们在相邻 mu_shift 试探值之间热启动，减少收敛所需的
+        迭代次数（mu_shift 只做小幅调整时，(Z,χ) 通常只需个位数次混合迭代就能
+        从上一个解重新收敛）。
         """
-        z = np.ones_like(wn)
-        chi = np.zeros_like(wn)
+        z = np.ones_like(wn) if z0 is None else np.array(z0, dtype=float)
+        chi = np.zeros_like(wn) if chi0 is None else np.array(chi0, dtype=float)
         zero_phi = np.zeros_like(wn)
         converged = False
         for _ in range(self.dos_max_iter):
-            g_int, h_int = self._dos_energy_integrals(z, chi, zero_phi, wn, e_max)
+            chi_eff = chi + mu_shift
+            g_int, h_int = self._dos_energy_integrals(z, chi_eff, zero_phi, wn, e_max)
             z_new = 1.0 + (np.pi * t_mev / wn) * (lam_z @ (wn * z * g_int))
-            chi_new = -np.pi * t_mev * (lam_chi @ (chi * g_int + h_int))
+            chi_new = -np.pi * t_mev * (lam_chi @ (chi_eff * g_int + h_int))
             denom = np.max(np.abs(z_new)) + np.max(np.abs(chi_new)) + 1e-30
             diff = (np.max(np.abs(z_new - z)) + np.max(np.abs(chi_new - chi))) / denom
             z = self.dos_mixing * z_new + (1 - self.dos_mixing) * z
@@ -806,6 +840,127 @@ class Solver:
                 converged = True
                 break
         return z, chi, converged
+
+    def _electron_number_deviation(
+        self, mu_shift: float, t_mev: float, lam_z: np.ndarray, lam_chi: np.ndarray,
+        wn: np.ndarray, e_max: float,
+        z0: Optional[np.ndarray] = None, chi0: Optional[np.ndarray] = None
+    ) -> Tuple[float, np.ndarray, np.ndarray, bool]:
+        """给定 mu_shift，先解 (Z,χ)（_solve_z_chi_dos），再返回电子数偏差。
+
+        参考态是"常数 DOS、χ≡0"（正常态、φ=0、mu_shift=0）：在对称积分区间
+        [-e_max, e_max] 上，N̄≡1 时 H_j=(1/π)∫dε·1·ε/D_j(ε)=0 恒成立（被积函数是
+        ε 的奇函数，D_j(ε) 在 χ=0 时是 ε 的偶函数），且 χ=0 是这条件下 χ 方程的
+        精确不动点（RHS=-πTΣΛ[0·G+0]=0）——所以参考电子数（相对量）精确为 0，
+        不需要单独跑一次参考 Solver 来算，直接把待求偏差的目标定为 0 即可。
+
+        待求偏差本身：
+            Δn(mu_shift) ∝ Σ_j [ χ_eff_j·G_j + H_j ]，χ_eff_j = χ_j + mu_shift
+
+        这是标准 Matsubara 电子数公式 n=∫dε N(ε) f(ε-μ,T)（虚轴自能形式的严格
+        等价写法）在本模块能量积分基元 G_j=(1/π)∫dε N̄(ε)/D_j(ε)、
+        H_j=(1/π)∫dε N̄(ε)ε/D_j(ε) 下的展开——与 χ 方程 RHS 用的是同一个组合
+        （见 _solve_z_chi_dos 的 chi_new 公式），只是这里对全部 Matsubara 指标
+        直接求和而不再乘 Λ 核。返回值只用于求根（目标=0），比例常数、乃至整体
+        符号都无关紧要（_solve_mu_shift 的二分只看变号，不假设单调方向）。
+
+        实测排查过一次容易搞错的符号细节，记录在这里避免下次重新踩坑：
+        标准推迟格林函数 G(iω_j,ε)=1/(iω_jZ_j-(ε+χ_eff_j))（φ=0）的实部是
+        Re G=-(ε+χ_eff_j)/D_j(ε)，比 `chi_eff_j·G_j+H_j` 多一个负号——也就是说
+        这里返回的 `deviation` 实际正比于 **-Δn**，不是 +Δn。这不影响二分求根
+        本身（求根只依赖符号变化，与哪一侧对应"偏大"哪一侧对应"偏小"无关），
+        只是意味着不能望文生义地说"mu_shift 越大这个返回值就越大"——已经
+        用 DOS.step(ratio=0.5/2.0) 数值验证过 mu_shift 的根本身符号（不是这个
+        中间量的符号）与直觉一致：DOS 在费米面上方权重低于下方时 mu_shift<0，
+        见 tests/test_eliashberg_iso.py 里 fix_mu="conserve" 一节的 docstring
+        推导，以及 README「能量依赖 DOS·化学势守恒」。
+        """
+        z, chi, converged = self._solve_z_chi_dos(
+            t_mev, lam_z, lam_chi, wn, e_max, mu_shift=mu_shift, z0=z0, chi0=chi0
+        )
+        chi_eff = chi + mu_shift
+        g_int, h_int = self._dos_energy_integrals(z, chi_eff, np.zeros_like(wn), wn, e_max)
+        deviation = float(np.sum(chi_eff * g_int + h_int))
+        return deviation, z, chi, converged
+
+    def _solve_mu_shift(
+        self, t_mev: float, lam_z: np.ndarray, lam_chi: np.ndarray,
+        wn: np.ndarray, e_max: float
+    ) -> Tuple[float, np.ndarray, np.ndarray, bool]:
+        """求解 fix_mu="conserve" 的化学势偏移 mu_shift（meV），使
+        _electron_number_deviation(mu_shift)=0（电子数守恒，见该函数文档）。
+
+        用自实现的二分法而非 scipy.optimize.brentq：为了在相邻试探点之间热启动
+        (Z,χ) 的不动点迭代（拿上一个 mu_shift 解出的 (z,chi) 作为下一个试探值的
+        起点，见 _solve_z_chi_dos 的 z0/chi0），显著减少总迭代次数——mu_shift 是
+        Tc 二分套壳里的内层求根，每次 tc() 调用要在多个候选 T 上各做一次，热启动
+        对整体性能很重要；brentq 是黑盒实现，不便做这个优化。
+
+        括号：从 ±0.05·w_cut 开始（多数物理场景下电子数守恒所需的 mu_shift 相对
+        声子截止是一个小量），双向加倍最多 mu_shift_max_expand 次直到偏差变号；
+        找不到变号（DOS 参数病态，例如 log_vhs 归一化接近失效，见其文档）时报错。
+        """
+        z_guess, chi_guess = np.ones_like(wn), np.zeros_like(wn)
+
+        def dev(mu: float, z0: np.ndarray, chi0: np.ndarray):
+            return self._electron_number_deviation(mu, t_mev, lam_z, lam_chi, wn, e_max, z0, chi0)
+
+        scale = 0.05 * self.w_cut
+        lo, hi = -scale, scale
+        dev_lo, z_lo, chi_lo, conv_lo = dev(lo, z_guess, chi_guess)
+        dev_hi, z_hi, chi_hi, conv_hi = dev(hi, z_lo, chi_lo)
+        tries = 0
+        while dev_lo * dev_hi > 0 and tries < self.mu_shift_max_expand:
+            lo *= 2.0
+            hi *= 2.0
+            dev_lo, z_lo, chi_lo, conv_lo = dev(lo, z_lo, chi_lo)
+            dev_hi, z_hi, chi_hi, conv_hi = dev(hi, z_hi, chi_hi)
+            tries += 1
+        if dev_lo * dev_hi > 0:
+            raise RuntimeError(
+                "无法为 mu_shift（电子数守恒的化学势偏移）定位合适的二分区间"
+                f"（dev_lo={dev_lo:.4g}, dev_hi={dev_hi:.4g}，最终区间 "
+                f"[{lo:.4g}, {hi:.4g}] meV）；请检查 DOS 参数是否给出了病态的能量"
+                "依赖（例如 log_vhs 归一化接近失效）"
+            )
+        z_cur, chi_cur = z_lo, chi_lo
+        converged_zchi = conv_lo and conv_hi
+        for _ in range(self.mu_shift_max_iter):
+            mid = 0.5 * (lo + hi)
+            dev_mid, z_mid, chi_mid, conv_mid = dev(mid, z_cur, chi_cur)
+            converged_zchi = converged_zchi and conv_mid
+            if dev_lo * dev_mid <= 0:
+                hi, dev_hi = mid, dev_mid
+            else:
+                lo, dev_lo = mid, dev_mid
+            z_cur, chi_cur = z_mid, chi_mid
+            if (hi - lo) < self.mu_shift_tol:
+                break
+        mu_shift = 0.5 * (lo + hi)
+        _, z_final, chi_final, conv_final = dev(mu_shift, z_cur, chi_cur)
+        return float(mu_shift), z_final, chi_final, bool(converged_zchi and conv_final)
+
+    def mu_shift_at_T(self, t_k: float) -> Tuple[float, bool]:
+        """诊断/测试接口：给定温度 T（K），求解电子数守恒对应的化学势偏移
+        mu_shift（meV），与 self.fix_mu 的设置无关（总是走 "conserve" 的求解
+        路径；不修改 self，也不影响 tc() 的行为）。
+
+        dos.is_constant 时恒返回 (0.0, True)：无限延伸的常数 DOS 走 v0 折叠路径，
+        没有能量依赖，也就没有 mu_shift 的物理意义。
+
+        返回 (mu_shift, converged)；converged 要求括号搜索与二分过程中所有
+        (Z,χ) 自洽求解都收敛。
+        """
+        if self.dos.is_constant:
+            return 0.0, True
+        t_mev = KB_MEV_PER_K * t_k
+        n_pos = self._n_for_T(t_mev)
+        n_arr, wn = self._full_axis_grid(t_mev, n_pos)
+        lam_full = self._lambda_toeplitz_full(t_mev, n_pos)
+        lam_z, _ = self._apply_vertex_full(lam_full, n_arr, wn, t_mev)
+        e_max = self._dos_e_max()
+        mu_shift, _, _, converged = self._solve_mu_shift(t_mev, lam_z, lam_full, wn, e_max)
+        return mu_shift, converged
 
     # ---------------- 公开接口：非线性 Δ(T) ----------------
 

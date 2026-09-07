@@ -675,3 +675,173 @@ def test_vertex_pietronero_grimaldi_isotropic_placeholder_shape_and_sign():
     assert v_small.shape == n_idx.shape
     assert np.all(v_small > 0)
     assert np.all(v_large < 0)
+
+
+# ==========================================================================
+# 15. fix_mu="conserve"：能量依赖 DOS 路径的电子数守恒化学势修正
+# ==========================================================================
+#
+# 背景：EPW 的 fbw（全带宽）模式在能量依赖 DOS 下会解一个 muchem（化学势修正）
+# 保持正常态电子数不变；本模块 v0.1 的能量依赖 DOS 路径（fix_mu="none"）忽略
+# 这个效应。这里新增 fix_mu="conserve"，额外求解一个标量 mu_shift 使线性化
+# （φ→0）正常态电子数相对"常数 DOS、χ≡0"参考态守恒。方程、参考态=0 的论证、
+# 二分求根策略见 README「能量依赖 DOS·化学势守恒（fix_mu="conserve"）」；
+# 诊断接口 Solver.mu_shift_at_T(t_k) 独立于 self.fix_mu，直接返回给定温度下的
+# mu_shift（meV），供这里的测试直接断言符号/量级，不必每次都走一次完整 tc()。
+#
+# 本节测试统一放松部分数值容差（dos_n_eps、dos_tol、mu_shift_tol、tc(xtol=...)）
+# 换取速度：mu_shift 的二分求根是 Tc 二分套壳里的内层求根，默认容差下单次
+# tc() 调用要几十秒；这里只需要验证符号/数量级/方向是否正确，不需要 1e-9
+# 量级的精度，放松容差把单个测试的运行时间从分钟级降到几秒级。
+
+_FAST_MU_SHIFT_KW = dict(mu_shift_tol=1e-2, mu_shift_max_expand=20, mu_shift_max_iter=30)
+
+
+def test_fix_mu_conserve_matches_none_for_flat_dos():
+    """(a) N̄≡1 时 fix_mu="conserve" 必须与 "none" 高度一致（mu_shift≈0，Tc 几乎
+    逐位相同）。
+
+    用 DOS.step(ratio=1.0)（而不是 DOS.constant()）确保真的走了新增的
+    _solve_mu_shift/_electron_number_deviation 代码路径——DOS.constant() 会被
+    dos.is_constant 直接短路到 v0 折叠路径，根本碰不到 fix_mu 的任何新代码。
+    """
+    sp, w_cut, _ = _dos_test_spectrum_and_solver()
+    dos_flat = DOS.step(delta=0.0, ratio=1.0, width=1.0)
+    s_none = Solver(sp, mu_star=_DOS_MU_STAR, w_cut=w_cut, dos=dos_flat, dos_n_eps=200)
+    s_cons = Solver(sp, mu_star=_DOS_MU_STAR, w_cut=w_cut, dos=dos_flat, dos_n_eps=200,
+                     fix_mu="conserve")
+    tc_none = s_none.tc()
+    tc_cons = s_cons.tc()
+    assert tc_cons == pytest.approx(tc_none, rel=1e-6), (
+        f"tc_none={tc_none!r}, tc_cons={tc_cons!r}：N̄≡1 时两者应几乎逐位相同"
+    )
+    mu_shift, converged = s_cons.mu_shift_at_T(tc_none)
+    assert converged
+    assert abs(mu_shift) < 1e-4, f"mu_shift={mu_shift:.3e}，N̄≡1 时应恰为 0"
+
+
+def test_fix_mu_conserve_mu_shift_near_zero_for_symmetric_dos():
+    """(b) 对称 DOS（DOS.log_vhs(delta=0)，N̄(ε)≡N̄(-ε) 精确成立，形状函数只依赖
+    |ε-0|）下，mu_shift 应≈0。
+
+    数学论证（见 _electron_number_deviation 文档字符串）：N̄ 是偶函数时，
+    chi≡0、mu_shift=0 是电子数守恒方程的精确不动点——对称积分区间
+    [-e_max,e_max] 上 H_j=(1/π)∫dε N̄(ε)ε/D_j(ε) 是奇函数积分恒为 0，chi 方程
+    RHS 在 chi=0 时同样恒为 0（同一个奇偶论证）。这个结论对任意有限 e_max 都
+    精确成立，不依赖能量截止取多大——是本节测试里少数不受下面
+    test_fix_mu_conserve_mu_shift_sensitive_to_energy_cutoff 记录的截止敏感性
+    问题影响的稳健断言。
+    """
+    sp, w_cut, _ = _dos_test_spectrum_and_solver()
+    dos_sym = DOS.log_vhs(delta=0.0, a=0.3, W=1000.0, cut=5.0)
+    solver = Solver(sp, mu_star=_DOS_MU_STAR, w_cut=w_cut, dos=dos_sym, dos_n_eps=200,
+                     fix_mu="conserve")
+    mu_shift, converged = solver.mu_shift_at_T(150.0)
+    assert converged
+    assert abs(mu_shift) < 1e-4, f"mu_shift={mu_shift:.3e}，对称 DOS 下应≈0"
+
+
+def test_fix_mu_conserve_asymmetric_dos_sign_and_tc_direction():
+    """(c) 非对称 DOS：mu_shift 必须明显非零，符号与下面的物理推导一致；
+    "conserve" 相对 "none" 的 Tc 变化方向也必须符合同一个推导。
+
+    符号推导（团队提示："DOS 上方低于下方时化学势下移？"——这里用 T=0 简单
+    填充图像独立验证，而不是直接采信提示）：设参考态在 μ=0 处填满
+    n_ref=∫_{-∞}^{0} N̄_ref(ε)dε 个态（N̄_ref≡1）。若 N̄(ε) 在 ε<0（费米面下方）
+    比参考基线更高、在 ε>0（上方）更低（即"DOS 上方低于下方"），则在**不移动
+    μ**的情况下按同一个积分下限算 n(μ=0)=∫_{-∞}^0 N̄(ε)dε 会因为下方权重变高
+    而**超过** n_ref——要恢复到 n_ref 就必须**缩小**积分上限，即把 μ 往下移
+    （mu_shift<0）。这与团队提示的方向一致，下面用 DOS.step(ratio=0.5)（上方
+    基线 0.5×，下方基线 1×，即"上方低于下方"）数值验证 mu_shift<0，用镜像
+    DOS.step(ratio=2.0)（上方 2×，下方 1×，"上方高于下方"）验证符号翻转。
+
+    Tc 方向：实测发现 ratio=0.5 与 ratio=2.0（互为 ε→-ε 镜像的 DOS）不仅
+    mu_shift 精确反号，Tc_none、Tc_conserve 也都分别彼此相等——这是镜像对称
+    本身的推论（ε→-ε 同时 mu_shift→-mu_shift 是整个本征值问题的一个对称
+    操作，不改变主导本征值），与 mu_shift 的符号无关。所以"conserve"相对
+    "none"对 Tc 的影响在这个意义上**不依赖不对称的具体方向**，两个镜像
+    都应该同方向变化——实测是**压低**：Tc_conserve<Tc_none。这与标定动机
+    （见 theory/derivations/p1_mishra_dos_calibration.py 的 docstring 与
+    README「第二阶段结果」的新增分析）里 EPW 的 muchem（电子数守恒）相对
+    不做修正**压低**了 H3S 的 Tc 这个方向一致，且比"两个镜像方向相反"这个
+    （错误的）初始猜测更稳健——已经用实测排除了"方向相反"这个可能性。
+    """
+    sp, w_cut, _ = _dos_test_spectrum_and_solver()
+
+    results = {}
+    for ratio in (0.5, 2.0):
+        dos = DOS.step(delta=0.0, ratio=ratio, width=20.0)
+        s_none = Solver(sp, mu_star=_DOS_MU_STAR, w_cut=w_cut, dos=dos,
+                         dos_n_eps=100, dos_tol=1e-6)
+        s_cons = Solver(sp, mu_star=_DOS_MU_STAR, w_cut=w_cut, dos=dos,
+                         dos_n_eps=100, dos_tol=1e-6, fix_mu="conserve", **_FAST_MU_SHIFT_KW)
+        tc_none = s_none.tc(xtol=1e-4)
+        tc_cons = s_cons.tc(xtol=1e-4, t_bracket_k=(tc_none * 0.4, tc_none * 1.3))
+        mu_shift, converged = s_cons.mu_shift_at_T(tc_none)
+        assert converged
+        results[ratio] = (mu_shift, tc_none, tc_cons)
+
+    mu_lo, tc_none_lo, tc_cons_lo = results[0.5]
+    mu_hi, tc_none_hi, tc_cons_hi = results[2.0]
+
+    assert mu_lo < -1.0, f"ratio=0.5（上方低于下方）应给出明显负的 mu_shift，实得 {mu_lo:.4f}"
+    assert mu_hi > 1.0, f"ratio=2.0（上方高于下方）应给出明显正的 mu_shift，实得 {mu_hi:.4f}"
+    assert mu_hi == pytest.approx(-mu_lo, rel=1e-6), (
+        "ratio=0.5/2.0 是彼此在 ε→-ε 下的镜像 DOS，mu_shift 应精确反号"
+    )
+
+    assert tc_cons_lo < tc_none_lo, (
+        f"ratio=0.5：Tc_conserve={tc_cons_lo:.4f} 应低于 Tc_none={tc_none_lo:.4f}"
+    )
+    assert tc_cons_hi < tc_none_hi, (
+        f"ratio=2.0：Tc_conserve={tc_cons_hi:.4f} 应低于 Tc_none={tc_none_hi:.4f}"
+        "（与 ratio=0.5 同方向——见 docstring 关于镜像对称的讨论）"
+    )
+    assert tc_cons_lo == pytest.approx(tc_cons_hi, rel=1e-6), (
+        "镜像 DOS 的 Tc_conserve 也应彼此相等（同一个物理系统的镜像表示）"
+    )
+    assert tc_none_lo == pytest.approx(tc_none_hi, rel=1e-6), (
+        "镜像 DOS 的 Tc_none 也应彼此相等（fix_mu 对此没有影响，纯粹是 DOS 镜像对称的推论）"
+    )
+
+
+def test_fix_mu_conserve_mu_shift_sensitive_to_energy_cutoff():
+    """如实记录一个重要的已知局限（见 README「能量依赖 DOS·化学势守恒」）：
+    mu_shift 的求根结果对 dos_energy_cutoff_ratio（能量积分范围）敏感，
+    不像 (Z,χ,φ) 本身那样只有 ~1/cutoff 量级的小截断误差。
+
+    机制（已用解析单项背景积分核实，见开发笔记）：把能量积分区间
+    [-e_max,e_max] 拆成"常数背景"+"局域不对称特征"两部分，背景部分对
+    dev(mu) 斜率的贡献随 e_max 增大按 ~1/e_max 衰减到 0；只要 N̄(ε) 在
+    ε→±∞ 都收敛到同一个常数（例如这里的 DOS.step 台阶），局域特征部分对
+    dev(0) 本身的贡献会收敛到一个有限值，但收敛到 0 斜率的背景意味着方程
+    dev(mu)=0 的根需要越来越大的 |mu| 才能补上这个有限的 dev(0)——根本身
+    仍然收敛，但收敛速度极慢（需要 dos_energy_cutoff_ratio 到 1e4~1e5 量级
+    才能看到明显收敛），远超模块默认值 20、也超过"高精度"建议值 200。
+    对 DOS.step 这种两侧台阶高度不同、永远不会回到同一个常数的模型，
+    mu_shift 甚至不收敛（随 cutoff 增大持续缓慢增长，见下面的实测数值）。
+
+    结论：fix_mu="conserve" 的 mu_shift **绝对数值**依赖 dos_energy_cutoff_ratio
+    的选择，不能脱离这个选择单独解读；本文件其余测试只断言符号和方向（这些
+    在下面实测的全部 cutoff 范围内都稳健不变），不断言绝对数值。这里只锁定
+    "确实敏感"这个定性事实作为回归哨兵，不断言具体收敛与否。
+    """
+    sp, w_cut, _ = _dos_test_spectrum_and_solver()
+    dos = DOS.step(delta=0.0, ratio=0.5, width=20.0)
+    t_k = 150.0
+
+    mu_shifts = []
+    for ratio in (2.0, 20.0, 200.0):
+        solver = Solver(sp, mu_star=_DOS_MU_STAR, w_cut=w_cut, dos=dos, dos_n_eps=100,
+                         dos_energy_cutoff_ratio=ratio, **_FAST_MU_SHIFT_KW)
+        mu_shift, converged = solver.mu_shift_at_T(t_k)
+        assert converged
+        mu_shifts.append(mu_shift)
+
+    assert all(m < 0 for m in mu_shifts), "符号在所有 cutoff 下都应保持一致（上方低于下方 -> 负）"
+    assert abs(mu_shifts[1]) > abs(mu_shifts[0]) * 1.5, (
+        "mu_shift 的量级应随 cutoff 增大明显增长（记录截止敏感性，不是收敛到常数）"
+    )
+    assert abs(mu_shifts[2]) > abs(mu_shifts[1]) * 1.5, (
+        "cutoff 继续增大，mu_shift 应继续明显增长（同上）"
+    )

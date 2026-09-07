@@ -194,7 +194,112 @@ SPEC 要求的"至少 ±20·ω_c"）；`DOS.from_table()` 时会额外取 `max(e
 （计算量基本不变，`(Z,χ)` 自洽和本征值求解不随 `e_max` 增大而变慢，只有积分节点
 覆盖的 `ε` 范围变大）。
 
-### 已知局限
+### 化学势守恒（`fix_mu="conserve"`）
+
+**动机**：用 Mishra 数据集的真实 H3S α²F + 真实 QE DOS 标定时（见
+`theory/derivations/p1_mishra_dos_calibration.py`），发现常数 DOS 路径与 EPW
+的 fsr（固定态密度）Tc 相差 1–2K，但能量依赖 DOS 路径与 EPW 的 fbw（全带宽）
+Tc 相差 6–8K，且**方向相反**（本模块的能量依赖 DOS 路径略微**抬高** Tc，
+EPW 的 fbw 略微**压低** Tc）。H3S 的 N̄(ε) 明显不对称（费米面下方 1.1–1.17、
+上方 0.74–0.83），而 EPW 的 fbw 模式会解一个 `muchem`（化学势修正）保持正常
+态电子数不变（Lucrezi et al., *Commun. Phys.* 7, 33 (2024),
+arXiv:2310.00056）；本模块 `fix_mu="none"`（v0.1 默认）完全忽略这个效应，
+是最可能的差距来源之一。`fix_mu="conserve"` 补上这个修正，纯加性（默认仍是
+`"none"`，不影响任何既有结果）。
+
+#### 方程
+
+物理上 `mu_shift` 和 `χ_n` 处于同一个位置——都是正常态格林函数分母
+`D_n(ε)=(ω_nZ_n)²+(ε+χ_n+mu_shift)²+φ_n²` 里"`ε+χ_n`"这个加法项的一部分——
+区别是 `χ_n` 由声子自能自洽产生（出现在 `χ` 方程左边），`mu_shift` 是不依赖
+Matsubara 指标的标量，由电子数守恒条件单独定出，不进入 `(Z,χ)` 自洽方程的
+左边：
+
+```
+Z_n、χ_n 自洽方程与"能量依赖 DOS"一节相同，只是把 χ_m 替换成 χ_eff_m=χ_m+mu_shift：
+Z_n ω_n = ω_n + πT Σ_m λ(n−m) · ⟨ω_m Z_m/D_m(ε)⟩_ε
+χ_n     = −πT Σ_m λ(n−m) · ⟨(ε+χ_eff_m)/D_m(ε)⟩_ε   （注意：左边仍是 χ_n，不是 χ_eff_n）
+D_m(ε)  = (ω_m Z_m)² + (ε+χ_eff_m)² + φ_m²
+```
+
+#### 电子数公式与"参考态=0"
+
+标准（虚轴、正常态）电子数公式 `n=∫dε N(ε) f(ε-μ,T)` 在本模块的能量积分基元
+`G_j=(1/π)∫dε N̄(ε)/D_j(ε)`、`H_j=(1/π)∫dε N̄(ε)ε/D_j(ε)` 下可以写成
+
+```
+偏差(mu_shift) ≡ Σ_j [ χ_eff_j·G_j + H_j ]，χ_eff_j = χ_j + mu_shift
+```
+
+—— 与 `χ` 方程右边用的是同一个组合，只是对全体 Matsubara 指标直接求和、不再
+乘 `Λ` 核。求根目标是这个"偏差"=0；由于线性化（`φ→0`）求 Tc 只需要**正常态**
+电子数（不需要超导态的完整 `φ` 依赖），这个公式已经足够。
+
+参考态是"常数 DOS、`χ≡0`、`mu_shift=0`"：在对称积分区间 `[-e_max,e_max]` 上，
+`N̄≡1` 时 `H_j` 是奇函数积分恒为 0，且 `χ=0` 是这条件下 `χ` 方程的精确不动点
+（右边=0）——所以参考态的"偏差"精确为 0，不需要单独跑一次参考 `Solver` 来算，
+直接把求根目标定为 0 即可。
+
+**符号提醒（实测踩过的坑）**：标准推迟格林函数 `Re G=-(ε+χ_eff)/D` 比上面的
+"偏差"定义多一个负号，即这个"偏差"量实际正比于 `-Δn` 而不是 `+Δn`。这不影响
+求根本身（二分只看变号），但意味着不能望文生义地假设"`mu_shift` 越大偏差
+越大"——详见 `_electron_number_deviation` 的代码文档字符串。
+
+#### 数值求解：热启动二分，不用 `scipy.optimize.brentq`
+
+`mu_shift` 是 Tc 二分套壳里的**内层**求根（每个候选 T 都要重新解一次），默认
+用自实现的二分（`_solve_mu_shift`）而非 `brentq`，为的是在相邻试探点之间把
+上一个 `mu_shift` 解出的 `(Z,χ)` 传给下一个试探值当起点（`_solve_z_chi_dos`
+的 `z0`/`chi0` 参数）暖启动，显著减少总迭代次数——`brentq` 是黑盒实现，不便做
+这个优化。括号从 `±0.05·w_cut` 开始双向加倍（最多 `mu_shift_max_expand` 次）
+直到偏差变号，再二分（最多 `mu_shift_max_iter` 次或区间宽度 `<mu_shift_tol`）；
+测试/诊断用途可用 `Solver.mu_shift_at_T(t_k)` 直接拿到某个温度下的 `mu_shift`
+（不依赖 `self.fix_mu`，不修改 `self`，`dos.is_constant` 时恒返回 0）。
+
+#### 已知局限：`mu_shift` 对 `dos_energy_cutoff_ratio` 敏感
+
+这是排查计算比较久才定位到的一个重要限制，如实记录：**跟 `(Z,χ,φ)`
+本身只有 ~1/cutoff 量级的小截断误差不同，`mu_shift` 的求根结果对能量积分
+范围 `dos_energy_cutoff_ratio` 相当敏感**，实测（Einstein 谱 λ=1.84,
+ω_log=93meV, w_cut=465meV，`DOS.step(delta=0, ratio=0.5, width=20)`，
+T=150K）：
+
+```
+dos_energy_cutoff_ratio     mu_shift (meV)
+              2                  -237
+             20                 -2937
+            200                -30964
+```
+
+持续随 cutoff 增大而增大，没有收敛的迹象（这条 DOS 的两侧台阶高度不同，
+永远不会回到同一个常数）。已经排查过机制（解析拆出"常数背景 + 局域不对称
+特征"两部分做单项积分核实）：**背景部分对"偏差(mu_shift)"关于 mu_shift 的
+斜率的贡献随 e_max 增大按 ~1/e_max 衰减到 0**（可以解析证明，单个 Matsubara
+项的背景贡献严格等于 `(1/2π)ln[(a²+(e_max+c)²)/(a²+(e_max-c)²)]`，`c` 固定时
+这个表达式随 `e_max→∞` 趋于 0）；如果 DOS 的两侧尾部收敛到**同一个**常数
+（例如手工构造的、远离特征处精确回到 N̄=1 的"局域凸起"DOS），"偏差"本身在
+mu_shift 固定时确实收敛，但由于上述背景斜率趋于 0，方程"偏差=0"的根需要
+越来越大的 `|mu_shift|` 才能抵消局域特征贡献的一个有限余量——根本身仍然
+收敛，但收敛速度极慢（实测需要 `dos_energy_cutoff_ratio` 到 1e4~1e5 量级才能
+看到明显收敛，远超模块默认值 20，也超过"高精度"建议值 200）；如果两侧尾部
+根本不收敛到同一个常数（`DOS.step(ratio≠1)`、或真实材料表格数据在截止之外
+按边界值常数延拓、而左右边界值本来就不相等——H3S/D3S 的真实 QE DOS 表格正
+是这种情况），`mu_shift` 干脆不收敛。
+
+**这不是求解器 bug**，是"用一个不依赖 Matsubara 指标的标量化学势守恒一个对
+整个（可能无穷延伸的）能带积分而成的电子数"这个物理设定本身的性质：一个
+持续到无穷远、左右不对称的背景，理论上需要无穷大的化学势偏移才能补偿。
+**实践含义**：不要为了追求"`mu_shift` 收敛"盲目增大 `dos_energy_cutoff_ratio`
+——这里的正确截止应该对应**真实材料的物理能带范围**（类似 EPW 的
+`fsthick` 窗口），而不是数学意义上的"cutoff→∞极限"；`mu_shift` 的绝对数值
+必须结合"用的是哪个 `dos_energy_cutoff_ratio`"来解读，不能脱离这个选择单独
+引用。本模块测试（`tests/test_eliashberg_iso.py` 的 `fix_mu="conserve"`
+一节）只断言符号和方向（在整个实测的 cutoff 范围内都稳健），不断言绝对数值；
+`p1_mishra_dos_calibration.py` 的 `fix_mu="conserve"` 结果沿用与 `"none"` 相同
+的 `dos_energy_cutoff_ratio=2.0`（与 QE DOS 表格窗口 `±3eV` 同量级）以保证
+可比性，见「第二阶段结果」一节的具体数值与讨论。
+
+### 已知局限（能量依赖 DOS 通用部分）
 
 1. **`delta=0`（vHs 精确钉在费米面）不会提升 Tc，反而压低 Tc**：这是上面"归一化"
    一节讨论的数学推论，在 `a∈{0.05,...,1.0}, cut∈{1,5,20}` 的扫描下稳健成立
@@ -212,11 +317,15 @@ SPEC 要求的"至少 ±20·ω_c"）；`DOS.from_table()` 时会额外取 `max(e
    `UserWarning`）。**这不是"delta 越大越接近常数 DOS 因而无所谓"的直觉**——验证
    "delta 远大于 w_cut 回到常数 DOS"这类极限时，必须同时把 `W` 取得远大于扫描到的
    `delta`（`nbar()` 会在 `g(0)<0.1` 时发 `UserWarning` 提示这个风险）。
-3. **`fix_mu` 只实现了 `"none"`**（忽略化学势的电子数守恒修正，把它当作能量依赖
-   DOS 的额外自由参数直接忽略，这是 v0.1 范围内的已知简化）。`fix_mu="linear"`
-   （电子数守恒的线性化修正，Mitrović-Carbotte 原文和 Pickett 1980 都讨论过这个
-   修正项）**未实现**；`Solver.__post_init__` 会在 `fix_mu` 取其它值时直接
-   `raise NotImplementedError`，不会静默给出不完整的结果。
+3. **`fix_mu` 已实现 `"none"`（默认）与 `"conserve"`**：`"none"` 忽略化学势的
+   电子数守恒修正（v0.1 行为，逐位不变）；`"conserve"` 额外求解一个不依赖
+   Matsubara 指标的标量化学势偏移使正常态电子数守恒，见上面「化学势守恒
+   （`fix_mu="conserve"`）」一节（含方程、数值方法与已知的截止敏感性局限）。
+   `fix_mu="linear"`（Mitrović-Carbotte 原文和 Pickett 1980 都讨论过的另一种
+   线性化电子数守恒修正，与本模块实现的"非线性求根"路径不同）**未实现**，
+   不在本次任务范围内；`Solver.__post_init__` 会在 `fix_mu` 取 `"none"`、
+   `"conserve"` 之外的值时直接 `raise NotImplementedError`，不会静默给出
+   不完整的结果。
 4. **计算成本**：能量依赖 DOS 路径每次 `tc()` 调用里，每个二分迭代点都要做一次
    `(Z,χ)` 自洽（最多 `dos_max_iter=500` 次线性混合迭代，`dos_mixing=0.3`）+ 一次
    `M×M`（`M=2*n_pos`）本征值求解，比常数 DOS 路径慢一到两个数量级（典型运行时间
@@ -451,10 +560,105 @@ delta/wlog | delta(meV) |     Tc(K) |  Tc/Tc0 |   alpha
 增大单调恢复向基线——这部分与 Tsuei (1990) "vHs 钉在/靠近费米面压制同位素效应"的
 定性结论一致，且是这张表里最稳健的定性结论（不依赖 Tc 升降的符号）。
 
+### `p1_mishra_dos_calibration.py` 新增 `fix_mu="conserve"` 两列的结果（真实 H3S/D3S QE DOS）
+
+以下为 `python theory/derivations/p1_mishra_dos_calibration.py` 的原样输出（2026-09-08 跑的，
+含新增的 `fix_mu="conserve"` 两列，全程约 10.4 分钟）。DOS 来自真实 QE 计算的
+`H3S-200GPa/band/H3S.dos`（`E_F=17.619 eV`，`±3eV` 窗口，1200 点，归一化到 `N̄(E_F)=1`）：
+
+```
+QE DOS: N(E_F)=0.5593 states/eV; window ±3.0 eV, 1200 points
+  N̄( -500 meV) = 0.825
+  N̄( -200 meV) = 1.165
+  N̄( -100 meV) = 1.129
+  N̄(  -50 meV) = 1.114
+  N̄(   +0 meV) = 1.000
+  N̄(  +50 meV) = 0.830
+  N̄( +100 meV) = 0.781
+  N̄( +200 meV) = 0.736
+  N̄( +500 meV) = 0.622
+
+kind DOS                       Tc_H    Tc_D    α_H | EPW Tc_H EPW Tc_D EPW α_H
+har  const                    243.9   179.3  0.444 |      245      180   0.445
+har  QE-table                 241.6   179.3  0.431 |      234      173   0.436
+har  QE-table+cons            148.3   108.1  0.456 |      234      173   0.436
+har  QE-table+cons(±1eV)      168.2   120.9  0.477 |      234      173   0.436
+anh  const                    190.6   151.5  0.331 |      192      152   0.337
+anh  QE-table                 195.4   155.0  0.335 |      189      149   0.343
+anh  QE-table+cons             97.3    80.1  0.281 |      189      149   0.343
+anh  QE-table+cons(±1eV)      113.1    91.5  0.306 |      189      149   0.343
+
+fix_mu="conserve" 的 mu_shift（各自 Tc 处求得，meV，负号=化学势下移）：
+har  QE-table+cons          H3S  mu_shift=  -1055.3 meV  converged=True
+har  QE-table+cons          D3S  mu_shift=  -1078.0 meV  converged=True
+har  QE-table+cons(±1eV)    H3S  mu_shift=   -612.8 meV  converged=True
+har  QE-table+cons(±1eV)    D3S  mu_shift=   -642.4 meV  converged=True
+anh  QE-table+cons          H3S  mu_shift=  -1081.2 meV  converged=True
+anh  QE-table+cons          D3S  mu_shift=  -1094.3 meV  converged=True
+anh  QE-table+cons(±1eV)    H3S  mu_shift=   -645.2 meV  converged=True
+anh  QE-table+cons(±1eV)    D3S  mu_shift=   -662.1 meV  converged=True
+```
+
+#### 如实分析：方向对了，但 `"conserve"` 把 gap 反向撑大了 8–13 倍，没有收窄
+
+先确认动机里描述的"反方向"现象在这份真实数据里确实存在：`const` 列（对应 EPW 的
+`fsr`，无 DOS 能量依赖）与 EPW 差 1–2K（`har`: 243.9 vs 245；`anh`: 190.6 vs 192），
+和 SPEC 预期一致；但 `QE-table`/`fix_mu="none"` 列（对应 EPW 的 `fbw`）比 EPW 的
+`fbw` **高** 6–8K（`har`: 241.6 vs 234，+7.6K；`anh`: 195.4 vs 189，+6.4K）——EPW 的
+`fbw`（带 `muchem` 电子数守恒）比它自己的 `fsr` 低，本模块的 `QE-table`（`fix_mu="none"`，
+无电子数守恒）却比它自己的 `const` 基线还略高（`har`）或明显更高（`anh`），确认了
+方向相反这个 gap 的存在。
+
+加上 `fix_mu="conserve"` 之后，方向确实被"掰"回来了——`QE-table+cons` 相比
+`QE-table` 大幅降低（`har`: 241.6→148.3，`anh`: 195.4→97.3），这与"EPW 的 `muchem`
+让 `fbw` 低于 `fsr`"是同一个方向，定性验证了「H3S 的 N̄(ε) 不对称 + 电子数守恒
+压低 Tc」这一因果链确实成立。**但幅度完全对不上**：`har` 只需要再降
+`241.6-234=7.6K` 就能对上 EPW 的 `fbw`，`"conserve"`（`dos_energy_cutoff_ratio=2.0`，
+与 `QE-table` 相同）却把 Tc 砸到 148.3K，**过冲了 `148.3-234=-85.7K`，是目标缺口的
+约 11.3 倍**；`anh` 同理，目标缺口 6.4K，实际过冲到 `97.3-189=-91.7K`，约 **14.3 倍**。
+换成探索性的 `±1eV` 窗口（更接近 EPW `fsthick=1.0eV`）后过冲幅度有所收敛
+（`har`: -65.8K≈8.7 倍，`anh`: -75.9K≈11.9 倍），说明窗口大小确实是过冲幅度的一个
+贡献因素（与「化学势守恒」一节"`mu_shift` 对 `dos_energy_cutoff_ratio` 敏感"的
+已知局限吻合：`±3eV` 窗口下 `|mu_shift|≈1055–1094meV`，`±1eV` 窗口下降到
+`|mu_shift|≈613–662meV`，窗口越大过冲越猛），**但即使换成 EPW 量级的窗口，过冲
+倍数仍然接近一个数量级，没有真正收窄到目标缺口附近**。
+
+下一步怀疑对象（按优先级排序，供后续任务参考）：
+
+1. **EPW 的 `fsthick=1.0eV` 不只是"化学势求解用的 DOS 窗口"，而是贯穿整个
+   Eliashberg 求和的硬截止**——`fsthick` 限制的是哪些电子态参与电声耦合矩阵元
+   求和本身（k/q 点求和的费米面附近壳层），不只是"用哪段 N̄(ε) 去解一个标量
+   `mu_shift`"。本模块的 `"conserve"` 实现是后者：用一个**不依赖 Matsubara 指标
+   的标量 `mu_shift`**去补偿**同一个（可能远超 `fsthick` 的）能量积分域**上的
+   电子数偏差，这与 EPW `muchem` 在 `fsthick` 壳层内部、且与能带结构/ k 点权重
+   自洽求解化学势的机制在数学结构上并不等价。本次 `±1eV` 截断实验只是把
+   **DOS 形状**限制在 `±1eV`，积分和电子数守恒逻辑仍是本模块原有的"标量
+   `mu_shift`"框架，并不是真正复现 EPW 的 `fsthick` 机制——这很可能是过冲量级
+   对不上的主因，值得作为下一步的重点方向。
+2. **真实 QE `*.dos` 表格本身的粗糙度/尖锐度**：从打印的 `N̄(ε)` 看，`±500meV`
+   窗口内 `N̄` 已经从 0.622 变到 1.165，接近 2 倍的摆动——这个摆动如果部分来自
+   `*.dos` 直方图的统计噪声（而非物理带结构的真实精细结构），会让标量
+   `mu_shift` 机制过度反应；EPW 用于 `muchem` 的 DOS 本身分辨率/展宽
+   （`degaussw`）设置未知，如果比这里用的原始 `*.dos` 更平滑，会显著改变
+   `mu_shift` 的量级。
+3. **Tc 提取网格分辨率（1–2K）与 EPW `*.dos` 网格粗糙度（`±1eV`/40 bins）**：
+   相对于本节发现的 65–92K 过冲，这两个因素量级太小，不太可能是主因，但仍
+   应在后续更精细的对照里排除。
+
+**结论**：`fix_mu="conserve"` 的实现本身通过了本节和 `tests/test_eliashberg_iso.py`
+的"符号、对称性、`N̄≡1` 退化到 `"none"`"等结构性检验（见「化学势守恒」一节），
+是一个数学上自洽的标量电子数守恒修正；但把它套到真实 H3S/D3S QE DOS 表格上，
+**没有让 gap 收窄，反而在正确的方向上过冲了一个数量级**。这不是"实现有 bug"，
+而是"标量 `mu_shift` 模型 + 真实材料 DOS 表格"这个组合本身的定量局限——诊断和
+（如果需要）改进这个组合，应作为独立的后续任务，而不是本次任务范围内可以
+一次性解决的问题。
+
 ## 未实现/未覆盖的范围
 
-- **`fix_mu="linear"`**（能量依赖 DOS 路径的化学势-电子数守恒线性修正）：未实现，
-  见「能量依赖 DOS·已知局限」第 3 条；`fix_mu` 目前只接受 `"none"`。
+- **`fix_mu="linear"`**（能量依赖 DOS 路径的化学势-电子数守恒**线性化**修正，
+  与已实现的 `"conserve"`（非线性求根）是 Mitrović-Carbotte/Pickett 原文里
+  并列讨论的两种不同近似）：未实现；`fix_mu` 目前接受 `"none"`（默认）与
+  `"conserve"`，见「能量依赖 DOS·化学势守恒（`fix_mu="conserve"`）」一节。
 - **顶角核钩子对 `ε` 的依赖**：`vertex` 目前只作用在 Matsubara 求和核上，不进入
   能量积分；见「顶角核钩子·已知局限」。
 - **`vertex_pietronero_grimaldi_isotropic` 的真实文献解析形式**：当前实现是占位
