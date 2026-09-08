@@ -199,6 +199,13 @@ implementer 把真实 H3S DOS 放进完整的 (Q, ω_q) 一阶顶角 P(Q, ω_q)�
 
 **假说的修正（Schrödi Eq. 23–24 逐字转录后，`surveys/schrodi_2020_eq19-24_transcription_2026-09-08.md`）**：把两式在 Δ→0 线性化：Z 方程的顶角项只剩 −P Σλλ·sgn·sgn·sgn，在主要贡献区（三个符号相同）**降低 Z**（Schrödi Table I：小 α 时 λ_Z^(2) < 0）；Δ 方程的三个线性项合起来 ≈ −P Σλλ·Δ/|ω|，**削弱配对核**。Schrödi p.12 的数值结论："the FSR isotropic approximation ... systematically produce[s] a negative correction"——即**在各向同性 FSR 一阶理论里，正的相空间常数 P 经两通道的净效应总是压低 Tc，Δ 通道的削弱压过 Z 通道的减小**。所以 §5.6 的机制假说方向反了（不是 Z 增强而是 Δ 削弱），但结论保留：**各向同性顶角函数为正与 EPW 压低 Tc 并不矛盾**——§5.5 的"矛盾"来自把顶角函数的符号（GPS 的 P）与它对 Tc 的净效应混为一谈。式 (5.1) 的吻合仍无机制支持（静态 P_s 不是进入 Tc 的量）。
 
+**动量结构扫描（`P2_vertex_momentum_report.md`，`p2_vertex_momentum.py`，40 测试）**：在同一各向同性一阶顶角函数上换 g²(Q) 权重与"部分态 v_F→0"的鞍点模型：
+- 小 q 峰权重（Q_c = 0.05–0.2）：P̄_eff 强烈为正（+0.04～+0.41），排除
+- 大 q 峰 / 区界主导：E_F = 24 eV 下 −0.0005～−0.0007（比目标小 150×），E_F = 1 eV 下翻正——不稳健
+- 用 D3S `a2f_proj` 频率分类构造的 H3S 代理权重：+0.0004
+- v_F → 0 的"慢电子"混入任何比例都把 P̄_eff 推到 +0.2～+0.37：因为 v_F = 0 精确等价于 q ≡ 0 的动态极限（P_d > 0，大正数）——这是§5.1 极限顺序警示的另一面
+**结论**：单独改 Q 权重或 v_F 分布都不能让**顶角函数本身**的 Eliashberg 平均变负。与上段一致：负号不在顶角函数，在两通道结构。
+
 这也重写了判据的形状：**各向同性 FSR 一阶理论里顶角恒压低 Tc；增强（MgB2 σ 带、Schrödi 完整解在大 α）需要动量分辨的、非费米面平均的结构**（Schrödi p.9："neglect non-Fermi surface contributions"）。压制的**量级**由 P·λ²·频率结构决定——Mishra 指出 factorized 核比精确 λ^V 大 3–4×，所以 Schrödi 式各向同性理论会**高估**压制。`p2_schrodi_fsr.py` 正在用 Mishra 的 H3S/D3S 谱数值检验：Z-only / Δ-only / 两者的 δ = ln(Tc^V/Tc^0)，对照 EPW FSR 的 −0.21 / −0.15。
 
 **EPW 实现的确认（`surveys/mishra_2507_vertex_formalism_2026-09-08.md`）**：Mishra 2507 的 λ^V 是**正数**（H3S anh 0.71，λ^V/λ² ≈ 0.24），顶角项是独立的双频率核经 2×2 矩阵 P̃^ω（Z 通道）、P̃^Δ（Δ 通道）进入——"顶角压低 Tc"不是顶角函数为负，是**正的顶角核在两通道的净效应为负**。这正是本节假说的结构。还有两条对本稿有用的事实：(a) Schrödi 式 factorized 核 λ·λ 比 Mishra 的精确 λ^V 大 3–4 倍；(b) Mishra 不取静态极限、自洽迭代仍得负号，所以"静态极限 artifact"（Schrödi p.9 的猜测）不是 H3S 负号的来源——与 §5.5 的结论一致：式 (5.1) 的吻合不是机制。文献里 Pietronero 1995 与 Schrödi 2020 关于"各向同性程度 → 符号"的规则**互相相反**（Schrödi 原句 "opposite to those of Ref.[28]"），没有任何一条预言 H3S 的真实符号。
