@@ -246,7 +246,7 @@ Villa-Cortés 2022 的独立数字（μ* 逐压力点拟合实验 Tc）：α_el-
 | 实验 α（fcc 相） | **0.57**（Tc_D 168 K）或 **0.64**（160 K） | Drozdov 2019；LaD10 的压力与相纯度待抽取 |
 | 差额 | **+0.16 ～ +0.23** | 且 **α_exp > ½**：库仑与 SSCHA 非谐都给不出 |
 
-按推论 1，α > ½ 的候选来源只有：(i) Tc 随 m = ω/E_F 增强的非绝热顶角修正；(ii) DOS 位形使 s_DOS > 0；(iii) SSCHA 之外的非谐软化（Drozdov 原文自己的猜测"soft anharmonism"，但 Errea 2020 的 SSCHA 给的是硬化型、α 降到 0.43，与之相反）；(iv) 实验侧。**H3S 的四因子分解（§4.1）表明顶角修正在氢化物里是压 α 的（−0.085），DOS 单独 ≈ 0**——若 LaH10 与 H3S 同类，(i)(ii) 给的是负号，差额会更大。LaH10 要走 (i) 需要它的电声耦合动量结构与 H3S 相反（Pietronero–Grimaldi：小 q 主导 → 顶角增强 Tc），这是 P2 要算的具体问题。
+按推论 1，α > ½ 的候选来源只有：(i) Tc 随 m = ω/E_F 增强的非绝热顶角修正；(ii) DOS 位形使 s_DOS > 0；(iii) SSCHA 之外的非谐软化（Drozdov 原文自己的猜测"soft anharmonism"，但 Errea 2020 的 SSCHA 给的是硬化型、α 降到 0.43，与之相反）；(iv) 实验侧。**P2 v0.4 的结果**：H3S 的四因子分解表明顶角修正压 α（−0.085）；文献 DOS 读图显示 LaH10 的 ε_F 与 H3S 同在 vHs 高能侧下坡、但更平坦，DOS 缺损泛函给 LaH10 的静态顶角压制约为 H3S 的一半、**同号**——(i) 关闭（判据层面，非类比）。(ii) 在 H3S 单独 ≈ 0，LaH10 未知。剩下 (iii)(iv)。
 
 **实验侧的脆弱点（v0.6，researcher 三轮原文）**：Drozdov 2019 的 α = 0.57 用的是 LaH10 的最大 Tc（250 K，fcc，150 GPa XRD 确认）配 LaD10 的最大 Tc（168 K，**压力未标注**，**结构未做 XRD**——原文"we can naturally suppose ... the same crystal structure"；Ext. Data Fig. 5 图注"we did not determine the structure for the phase with the highest Tc ~160 K"）。不是同压对比。Ext. Data Fig. 4b 的 LaD10 数据点约 163–165 K @139 GPa、158–160 @145、150 @152（读图），Tc 随压力下降，而 LaH10 的 dome 峰在 170 GPa——若按同压 150 GPa 配对（249 K vs ~152 K），α ≈ 0.71。α = 0.62 那对（215 K vs 140 K，均 P4/nmm、XRD 确认）更干净。**无论怎么配，LaH10 系的 α 都 > ½。** 主会话读了 arXiv:1812.01561v1 全文：v1 与 Nature 终版一样写 0.57/0.62，所以 Errea 2020 正文的"experimentally reported α of 0.46"**没有可识别的一手来源**（Durajski 2020、Villa-Cortés 2022 的 0.46/0.47 上游即 Errea 2020 这句话）。**LaH10 取代 H3S 成为 P1 的主要靶标。**
 
