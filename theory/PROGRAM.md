@@ -141,4 +141,16 @@ P5 ← D3 切入点 1
 - 量级不作定论：factorized 核过估 3–4×（Mishra）；定量需精确双频 λ^V
 - 跨材料检验缺数据（第二家族 H/D 顶角、FSR Tc、数值 DOS）——邮件草稿待用户决定
 
-**未启动**：P3（Tc 上界压力依赖）、P5、P6。**建议下一个**：P1b 已闭为负结果、P1/P2 主线在现有数据下已到"需外部数据才能再定量"的边界（Mishra/Margine 精确 λ^V、第二家族 H/D 顶角、干净 α(P) 曲线均缺）。候选下一步：(a) P3 强耦合 Tc 上界的压力依赖（理论含量高、不依赖缺失数据、可与氢化物纪录包络对比）；(b) P4 van Hove 距 E_F 决定 dTc/dP 符号（与 P2 §5 DOS 缺损判据同源，可复用求解器）。
+**P4（van Hove 距 ε_F 决定 dTc/dP 符号）—— 推导 v0.1，对抗核验加固，数值/数据在跑**
+- 能量依赖 DOS 的 Eliashberg 给窗口平均增强因子 E(δ)=1+aΓW_eff/(δ²+W_eff²)（δ=vHs 到 ε_F 距离，W_eff=Γ+c·ω_log）。dTc/dP = vHs 增强项（正，峰趋近 ε_F）+ 声子硬化背景（负）；圆顶=平衡；vHs 是否穿过 ε_F 决定峰被钉在穿越点（不对称圆顶）还是纯平衡点
+- **最稳健结论**：sign(∂E/∂δ)=−sign(δ)，在多宽度 Matsubara 窗求和下严格保持（不依赖单洛伦兹近似）；KMK 步、洛伦兹卷积、dE/dδ 均机器精度验证（我 + `p4-review2` 双核对）
+- **v0.1 经 `p4-review2` 加固**：δ"主旋钮"从既定降为**待数值裁决的假设**（(5) 补全 a(P)、Γ(P)、μ*(P) 直接项）；§3 只用 Λ>0 单调性不套 McMillan（裸 McMillan 低估 Λ 27–61%）；弱化与 P2 §5.1 的类比（P2 自身已降级该泛函）。`derivations/P4_vhs_dtc_dp_sign.md` v0.1、commit 4f11e72
+- **在跑**：`p4-numerics`（E(δ) 闭式对照 + a/Γ 扫决定 δ 是否主旋钮 + 求解器直接解 Tc）、`p4-vhs-data`（H3S 的 δ(P)：150–250 GPa 内 vHs 是否穿过 ε_F → 定情形 a/b）
+
+**P3（强耦合 Tc 上界的压力依赖）—— 推导 v0，reviewer 核验中**
+- 地基 `surveys/P3_tc_upper_bound_foundations_2026-09-08.md` + `theory/data/hydride_tc_record_envelope.csv`（researcher 一手核实：λ≲4 分四个量、三套界的频率约定、纪录包络逐条溯源）
+- **核心命题**：单材料 Tc(P)=Tc^emp(λ,ω_log)·R(P)，Tc^emp=0.182ω_log√λ（AD 强耦合渐近天花板），R=亏损比。LaH10 SSCHA 序列（Errea 2020）：**天花板 Tc^emp 随压力升（307→352 K）、真实 Tc 降（255→217 K），dlnR/dP=−0.42 ⇒ 圆顶负斜率在亏损比 R 里、不在 λ⟨ω²⟩ 天花板里**。机制：R(λ) 是 λ 增函数、λ→∞→1；压力压 λ、λ 压 R
+- **第二条线（原创缺口）**：Semenok λ_*[α²F] 稳定性上界只给固定 3.69/4.72，无压力依赖；P3 拟把 λ_*(σ)≈3.69[1+½κσ²] 展开（σ=谱宽/谱心），dλ_*/dP=sign(dσ/dP)——纲领，κ 待推
+- `derivations/P3_tc_max_pressure.md` v0、commit 380800e；`p3-review` 对抗核验中（重点查"分解是否平凡/换参考量圆顶是否回天花板"）
+
+**未启动**：P5、P6。
