@@ -24,7 +24,7 @@ f 费米函数，n 玻色函数，n(−ω₀) = −1 − n(ω₀)。T→0：f = 
 ## 2. 各向同性模型（把 k' 求和变成能量-角度积分）
 
 - 电子：各向同性带，能量 ε 从 −E_F（带底）到 E − E_F（带顶），DOS N(ε)；k' 求和 → ∫dε' N(ε') ∫₋₁¹ d(cosθ)/2，其中 θ 是 k' 与 q 的夹角
-- ε_{k'+q}：线性化 ε_{k'+q} = ε' + v_F q cosθ（近费米面；q 用 Q ≡ q/(2k_F) 无量纲化，v_F q = 2E_F·Q 对自由电子 v_F = 2E_F/k_F）。可选更精确的 ε_{k'+q} = ε' + ħ²(2k'q cosθ + q²)/2m（自由电子），两者在 Q ≲ 0.5 应一致，做一次对照
+- ε_{k'+q}：线性化 ε_{k'+q} = ε' + v_F q cosθ（近费米面；q 用 Q ≡ q/(2k_F) 无量纲化，**v_F q = 4E_F·Q**——自由电子 v_F = 2E_F/k_F 与 q = 2k_F Q 的乘积；本规格初版误写 2E_F·Q，implementer 已按原文修正）。可选更精确的 ε_{k'+q} = ε' + ħ²(2k'q cosθ + q²)/2m（自由电子），两者在 Q ≲ 0.5 应一致，做一次对照
 - 耦合 g²_{k−k'}：结构无关常数 g²，用 λ = 2N(0)g²/ω₀ 归一化（原文 g² = 2γ²/ω₀；请自己核对 λ 的定义使 Eq. (11) 成立），最终 P 以 λ 为单位输出（即输出 P/λ）
 - 常数 DOS：N(ε) = N(0) 在 [−E_F, E_F]，半填充
 - H3S DOS：`theory/data/external/mishra_h3s_d3s/Data-H3S-D3S-PH-EPW-Anharmonic/H3S-200GPa/band/H3S.dos`（列：E(eV)、DOS(states/eV)、积分 DOS；E_F = 17.619 eV；带底约 −7.6 eV，即 E_F − 带底 ≈ 25 eV），N̄(ε) = N(ε)/N(E_F)，ε 相对 E_F；k_F、v_F 用自由电子等效值（n = 积分 DOS 到 E_F ≈ 9 电子/胞，胞体积从 `scf.in` 读；或简单取 E_F^free 使 N_free(E_F) = N(E_F)——写清你的选择）
