@@ -867,6 +867,82 @@ def test_fix_mu_conserve_mu_shift_sensitive_to_energy_cutoff():
     )
 
 
+def test_fix_mu_conserve_tc_effect_sign_can_flip_with_energy_cutoff():
+    """团队 2026-09-08 任务（核查 `fix_mu="conserve"` 的化学势移动方向是否与
+    EPW `muchem` 一致，见 README「化学势守恒」一节新增的方向核查小节）确认的
+    一个新现象，是上面 test_fix_mu_conserve_mu_shift_sensitive_to_energy_cutoff
+    结论的一个更严重的推论：对"不对称贯穿整个积分域"这类 DOS，继续增大
+    `dos_energy_cutoff_ratio` 不仅让 `mu_shift` 的**幅值**持续增长（那个测试
+    已经锁定），还会让 `Tc_cons − Tc_none` 这个**净效应的符号**翻转——`mu_shift`
+    本身符号不变（下面断言），但它对 `_dos_energy_integrals` 里 G_j/H_j 关于
+    `chi_eff` 的非线性依赖的净反馈效果换了方向。
+
+    背景：真实 H3S QE DOS 表格标定（`p1_mishra_dos_calibration.py`）里，
+    `anh` 组合在 `dos_energy_cutoff_ratio=2.0`（`e_max=5eV`）下 `fix_mu="conserve"`
+    让 Tc 从 195.4K **降到** 189.7K，方向与 Mishra et al., npj Comput. Mater. 11,
+    342 (2025) Table I 报告的 EPW `muchem`（+μ 更新让 anh/H3S 的 Tc 从 189K
+    **升到** 195K）相反；但把 `e_max` 真正限制到 Lucrezi et al., Commun. Phys. 7,
+    33 (2024) "Computational details" 一节记录的该体系实际 Fermi window
+    （H3S/D3S 200GPa：±1eV）后，方向重新与 EPW 一致（`e_max=1eV` 时
+    `diff=+11.4K`，`e_max=5eV` 时 `diff=-30.0K`，中间在 `e_max≈2.5~3eV` 之间
+    平滑变号，实测数值见 README）。用本测试文件的合成 DOS（同一个"贯穿整个
+    积分域的不对称"DOS 类别，`test_fix_mu_conserve_mu_shift_sensitive_to_
+    energy_cutoff` 用的正是它）复现同一个方向：确认这不是真实 QE 表格特有的
+    病理，而是这类 DOS 在大截止下的通用行为——只是这里用的 `DOS.step(ratio=0.7)`
+    不对称幅度比真实 H3S 表格温和很多，变号需要的截止比例也大得多（`ratio=2→150`
+    才变号，真实表格 `ratio=1.2` 左右就变号）：
+
+    ```
+    dos_energy_cutoff_ratio   e_max(meV)   Tc_none(K)   Tc_cons(K)   diff(K)
+              2.0                 930        156.571      156.792    +0.222
+            150.0               69750        152.593      152.148    -0.445
+    ```
+
+    注意这里**分别**在每个 `dos_energy_cutoff_ratio` 下重新求 `Tc_none`
+    （而不是固定用某一个截止下的 `Tc_none` 当基准）——`fix_mu="none"` 的
+    `e_max` 同样来自 `dos_energy_cutoff_ratio`，`Tc_none` 本身也会随截止漂移
+    （这里从 156.57K 漂到 152.59K，约 4K），如果不这样做，`diff` 会同时混入
+    "`Tc_none` 基准本身在漂移"与"`mu_shift` 的净效应在变化"两个效应，读出
+    错误的变号阈值（诊断脚本里第一次犯过这个错误，混入两者之后错误地把
+    变号点算成了 `ratio≈5~10`，改成两侧都用各自匹配的 `e_max` 之后，变号点
+    才是这里锁定的 `ratio≈40~80`）。
+
+    结论：`fix_mu="conserve"` 的符号约定本身没有错（与 EPW 自己的 FBW+μ 方程
+    逐项一致，见 README「化学势守恒」的方向核查小节），"用哪个
+    `dos_energy_cutoff_ratio`/`e_max`" 这个自由度足以翻转净 Tc 效应的方向——
+    这不是实现 bug，是「已知局限」一节"贯穿整个积分域的不对称"机制的一个
+    新推论。这里只锁定"确实会变号"这个定性事实作为回归哨兵，不断言具体在
+    哪个 ratio 变号（临界点依赖谱/DOS 的具体参数，不是稳定常数）。
+    """
+    sp, w_cut, _ = _dos_test_spectrum_and_solver()
+    dos = DOS.step(delta=200.0, ratio=0.7, width=50.0)
+
+    diffs = {}
+    mu_shifts = {}
+    for ratio in (2.0, 150.0):
+        s_none = Solver(sp, mu_star=_DOS_MU_STAR, w_cut=w_cut, dos=dos, dos_n_eps=200,
+                         dos_energy_cutoff_ratio=ratio, fix_mu="none")
+        tc_none = s_none.tc(xtol=1e-4)
+        s_cons = Solver(sp, mu_star=_DOS_MU_STAR, w_cut=w_cut, dos=dos, dos_n_eps=200,
+                         dos_energy_cutoff_ratio=ratio, fix_mu="conserve", **_FAST_MU_SHIFT_KW)
+        tc_cons = s_cons.tc(xtol=1e-4, t_bracket_k=(tc_none * 0.6, tc_none * 1.4))
+        mu_shift, converged = s_cons.mu_shift_at_T(tc_none)
+        assert converged
+        mu_shifts[ratio] = mu_shift
+        diffs[ratio] = tc_cons - tc_none
+
+    assert all(m > 0 for m in mu_shifts.values()), (
+        f"mu_shift 应在两个截止下都保持正号（符号不变，变的是净 Tc 效应）：{mu_shifts}"
+    )
+    assert diffs[2.0] > 0.1, (
+        f"ratio=2.0（e_max=930meV）：Tc_conserve 应明显高于 Tc_none，实得 diff={diffs[2.0]:+.4f}K"
+    )
+    assert diffs[150.0] < -0.15, (
+        f"ratio=150.0（e_max=69750meV）：净效应应翻转为 Tc_conserve 低于 Tc_none，"
+        f"实得 diff={diffs[150.0]:+.4f}K"
+    )
+
+
 def _make_localized_asymmetric_dos(amp: float = 0.15) -> "DOS":
     """构造一个不对称特征**局域**（截止之外两侧精确回到同一个常数基线 1）的
     DOS 表：ε=-150meV 附近一个正峰、ε=+200meV 附近一个（更宽更浅的）负峰，

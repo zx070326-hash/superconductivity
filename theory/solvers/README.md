@@ -783,6 +783,184 @@ n_eps=  600  mu_shift=   -145.21 meV
 求积（而不是固定节点 Gauss-Legendre）——这两个都是独立的、本次任务范围之外
 的后续工作。
 
+### 方向核查：`fix_mu="conserve"` 的化学势移动方向是否与 EPW `muchem` 一致——2026-09-08
+
+团队交办的核查任务：Mishra et al., npj Comput. Mater. 11, 342 (2025) [arXiv:2507.01897]
+Table I 报告 H3S 200GPa EPW FBW 的 `muchem`（+μ 更新）方向是**升高** Tc（`har`：
+235→238K，`anh`：189→195K，+3~6K）；而上面「`p1_mishra_dos_calibration.py`」
+一节的实测里，`anh` 组合 `QE-table`（195.4K，无 μ 修正）→`QE-table+cons`
+（189.7K，有 μ 修正）却是**下降** 5.7K——方向相反。需要判定：(a) 求解器
+`chi_eff=chi+mu_shift` 的符号约定本身有 bug；(b) 符号本身没错，是 EPW 的
+"no μ" 基线定义得不一样；还是 (c) 证据不足以判断。结论是 **(b)**：符号约定
+本身没错，差距来自标定脚本里 `dos_energy_cutoff_ratio=2.0` 给出的能量积分
+截止 `e_max=5eV`，比 EPW 文献明确记录的这个体系实际用的 Fermi window
+（`±1eV`）宽了 5 倍；对"不对称贯穿整个积分域"这类 DOS，净 Tc 效应的符号
+本身就会随 `e_max` 变化，`e_max=5eV` 恰好落在符号已经翻转的一侧。
+
+#### 推导：与 EPW 自己的 FBW+μ 方程逐项对照
+
+EPW `muchem` 的方程见 Lucrezi et al., Commun. Phys. 7, 33 (2024)
+[arXiv:2310.00056]（`library/pdf/D1/2024_Roman_Lucrezi_2310.00056.pdf`，与
+Mishra et al. 2025 同一套 FBW 实现）。其 Eq(8)/(10) 把非相互作用格林函数的
+对角项写成 `ε_nk − μ`，加上电声自能后（Eq(9)/(10)）变成
+`[ε_nk − μ + χ_nk(iω_j)]`——与本代码 `_solve_z_chi_dos` 里
+`chi_eff_j = χ_j + mu_shift` 加在 `ε` 上的位置**完全相同**，给出精确对应
+`mu_shift(本代码) = −δμ(EPW)`（`δμ ≡ μ(EPW) − μ_0` 是 EPW 论文里真正的物理
+化学势偏移；本代码反号是因为把偏移项加在 `ε` 一侧而不是从 `μ` 里减去，
+两者代数等价）。Eq(14) 给出的 χ 自洽方程
+`χ_nk(iω_j) = −(T/N(E_F))Σ∫(dq/Ω_BZ)[ε_mk+q−μ+χ_mk+q(iω_j′)]/θ_mk+q·λ(...)`
+与本代码 `_solve_z_chi_dos` 里
+`chi_new = −πT Σ_m λ(n−m)[chi_eff_m·G_m + H_m]` 逐项同构（`μ` 都在自洽方程
+**内部**参与求和，不是算完 χ 之后再外挂的修正）；Eq(16) 的电子数守恒条件
+也与本代码 `实际电子数(mu_shift)=Σ_j[chi_eff_j·G_j+H_j]` 对应 n_ref 的求根
+结构一致。**结论：两套方程在符号约定上完全同构，`eliashberg_iso.py` 没有
+符号错误。**
+
+#### 诊断数字（1）：真实 H3S/anh QE DOS，χ_n 与电子数
+
+`fix_mu="none"`（`mu_shift=0`）与 `fix_mu="conserve"`（`mu_shift=+366.581meV`，
+`dos_energy_cutoff_ratio=2.0`，`T=Tc_none=195.425K`）下前 6 个 Matsubara 项
+（`python` 原样输出，`Tc_cons=189.746K`，`cons-none=-5.679K`，与「结论」段落
+引用的标定脚本数字一致）：
+
+```
+                    fix_mu="none"                          fix_mu="conserve"（mu_shift=+366.581meV）
+n   ω_n(meV)     Z_n      χ_n(meV)   χ_eff(meV)       Z_n      χ_n(meV)   χ_eff(meV)
+0    52.906    2.4267    +60.8883   +60.8883        2.4089     +6.1296  +372.7106
+1   158.717    1.9077    +55.0093   +55.0093        1.9040    +12.3426  +378.9235
+2   264.529    1.6552    +49.5380   +49.5380        1.6553    +17.9274  +384.5084
+3   370.340    1.5020    +45.2779   +45.2779        1.5035    +22.0551  +388.6360
+4   476.152    1.4012    +41.9788   +41.9788        1.4033    +25.0122  +391.5932
+5   581.963    1.3308    +39.3529   +39.3529        1.3332    +27.1268  +393.7078
+
+n_ref（裸参考态，Z≡1,χ≡0,mu_shift=0）                = -8.8165（两种 fix_mu 下相同，只依赖 (wn,e_max)）
+实际电子数 Σ_j[chi_eff_j·G_j+H_j]，fix_mu="none"      = -7.8747   （偏差 = +0.9418，非零）
+实际电子数 Σ_j[chi_eff_j·G_j+H_j]，fix_mu="conserve"  = -8.8179   （偏差 = -0.0014，≈0，求根收敛）
+```
+
+`χ_n`（声子自能诱导、与 `mu_shift` 无关的部分）在两种 `fix_mu` 下都是正号，
+随 `|n|` 增大衰减，`fix_mu="conserve"` 下数值明显更小（`+60.9→+6.1meV` 等）
+——这是因为 `chi_eff=χ+mu_shift` 反馈进 `_solve_z_chi_dos` 的自洽方程，
+`mu_shift` 一旦定下来，χ 自洽解本身也会跟着重新调整（Z_n 几乎不变，χ_n 明显
+变小）。真正承载化学势修正的是加在每个 `χ_n` 上的常数项 `mu_shift=+366.6meV`。
+`fix_mu="none"` 下"实际电子数"（`-7.87`）与裸参考态 `n_ref`（`-8.82`）之间
+有 `+0.94` 的偏差——这正是 `mu_shift` 要去补偿的量；`fix_mu="conserve"` 求根
+之后偏差降到 `-0.0014`（数值容差内的 0），确认根找对了。
+
+#### 诊断数字（2）：人工阶梯 DOS 的直觉核对
+
+`DOS.step(delta=200meV, ratio=0.7, width=50meV)`——费米面上方（`ε>250meV`）
+`N̄→0.7`，下方（`ε<150meV`）`N̄→1.0`，即"DOS 在费米面上方更低"，与 H3S 真实
+QE 表格的主导趋势（费米面下方 `0.8~1.17`、上方 `0.45~0.83`，同样是"上方更
+低"）定性一致。Einstein 谱（`λ=1.84, ω0=93meV`，与本文件 DOS 测试小节相同
+的标准配置）+ `mu_star=0.16`，`dos_energy_cutoff_ratio=5.0`：
+
+```
+mu_shift = +50.6 meV（converged=True），Tc_none=154.48K → Tc_cons=154.98K（+0.51K）
+```
+
+`mu_shift(本代码)=−δμ(EPW)>0` 意味着物理化学势 `δμ<0`，即物理化学势**下移**
+——与"DOS 在费米面上方更低 → 相同电子数需要把费米能级往下移，让更多态落
+进下方更高的 DOS 区"的直觉图像一致；净效应是 Tc **升高**，方向与 EPW 报告
+的 H3S `muchem` 方向一致。这与既有回归测试
+`test_fix_mu_conserve_asymmetric_dos_sign_and_tc_direction`（`DOS.step(ratio=0.5)`
+给正 `mu_shift`、`Tc_cons>Tc_none`）完全吻合，不是新结论——新的部分是下面
+（3）：这个方向在 `e_max` 变大之后并不稳定。
+
+#### 诊断数字（3）：`e_max` 从 EPW 实际窗口（1eV）扫到标定脚本当前用的宽度（5eV）
+
+`p1_mishra_dos_calibration.py` 里现有的 `"QE-table+cons(±1eV)"` 探索列
+**并没有**真正把能量积分截止到 `±1eV`：该列虽然把 DOS **表格**截到了
+`±1eV`，但 `dos_energy_cutoff_ratio` 仍固定用 `2.0`（`w_cut=2.5eV`），而
+`Solver._dos_e_max()` 取的是 `max(dos_energy_cutoff_ratio·w_cut, |表格边界|)
+= max(5000, 1000) = 5000meV`——积分截止仍然是 5eV，比表格截断范围还宽 5
+倍，表格边界外的部分按端点值继续平地外推。这就是为什么该列反而**过修正
+更多**（`har`: 227.5/159.2，`anh`: 162.9/124.1，比 `±3eV` 窗口版本更偏离
+EPW，见上面「结论」段落）——它不是在检验"限制到 EPW 窗口"这个假设，只是
+换了一张（更陡峭的）表格、却用了同一个过宽的截止。
+
+用同一张 `±1eV` 预截断表格，让 `dos_energy_cutoff_ratio` 真正对应到
+`e_max`（`H3S/anh`，`Tc_none` 在每个 `e_max` 下**分别**重新求解，避免用
+固定基线混入"`Tc_none` 自身也随截止漂移"这个效应）：
+
+```
+dos_energy_cutoff_ratio   e_max(meV)   Tc_none(K)   mu_shift(meV)   Tc_cons(K)   diff(K)
+        0.40                 1000        194.392        +221.71      205.836     +11.444
+        0.60                 1500        193.877        +291.53      201.832      +7.955
+        0.80                 2000        193.515        +316.19      199.489      +5.973
+        1.00                 2500        193.286        +347.07      195.774      +2.488
+        1.20                 3000        193.140        +381.24      190.857      -2.283
+        1.60                 4000        192.983        +453.79      177.583     -15.400
+        2.00                 5000        192.916        +527.38      162.929     -29.987
+        3.00                 7500        192.898        +712.19      133.555     -59.343
+        5.00                12500        193.018       +1071.44      111.791     -81.227
+```
+
+`mu_shift` 全程保持正号、随 `e_max` 单调增长（与「已知局限」一节记录的
+"贯穿整个积分域的不对称"机制一致）；但 `Tc_cons−Tc_none` 这个净效应的
+**符号**在 `e_max≈2.5~3.0eV` 之间从正变负，且是平滑单调的变化，不是
+「后续尝试：喂全带 QE DOS 表」一节记录的那种求积混叠/混沌跳动——两者是
+性质完全不同的现象（这里换 `dos_n_eps=200→400` 复核过 `e_max=1000meV` 与
+`e_max=5000meV` 两个端点，`mu_shift`/`Tc_cons` 变化 <0.5%，确认是真实的
+物理依赖而非欠采样假象）。
+
+`e_max=1000meV`（即 `±1eV`，恰好是 Lucrezi et al. 2024 "Computational
+details" 一节明确记录的"The width of the Fermi window is set to 2 eV for
+H3S, D3S, YH6, CaH6[, BaSiH8]"——H3S/D3S 200GPa 的 Fermi window 半宽正是
+`1eV`）给出 `diff=+11.4K`，方向与 EPW 报告的 `+3~6K` 一致（量级偏大，但
+同号）；`e_max=5000meV`（标定脚本当前实际用的 `dos_energy_cutoff_ratio=2.0`）
+给出 `diff=-30.0K`，方向相反。**标定脚本目前汇报的"`anh` 组合 conserve
+降低 Tc"这个观测，用的是一个比 EPW 实际物理窗口宽 5 倍的积分截止**，落在
+了符号已经翻转之后的一侧。
+
+用合成 DOS（`DOS.step(delta=200,ratio=0.7,width=50)` + Einstein 谱，见
+`tests/test_eliashberg_iso.py::test_fix_mu_conserve_tc_effect_sign_can_flip_with_energy_cutoff`）
+复现同一个"符号随 `e_max` 平滑翻转"的现象，确认这不是真实 QE 表格特有的
+病理，而是"不对称贯穿整个积分域"这类 DOS 在大截止下的通用行为（该 DOS
+的不对称幅度比真实 H3S 表格温和很多，翻转需要的截止比例也大得多：
+`ratio=2→150`，即 `e_max` 从 `0.93eV` 到 `69.75eV` 才翻转，而真实 H3S 表格
+`ratio≈1.2`，即 `e_max≈3eV` 左右就翻转）——两者翻转点差一个数量级以上，
+再次说明这个临界点强烈依赖 DOS 不对称的**幅度**，不是一个通用常数。
+
+#### 结论
+
+**判定 (b)**：`fix_mu="conserve"` 的 `chi_eff=χ+mu_shift` 符号约定本身
+没有 bug——与 EPW 自己的 FBW+μ 方程（Lucrezi et al. 2024，Eq 8–16）逐项
+同构，`mu_shift(本代码)=−δμ(EPW)`；两个独立的"DOS 在费米面上方更低"检验
+（真实 H3S QE 表格、人工阶梯 DOS）在**小 `e_max`** 下都给出与 EPW 一致的
+方向（`mu_shift>0`、Tc 升高）。`p1_mishra_dos_calibration.py` 里 `anh`
+组合观测到的"conserve 让 Tc 下降"，根源是该脚本对所有 DOS 变体统一用
+`dos_energy_cutoff_ratio=2.0`（→`e_max=5eV`），而这个截止比 EPW 论文明确
+记录的、这个体系实际使用的 Fermi window（`±1eV`）宽 5 倍；对"不对称贯穿
+整个积分域"的真实 QE DOS 表格，净 Tc 效应的**符号**本身会随 `e_max` 平滑
+翻转（`e_max≈2.5~3eV` 附近变号），`e_max=5eV` 恰好落在翻转之后的一侧。
+这不是本模块的实现缺陷，是「已知局限」一节"贯穿整个积分域的不对称"机制
+一个此前未被注意到的推论（此前只记录了 `mu_shift` **幅值**不收敛，这里
+进一步确认净 Tc 效应连**符号**都不是这类 DOS 下的稳健结论）。
+
+**遗留问题（本次任务范围外，`theory/derivations/` 不在允许修改范围内，
+留给后续任务）**：`p1_mishra_dos_calibration.py` 现有的
+`"QE-table+cons(±1eV)"` 列**没有**正确实现"把积分截止限制到 EPW 实际窗口"
+这个实验意图，原因是 `dos_energy_cutoff_ratio=2.0` 与 `_dos_e_max()` 的
+`max(ratio·w_cut, 表格边界)` 逻辑联合作用，使 `e_max` 仍固定在 5eV，不随
+表格截断范围变化。一个真正实现该实验的做法是：给这一列单独传一个更小的
+`dos_energy_cutoff_ratio`（例如 `1000/2500=0.4`，让 `e_max` 恰好等于
+`1000meV`），而不是沿用其余列的 `2.0`。修好这一列之后，预期 `anh` 组合的
+`"+cons(±1eV)"` 会从当前的过修正（162.9/124.1）变成方向与 EPW 一致的
+结果（本节诊断数字（3）的 `e_max=1000meV` 那一行：`Tc_cons=205.8K`，比
+`Tc_none`（同一张 `±1eV` 表格，194.4K）高 11.4K）——但量级仍然明显偏大
+（EPW 报告 `+3~6K`），说明即便修正了这个脚本配置问题，「已知局限」一节
+里"真实 QE 表格延拓病态""EPW `fsthick` 是否只是 DOS 窗口"等更深层的自由度
+仍然没有解决，不能指望单靠调窗口宽度就让数字完全对上。
+
+（补充：即便在 EPW 自己的论文之间，`muchem` 修正的方向/幅度也不是一个
+稳定不变的效应——Lucrezi et al. 2024 Table I 报告 H3S 200GPa **谐波**
+`T_c^FBW=239K → T_c^FBW+μ=238K`（+μ 使 Tc **下降** 1K），而 Mishra et al.
+2025 报告同一体系谐波 `235K→238K`（+μ 使 Tc **升高** 3K）——两篇论文对
+"+μ 让谐波 H3S 的 Tc 升还是降"给出了相反的方向。这说明 `muchem` 效应对
+计算细节（`fsthick`、DOS 展宽、k/q 网格等）本身就是敏感的，不应该把"EPW
+恒定给出 Tc 升高"当作一个必须严格复现的不变量来校验本模块。）
+
 ## 未实现/未覆盖的范围
 
 - **`fix_mu="linear"`**（能量依赖 DOS 路径的化学势-电子数守恒**线性化**修正，
