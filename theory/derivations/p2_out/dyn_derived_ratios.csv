@@ -1,0 +1,17 @@
+ef_label,dos_kind,weight,P_H,P_D,ratio_D_over_H
+free,real,flat,0.00513,0.00438,0.85314
+free,real,QdQ,-0.00016,-0.00012,0.72128
+free,const,flat,0.00521,0.00469,0.90158
+free,const,QdQ,-0.00125,-0.00087,0.69736
+free,suppression_H3S,flat,0.00513,0.00521,0.98628
+free,suppression_D3S,flat,0.00438,0.00469,0.93329
+free,suppression_H3S,QdQ,-0.00016,-0.00125,0.12955
+free,suppression_D3S,QdQ,-0.00012,-0.00087,0.13400
+control_1eV,real,flat,0.06088,0.04757,0.78129
+control_1eV,real,QdQ,0.02895,0.02000,0.69068
+control_1eV,const,flat,0.01164,0.01247,1.07126
+control_1eV,const,QdQ,-0.02383,-0.01814,0.76152
+control_1eV,suppression_H3S,flat,0.06088,0.01164,5.22952
+control_1eV,suppression_D3S,flat,0.04757,0.01247,3.81400
+control_1eV,suppression_H3S,QdQ,0.02895,-0.02383,-1.21526
+control_1eV,suppression_D3S,QdQ,0.02000,-0.01814,-1.10220
