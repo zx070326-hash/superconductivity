@@ -1,0 +1,31 @@
+check,value,note
+tcmap_invert_relerr_kernel,1.018e-05,scale=1.13/1.77/2.55 真算 Tc 再反解
+matsubara_oversample_3_to_6_reldiff,1.001e-04,"dlt=0, Tc 236.4513 vs 236.4276 K"
+ntilde_numeric_vs_closed_form,4.132e-13,
+W_core_over_W_tail,0.72862,"W_core=187.91 meV (15点), W_tail=257.90 meV (14点)"
+width_amp_vs_curv_vs_half,"W_amp=204.47,W_curv=413.37,W_half=318.79","W_curv/W_amp=2.0216, W_half/W_amp=1.5591；(4) 式成立则都=1"
+E_even_symmetry_max_dev,1.354e-14,Lorentz 峰形
+peak_position_delta0_meV,0.0000,3-参数拟合
+dE_ddelta_sign_violations,0,共 28 个区间
+monotonicity_violations,"pos=0,neg=0","dlt>0 侧 13 区间, dlt<0 侧 13 区间"
+Lambda_at_lam_eff_1.50,0.73351,AD(f1f2) 0.76876 (+4.8%); 裸 McMillan 0.69983 (-4.6%)
+Lambda_at_lam_eff_1.80,0.52657,AD(f1f2) 0.54046 (+2.6%); 裸 McMillan 0.46955 (-10.8%)
+Lambda_at_lam_eff_2.25,0.36486,AD(f1f2) 0.36249 (-0.7%); 裸 McMillan 0.29052 (-20.4%)
+Lambda_at_lam_eff_2.70,0.27864,AD(f1f2) 0.26886 (-3.5%); 裸 McMillan 0.19731 (-29.2%)
+window_width_dist[lam=lam_b],"mean=131.98,median=104.47,p90=266.53",以 w_log=110.0 为单位: 1.200/0.950/2.423
+window_width_dist[lam=lam_b*E(0)=2.967],"mean=274.78,median=249.15,p90=249.15",以 w_log=110.0 为单位: 2.498/2.265/2.265
+R2_multiwindow_vs_single_lorentz,"multi_lamb=0.56998,multi_lameff=-0.34211,single_fit=0.65015",多窗口是零自由参数预言，单洛伦兹是 1 参数拟合
+window_identity_delta0,"no_chi=2.118e-05,with_chi=2.118e-05",max|chi_m|=0.000 meV; 剩余偏差主要来自 e_max=11000 meV 的积分截断
+window_identity_delta150,"no_chi=3.327e-02,with_chi=2.093e-05",max|chi_m|=37.590 meV; 剩余偏差主要来自 e_max=11000 meV 的积分截断
+window_identity_delta300,"no_chi=6.121e-02,with_chi=1.899e-05",max|chi_m|=62.228 meV; 剩余偏差主要来自 e_max=11000 meV 的积分截断
+width_amp_vs_curv_vs_half_mu0,"W_amp=304.55,W_curv=517.48,W_half=400.84","mu*=0；W_curv/W_amp=1.6992, W_half/W_amp=1.3162"
+limit_gam_over_wlog_0.909,"c=0.8530,E0m1=0.97812,E0m1_over_a=0.4891,E0m1_wlog_over_aGam=0.5380",Gam=100.0 w_log=110.0 W_eff/Gam=1.9383
+limit_gam_over_wlog_0.100,"c=0.7968,E0m1=0.23075,E0m1_over_a=0.1154,E0m1_wlog_over_aGam=1.1538",Gam=11.0 w_log=110.0 W_eff/Gam=8.9680
+limit_gam_over_wlog_0.250,"c=0.8690,E0m1=0.45640,E0m1_over_a=0.2282,E0m1_wlog_over_aGam=0.9128",Gam=27.5 w_log=110.0 W_eff/Gam=4.4759
+limit_gam_over_wlog_0.500,"c=0.9126,E0m1=0.70816,E0m1_over_a=0.3541,E0m1_wlog_over_aGam=0.7082",Gam=55.0 w_log=110.0 W_eff/Gam=2.8251
+limit_gam_over_wlog_1.000,"c=0.9155,E0m1=1.02462,E0m1_over_a=0.5123,E0m1_wlog_over_aGam=0.5123",Gam=110.0 w_log=110.0 W_eff/Gam=1.9155
+limit_gam_over_wlog_2.000,"c=0.8170,E0m1=1.37483,E0m1_over_a=0.6874,E0m1_wlog_over_aGam=0.3437",Gam=220.0 w_log=110.0 W_eff/Gam=1.4085
+limit_gam_over_wlog_4.000,"c=0.5273,E0m1=1.69760,E0m1_over_a=0.8488,E0m1_wlog_over_aGam=0.2122",Gam=440.0 w_log=110.0 W_eff/Gam=1.1318
+limit_gam_over_wlog_8.000,"c=-0.0359,E0m1=1.92976,E0m1_over_a=0.9649,E0m1_wlog_over_aGam=0.1206",Gam=880.0 w_log=110.0 W_eff/Gam=0.9955
+shape_cusp_peak_delta_meV,"num_grid=0.0,fit3=0.00,window_pred=0.0","R2: lorentz(4)=0.96356, window(2)=0.80843"
+shape_asym4_peak_delta_meV,"num_grid=-40.0,fit3=-56.75,window_pred=-40.5","R2: lorentz(4)=0.85384, window(2)=0.79086"
