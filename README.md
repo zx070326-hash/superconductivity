@@ -97,7 +97,8 @@ superconductivity/
 - [ ] P2 E_F 扫描（implementer）；其他材料 adia/vertex Tc 数据（researcher）
 - [ ] P2 下一步：式 (5.1) 的 (Q, ω_q) 动态修正版；求解器顶角钩子接入
 - [ ] 用户决定：是否向 Mishra/Margine 发数据请求（`theory/notes/draft_email_mishra_margine.md`）
-- [ ] 用 Mishra 的 H3S.dos 标定求解器 DOS 实现；扫 DOS×顶角交叉项
+- [x] 用 Mishra 的 H3S.dos 标定求解器 DOS 实现（非谐 <1 K，谐波 5–7 K）
+- [ ] 用求解器扫 DOS×顶角交叉项
 - [ ] 各方向 README 填入现状摘要（D1–D4 优先，D5–D7 降级为参考）
 - [ ] 补核 16 条无 arXiv ID 的元数据（多为 Nature/PRL 正式版，无预印本）
 
