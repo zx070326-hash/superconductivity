@@ -94,7 +94,8 @@ superconductivity/
 - [x] 2026-09-08 reviewer 核验 P2 §5：推导正确；压力比吻合依赖 EPW 窗口、高能空带贡献 15–30%、判据降级为静态区部分答案 → P2 v0.4
 - [x] 2026-09-08 LaH10 DOS 形状（文献）：与 H3S 同在 vHs 下坡但更平坦 → 顶角压制约 H3S 一半、同号；LaH10 α>½ 顶角路径关闭
 - [x] 2026-09-08 **P2 第一轮闭环记录** `theory/notes/2026-09-08_P2_round1.md`
-- [x] 2026-09-08 其他材料 adia/vertex Tc 数据：Mishra 2507 Table I 确认我们的 FSR 提取；MgB2 σ 带（Cappelluti 2002）为动态区增强的反例；H3S/D3S 圆顶错开 ~30 GPa（结构侧第五因子）
+- [x] 2026-09-08 其他材料 adia/vertex Tc 数据：Mishra 2507 Table I 确认我们的 FSR 提取；MgB2 σ 带（Cappelluti 2002）为动态区增强的反例；H3S/D3S 圆顶错开（一度记为"结构侧第五因子"）
+- [x] 2026-09-08 **"第五因子"闭环为负结果**（`derivations/P1b_structural_fifth_factor.md` v0.1 + `notes/2026-09-08_P1b_fifth_factor_closeout.md`，researcher 一手核验 `surveys/h3s_d3s_dome_offset_fifth_factor_2026-09-08.md`）：结构相变压力同位素移动 ΔP_c 真实（12–16 GPa，纯量子核效应），但立稿的"低压 α≈0.44"是自算量且用了污染 D3S 样品；Tc 峰在结构相变上方 40+ GPa（Cherubini 2026）；剩余 α 压力依赖被纯配对+Lifshitz 简并 → **不构成对报道 α（P>170, ≈0.30）的可测污染，P1 四因子无需第五因子**。P2 §6 相应降级
 - [x] 2026-09-08 求解器 muchem 方向核查：约定与 EPW 一致，Tc 修正符号随能量截止翻转（EPW 用 ±1 eV 窗）——无 bug
 - [x] 2026-09-08 **P2 v0.5 动态版检验**：各向同性一阶顶角按 Eliashberg 核加权为小正数，式 (5.1) 的吻合无机制支持；动量结构扫描（9 种 g²(Q)、vHs 慢电子）也给不出负号
 - [x] 2026-09-08 Mishra 2507 顶角实现抄录：λ^V 为正，压制来自两通道矩阵结构；Schrödi Eq. 23–24 逐字转录并线性化 → 正的 P 削弱配对核、各向同性 FSR 恒压低 Tc（§5.6）
