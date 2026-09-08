@@ -95,7 +95,10 @@ superconductivity/
 - [x] 2026-09-08 LaH10 DOS 形状（文献）：与 H3S 同在 vHs 下坡但更平坦 → 顶角压制约 H3S 一半、同号；LaH10 α>½ 顶角路径关闭
 - [x] 2026-09-08 **P2 第一轮闭环记录** `theory/notes/2026-09-08_P2_round1.md`
 - [x] 2026-09-08 其他材料 adia/vertex Tc 数据：Mishra 2507 Table I 确认我们的 FSR 提取；MgB2 σ 带（Cappelluti 2002）为动态区增强的反例；H3S/D3S 圆顶错开 ~30 GPa（结构侧第五因子）
-- [ ] P2 E_F 扫描（implementer）；(Q, ω_q) 动态版泛函（implementer）；求解器 muchem 方向核查（implementer）
+- [x] 2026-09-08 求解器 muchem 方向核查：约定与 EPW 一致，Tc 修正符号随能量截止翻转（EPW 用 ±1 eV 窗）——无 bug
+- [x] 2026-09-08 **P2 v0.5 动态版检验**：各向同性一阶顶角按 Eliashberg 核加权为小正数，式 (5.1) 的吻合无机制支持；动量结构扫描（9 种 g²(Q)、vHs 慢电子）也给不出负号
+- [x] 2026-09-08 Mishra 2507 顶角实现抄录：λ^V 为正，压制来自两通道矩阵结构；Schrödi Eq. 23–24 逐字转录并线性化 → 正的 P 削弱配对核、各向同性 FSR 恒压低 Tc（§5.6）
+- [ ] P2：Schrödi 双通道 FSR 数值（implementer，worktree）；§5.6 线性化核验（reviewer）；动态版核验（reviewer）；E_F 扫描（implementer）
 - [ ] P2 下一步：式 (5.1) 的 (Q, ω_q) 动态修正版；求解器顶角钩子接入
 - [ ] 用户决定：是否向 Mishra/Margine 发数据请求（`theory/notes/draft_email_mishra_margine.md`）
 - [x] 用 Mishra 的 H3S.dos 标定求解器 DOS 实现（非谐 <1 K，谐波 5–7 K）
