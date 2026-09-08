@@ -1,7 +1,7 @@
 # 超导理论 · autoresearch 工作区
 
 建立日期：2026-09-07
-状态：**方向调研中**（7 个方向并行调研，等待选定聚焦方向）
+状态：**理论推进中**（P1 同位素四因子分解 v0.7、P2 顶角判据 v0.4；方向已定，见 `decisions/`）
 
 ---
 
@@ -94,12 +94,13 @@ superconductivity/
 - [x] 2026-09-08 reviewer 核验 P2 §5：推导正确；压力比吻合依赖 EPW 窗口、高能空带贡献 15–30%、判据降级为静态区部分答案 → P2 v0.4
 - [x] 2026-09-08 LaH10 DOS 形状（文献）：与 H3S 同在 vHs 下坡但更平坦 → 顶角压制约 H3S 一半、同号；LaH10 α>½ 顶角路径关闭
 - [x] 2026-09-08 **P2 第一轮闭环记录** `theory/notes/2026-09-08_P2_round1.md`
-- [ ] P2 E_F 扫描（implementer）；其他材料 adia/vertex Tc 数据（researcher）
+- [x] 2026-09-08 其他材料 adia/vertex Tc 数据：Mishra 2507 Table I 确认我们的 FSR 提取；MgB2 σ 带（Cappelluti 2002）为动态区增强的反例；H3S/D3S 圆顶错开 ~30 GPa（结构侧第五因子）
+- [ ] P2 E_F 扫描（implementer）；(Q, ω_q) 动态版泛函（implementer）；求解器 muchem 方向核查（implementer）
 - [ ] P2 下一步：式 (5.1) 的 (Q, ω_q) 动态修正版；求解器顶角钩子接入
 - [ ] 用户决定：是否向 Mishra/Margine 发数据请求（`theory/notes/draft_email_mishra_margine.md`）
 - [x] 用 Mishra 的 H3S.dos 标定求解器 DOS 实现（非谐 <1 K，谐波 5–7 K）
 - [ ] 用求解器扫 DOS×顶角交叉项
-- [ ] 各方向 README 填入现状摘要（D1–D4 优先，D5–D7 降级为参考）
+- [x] 2026-09-08 D1–D4 方向卡填入现状摘要与切入点（commit 15fd936）；D5–D7 保留为参考
 - [ ] 补核 16 条无 arXiv ID 的元数据（多为 Nature/PRL 正式版，无预印本）
 
 ## 5. 工作区补充
