@@ -141,11 +141,13 @@ P5 ← D3 切入点 1
 - 量级不作定论：factorized 核过估 3–4×（Mishra）；定量需精确双频 λ^V
 - 跨材料检验缺数据（第二家族 H/D 顶角、FSR Tc、数值 DOS）——邮件草稿待用户决定
 
-**P4（van Hove 距 ε_F 决定 dTc/dP 符号）—— 推导 v0.1，对抗核验加固，数值/数据在跑**
+**P4（van Hove 距 ε_F 决定 dTc/dP 符号）—— 推导 v0.2，H3S 一手数据并入，数值在跑**
 - 能量依赖 DOS 的 Eliashberg 给窗口平均增强因子 E(δ)=1+aΓW_eff/(δ²+W_eff²)（δ=vHs 到 ε_F 距离，W_eff=Γ+c·ω_log）。dTc/dP = vHs 增强项（正，峰趋近 ε_F）+ 声子硬化背景（负）；圆顶=平衡；vHs 是否穿过 ε_F 决定峰被钉在穿越点（不对称圆顶）还是纯平衡点
 - **最稳健结论**：sign(∂E/∂δ)=−sign(δ)，在多宽度 Matsubara 窗求和下严格保持（不依赖单洛伦兹近似）；KMK 步、洛伦兹卷积、dE/dδ 均机器精度验证（我 + `p4-review2` 双核对）
-- **v0.1 经 `p4-review2` 加固**：δ"主旋钮"从既定降为**待数值裁决的假设**（(5) 补全 a(P)、Γ(P)、μ*(P) 直接项）；§3 只用 Λ>0 单调性不套 McMillan（裸 McMillan 低估 Λ 27–61%）；弱化与 P2 §5.1 的类比（P2 自身已降级该泛函）。`derivations/P4_vhs_dtc_dp_sign.md` v0.1、commit 4f11e72
-- **在跑**：`p4-numerics`（E(δ) 闭式对照 + a/Γ 扫决定 δ 是否主旋钮 + 求解器直接解 Tc）、`p4-vhs-data`（H3S 的 δ(P)：150–250 GPa 内 vHs 是否穿过 ε_F → 定情形 a/b）
+- **v0.2 诚实降级（`p4-vhs-data` 一手核实，与 P1b 同类）**：H3S 属**情形 (b) 不穿越** + **峰顶 δ≈0.2–0.3 eV 落 E(δ) 尾部**（增强弱、∂E/∂δ 小）+ **δ(P) 协议依赖不可判定**（跨代码散差 0.2–0.3 eV > 压力移动 ~0.1 eV）。⇒ 情形 (a) 的"不对称圆顶"最干净可证伪预言在 H3S 无处施用；对称洛伦兹 δ=峰顶 对这个强不对称、ε_F-在肩部的峰是差拟合。**解析核心成立，H3S 应用被削弱**；P4 改走"固定协议 + 受控 ΔTc(δ) 平移数值实验"（δ 降为外部输入），并须与 P2 非绝热两通道在 H3S 上去重（同一窄 vHs 的两种投影）
+- 前提更正：40–50 meV 是 E_F^eff（±15% 窗口半宽 ≈36 meV），非峰顶到 ε_F 距离；"峰顶远离、峰沿贴紧"（Mishra PBE/EPW 峰顶 −0.20→−0.284 eV 远离，肩部 N̄(+0.1) 0.89→0.78 贴近）。同步更正 P2 稿两处误转述
+- `derivations/P4_vhs_dtc_dp_sign.md` v0.2、`surveys/P4_h3s_vhs_position_vs_pressure_2026-09-08.md`、commit 46eb21b
+- **在跑**：`p4-numerics`（E(δ) 闭式对照 + **a/Γ 扫决定 δ 是否主旋钮**——H3S 峰顶落尾部使这条更关键 + 求解器直接解 Tc(δ)）
 
 **P3（强耦合 Tc 上界的压力依赖）—— 推导 v0，reviewer 核验中**
 - 地基 `surveys/P3_tc_upper_bound_foundations_2026-09-08.md` + `theory/data/hydride_tc_record_envelope.csv`（researcher 一手核实：λ≲4 分四个量、三套界的频率约定、纪录包络逐条溯源）
