@@ -56,7 +56,10 @@ def tail_const(w0, e_lo, e_hi, nbar_tail=1.0):
 W0 = {"H3S": 110.0, "D3S": 77.8}
 # 第一性原理（Mishra 数据集，FSR，μ*=0.16，非谐）：δ = ln(Tc_na/Tc_adia)
 DATA = {("H3S", 200): -0.208, ("D3S", 200): -0.149, ("H3S", 160): -0.076, ("D3S", 160): -0.045}
-S_LAMBDA = 1.27  # 本求解器对 200 GPa 非谐谱的 ∂lnTc/∂lnλ（P2 §2）
+# 每个 (体系, 压力) 自己的 λ 与 ω_log（本求解器对 Figshare 非谐 .a2f 的积分；reviewer M2：不能把 200 GPa 的值复用到 160 GPa）
+LAM = {("H3S", 200): 1.721, ("D3S", 200): 1.784, ("H3S", 160): 1.876, ("D3S", 160): 1.941}
+WLOG = {("H3S", 200): 110.0, ("D3S", 200): 85.5, ("H3S", 160): 106.9, ("D3S", 160): 82.0}
+S_LAMBDA = 1.27  # 本求解器对 200 GPa 非谐谱的 ∂lnTc/∂lnλ（P2 §2）；160 GPa 未单独算，沿用
 
 print("静态极限 DOS 缺损泛函  P_s/λ = I − 1,  I ≡ (ω₀/2)∫dε N̄(ε)/(|ε|+ω₀)²")
 print("数据侧对照：P̄ ≡ δ/(s_λ·λ)，λ=1.72（200 GPa 非谐），s_λ=1.27\n")
@@ -83,11 +86,18 @@ for (mat, P), f in files.items():
         res[(iso, P)] = (I_win - 1, I_ext - 1)
         print(f"  {iso} DOS@{P} GPa (ω₀={w0:.0f} meV): 截断 P_s/λ = {I_win-1:+.4f} | 延拓 P_s/λ = {I_ext-1:+.4f}   N̄(−100/+100)={np.interp(-100,eps,nb):.2f}/{np.interp(100,eps,nb):.2f}")
 
-print("\nC. 与第一性原理顶角修正对照（P̄_data = δ/(s_λ λ)）")
-lam = 1.72
+print("\nC. 与第一性原理顶角修正对照（P̄_data = δ/(s_λ λ)，线性化；各 (体系,压力) 用各自 λ）")
 for (mat, P), d in DATA.items():
-    pbar = d / (S_LAMBDA * lam)
+    pbar = d / (S_LAMBDA * LAM[(mat, P)])
     w, e = res[(mat, P)]
-    print(f"  {mat} {P} GPa: P̄_data = {pbar:+.4f}   静态泛函（截断/延拓） = {w:+.4f} / {e:+.4f}")
+    print(f"  {mat} {P} GPa (λ={LAM[(mat,P)]:.2f}, ω_log={WLOG[(mat,P)]:.0f}): P̄_data = {pbar:+.4f}   静态泛函（截断/延拓） = {w:+.4f} / {e:+.4f}")
+
+print("\nD. 窗口敏感性（reviewer M1）：QE 全带 DOS 按不同窗口截断，200 GPa H3S")
+for win in [500, 950, 2000, 5000, None]:
+    if win is None:
+        I = deficit_integral(110.0, eps_q, nb_q); label = "全带"
+    else:
+        m = np.abs(eps_q) < win; I = deficit_integral(110.0, eps_q[m], nb_q[m]); label = f"±{win/1000:.2f} eV"
+    print(f"  {label:9s}: P_s/λ = {I-1:+.4f}")
 print(f"\n  压力比 160/200（H3S）：数据 {DATA[('H3S',160)]/DATA[('H3S',200)]:.2f}；泛函截断 {res[('H3S',160)][0]/res[('H3S',200)][0]:.2f}；延拓 {res[('H3S',160)][1]/res[('H3S',200)][1]:.2f}")
 print(f"  同位素比 D/H（200 GPa）：数据 {DATA[('D3S',200)]/DATA[('H3S',200)]:.2f}；泛函截断 {res[('D3S',200)][0]/res[('H3S',200)][0]:.2f}；延拓 {res[('D3S',200)][1]/res[('H3S',200)][1]:.2f}")
