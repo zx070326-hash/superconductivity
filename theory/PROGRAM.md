@@ -148,13 +148,13 @@ P5 ← D3 切入点 1
 - **P4 最终定位**：作为一般理论（符号判据 (6) + 精确窗口平均 (2)）独立成立，适用于 δ 能被压力扫过 W_eff 的穿越型体系；H3S 的 dTc/dP 由峰高/峰宽/肩部缺损（E_F^eff）主导、不由峰位 δ——接回 P2 非绝热两通道（同一窄 vHs 的两种投影，须去重，不各记一份）
 - `derivations/P4_vhs_dtc_dp_sign.md` v0.3、`p4_vhs_enhancement.py`+25 测试、`p4_out/*.csv`、commit 5b4ba11
 
-**P3（强耦合 Tc 上界的压力依赖）—— 推导 v0.2，`p3-review` 对抗 + `p3-omega2-data` 一手 r 反演并入，约定无关主结论站住**
+**P3（强耦合 Tc 上界的压力依赖）—— 推导 v0.3，§4 原创缺口补完（λ_* 稳定界解析压力展开），约定无关主结论站住**
 - 地基 `surveys/P3_tc_upper_bound_foundations_2026-09-08.md` + `surveys/P3_lah10_omega2_moments_2026-09-08.md` + `theory/data/hydride_tc_record_envelope.csv`（researcher 一手核实：λ≲4 分四个量、三套界的频率约定、纪录包络逐条溯源；一手 ω₂/ω_log 封闭反演）
 - **核心命题（v0.2）**：单材料 Tc(P)=Tc^emp(λ,ω_log)·R(P)，R=亏损比。LaH10 SSCHA 序列（Errea 2020）分解圆顶。`p3-review` 确认分解恒等式 (1) 与 ∂R/∂λ>0（λ→∞→1、无反例）；**稳健结论"λ 随压力下降（m≈−1）⇒ 有限-λ 亏损加深"成立（约定无关，但只解释 dlnR/dP 的 ~60%，~40% 是 μ*(P)/谱形 f₂(P)）**
 - **★ v0.1→v0.2 一手反演裁决（`p3-omega2-data`，`surveys/P3_lah10_omega2_moments`）**：一手 ω₂ 列表确认**不存在**（Errea 无 Source Data/SI、Semenok SI 只有 λ/ω_log），但从 Errea Ext. Data Table I **同给的 Tc^Mc 与 Tc^AD 封闭反演**出 r≡ω₂/ω_log=**1.194/1.075/1.105/1.095**（129/163/214/264 GPa，零数字化、δr≈0.001，三重自洽检验通过）。**撤回 v0.1 的"谱随压力单调 Einstein 化（√⟨ω²⟩/ω_log 1.12→1.04）"**——真实 r 非单调（129 GPa 谱显著更宽 + 高压三点持平），v0.1 用的抠图系统低估 r ~5%、把"台阶+平台"抹成单调；Errea 全文无一句说谱变窄（声学 La 份额 14%→12% 近似不变，反不支持）。
 - **★ v0.2 约定无关主结论（替代 v0"天花板反而在涨"）**：天花板 A=0.182ω_log√λ 只在 ω_log 约定成立；换 AD 真渐近 B=0.1827√λ·ω₂ 代入一手 r 得 368→359→388→387（**+5%、129→163 段还降**）。**两种约定下天花板都不下降（A +15%、B +5%），真实 Tc 降 −15%（255→217 K）⇒ 圆顶下降沿完全由 R 承担（R_A −26%、R_B −19%，乘性核对两条都闭合）——这个结论约定无关，比 v0 稳健。** 另更正 v0 笔误（0.08→0.50 ω_D）、天花板精确系数 0.1878 非 0.182
-- **第二条线（原创缺口）**：Semenok λ_*[α²F] 稳定界只给固定 3.69/4.72、无压力依赖；λ_*(σ)≈3.69[1+½κσ²]（σ=谱宽/谱心），κ>0 已数值确认（~2.8，`p3-review`），解析封闭式待推。一手 r=1.08–1.19 靠近 Einstein 端（Xie 标尺氢化物可达 ~2.2）⇒ λ_*(LaH10) 贴近下确界 3.69、压力依赖弱
+- **第二条线（原创缺口，v0.3 补完解析封闭式）**：Semenok λ_*[α²F] 稳定界只给固定 3.69/4.72、无压力依赖。**P3 推出 λ_*(σ)=3.6915[1+2.802σ²+O(σ⁴)]，κ ≡ −x_max²g''(x_max)/g_max = 5.6035（纯数、材料无关；g''(x) 手推封闭式与数值微分吻合 1e-25）**，从 Eq. S12 泛函直接积分**精确复现 Semenok 两端点**（Einstein 3.6915、Debye 4.7186），近 Einstein 区（σ≲0.2）精度 ≤0.4%（`derivations/p3_lambda_star_kappa.py`）。先前 `p3-review` 的"κ~2.8"实为 σ² 系数 ½κ、非 κ。LaH10 的 r=1.08–1.19 靠近 Einstein 端 ⇒ λ_*(LaH10) 贴近 3.6915、压力依赖弱。**★ 此结果纯由 g 核定、不涉 Allen–Dynes f₂，是 P3 唯一不受"PRB 12,905 必补"风险影响的一块（最独立、最硬）。** 待 reviewer 复核 + ≥3 峰谱一般性 + σ(P) 一手序列（需 α²F 数据）
 - **★ 必补 / 用户决定**：(a) Allen–Dynes PRB 12,905 原文（f₁/f₂ 确切式——r 反演单一最大不确定性来源，从"该补"升"必补"；Kruglov PRB 101,024508 SI 系数一致算第二佐证，非原文）；(b) 是否写信 Ion Errea 要 LaH10 α²F 数值文件（Data availability=upon request）；(c) Kruglov PDF 已缓存，建议归档 `library/pdf/P3/`
-- `derivations/P3_tc_max_pressure.md` v0.2、implementer 数值验证待启
+- `derivations/P3_tc_max_pressure.md` v0.3、`derivations/p3_lambda_star_kappa.py`、implementer 数值验证（R(λ)/分解/λ_*[α²F] 泛函）待启
 
 **未启动**：P5、P6。
