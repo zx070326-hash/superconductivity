@@ -91,8 +91,12 @@ superconductivity/
 - [x] 2026-09-08 **P2 数值**：GPS99 一阶顶角在裸 E_F=24 eV 下符号错、量级差 10–20×（四个解析极限复现 <1%）→ P2 v0.2 重定位为"有效 E_F 由什么决定"（与 P4 合并）
 - [x] 2026-09-08 **P2 v0.3：DOS 缺损泛函** P_s/λ = (ω₀/2)∫N̄/(|ε|+ω₀)² − 1 —— 真实 H3S DOS 给 −0.103 vs 第一性原理 −0.095，压力比 0.37 vs 0.37，E_F^eff = 0.96 eV；P2 判据 = 费米面附近 ~ω₀ 内的 DOS 缺损（与 P4 合并）
 - [x] 2026-09-08 researcher：2608.14949 无氘化体系顶角数据；第二家族 H/D 顶角需向作者索取（用户决定）
-- [ ] reviewer 核验 P2 §5（极限顺序、λ 归一化、窗口敏感性、I>1 是否可能）
-- [ ] P2 E_F 扫描（implementer）；Mishra 2608 SM 的 E_F^eff/η/DOS 表抽取；LaH10 DOS 形状（两个 researcher）→ 跨材料检验式 (5.1)
+- [x] 2026-09-08 reviewer 核验 P2 §5：推导正确；压力比吻合依赖 EPW 窗口、高能空带贡献 15–30%、判据降级为静态区部分答案 → P2 v0.4
+- [x] 2026-09-08 LaH10 DOS 形状（文献）：与 H3S 同在 vHs 下坡但更平坦 → 顶角压制约 H3S 一半、同号；LaH10 α>½ 顶角路径关闭
+- [x] 2026-09-08 **P2 第一轮闭环记录** `theory/notes/2026-09-08_P2_round1.md`
+- [ ] P2 E_F 扫描（implementer）；其他材料 adia/vertex Tc 数据（researcher）
+- [ ] P2 下一步：式 (5.1) 的 (Q, ω_q) 动态修正版；求解器顶角钩子接入
+- [ ] 用户决定：是否向 Mishra/Margine 发数据请求（`theory/notes/draft_email_mishra_margine.md`）
 - [ ] 用 Mishra 的 H3S.dos 标定求解器 DOS 实现；扫 DOS×顶角交叉项
 - [ ] 各方向 README 填入现状摘要（D1–D4 优先，D5–D7 降级为参考）
 - [ ] 补核 16 条无 arXiv ID 的元数据（多为 Nature/PRL 正式版，无预印本）
