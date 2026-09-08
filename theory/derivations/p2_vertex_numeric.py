@@ -725,6 +725,61 @@ def _task_C_D_E(out_dir: Path, h3s_path: Path) -> dict:
             "w0_H": w0_H, "w0_D": w0_D, "summary": summary}
 
 
+def _task_F(out_dir: Path, h3s_path: Path, EF_scan=None, Qcs=None) -> dict:
+    """补充任务 F（team-lead 2026-09-08 指派，反推 E_F^eff）：把 vFq=4EF·Q 里
+    的 EF 当自由参数扫描，DOS **形状**不变（H3S 真实 N̄(ε) 表 / 常数 DOS 半
+    填充带两种），看哪个 EF^eff 能使 P̄_H ≈ -0.095——把
+    P2_vertex_sign_criterion.md §2 用静态闭式 P_s=-w0/(w0+EF) 反推出的
+    "EF^eff≈1eV"，升级成这里完整 (Q,wq) 数值结构（含 Q 平均、Einstein 声子
+    权重）下的版本。
+
+    关键设计：EF^eff 与"DOS 积分范围"是两件独立的事，这里只扫前者——
+    H3S 情形的真实能带边界 (h3s.band_bottom/band_top) 与真实 N̄(ε) 表
+    (h3s.dos_bar) 保持不变（真实电子结构不应该随 EF^eff 这个运动学参数变化），
+    只有传给 vertex_PV 的 EF（决定 vFq 标度）被替换成扫描值。常数 DOS 情形
+    按半填充惯例取带宽 ±EF（与 analytic_Ps/Pd 的假设、_task_C_D_E 的常数 DOS
+    情形一致，否则"EF"在两种 DOS 下含义不可比）。EF_scan 默认
+    {0.5,1,2,5,EF_free≈24.14}eV，Qcs 默认 {0.3,1.0}（team-lead 指定）。
+    复用 _h3s_case（与 C/D/E 完全相同的数值路径、相同的 _FAST_GRID_KWARGS/
+    _FAST_N_Q 降采样设置），不改动任何物理公式。
+    """
+    h3s = load_h3s_dos(h3s_path)
+    if EF_scan is None:
+        EF_scan = [0.5, 1.0, 2.0, 5.0, h3s.EF_free]
+    if Qcs is None:
+        Qcs = [0.3, 1.0]
+    w0_H = 0.110
+    w0_D = 0.110 / np.sqrt(2.0)
+
+    rows = []
+    for EF in EF_scan:
+        h3s_scan = H3SDos(h3s.EF_abs, h3s.band_bottom, h3s.band_top,
+                           h3s.N_EF, h3s.n_cell, EF, h3s.dos_bar)
+        const_scan = H3SDos(h3s.EF_abs, -EF, EF, 1.0, 1.0, EF, const_dos)
+
+        C_const = _h3s_case(out_dir, const_scan, w0_H, f"F_const_EF{EF:.4g}", Qcs)
+        C_h3s = _h3s_case(out_dir, h3s_scan, w0_H, f"F_h3s_EF{EF:.4g}", Qcs)
+        D_const = _h3s_case(out_dir, const_scan, w0_D, f"F_constD_EF{EF:.4g}", Qcs)
+        D_h3s = _h3s_case(out_dir, h3s_scan, w0_D, f"F_h3sD_EF{EF:.4g}", Qcs)
+
+        for i, Qc in enumerate(Qcs):
+            for key, wname in [("Pbar_flat", "flat"), ("Pbar_QdQ", "QdQ")]:
+                row = dict(
+                    EF=EF, Qc=Qc, weight=wname,
+                    Pbar_H_const=C_const["rows"][i][key],
+                    Pbar_H_h3s=C_h3s["rows"][i][key],
+                    Pbar_D_const=D_const["rows"][i][key],
+                    Pbar_D_h3s=D_h3s["rows"][i][key],
+                )
+                row["ratio_D_over_H_const"] = row["Pbar_D_const"] / row["Pbar_H_const"]
+                row["ratio_D_over_H_h3s"] = row["Pbar_D_h3s"] / row["Pbar_H_h3s"]
+                row["dos_suppression_H"] = row["Pbar_H_h3s"] / row["Pbar_H_const"]
+                row["dos_suppression_D"] = row["Pbar_D_h3s"] / row["Pbar_D_const"]
+                rows.append(row)
+
+    return {"rows": rows, "EF_scan": EF_scan, "Qcs": Qcs}
+
+
 def _fmt_table(rows, cols, fmt="{:.4g}"):
     lines = [",".join(cols)]
     for r in rows:
@@ -774,6 +829,15 @@ def main():
     print("\n--- 同一组 C/D/E 量，改用 QdQ 权重（SPEC §3B 的另一种选项） ---")
     print(table_c_qdq)
     (OUT_DIR / "CDE_summary_QdQ.csv").write_text(table_c_qdq, encoding="utf-8")
+
+    print("\n=== Task F（补充，team-lead 2026-09-08 指派）：EF^eff 扫描 ===")
+    F = _task_F(OUT_DIR, h3s_path)
+    cols_f = ["EF", "Qc", "weight", "Pbar_H_const", "Pbar_H_h3s", "Pbar_D_const", "Pbar_D_h3s",
+              "ratio_D_over_H_const", "ratio_D_over_H_h3s",
+              "dos_suppression_H", "dos_suppression_D"]
+    table_f = _fmt_table(F["rows"], cols_f)
+    print(table_f)
+    (OUT_DIR / "F_EF_scan.csv").write_text(table_f, encoding="utf-8")
 
     print(f"\n输出目录: {OUT_DIR}")
 
