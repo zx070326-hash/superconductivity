@@ -304,6 +304,8 @@ Survey 的 "Corollary 3" 可能指的是 **KAY II** 的某个 Corollary（survey
 
 **裁决**：survey 的 U3（"N→∞ 换序证明是否在 KAY I 而非 II"）——**在 KAY I 中有，即 Theorem 2 + 其证明**。但这只是 γ 模型的 𝔤^(N)→𝔤。将此提升到一般 P(dω) 的 𝔨^(N)→𝔨 的换序**应在 KAY II** 中。等级 A（KAY I 部分）/ C（KAY II 部分未核）。
 
+**⚠ 更正（2026-09-10，`surveys/P4_KAY_interchange_statements_2026-09-10.md`，KAY II v3 全文逐页核）**：上句「一般 P 版本应在 KAY II」**判错**。KAY II **无**一般-P 的 𝔨^(N)↑𝔨 编号定理——Theorem 4 (p.9) 只给不等式 Λ<1/𝔨^(N)，"converges upward" 仅散文出现（p.9/21/38/41）、正文无证明（无 KAY I Lemma 6 的对应物）。「KAY II Corollary 3 = N→∞ 换序」是**编号误挂**：KAY II Cor 3 (p.13) 实为大-λ 渐近闭式 eq.(30)。**⟹ 一般-P 收敛在 KAY 无出处，由我方 `derivations/P4_interchange_uniformity.md` 推论(7) 首证（紧自伴压缩 + Weyl）。** 正确表述：「KAY 断言但未证、我方补证」。
+
 ---
 
 ## §6 Combescot, PRB 51, 11625 (1995)（检索目标二）
