@@ -158,3 +158,29 @@ P5 ← D3 切入点 1
 - `derivations/P3_tc_max_pressure.md` v0.3.4、`derivations/p3_lambda_star_kappa.py`、`derivations/p3_lambdastar_universality.py`（普适性证明）、`derivations/p3_lah10_lambdastar_check.py`、reviewer 交叉核验脚本 `derivations/_xcheck_p3_kappa_A.py`/`_xcheck_p3_kappa_B.py`、**`p3-numerics` 数值验证已并入**：`solvers/lambda_star.py`(+`tests/test_lambda_star.py` 10/10)、`derivations/p3_task_A_R_lambda.py`、`derivations/p3_task_C_envelope.py`、`notes/2026-09-09_P3_numerics.md`。**结果**：R(λ) 决定性检验落第二支（λ 单独 dlnR/dP=−0.2521 占 60%、μ*(P)/f₂(P) 确证额外 ~40%）；λ_* 泛函复现 κ=5.6035/c₃=0.8959/Einstein 3.6915/Debye 4.7186、σ³ 字面展开改进 0.9%→0.07%/1.7%→0.73%；纪录包络 Tc/ω_max=0.043–0.091 全远低于 Semenok 0.20 稳定界（尚有 ~2× 余量）。斜率法歧义（端点割线 vs 四点 OLS）已在 §2 澄清为端点割线。**剩**：全非线性 `eliashberg_iso.py` Tc 复核 + 真实 α²F(ω;P) 直接积分（待 Errea 谱）。**v0.3.5 非氢化物验证**：`derivations/p3_nonhydride_lambdastar_check.py`（BETE-NET+JARVIS 双源 DFT，Nb 对上 Semenok / MgB₂ 表异常 / κ·c₃ 缩放律确证）、`notes/2026-09-09_P3_nonhydride_lambdastar_check.md`、`surveys/P3_nonhydride_landscape_2026-09-09.md`。
 
 **未启动**：P5、P6。
+
+---
+
+## 7. P4′（严格声子介导 Tc 上界 · P3 严格化升格）—— 立项 v0.1，两块数值验证落地
+
+> 注：此 P4′ 与 §2 备选池里旧的「P4 vHs」是**不同问题**（旧 P4 vHs 已闭为负结果，见 §6）。这里的 P4 指用户 2026-09-09 选定的大难题主线「严格的声子介导 Tc 上界」，是 P3 的严格化升格。为避免编号混淆，正文文件名用 `P4_rigorous_tc_bound`。
+
+**缘起（用户指令，2026-09-09）**：面向凝聚态/超导大难题立项，用户选定方向 1（声子 Tc 物理上限）∩ 2（严格数学物理定理）——两者交点 = **证明/收紧声子介导超导 Tc 的严格上界常数**，长在 P3 轨道上。
+
+**地形（两篇一手调研）**：`surveys/P4_rigorous_tc_bound_scoping_2026-09-09.md` + `surveys/P4_KAY_I_and_combescot_2026-09-09.md`
+- **KAY 三部曲**（Kiessling–Altshuler–Yuzbashyan 2025，J. Stat. Phys.）把 Eliashberg 线性稳定边界证成紧自伴算子 𝔎/𝔊 的最大本征值问题。**"确定 sharp constant"已不开放**：C_∞=0.1827262477… 已被定义、证为大 λ 渐近常数、算到 10 位，且 KAY Remark 3 亲口说它 = Allen–Dynes eq.(22) 那个常数（= P3 引的 0.1827）。**开放的是**：(a) 该 10 位只有浮点无严格包围；(b) 已证显式上界比它大 2.034×（KAY II；KAY I 原文对 T_c^(4) 是 2.032）；(c) 升级为全 λ 上界（Conjecture 2）。
+- **常数分层（务必不混）**：C^(1)=1/2π、C^(4)=0.1825137、**C_∞=0.1827262477（真渐近）**、C_ADfit=0.1878（AD 拟合式渐近，高 2.78%）、C^♯=2.034·C_∞=0.3717（唯一已证上界）。
+- **记号同构（金子）**：KAY 的 P(dω) = P3/Semenok 谱形函数 P(ω) 逐字同一；⟨ω²⟩ 定义逐位同 ⟹ P3 的 σ/γ₃ 与 LaH₁₀ 反演 r 值可直接复用。
+- **YAP PRL 的 λ≲4 不是定理**（准经典近似，λ≳3.4 才自洽）；Hainzl–Seiringer 严格纲领是**纯瞬时 BCS**（推迟核严格 Tc 界=处女地，但等价于控制 Migdal，极难，不选）；除 KAY 外无第二组给过严格 Eliashberg 大 λ 常数（Combescot 1995 非数学物理、仅近似解，U9 降级）。
+
+**命题（`derivations/P4_rigorous_tc_bound.md` v0.1）**：
+- **P4-A（主攻）**：把 P3 的 κ/c₃ 矩展开搬到 KAY 严格算子——𝔨^(N)(P,T)=𝔥^(N)(ϖ̄)[1+½κ_N(ϖ̄)σ²+c_{3,N}(ϖ̄)γ₃σ³+O(σ⁴)]，定量回答 KAY **Remark 2 亲口点名的洞**（"𝔨^(N) 不是 𝔥^(N) 的 P-平均，差多少"）。**本质差别**：κ_N 是 ϖ̄ 的**函数**不是纯数（KAY 不取极大，一阶靠 ⟨ξ⟩=0 消；P3 靠 g′(x_max)=0 得纯数），已前置声明、不承诺"又一个 5.6035"。
+- **P4-B（附属）**：C_∞ 从浮点升级为严格区间包围。
+- **P4-C（AI 试验田）**：收窄 2.034 缺口（物理折算 ~1090 K/√A）——缺口在 Lemma 1 解耦 + Lemma 2 次可加丢 −𝔊₁，非 ζ 估计；子问题 Conjecture 3、单调性 ϖ≤√2 之外均可形式化。
+
+**★ 两块数值验证已并入（本 worktree 复跑全过）**：
+- **P4-A `p4_kappa_N.py`（1257 检查，commit 4c010e9）**：(T1) sympy 确认 N=1 手推 κ₁=(2−6ϖ̄²)/(ϖ̄²+1)²、c_{3,1}=4ϖ̄²(ϖ̄²−1)/(ϖ̄²+1)³；(T2) N=1..4 的 κ_N/c_{3,N}(ϖ̄) 表 + KAY I 四常数复现（𝔤^(2)(2)=(20+√13819)/108 整数指纹级命中）+ 桥极限 lim_{ϖ→0}ρ(ℌ^(N))/ϖ²=𝔤^(N)(2) 接通 ℌ↔𝔊；(T3) 5 组谱族普适性成立——O(σ³) 残差谱形无关、峰数/峭度仅 O(σ⁴) 进入（**可证伪点守住**）。
+- **P4-B `p4_C_infinity_enclosure.py`（22/22 检查，commit 6760957）**：**C_∞∈[0.182726247771, 0.182726287025]，宽度 3.9×10⁻⁸，严格含 0.1827262477**。下界=Thm2 单调+N=400 Rayleigh 证书；上界=N=800 Schur 补分块证书。B2 闭式如实报负（符合 p.28 预期）。
+- **两个 implementer 独立发现同一 survey eq.31 (2,2) 元笔误（1/3^γ→1/5^γ），交叉印证，已改正**；N=2 常数末位 …944→…946（40 位复算裁决）。
+
+**剩（后置/待用户）**：(T4) ϖ̄ 自洽反解 T_c^(N)(λ,P) 谱形修正表；(T5) 一致余项 + N→∞ 换序（KAY II 一般 P 版本，U3 待核）；P4-C 主攻是否推进；两条挂账检索（Combescot 全文、KAY I Prop5/6 已取）。**系统性限制必须前置**：U4（KAY 全套 μ\*=0）、U5（λ 侧不严格，须"给定 λ 的严格 Tc 上界"+"λ 的物理上界"两层分开写）。
