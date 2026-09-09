@@ -115,6 +115,12 @@
 > 可以说：*"KAY II asserts this (p.9, p.21, p.38) and uses it in the proof of their Theorem 2 (p.34), but it is not the content of any numbered result and no proof is given beyond the remark that compact operators admit finite-rank approximations."*
 > **我方仍需自证一般-P 收敛**（好消息：这是标准命题，紧自伴 + P_N↑I ⟹ ‖𝔎−P_N𝔎P_N‖→0 ⟹ 谱收敛，可完全严格地写出，篇幅约半页）。这反而是我方相对 KAY 的一个干净的增量。
 
+**⚠ 增量边界（补记 2026-09-10，防 overclaim）**：**不可写「N→∞ 收敛首证」。** KAY I Theorem 2 + Lemma 6（KAY I p.29）**已完整证明 γ-model 特例**的 𝔤^(N)↑𝔤。我方增量精确地只有两条：
+- **(a)** 从 γ-model 的**固定核**推广到**任意谱测度 P** 的 𝔎(P,T) = ∫ℌ(ϖ)P(dω)；
+- **(b)** 补 KAY 两篇**都缺的定量速率**（ρ_N = 2‖(I−P_N)ℌ‖_HS 一类）。
+
+**附带的风险隔离**：KAY III（2409.02121）是 Einstein 极限 P(dω) = δ(ω−Ω)，即**单点测度特例**。即使 KAY III 补证了收敛，也够不到一般-P 的定位。（但 KAY III 若讨论了 Einstein 极限下的**谱隙**，会影响量化部分的定位——见 §8。）
+
 ---
 
 ## §2 紧性 / Hilbert–Schmidt 的确切陈述
@@ -165,7 +171,19 @@ KAY **不对 𝔎（或 𝔊）本身用 Perron–Frobenius**。他们把本征�
 
 > "As in the proof of Theorem 1 in [KAYa] one shows that ℭ(η) for η > 0 is a compact operator that maps the positive cone ℓ²_{≥0}(ℕ₀) into itself, in fact mapping any non-zero element of ℓ²_{≥0}(ℕ₀) into the interior of ℓ²_{≥0}(ℕ₀), and that the spectral radius of ℭ(𝔥) equals 1. **Thus the Krein–Rutman theorem applies** and guarantees that the non-trivial solution Ξ^opt of (45) is in the positive cone ℓ²_{≥0}(ℕ₀) (after at most choosing the overall sign), hence a superconducting perturbation of the normal state Ξ̲."
 
-**关键机制（B 级 `[本报告自推]`，但推理是初等的）**：𝔎₁ 是对角非负 ⟹ (ηℑ+𝔎₁)^{-1} 是**对角正**算子；𝔎₂+𝔎₃ 是**逐元素正**（𝔎₂ 对角为 0 但非对角正，𝔎₃ 全正，见 p.19 逐字）⟹ 乘积 ℭ(η) **逐元素正**。**所以 −𝔎₁ 的负号被吸收进预解式，正性完好无损。这正是我方问题 3 里担心的那一步，KAY 已经解决。**
+**关键机制（B 级 `[本报告自推]`，但推理是初等的）**：𝔎₁ 是对角非负 ⟹ (ηℑ+𝔎₁)^{-1} 是**对角正**算子；𝔎₂+𝔎₃ 是**逐元素正**（𝔎₂ 对角为 0 但非对角正，𝔎₃ 全正，见 p.19 逐字）⟹ 乘积 ℭ(η) **逐元素正**。**所以 −𝔎₁ 的负号被吸收进预解式，正性完好无损。这正是我方问题 3 里担心的那一步，KAY 已经处理。**
+
+### 3.1a ⚠ 但 KAY 这一步有技术瑕疵（补记 2026-09-10，等级 A 逐字 + B 判断）
+
+原文 p.20 与 p.25 都说 ℭ(η) 把 ℓ²_{≥0}(ℕ₀) 的任意非零元 **"into the interior of ℓ²_{≥0}(ℕ₀)"**。
+
+**问题：ℓ²_{≥0}(ℕ₀) 在 ℓ²-范数下内部为空。** 取任意全正 x ∈ ℓ²_{≥0} 与任意 ε > 0：因 x_n → 0，可取 n 使 x_n < ε/2，则 x − (ε/2)e_n 在 x 的 ε-球内却有负分量，故 x 不是内点。**⟹ 要求锥有非空内部的经典强 Krein–Rutman 不能照搬。**
+
+这不使结论错，但**单一性不是白拿的**：
+- 标准补法是换用**不需要锥内部非空**的版本（de Pagter：不可约紧正算子若 r(T) > 0 则 r(T) 是单一本征值；或 K–R 的 ideal-irreducibility 版本）。ℭ(η) 的核逐元素严格正应当足以给不可约性——**但该适用性本报告未独立验证，记为开放。**
+- 同一瑕疵**同时影响 γ 侧**：p.25 那句 "It is non-degenerate" 依赖完全相同的措辞，故 §3.2(a) 的 γ-模型单一性也不能直接当既成事实引用。
+
+**团队处置（v0.3）**：主路线已改为不依赖任何抽象锥定理——单一性由认证谱隙直接给（μ > α ∧ λ₂ ≤ α ⟹ 超过 α 的本征值恰一个 ⟹ λ₁ 严格孤立、单一）。KAY 的 ℭ(η) 改写降为可选加分项并如实标注上述瑕疵。
 
 且（B 级 `[自算]`，等价性验算）：
 ℭ(η)Ξ = Ξ ⟺ (𝔎₂+𝔎₃)Ξ = (ηℑ+𝔎₁)Ξ ⟺ (−𝔎₁+𝔎₂+𝔎₃)Ξ = ηΞ ⟺ 𝔎Ξ = ηΞ。
@@ -304,7 +322,7 @@ Corollary 3 的公式 eq.(30) 里含 **⟨𝔊^(N)(4)⟩₂**，其定义（eq.2
 |---|---|---|---|---|
 | 1 | 一般 P 下 𝔨^(N)↑𝔨 是否有编号定理？ | **否。Theorem 4 只有不等式。收敛仅散文断言（p.9/21/38），且被 Theorem 2 的证明依赖（p.34）。无 Lemma 6 类支撑。我方须自证。** | A | p.9, 21, 34, 38, 41 |
 | 2 | 紧性 / HS 陈述与显式界？ | **有：Proposition 2（p.19）：𝔎_j ∈ ℓ²(ℕ₀×ℕ₀)，HS 且紧。显式界 ‖𝔎_j‖_HS ≤ ⟨ϖ²⟩·‖𝔊_j(2)‖_HS。但 ‖𝔊_j(2)‖_HS 的数值/ζ 表达式不在 KAY II（回 KAY I App. A）。ℌ_j(ϖ) 也是 HS。** | A | p.19, eqs.40–42 |
-| 3 | 顶本征值单一性？如何绕过 −𝔎₁？ | **γ 模型侧明写「non-degenerate」（p.25，Krein–Rutman；有限 N 用 Perron–Frobenius，p.22/25）。绕法：不对 𝔊/𝔎 用 PF，而对 ℭ(η)=(ηℑ+𝔎₁)^{-1}(𝔎₂+𝔎₃) 用 Krein–Rutman——负号被吸进对角正预解式（eq.46, p.20）。但标准 Eliashberg 侧（𝔨(P,T)）从未明写单一性，我方需补一句平行论证。** | A（γ 侧）/ A-未见（𝔎 侧） | p.20, 22, 25 |
+| 3 | 顶本征值单一性？如何绕过 −𝔎₁？ | **绕法：不对 𝔊/𝔎 用 PF，而对 ℭ(η)=(ηℑ+𝔎₁)^{-1}(𝔎₂+𝔎₃) 用 Krein–Rutman——负号被吸进对角正预解式（eq.46, p.20）。γ 模型侧明写「non-degenerate」（p.25）；标准 Eliashberg 侧从未明写。⚠ 但 KAY 这一步的 "into the interior of ℓ²_{≥0}" 措辞不成立（该锥在 ℓ²-范数下内部为空），经典强 K–R 不能照搬，γ 侧那句也因此不白拿；补法需 de Pagter / ideal-irreducible 版本，本报告未验证。见 §3.1a。** | A（逐字）/ B（瑕疵判断） | p.20, 22, 25 |
 | 4 | 截断 = 左上 N×N 主子块？ | **是，五处逐字互证（Thm 4 "restriction to the first N components"；p.21 Ξ_N=(ξ₀,…,ξ_{N−1},0,…)；p.9 "upper leftmost 2×2 / 3×3 block"；p.24 eq.58 "projection onto the subspace spanned by the first N positive Matsubara frequencies"；p.25 "limiting n and m to {0,…,N−1}"）。与 KAY I Thm 2 的「N-angle sequences」等价（𝔇^{1/2} 对角）。⚠ 但 Remark 2（p.10）警告：本征值层面不可与 P-平均换序。** | A | p.9, 10, 21, 24, 25, 33 |
 | 5 | 算子范数收敛？谱隙？ | **两者全文均未见。** 无 ‖𝔎−P_N𝔎P_N‖→0 的任何不等式，无收敛率，无第二本征值/谱隙的任何提及。**这正是我方要补的。** 加分观察：Corollary 3 末句「N→∞ 亦成立」隐含需要本征向量收敛（⟨𝔊^(N)(4)⟩₂ 用 Ξ_N^opt(2) 定义），而那正需谱隙——KAY 未证，是我方工作的直接动机。 | A（未见）+ B（动机推断） | 全文；p.13, 29, 34 |
 
