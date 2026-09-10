@@ -68,7 +68,18 @@ STAGES
          upper bound on lam_2(M) inherited from lam_2(H), Stage B(iii)'s free
          operator-order gift), the standard residual/gap corollary of the
          Davis-Kahan sinTheta theorem gives
-             sin(angle(v_hat,v)) <= ||r|| / gamma.
+             sin(angle(v_hat,v)) <= ||r_full|| / gamma,
+         where r_full is the residual against the FULL operator M, not just
+         its Nv x Nv head block: v_hat is supported in [0,Nv), so
+             ||r_full||^2 = ||M_head v_hat - theta v_hat||^2 + ||B^T v_hat||^2
+                         <= ||r_head||^2 + ||B||^2,
+         with B the head-tail coupling block of M -- which equals that of H
+         because Nv >= N_c puts the Coulomb window inside the head -- and
+         ||B|| the certified `schur_coupling(Nv, w)` envelope.  (MAIN-SESSION
+         FIX 2026-09-10: the first version used ||r_head|| alone, ~1e-16,
+         which silently dropped the ~1e-2 tail term and under-reported the
+         angle by ~14 orders of magnitude; the certified kappa intervals are
+         now ~3x wider and correct.)
          (`P4_interchange_uniformity.md` only references Davis-Kahan
          conceptually, tying kappa_N -> kappa convergence to the tail norm
          rho_N and the certified gap; no closed-form lemma is stated there to
@@ -461,7 +472,7 @@ def rayleigh_resid_pencil(w, mutilde, Nc, Nv=None):
     `pdc.rayleigh_mu_pencil` (reproduced here because that function does not
     expose the residual)."""
     if Nv is None:
-        Nv = piu.NV_RAY
+        Nv = max(piu.NV_RAY, int(Nc) + 10)   # head must contain the Coulomb window
     A_np = H_mat(Nv, w, 0)
     M_np = A_np if mutilde == 0.0 else A_np - mutilde * K_c(Nv, Nc)
     v = np.linalg.eigh(M_np)[1][:, -1]
@@ -483,7 +494,13 @@ def rayleigh_resid_pencil(w, mutilde, Nc, Nv=None):
     num = sum(vm[i] * Mv[i] for i in range(Nv))
     theta = num / den
     resid = [Mv[i] - theta * vm[i] for i in range(Nv)]
-    rnorm = mp.sqrt(sum(x * x for x in resid) / den)
+    rnorm_head = mp.sqrt(sum(x * x for x in resid) / den)
+    # FULL-operator residual: the tail rows of M v_hat are B^T v_hat (K_c is
+    # zero there since Nv >= N_c), bounded by the certified coupling envelope.
+    if Nv < Nc:
+        raise ValueError(f"Nv={Nv} < Nc={Nc}: Coulomb window not inside the head")
+    nB = schur_coupling(Nv, w, 0, spec=spec_point(w, 0))
+    rnorm = mp.sqrt(rnorm_head ** 2 + mp.mpf(nB) ** 2)
     mu_lo = theta - ROUND_PAD
     return theta, rnorm, mu_lo
 
@@ -531,7 +548,7 @@ def kappa_c3_interval(w, mutilde, Nc, Nv=None, Na=None):
     (gamma<=0, i.e. wbar below the certified-gap floor -- honestly reported,
     not a computation failure)."""
     if Nv is None:
-        Nv = piu.NV_RAY
+        Nv = max(piu.NV_RAY, int(Nc) + 10)   # head must contain the Coulomb window
     theta, rnorm, lam_lo = rayleigh_resid_pencil(w, mutilde, Nc, Nv)
     lam_hi, ok, c, nB, nD = lambda1_upper_pencil(w, mutilde, Nc, Na)
     if not ok:
@@ -635,6 +652,9 @@ def run_stage3():
         f"n_nogap={n_nogap}")
 
     widths = [iv[1] - iv[0] for (kv, cv, s) in STAGE3_RESULTS.values() if s == "ok" for iv in (kv,)]
+    chk("Stage3 sin-angle bound includes the tail coupling (>=1e-4, not ~1e-16)",
+        all(float(rayleigh_resid_pencil(w, mt, Nc)[1]) >= 1e-4
+            for (w, mt, Nc), (kv, cv, st) in list(STAGE3_RESULTS.items())[:3] if st == "ok"))
     if widths:
         print(f"\n  {n_ok} points certified, {n_nogap} honestly labelled "
               f"'no rigorous error bar'. kappa interval width: min={min(widths):.2e} "
