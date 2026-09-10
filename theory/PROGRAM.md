@@ -194,4 +194,6 @@ P5 ← D3 切入点 1
 
 **P4-D 剩余（reviewer §7，2026-09-10）**：**(1) 承重**：κ(ϖ̄,μ̃,N_c)/c₃/K_* 表重算——μ\*≠0 的 σ-展开产品形态须重设计（可能按 ω_c/ω_E 分档），这是 U4 从「算子嵌入完成」到「Tc 上界产品」的最后一层；(2) λ<1 的区间上端从 5 外推（ϖ̄_c>5 时现区间不含 Tc）；(3) Combescot PRB 51,11625 定 C_∞(μ\*) 阶数（Layer 3，低优先）；(4) 单边核 Layer 1 非算子序（对外与 U7 同列，非承重）。
 
+**★ 闭合地图（分析员 `p4-closure-map`，2026-09-10，`notes/2026-09-10_P4_closure_map.md`）**：八块闭合状态矩阵 + U1–U9 现状 + 可外推节点清单 + 跨文档不一致 9 条。**主会话采信要点**：(1) 五块（P4-A T1–T5、P4-B、P4-C、P4-C.γ、第七块）已无遗留 CHALLENGED、可组装论文骨架；P4-D 不与之同批交付。(2) **最严重不一致——T5 Part 1 谱隙域 [0.2,5] vs 第七块区间定理 [0.3,5]**，此前两轮 reviewer 均未触及；主会话探针 `_scratch_ir/probe_02_03_cells.py` 证实第七块三支柱在 [0.2,0.3] 36 个几何 cell 全正（inf g_alt≥0.043、k-sign 全合格）⟹ **是记账缺口非漏洞**，顶命题对外域暂以 [0.3,5] 为准、已在主文档 §4 写明，扩展到 [0.2,5] 只需把 `wbar_grid` 下端改 0.2 并复跑（小代价，排入下一轮）。(3) U2（2.034 恒等式 survey 自算）、U9（Combescot 挂账）已正式并入主文档 §5 清单；‖𝔊₂‖_HS 记法笔误、g_alt 倍数精度两处已修。**分析员下一轮排序**：① T5 域记账（✅ 本轮已做）→ ② P4-D κ 表（implementer 进行中）→ ③ 五块论文骨架决策 → ④ 区间上端从 5 外推覆盖 λ<1 → ⑤ Combescot 全文定 C_∞(μ\*) 阶 → ⑥ U 编号卫生（✅ 本轮已做）。
+
 **git 合并挂账**：P4 全部提交（本 worktree 分支 `worktree-p3-numerics`，含第七块换序一致性证书 + reviewer 对抗裁决 + implementer R1/R2 升区间定理落地 commit 05e91f3（1668 检查）+ 本轮 PROGRAM/主文档并入，**至分支最新 commit**）待用户从 `D:\physics\superconductivity` 主 checkout 用 `git merge --ff-only worktree-p3-numerics` 合入 master（本隔离 worktree 无法代办；直接合分支 tip 即取全部，无需逐 commit）。
