@@ -3,9 +3,12 @@ P4 . INTERVAL EXTENSION, PART 2 (server run):  [0.2, 20]  -->  [0.2, W_HI]
       plus the mutilde = 0.33 node (mu* = 0.13 at lambda = 0.4: the last
       uncovered corner of the physics anchor X3 of `p4_interval_extension.py`).
 
-RUN (server, 44 cores):
-    OMP_NUM_THREADS=1 python -u p4_interval_extension_hi.py            (X4 X5 X6)
-    OMP_NUM_THREADS=1 python -u p4_interval_extension_hi.py X4 --whi 60 --refine 2
+RUN (server, 44 cores; the logged run `_scratch_ir/x4_run2.log` used exactly):
+    OMP_NUM_THREADS=1 python -u p4_interval_extension_hi.py X4 X4L X5 X6 \
+        --whi 60 --refine 2 --kna 16 --workers 40
+(kna=16 is now also the CFG default -- reviewer `interval-hi-review` 2026-09-11
+found the committed default was 14 while the log and the notes quote 16; the
+script prints the full CFG at start so the provenance is in every log.)
 
 Everything is imported unchanged from the certified modules; the two design
 knobs, both documented in the X0-X3 file and its review
@@ -76,10 +79,14 @@ def _summary(tag, note=""):
 
 # ---------------------------------------------------------------------------
 W_LO = 20.0
-CFG = dict(whi=60.0, refine=2, kna=14.0, nodes=(30.0, 40.0, 60.0))
+CFG = dict(whi=60.0, refine=2, kna=16.0, nodes=(30.0, 40.0, 60.0))
 MUTILDES = (0.0, 0.1, 0.13, 0.26, 0.33)
-# certified lower ends quoted from p4d_coulomb_certify Stage E (0.1/0.13/0.26)
-# and p4_interval_extension X0 (0.0); 0.33 has NO lower-end certificate yet.
+# certified lower ends quoted from p4d_coulomb_certify Stage E (0.1/0.13/0.26,
+# computed there with the BASE L) and p4_interval_extension X0 (0.0).  The 0.33
+# lower end is computed here in X4L with the WEIGHTED-row-0 L (1.5666; the base
+# L would give 1.6418, also printed).  Both conventions are rigorous; the
+# published 0.1/0.13/0.26 values are kept as published rather than re-tightened
+# (X4L shows the weighted L would move 0.26 from 1.1686 to 1.1416).
 WMIN_QUOTED = {0.0: 0.2, 0.1: 0.5391, 0.13: 0.6427, 0.26: 1.1686}
 
 
@@ -420,8 +427,9 @@ def run_verdict():
     for mt in MUTILDES:
         iv = interval_for(mt)
         wmax, ginf, n_ok, n = RESULT[("hi", mt)]
+        conv = "lower end: X4L, weighted L" if mt == 0.33 else "lower end: published (base L)"
         print(f"  mutilde={mt:<5}: certified [{iv[0]:.4f}, {iv[1]:.4f}]; above 20: "
-              f"{n_ok}/{n} cells, inf g_alt {ginf:.6f}", flush=True)
+              f"{n_ok}/{n} cells, inf g_alt {ginf:.6f}  ({conv})", flush=True)
     for w in sorted(NODE):
         print(f"  node {w:g}: g_alt={NODE[w]['galt']:.5f} K_*={NODE[w]['K']:.4e} s_max={NODE[w]['s_max']:.4f}", flush=True)
 
@@ -436,6 +444,7 @@ if __name__ == "__main__":
     args = ap.parse_args()
     CFG.update(whi=args.whi, refine=args.refine, kna=args.kna)
     want = [s.upper() for s in args.stages]
+    print(f"CFG: {CFG}  workers={args.workers}  stages={want}", flush=True)
     T0 = time.time()
     with Pool(args.workers) as pool:
         if "X4" in want:
