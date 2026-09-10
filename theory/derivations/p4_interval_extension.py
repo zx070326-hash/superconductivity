@@ -36,8 +36,25 @@ wbar=20 is 3.55, true lam_2 ~ 0.0024).  Scaling Na ~ 14 wbar restores it:
     Na = 140 for b <= 10
     Na = 280 for b <= 20
 The cost is the mpmath Cholesky at dps=30 (~ Na^3): 0.1 s at 70, 4 s at 280,
-14 s at 400, which is why the extension stops at 20 -- not because anything
-breaks there (probe: Na=420 still closes at wbar=30 with g_alt = 1.17).
+14 s at 400.  The extension stops at 20 for cost; nothing collapses there (true
+gap 3.55 at wbar=20, nodal g_alt(30) = 1.17 at Na=420), but see the L note
+below for what would ALSO have to change beyond ~20.
+
+LIPSCHITZ CONSTANT (reviewer `interval-ext-review`, 2026-09-11, load-bearing
+DOWNGRADE, adopted here): the base `schur_full_seg` bounds row 0 of the
+envelope matrix by `row_env0` = 2*S1, i.e. it DROPS the (2m+1)^{-1/2} column
+weight on row 0 -- rigorous, but 1.6x (wbar~0.2) to 5x (wbar~20) looser than
+summing row 0 explicitly with the weight, which is what the n>=1 loop of the
+same function already does.  Row 0 is the maximising row on every cell, so
+this slack IS the Lipschitz constant.  `schur_full_seg_w0` below is the base
+function with the loop started at n=0 (the n>=1 derivation of each term holds
+verbatim at n=0: H1 diagonal is empty, H2/H3 rows are the same psi(|n-m|),
+psi(n+m+1) sums, the integral tail bound only needs psi decreasing).  It is
+asserted <= the base L on every cell.  Consequences (reviewer, confirmed by
+the X1 rerun): the mutilde=0.26 prefix, which ended at 16.3172 under the base
+L because 61% of alpha_cell there was L*h/2, now closes on the whole [5,20];
+and at wbar=30 the geometric cell closes with margin instead of by 0.07.  The
+base module is NOT modified (its 1668 checks / Gate A stay untouched).
 
 Everything that enters a bound is mpmath (dps=30) on the same discipline as the
 base files; float64 eigvalsh appears ONLY as a trial-vector / evidence device.
@@ -97,6 +114,59 @@ def _summary(tag, note=""):
     k = PASS[0] - _LAST[0]
     _LAST[0] = PASS[0]
     print(f"  [{tag}] {k} checks passed. {note}")
+
+
+def schur_full_seg_w0(a, b, order, Mrows=200, Mcols=8000):
+    """`piu.schur_full_seg` with row 0 summed EXPLICITLY with its column weights
+    (loop from n=0) instead of the unweighted `row_env0` = 2*S1.  Same envelope
+    matrix, same Schur test, same integral tails -- strictly a subset of the
+    base function's own derivation, hence rigorous; never larger than it."""
+    spec = spec_seg(a, b, order)
+    C, A, p = float(spec[0]), float(spec[1]), spec[2]
+    _, int_tail = piu.envelope(spec)
+    m = np.arange(Mcols, dtype=np.float64)
+    invm = 1.0 / np.sqrt(2.0 * m + 1.0)
+    kk = np.arange(Mrows + Mcols + 2, dtype=np.float64)
+    psi_k = C / (kk**2 + A**2) ** p
+    cum = np.concatenate(([0.0], np.cumsum(psi_k[1:])))
+    inv_sqrt_last = 1.0 / np.sqrt(2.0 * Mcols + 1.0)
+    best = 0.0
+    for n in range(0, Mrows):
+        nrm_n = 1.0 / np.sqrt(2.0 * n + 1.0)
+        r = 2.0 * cum[n] / (2.0 * n + 1.0)                   # H1 diagonal (empty at n=0)
+        d = np.abs(m - n)
+        h2 = psi_k[d.astype(np.int64)] * invm
+        h2[n] = 0.0
+        h3 = psi_k[(n + m + 1).astype(np.int64)] * invm
+        tail = (float(int_tail(Mcols - n - 1)) + float(int_tail(Mcols + n))) * inv_sqrt_last
+        r += nrm_n * (float(h2.sum()) + float(h3.sum()) + tail)
+        best = max(best, r)
+    return max(best, float(piu.row_env(Mrows, spec)))
+
+
+L_RATIO = {}      # (a, b) -> (L_w0, L_base) bookkeeping for the report
+
+
+def L_seg(a, b):
+    Lw = schur_full_seg_w0(a, b, 1)
+    Lb = schur_full_seg(a, b, 1)
+    chk("weighted-row-0 L <= base L", Lw <= Lb + 1e-15, f"cell [{a},{b}] {Lw} vs {Lb}")
+    L_RATIO[(a, b)] = (Lw, Lb)
+    return Lw
+
+
+def _L_evidence(cells, tag):
+    """float64 EVIDENCE (not in any bound): L_w0 must dominate ||H'(w)|| at N=1500
+    on sampled cells; and report how much tighter it is than the base L."""
+    for c in cells[::12] + [cells[-1]]:
+        a, b = c[0], c[1]
+        for wq in (a, 0.5 * (a + b), b):
+            hp = float(np.max(np.abs(np.linalg.eigvalsh(H_mat(1500, wq, 1)))))
+            chk("evidence: L_w0 >= ||H'(w)|| at N=1500", c[3] >= hp,
+                f"w={wq:.4f} L={c[3]:.4f} ||H'||={hp:.4f}")
+    ratios = [L_RATIO[(c[0], c[1])][1] / L_RATIO[(c[0], c[1])][0] for c in cells]
+    print(f"  [{tag}] L = weighted-row-0 Schur segment bound; base L / L_w0 in "
+          f"[{min(ratios):.2f}, {max(ratios):.2f}] on these cells (reviewer: 1.6x .. 5x)")
 
 
 # ---------------------------------------------------------------------------
@@ -167,7 +237,7 @@ def alpha_side(grid):
             _, okA, cA, _, _ = alpha_certificate_H(a, Na=Na)
             _, okB, cB, _, _ = alpha_certificate_H(b, Na=Na)
             chk("band-boundary recertification SPD", okA and okB, f"cell [{a},{b}]")
-        L = schur_full_seg(a, b, 1)
+        L = L_seg(a, b)
         al = alpha_cell_ub_Na(a, b, cA, cB, L, Na)
         cells.append((a, b, Na, L, al))
     return cells
@@ -206,6 +276,7 @@ def run_X0():
         abs(grid[0] - LO_EXT) < 1e-12 and abs(grid[-1] - LO_BASE) < 1e-12)
     cells = alpha_side(grid)
     chk("lower extension uses the base head size only", all(c[2] == 70 for c in cells))
+    _L_evidence(cells, "X0")
     for mt in MUTILDES:
         rows = cell_rows(cells, mt)
         good = [r for r in rows if r[6] > 0 and r[7]]
@@ -258,6 +329,7 @@ def run_X1():
         abs(grid[0] - HI_BASE) < 1e-12 and abs(grid[-1] - HI_EXT) < 1e-12)
     cells = alpha_side(grid)
     _CELLS_HI[:] = cells
+    _L_evidence(cells, "X1")
     print(f"  alpha side done ({time.time()-t0:.0f}s): "
           f"alpha_cell at [5,{cells[0][1]:.3f}] = {float(cells[0][4]):.4f}, "
           f"at [{cells[-1][0]:.3f},20] = {float(cells[-1][4]):.4f}; "
@@ -288,12 +360,25 @@ def run_X1():
             chk("mutilde <= 0.13: the WHOLE [5,20] is certified",
                 n_ok == len(rows), f"mt={mt} {n_ok}/{len(rows)}")
         else:
-            chk("mutilde=0.26: the prefix ends strictly inside (5,20) and the "
-                "first dropped cell fails for a reason",
-                n_ok < len(rows) and (rows[n_ok][6] <= 0 or not rows[n_ok][7]),
-                f"n_ok={n_ok}")
+            if n_ok < len(rows):
+                chk("mutilde=0.26: the first dropped cell fails for a reason",
+                    rows[n_ok][6] <= 0 or not rows[n_ok][7], f"n_ok={n_ok}")
             chk("mutilde=0.26 prefix covers the lambda=0.5, mu*=0.13 solution "
-                "(wbar_c=13.5 at r=10, 15.6 at r=3)", wmax > 15.6, f"wmax={wmax:.4f}")
+                "(EVIDENCE numbers: wbar_c=13.5 at r=10, 15.6 at r=3)", wmax > 15.6,
+                f"wmax={wmax:.4f}")
+            # what the BASE (unweighted row 0) L would have given on the same cells
+            n_base = 0
+            for (a, b, Na, L, al) in cells:
+                lw, lb = L_RATIO[(a, b)]
+                al_b = float(al) + (lb - lw) * (b - a) / 2.0
+                mu2, k1, k2, k3, case = mu2_pencil_cell(a, b, mt)
+                if float(mu2) - al_b > 0 and k1 >= 0 and k2 >= 0 and k3 >= 0:
+                    n_base += 1
+                else:
+                    break
+            print(f"           (with the base unweighted-row-0 L the mutilde=0.26 prefix "
+                  f"would end at {cells[n_base-1][1]:.4f} after {n_base} cells -- the "
+                  f"reviewer's 16.3172 cutoff; the weighted row 0 is what closes it)")
         print(f"  {mt:>8.3f}  [5, {wmax:>7.4f}]{'':>5}  {n_ok:>3}/{len(rows):<4}  "
               f"{ginf:>10.6f}  [{worst[0]:.4f},{worst[1]:.4f}]  {min(r[5] for r in kept):>9.5f}")
         # soundness EVIDENCE on retained cells (float64; audits, never enters)
@@ -443,7 +528,7 @@ def certified_interval(mt):
     return wmin[key], X1_QUOTED_WMAX[key]
 
 
-X1_QUOTED_WMAX = {0.0: 20.0, 0.1: 20.0, 0.13: 20.0, 0.26: 16.3172}   # X1, 2026-09-10
+X1_QUOTED_WMAX = {0.0: 20.0, 0.1: 20.0, 0.13: 20.0, 0.26: 20.0}   # X1 v2 (weighted row 0), 2026-09-11
 
 
 def run_X3():
@@ -506,9 +591,11 @@ def run_verdict():
         print(f"  mutilde={mt:<5}: certified [{iv[0]:.4f}, {iv[1]:.4f}]  "
               f"(inf g_alt on [5,wbar_max] = {G_HI[mt][1]:.6f})")
     print("  new nodes with K_* and s_max: " + ", ".join(f"{w:g}" for w in NEW_NODES))
-    print("  NOT done / honest edges: extension stops at 20 for COST (Na^3 Cholesky), "
-          "not failure; mutilde=0.26 ends at wbar_max<20 (Coulomb-shifted 2x2 floor "
-          "vs alpha) -- lambda<0.5 with mu*=0.13 (mutilde>0.26) has no node at all.")
+    print("  NOT done / honest edges: extension stops at 20 for COST (Na^3 Cholesky); "
+          "beyond ~20 the binding term is the Lipschitz slack L*h/2 (L saturates ~1.2 "
+          "with the weighted row 0, h/wbar fixed => slack ~ 0.007 wbar vs mu_2 -> 1.66), "
+          "so a finer grid or a sharper L is needed well before Na cost bites; "
+          "lambda<0.5 with mu*=0.13 (mutilde>0.26) has no node at all.")
 
 
 if __name__ == "__main__":
