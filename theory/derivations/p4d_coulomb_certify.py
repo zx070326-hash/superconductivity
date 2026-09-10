@@ -27,10 +27,15 @@ Dividing (P) by lambda > 0, the pencil is positive definite iff
 so the ONE-PARAMETER self-adjoint family M is the object that has to carry the
 whole certificate machine.  ** mutilde = mu*/lambda is the certified parameter,
 not mu* itself. **  The requested physical values mu* in {0.1, 0.13} are
-reported at lambda = 1 (i.e. mutilde = mu*); because lambda >= 1 in every
-strong-coupling application of interest and the certificates below are
-monotone-safe in mutilde only through explicit evaluation, mutilde is simply
-scanned as an independent parameter and every number is labelled by it.
+reported at lambda = 1 (i.e. mutilde = mu*).  COVERING LEMMA (reviewer
+2026-09-10, `notes/2026-09-10_P4D_review.md` sec.4.2): K_c >= 0 gives
+M(mutilde) >= M(mutilde_0) for mutilde <= mutilde_0, hence lam_1(M(mutilde,N_c))
+>= lam_1(M(mutilde_0,N_c)) for every N_c, every Rayleigh/2x2 trial bound is
+monotone the same way, and alpha is mutilde-free -- so EVERY certificate proved
+at a node mutilde_0 (delta, g_alt, interval closure) holds verbatim for all
+mutilde in [0, mutilde_0].  The nodes therefore certify the whole range below
+them; MUTILDES_EXT adds the lambda<1 corner node mutilde=0.26 (mu*=0.13,
+lambda=0.5) to the interval closure of Stage E.
 
 Three certificates are re-established for M, in the same discipline as the
 mu*=0 file (float64 `eigvalsh` only as a TRIAL-VECTOR / SEARCH device, never
@@ -94,6 +99,9 @@ PASS = [0]
 _LAST = [0]
 
 MUTILDES = (0.1, 0.13)      # the requested physical values, at lambda = 1
+MUTILDES_EXT = (0.26,)      # lambda<1 corner (mu*=0.13 at lambda=0.5); Stage E interval
+                            # closure only (its nodal wbar=1 is inside the collapsed
+                            # prefix, so the nodal wbar>=1 assertions of C/D do not apply)
 
 
 def chk(name, ok, detail=""):
@@ -549,6 +557,14 @@ def mu2_pencil_cell(a, b, mutilde):
     is the EXACT 2x2 top eigenvalue minus ROUND_PAD, and it is a valid bound
     whatever the k-signs do.  That is why Stage D reports the nodal g_alt and the
     k-signs in SEPARATE columns -- only Stage E's interval closure needs both.
+
+    ** k-SIGNS ARE TAKEN OVER ALL THREE CASES (reviewer item 11, 2026-09-10). **
+    min_case lam_case(a) is a bound on the whole cell for every N_c only if
+    EVERY case's own Q_case is increasing, i.e. every case's k-signs hold -- not
+    just the minimising case's.  The returned k1,k2,k3 are therefore the
+    componentwise MINIMUM over the three cases (conservative: all-nonnegative
+    iff all nine signs hold).  The reviewer's 1781-cell sweep found no cell
+    where the minimising case passes and another fails, so no number changes.
     Returns (bound, k1, k2, k3, worst_case_Nc)."""
     aw = mp.mpf(float(a))
     b1 = aw * aw / (1 + aw * aw)
@@ -557,6 +573,7 @@ def mu2_pencil_cell(a, b, mutilde):
     h00, h01, h11 = b1, (b1 + b2) / mp.sqrt(3), (b3 - 2 * b1) / 3
     mt = mp.mpf(float(mutilde))
     best = None
+    kmin = None
     for case, (u0, u1) in U2_CASES.items():
         m00 = h00 - 2 * mt * u0 * u0
         m01 = h01 - 2 * mt * u0 * u1
@@ -569,9 +586,12 @@ def mu2_pencil_cell(a, b, mutilde):
         k1 = (v0 * v0 + 2 * v0 * v1 / mp.sqrt(3) - 2 * v1 * v1 / 3) / nn
         k2 = (2 * v0 * v1 / mp.sqrt(3)) / nn
         k3 = (v1 * v1 / 3) / nn
+        kmin = (k1, k2, k3) if kmin is None else (min(kmin[0], k1),
+                                                  min(kmin[1], k2),
+                                                  min(kmin[2], k3))
         if best is None or lam < best[0]:
-            best = (lam - ROUND_PAD, k1, k2, k3, case)
-    return best
+            best = (lam - ROUND_PAD, case)
+    return (best[0], kmin[0], kmin[1], kmin[2], best[1])
 
 
 GALT_P = {}
@@ -674,7 +694,7 @@ def run_stage_E():
 
     print(f"  {'mutilde':>8}  {'wbar_min':>9}  {'cells kept':>10}  "
           f"{'inf g_alt on [wbar_min,5]':>25}  {'worst cell':>20}")
-    for mt in (0.0,) + MUTILDES:
+    for mt in (0.0,) + MUTILDES + MUTILDES_EXT:
         rows = []
         for i in range(len(grid) - 1):
             a, b = float(grid[i]), float(grid[i + 1])
@@ -729,8 +749,19 @@ def run_stage_E():
                 f"start={kept[0][0]}")
             chk("mutilde=0 recovers the published infimum 0.093225",
                 abs(ginf - 0.093225) < 1e-5, f"{ginf:.6f}")
+    # COVERING LEMMA consistency: wbar_min must be nondecreasing in mutilde
+    # (a node's interval is inherited by every smaller mutilde, so a larger
+    # mutilde can never certify a LARGER interval).
+    mts = (0.0,) + MUTILDES + MUTILDES_EXT
+    for m1, m2 in zip(mts[:-1], mts[1:]):
+        chk("covering lemma: wbar_min nondecreasing in mutilde",
+            G_INT[m1][0] <= G_INT[m2][0] + 1e-12, f"{m1}->{m2}")
+    chk("lambda<1 corner node mutilde=0.26 certifies [wbar_min,5] with wbar_min<1.17",
+        G_INT[0.26][0] < 1.17, f"wbar_min={G_INT[0.26][0]:.4f}")
+    # the k-signs never bind: the first DROPPED cell fails on g<=0 with k-signs ok
     print("  ==> mu*=0 row reproduces the v0.6 theorem (inf gap >= 0.093225 on the")
-    print("      whole [0.3,5]); the mutilde>0 rows are the honest sub-intervals.")
+    print("      whole [0.3,5]); the mutilde>0 rows are the honest sub-intervals,")
+    print("      each inherited by every smaller mutilde (covering lemma).")
     _summary("Stage E", f"({time.time()-t0:.1f}s)")
 
 
@@ -993,11 +1024,15 @@ def run_verdict():
     print(f"  (ii) pencil gap certificates ({'mutilde = mu*/lambda' })")
     print(f"      {'mutilde':>8}  {'delta(wbar=1)':>13}  {'g_alt(wbar=1)':>13}  "
           f"{'interval [wbar_min,5]':>21}  {'inf g_alt':>10}")
-    for mt in (0.0,) + MUTILDES:
+    for mt in (0.0,) + MUTILDES + MUTILDES_EXT:
         wmin, ginf, ncell = G_INT[mt]
-        print(f"      {mt:>8.3f}  {DELTA_P[(1.0, mt)][0]:>13.6f}  "
-              f"{GALT_P[(1.0, mt)][0]:>13.6f}  "
+        d1 = (f"{DELTA_P[(1.0, mt)][0]:>13.6f}" if (1.0, mt) in DELTA_P
+              else f"{'n/a (wbar=1 < wbar_min)':>13}")
+        g1 = (f"{GALT_P[(1.0, mt)][0]:>13.6f}" if (1.0, mt) in GALT_P
+              else f"{'n/a':>13}")
+        print(f"      {mt:>8.3f}  {d1}  {g1}  "
               f"{'[%.4f, 5]' % wmin:>21}  {ginf:>10.6f}")
+    print("      (each row holds verbatim for every smaller mutilde: covering lemma)")
     print("  (iii) N < N_c: no separate treatment NEEDED.  P_N K_c(N_c) P_N =")
     print("      K_c(min(N,N_c)) exactly, so M_N is a leading principal block of the")
     print("      one fixed operator M and Cauchy interlacing holds for every N.  The")
