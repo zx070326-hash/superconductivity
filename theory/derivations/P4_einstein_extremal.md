@@ -1,6 +1,6 @@
 # P4 · Einstein 极值定理（固定 λ、⟨ω²⟩ 时 Einstein 谱使 Tc 最大）—— 立项 v0.1
 
-建立：2026-09-11　状态：v0.1（主会话立项 + 数值探针；证书未落地、未审）
+建立：2026-09-11　状态：v0.2（主会话立项 + 数值探针 + §1.C 结构恒等式 + researcher 文献并入（陈述为 AD1975 folklore、严格证明新、c₀=γ+ln4−3/2）；证书未落地、未审）
 上游：`P4_conjecture2.md` v0.5（§1 Jensen 化约 (A)：𝔨(P,T) ≤ ∫h(ϖ)P(dω)，已过 reviewer 对抗核；引理 B、段 III 解析界、Stage M 单调性机器）、`P4_interchange_uniformity.md`（一般-P 收敛 𝔨^(N)↑𝔨、ϖ-导数包络到 5 阶、认证谱隙 [0.2,60]）。
 
 ## 0. 陈述
@@ -14,6 +14,15 @@
 **证明骨架（两行）**。(A) 𝔨(P,T) ≤ ∫H(ϖ²)P(dω)；若 **H 在 (0,∞) 上凹（引理 C）**，Jensen 给 ∫H(ϖ²)P ≤ H(∫ϖ²P) = h(ϖ_rms)。∎　**⟹ 定理 E ⟺ 引理 C（单变量凹性）**。
 
 **数值探针**（`notes/_scratch_ir/concave_probe.py`、`loewner_probe.py`，float64 证据）：H″(x)<0 在 x∈[1e-3,3600] 的 63 个网格点无一例外（H″(1)=−0.328；大 x 处 H″≈−1/(2x²)，即 H ~ ½ln x，与 BCS 弱耦合 𝔨 ~ ln ϖ 一致）；40 组随机两原子谱 𝔨(P)/h(ϖ_rms) 最大 0.99996。**否定的捷径**：ℌ′(ϖ) 非半正定（λ_min≈−0.5）、x↦ℌ(x) 非算子凹（λ_min(D)≈−0.47），故无 Loewner 型免费论证，凹性必须走本征值二阶微扰 + 大 x 解析。
+
+
+### 0.A 优先权与措辞（researcher `extremal-lit`，2026-09-11，`surveys/P4_einstein_extremal_lit_2026-09-11.md`）
+
+- **陈述不新、严格证明新**：Moussa & Cohen PRB 74, 094520 (2006) 逐字 "It is already known [3] that the Einstein spectrum maximizes Tc for a given λ and ⟨ω²⟩."，[3]=Allen & Dynes 1975（AD 原文四路线未取到，归属链末环只有 MC 转述，如实标注）。数值内容亦非新：AD 拟合 Tc∝ω₂[a(r)+(1−a(r))/r]（r=ω₂/ω_log≥1）对 r 递减 ⟹ Einstein 最大（B 级自算）。**对外措辞**："The extremality of the Einstein spectrum at fixed λ and ⟨ω²⟩ is folklore in the strong-coupling literature (Allen–Dynes 1975, as quoted by Moussa–Cohen 2006), based on the Allen–Dynes fit; we give the first rigorous proof, valid for all λ>0 and every P with ⟨ω²⟩<∞, and make explicit that KAY III Conjecture 1 ⟹ KAY II Conjecture 2." **不得写「据我们所知无人陈述」。**
+- 文献其它「最优谱」是**别的约束**（勿混）：Leavens–Carbotte / Marsiglio–Carbotte 综述 eqs.(98)(99) 固定面积 A=λ⟨ω⟩/2；Bergmann–Rainer 1973 只给泛函导数正性 + 峰位；Semenok–Altshuler–Yuzbashyan 2407.12922 SI §S4 固定 ω_max、变分非严格；Combescot PRB 42, 7810 (1990) 固定 ω_log（λ→0）。KAY I–III 零处。
+- **c₀ 有闭式（两独立 A 级来源）**：Marsiglio PRB 98, 024523 eq.(37) T_c=(1.13/√e)ω_E e^{−(1+λ)/λ} 与 CAEK arXiv:2004.01281 eq.(17) ⟹ **h(ϖ) = ln ϖ + c₀ + o(1)，c₀ = γ + ln4 − 3/2 = 0.4635101**（有效截断 N_eff=ϖ/√e）。判据：若渐近探针拟出 0.9635（=γ+ln4−1，硬截断值）即丢了软截断、是 bug 信号。KAY III Thm 6 只对有限 N：𝔥^(N)(ϖ)=𝔥^(N)(∞)−B_N/ϖ²+O(ϖ⁻⁴)，𝔥^(N)(∞)=−1+2Σ_{n<N}(2n+1)^{-1}（与本文件 §2 引理 X 的试探向量值 2S_N−1 **逐字相同**，即该试探向量在 ϖ=∞ 是精确的），**全文无 h~ln ϖ、无 ϖ→∞/N→∞ 换序**。带误差界的严格大 ϖ 渐近：**全域为零**，段 C-II 是真空地。
+- **段 C-II 最有价值线索**：标度 n=ϖs 下 ⟦n−m⟧ → 差核 1/(1+(s−t)²)、权 (st)^{−1/2}，与 **Mityagin–Sobolev arXiv:1106.0127** 的 K_β 族同型；其 Thm 1 给顶本征值渐近 + **重标本征函数按范数收敛** + 模型算子 A=|D_x|+θ(x)/2（Widom 差核 + PDO 符号演算 + 正性改进半群）。本征函数收敛正是 (C\*) 大 ϖ 端所缺的 ‖(I−P)ℌ′v‖ 与 g 的控制。配套：Widom TAMS 100 (1961) 252、106 (1963) 391；Sobolev 1609.02052；Mityagin 0803.3159。抽象凹性路线关闭确认（λ₁ 对算子恒凸，凹性只能来自 Loewner，已排除）。Hilbert/Carleman 比较算子文献零处，且衰减阶不匹配。
+- 附带：Bergmann–Rainer Z. Physik 263, 59 (1973) 全文取到（p.61 eq.(7) 是 ℌ 的 1973 年版本含 μ\* 与 ρ），闭合 P4-D 旧 leftover。待补：AD 1975 全文、Combescot 1990 全文、Karakozov 1975/76（√e 出处）。
 
 ## 1. 引理 C 的证明计划（与 Conjecture 2 同构：证书段 + 解析段）
 
