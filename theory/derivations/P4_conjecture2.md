@@ -8,7 +8,7 @@
 
 对所有 P∈𝒫、λ>0：T_c(λ,P) < T̃_c(λ,P) := (1/2π)·√(𝔤(2)⟨ω²⟩λ)，𝔤(2)=ρ(𝔊(2))，⟨ω²⟩=∫ω²P(dω)。
 
-**★ researcher `conj2-kay-check` 逐字核（2026-09-11，`surveys/P4_KAY_conjecture2_reduction_2026-09-11.md`，A 级）**：KAY II Conj. 2 与 KAY III Conj. 1（p.12 eq.28，Einstein：T̃_c=(Ω/2π)√(𝔤(2)λ)）均以 "There is a critical temperature … which for all … λ>0 is bounded above by" 起句，**含存在性**（KAY 只证 λ≥λ_*<0.7670 时存在）。**本文件只证「界」的那一半**——对所有 T≥T̃_c 正常态线性稳定（λ𝔨(P,T)<1），故临界面与线 ℒ(λ,P) 的一切交点满足 T<T̃_c；存在性/唯一性（⟺ ϖ↦𝔥 在全 ℝ₊ 单调）仍开放。KAY 自身无 sup/首次穿越的 T_c 定义（只在临界面为图时由反函数定义，Thm 5 eq.17；pp.7–8 明写可能多次穿越），**不替他们定义**。KAY III 的 Conj. 1 是 T_c 形式而非逐点 𝔥(ϖ)≤𝔤(2)ϖ²，但界的那一半与逐点严格不等式等价（survey §1.3，B 级一行推导）。**「一般 P ⇐ Einstein」的 Jensen 化约在 KAY I–III 零处**（最接近：KAY II Remark 2 p.10「𝔨 不是 𝔥 的 P-平均」只说不等不说方向；Prop 7 p.31 eq.83 ρ(𝔎_j)≤ρ(𝔊_j(2))∫ϖ²P 只对正部分 j=2,3，对含 −𝔎₁ 的全 𝔎 不适用）。**竞争**：截至 2026-09-11 无人声称证明；唯一新严格上界 Elezaby–Abanov arXiv:2512.20009v2（PRB 2026）只做 γ-model，Gershgorin 闭式给 𝔤(2)≤≈1.545（T_c 因子 1.083），无 Einstein/猜想。
+**★ researcher `conj2-kay-check` 逐字核（2026-09-11，`surveys/P4_KAY_conjecture2_reduction_2026-09-11.md`，A 级）**：KAY II Conj. 2 与 KAY III Conj. 1（p.12 eq.28，Einstein：T̃_c=(Ω/2π)√(𝔤(2)λ)）均以 "There is a critical temperature … which for all … λ>0 is bounded above by" 起句，**含存在性**（KAY 只证 λ≥λ_*<0.7670 时存在）。**本文件只证「界」的那一半**——对所有 T≥T̃_c 正常态线性稳定（λ𝔨(P,T)<1），故临界面与线 ℒ(λ,P) 的一切交点满足 T<T̃_c；存在性/唯一性（⟺ ϖ↦𝔥 在全 ℝ₊ 单调）仍开放。KAY 自身无 sup/首次穿越的 T_c 定义（只在临界面为图时由反函数定义，Thm 5 eq.17；pp.7–8 明写可能多次穿越），**不替他们定义**。KAY III 的 Conj. 1 是 T_c 形式而非逐点 𝔥(ϖ)≤𝔤(2)ϖ²，但界的那一半与逐点严格不等式等价（survey §1.3，B 级一行推导）。**「一般 P ⇐ Einstein」的 Jensen 化约在 KAY II、III 零处**（KAY I 本轮未逐页复查，survey 行 155；KAY I 是 γ-model 论文、不含一般 P）（最接近：KAY II Remark 2 p.10「𝔨 不是 𝔥 的 P-平均」只说不等不说方向；Prop 7 p.31 eq.83 ρ(𝔎_j)≤ρ(𝔊_j(2))∫ϖ²P 只对正部分 j=2,3，对含 −𝔎₁ 的全 𝔎 不适用）。**竞争**：截至 2026-09-11 无人声称证明；唯一新严格上界 Elezaby–Abanov arXiv:2512.20009v2（PRB 2026）只做 γ-model，Gershgorin 闭式给 𝔤(2)≤≈1.545（T_c 因子 1.083），无 Einstein/猜想。
 
 **对外措辞（researcher 裁决 (c)，采纳）**："We prove the T_c bound asserted in Conjecture 2 of [KAY II] (equivalently Conjecture 1 of [KAY III]): for every P∈𝒫 and λ>0 the normal state is linearly stable for all T ≥ T̃_c(λ,P); in particular T_c(λ,P) < T̃_c(λ,P) whenever T_c is defined. The reduction to the Einstein case is an elementary convexity argument not stated in [KAY II, III]; the existence/uniqueness of T_c for all λ>0 (monotonicity of ϖ↦𝔥(ϖ) on ℝ₊) remains open."
 
@@ -264,7 +264,7 @@ F(ϖ) := −c₂_lo + ϖ²‖𝔊(4)‖²/(g_lo−2ϖ²‖𝔊(4)‖) + ϖ²‖�
 
 ### 6.7 对 §2 三段计划的影响：**段 II 冗余**
 
-段 III 的起点 ϖ₁ = π/𝔤(2) ≈ **2.384**（§2 用 C=2 的估计）；段 I 已闭到 **6.0 > 2.5×ϖ₁**。⟹ **引理 B 由段 I + 段 III 两段即可闭合，§2 的段 II（中 ϖ 区间证书）对本结论不再必需**（段 II 仍有独立价值：它给 h 的逐 cell 上界与 §3 的 Hellmann–Feynman 单调性；且若段 III 的 Schur 常数 C 远大于 2、使 ϖ₁>6，仍需要它）。**ϖ₀=6.0 不是方法的极限、而是本次选定的停止点**：float64 模拟（`notes/_scratch_ir/probe_smallw3.py`，未提交、非证书）显示同一阶梯到 ϖ=12 仍全部通过；且 ϖ→∞ 时 ϖ²Λ(ϖ) → −λ_min(𝔊(2)) = 0.98979、ϖ²ê → 0，结构性约束趋于 0.98979 < g_lo，**永不失效**。继续推高 ϖ₀ 只需加 cell（约 12 cell / 单位 ϖ，约 2.2 s/cell）。
+段 III 的起点 ϖ₁ = π/𝔤(2) ≈ **2.384**（§2 用 C=2 的估计）；段 I 已闭到 **6.0 > 2.5×ϖ₁**。⟹ **引理 B 由段 I + 段 III 两段即可闭合，§2 的段 II（中 ϖ 区间证书）对本结论不再必需**（段 II 仍有独立价值：它给 h 的逐 cell 上界与 §3 的 Hellmann–Feynman 单调性；且若段 III 的 Schur 常数 C 远大于 2、使 ϖ₁>6，仍需要它）。**ϖ₀=6.0 不是方法的极限、而是本次选定的停止点**：float64 模拟（`notes/_scratch_ir/probe_smallw3.py`，未提交、非证书）显示同一阶梯到 ϖ=12 仍全部通过；且 ϖ→∞ 时 ϖ²Λ(ϖ) → −λ_min(𝔊(2)) = 0.98979、ϖ²ê → 0，结构性约束从上方趋于 0.98979 < g_lo（float64 显示峰值 ≈1.03 出现在 ϖ≈4–6，见 §7；仍 < g_lo=1.304），故不会失效。继续推高 ϖ₀ 只需加 cell（约 12 cell / 单位 ϖ，约 2.2 s/cell）。
 
 ### 6.8 诚实边界
 
@@ -278,7 +278,7 @@ F(ϖ) := −c₂_lo + ϖ²‖𝔊(4)‖²/(g_lo−2ϖ²‖𝔊(4)‖) + ϖ²‖�
 
 **覆盖**：段 I（§6）认证 h(ϖ)<𝔤(2)ϖ² 于 **(0, 6.0]**；段 III（§2.A）纯解析给 h(ϖ) ≤ ‖ℌ(ϖ)‖ ≤ C·S₁(ϖ) ≤ Cπϖ/2 < 1.31714·ϖ² ≤ 𝔤(2)ϖ² 于 **ϖ > ϖ₁ = 2.0825243**（C=⅓+2/√3+1/√15，行 n=1 承重；主会话逐行复核了三类行的推导：n=0、n=1、n≥2 的 Chebyshev 步与 Σ(2m+1)^{-1/2}≤√(2n−1) 归纳）。(0,6.0] ∪ (2.0825,∞) = (0,∞)。段 II [0.3,2.5] 为独立交叉覆盖（与段 I 在 [0.3,2.5]、与段 III 在 [2.0825,2.5] 双重覆盖），非承重。
 
-**⟹ 引理 B 成立；由 §1 定理，KAY II Conjecture 2 / KAY III Conjecture 1 的「界」半句成立**：对所有 P∈𝒫（⟨ω²⟩<∞、P≠δ₀）、λ>0、T ≥ T̃_c(λ,P)=(1/2π)√(𝔤(2)⟨ω²⟩λ)，λ𝔨(P,T)<1（正常态线性稳定）。存在性半句（全 ℝ₊ 单调）仍开放；§3.A 把单调性从 KAY 的 [0,ϖ_*)（ϖ_*≥√2）推到 **[0, 30]**（[√2,30] 由 Stage M 认证 + KAY III Thm 5 的 [0,ϖ_*)），ϖ>30 未认证。
+**⟹ 引理 B 成立；由 §1 定理，KAY II Conjecture 2 / KAY III Conjecture 1 的「界」半句成立**：对所有 P∈𝒫（⟨ω²⟩<∞、P≠δ₀）、λ>0、T ≥ T̃_c(λ,P)=(1/2π)√(𝔤(2)⟨ω²⟩λ)，λ𝔨(P,T)<1（正常态线性稳定）。存在性半句（全 ℝ₊ 单调）仍开放；§3.A 在 **[√2, 30]** 上认证 h′>0（我方证书）；KAY III Thm 5 的 [0,ϖ_*)（ϖ_*≥√2）N=∞ 部分只经收敛散文，两者分开陈述、不合并写成「[0,30]」，ϖ>30 未认证。
 
 **主会话采信复核**：(a) `p4_conj2_small_w.py` 本机复跑 540 检查 162.8 s 全过；自写 float64 代码（不 import 两脚本）验证恒等式 (I) 到 1e-16、κ/Λ/ê 在 ϖ∈{0.3,1,1.7,2.4,4,6} 落在认证界正确一侧、s=1 结构约束 ϖ²(Λ+2ê) 于 ϖ→∞ 趋 ≈1.03 < g_lo=1.304（6.0 是选点非极限）；锐化余项 λ₁(A+E) ≤ λ₁(A)+⟨v₀,Ev₀⟩+max_s[s²β+2se] 逐行手推无误、粗化恰退回 (*)。(b) `p4_conj2_interval.py` 默认 stage 与 Stage M 本机复跑（见 `_scratch_ir/conj2_interval_*_rerun.log`）；段 III 三行常数的推导逐步复核。(c) 两 implementer 均未改动任何基线脚本（`git diff --stat` 核）。
 
