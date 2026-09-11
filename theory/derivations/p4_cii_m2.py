@@ -873,7 +873,9 @@ def run_stage4(ws):
         Sig = max(float(np.sum(Rk('G', 0, 0, sn[i], sn) * wn)) for i in idx)
         chk(f"row sum <= Theta*+q Tbar w={w}", Sig <= THETA_STAR + q * TBAR['G'],
             f"{Sig:.8f} vs {THETA_STAR + q*TBAR['G']:.8f}")
-        # the full Schur bound for O[f]
+        ex = exact_sums(w)
+        b = bounds2(w)
+        worst = {}
         for nm in ('phi', 'kap'):
             f = FAM[nm][0]
             lf = 2.0 * np.concatenate(
@@ -882,12 +884,12 @@ def run_stage4(ws):
             for i in idx:
                 rows.append(float(np.sum(wn * (f(np.abs(sn[i] - sn)) + f(sn[i] + sn))))
                             + lf[i])
-            ex = exact_sums(w)
-            b = bounds2(w)
             NS = b['NP'] if nm == 'phi' else b['NK']
+            worst[nm] = (max(rows), NS)
             chk(f"Schur sup {nm} w={w}", max(rows) <= NS, f"{max(rows):.6f} vs {NS:.6f}")
         print(f"   wbar={w:6g}: row-sum(R_G) {Sig:.7f} <= {THETA_STAR + q*TBAR['G']:.7f}"
-              f" ; Schur(phi) {max(rows):.5f}")
+              f" ; Schur(phi) {worst['phi'][0]:.5f} <= {worst['phi'][1]:.5f}"
+              f" ; Schur(kap) {worst['kap'][0]:.5f} <= {worst['kap'][1]:.5f}")
     stage_end("Stage 4")
 
 
