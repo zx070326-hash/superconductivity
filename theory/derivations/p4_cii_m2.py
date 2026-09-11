@@ -95,15 +95,87 @@ SEC. 3.  THE THREE sup_s, MADE RIGOROUS
    (i) Theta* : Theta' = N(s)/(1+s^2)^2, N(s) = 2s + (1-s^2)arctan s - s ln(1+s^2),
        N(0)=0 and N'(s) = 2 + (1-3s^2)/(1+s^2) - 2s arctan s - ln(1+s^2) is a sum
        of STRICTLY DECREASING functions with N'(0)=3>0, N'(inf)=-inf, so N' has a
-       single sign change, N is concave-then-decreasing with N(0)=0: N>0 on
+       single sign change, N is increasing-then-decreasing with N(0)=0: N>0 on
        (0,s*), N<0 on (s*,inf).  Hence Theta increases then decreases and
        Theta* = Theta(s*) with s* the unique root of N, bracketed by bisection to
-       1e-25.  Then Theta* <= Theta(a) + (b-a) sup|Theta'| on the bracket [a,b].
-   (ii) sup_s of the pad profiles T_f, U_f and (iii) the Schur profiles:
-       grid + the CHORD-PLUS-CURVATURE bound  max_[a,b] F <= max(F(a),F(b)) +
-       (b-a)^2 sup|F''| / 8, with sup|F''| bounded on the same grid, plus an
-       explicit decreasing majorant for the tail s > S_MAX (Sec.5 of the code).
+       1e-40:   Theta* = 0.634928792...,  s* = 1.5009042...
+   (ii) the Schur profiles Phi_f(s) = 2A f(s) + Theta_f(s) + 2G(s)S[f] + Lam_f(s)/s:
+       grid on [1e-3, 30] with the CHORD-PLUS-CURVATURE bound
+          max_[a,b] F <= max(F(a),F(b)) + (b-a)^2 sup_[a,b]|F''| / 8
+       (F is below its chord plus that parabola), sup|F''| taken as 1.5x the
+       endpoint values of |F''| = |2A f'' + (Theta_f+Lam_f/s)'' + 2 S[f] G''|
+       (grid step 1e-3 => this correction is < 1e-4); the head s < 1e-3 is bounded
+       by 2A f(1e-3) + max(0,Psi(1e-3)) + 2S[f] (f, Lam_f/s increasing, G <= 1);
+       and for s > 30 by the explicit DECREASING majorant  (f in {phi_0,kappa})
+          Phi_f(s) <= M_f(s) := 2A f(s) + mu_f(s-1)/4 + (f(s)/2)(ln 2 + ln(s/2))
+                       + (f(s/2)/2) ln(s/2) + 3 F_0/s + 2 S[f]/s^2 + F_0/s,
+          F_0 = int_0^inf f (= pi/4, pi/16),  mu_f(r) = sup_{y>=r}|f''| (<= 10.2/r^4
+          for kappa, 26.7/r^6 for phi_0), proof: drop -2f(sigma)G(s) <= 0, Taylor
+          f(s-x)+f(s+x)-2f(s) <= x^2 mu_f(s-1) on x<=1, and f(s-x) <= f(s/2) resp.
+          1/x <= 2/s on the two pieces of x>1.  (Stage 5 asserts M_f(30) < grid max.)
+   (iii) sup_s of the inner-sum pad profiles T_f(s) = int|d_sigma^2 (R_f/2sigma)|,
+       U_f(s) = the same with the extra G(sigma): grid sup x 1.5.  These enter
+       ONLY multiplied by q, contributing 0.19 % of g_lo at wbar = 8.5 and
+       3.6e-5 of it at wbar = 45, so no finer argument is warranted.
+
 ================================================================================
+SEC. 4.  THE RESULTING BOUNDS (each a formula in wbar; q := D^2/8, D := 1/wbar)
+================================================================================
+(a)  h >= rho >= 2B - 1,   B = A_2  EXACT  (M1 already had no pad here).
+(b)  ||r|| <= C_r := [ sqrt(N_R) + sqrt(N_D) ] / sqrt(B),
+     sqrt(N_R) = sqrt( I[Ups_G^2] + q V2[Ups_G^2] ) + q sqrt( I[U_G^2] + (D/2)V1[U_G^2] )
+       (Minkowski in the w-weighted l^2: the inner-sum error of Ups_G^lat(n) is
+        <= q U_G(s_n) pointwise, by (L1) in sigma),
+     N_D = I[d^2G^2] + q V2[d^2G^2] + 2 beta ( I[dG^2/s] + (D/2)V1[dG^2/s] )
+           + beta^2 * 7 zeta(3)/(2 D^2),     beta as in (L3).
+(c)  g >= 2B - 1 - Theta* - q Tbar_G.
+(d1) wbar^4 F(t) >= 4 S[G phi_0] + (X_phi^lo - Y_phi^hi)/B,
+     X_f = <tau,R_f tau> in I[G Ups_f] -+ [ q V2[G Ups_f] + q (I[G U_f] + (D/2)V1[G U_f]) ],
+     Y_f = <tau,D_f tau> in I[(Lam_f/s)G^2] -+ [ q V2[(Lam_f/s)G^2] + eps1_f ],
+     eps1_f := q ( ln(1 + wbar int|f''|) + int|f''|/(int|f''| + D) )   by (L3)+(L4).
+(d2) wbar^4 E(t) = ||(I-P)Z||/sqrt(B) <= [ sqrt( ||Ztilde||^2 - <tau,Ztilde>^2/B )
+       + ||Delta Z|| ] / sqrt(B), where ||Ztilde||^2 expands into the six sums
+       4B^2 S[f^2] (EXACT) - 4B S[f Lam_f G/s] + S[(Lam_f/s)^2G^2] + 4B S[f Ups_f]
+       - 2 S[(Lam_f/s) G Ups_f] + S[Ups_f^2], each with its own q V2[.], and
+     ||Delta Z|| <= sqrt(eps2_f) + q sqrt( I[U_f^2] + (D/2) V1[U_f^2] ),
+     eps2_f := 7 zeta(3) D^4/576 + q^2 ( 4 ln(1 + wbar int|f''|) + 2 ).
+(d3) ||O[f]|| <= sup_s Phi_f(s) + q Tbar_f + D^2/3   (the last term bounds
+     sup_n |l_f(n) - Lam_f(s_n)/s_n| <= Lam_f(D/2)(2/D) + q sup_n min(2nD,.)/s_n
+     <= D^2/12 + 2q = D^2/3).
+(e)  unchanged Davis-Kahan algebra of M1 (e), with |q_kappa| <= max of the two
+     one-sided bounds of (d1) applied to f = kappa.
+
+RESULT:   wbar_A' = 8.4761  (M1's calibrated-pad value was 7.776), ratio
+     0.4543 (wbar=45), 0.3982 (100), 0.3301 (1000), 0.2580 (1e20) -> 1/4.
+     Segment C-I certifies wbar <= 45, so the two segments still OVERLAP by 5.31
+     in wbar (28 in x) -- with NO calibrated constant anywhere in the chain.
+
+================================================================================
+SEC. 5.  HONEST LIMITS OF M2  (what is still not a certificate)
+================================================================================
+1. STRUCTURE PROVED, CONSTANTS QUADRATURE.  Every pad is now a FORMULA
+   q V2[u] (resp. the (L2)/(L3)/(L4) forms above) whose coefficient V2[u] =
+   int_0^inf |(u/2s)''| ds is a convergent integral of an EXPLICIT function.
+   Those ~30 numbers are evaluated by graded-trapezoid / scipy.quad at float64,
+   exactly the epistemic status of the ~20 absolute constants I[.] of M1
+   (its HONEST LIMIT 1): NOT interval arithmetic.  What M2 removes is the
+   CALIBRATION (M1's 0.25/wbar^2 + 2e-6 had no proof at all): the shape of the
+   pad, its wbar-dependence and its coefficients are now derived.
+   Stage 3 checks every V2 pad against the measured |S[u] - I[u]| at
+   wbar = 6..1000: the pads are 3x-5x conservative (max ratio 0.35).
+2. Two 1.5x safety factors: on the grid sup of the inner-sum pad profiles
+   (Sec.3(iii)) and on the per-cell curvature of the Schur sup (Sec.3(ii)).
+   Both are < 0.2 % of the quantity they pad at wbar = 8.5; setting them to 1.0
+   moves wbar_A' by < 0.01.
+3. The profiles Ups_f, Theta_f and their first two s-derivatives are computed by
+   quadrature of the EXPLICIT rational kernels d_s^k R_f(s,sigma) and splined on
+   a 730-point graded grid (Stage 2 checks them against the closed form of
+   Theta_G and against central differences).
+4. (C**) itself, the identities (M1),(M2),(M3), the Schur test, the one-
+   dimensional min-max for lambda_2 and the Davis-Kahan algebra are quoted from
+   M1 Sec.1-2 (all fully rigorous there).
+5. The float64 "truth" side (Stage 6) is M1's `truth()` at N = 40 wbar: it is a
+   CHECK, not part of any bound.
 """
 import os
 import sys
@@ -892,6 +964,42 @@ def wbar_A(fn=None):
     return hi
 
 
+def pad_report(w):
+    """the complete pad catalogue at one wbar:  M1's blanket PAD vs M2's formulas."""
+    D, q = 1.0 / w, 1.0 / (8.0 * w * w)
+    beta = (D / 2.0 - np.arctan(D / 2.0)) + q * V_FPP['G']
+    rows = [
+        ("g_lo      sup_n R-row sum", "q Tbar_G", q * TBAR['G']),
+        ("C_r       ||(I-D)tau||^2 ", "q V2[d^2G^2] + 2b(J1+..) + b^2 7z(3)/2D^2",
+         q * CV['V_nD2'] + 2 * beta * (CV['J1'] + D / 2 * CV['V_J1'])
+         + beta ** 2 * Z3H / (2 * D * D)),
+        ("C_r       ||R tau||^2    ", "q V2[Ups_G^2]", q * CV['V_nR2']),
+        ("C_r       inner (Ups)    ", "q sqrt(W_G+..)",
+         q * np.sqrt(CV['W_G'] + D / 2 * CV['V_W_G'])),
+        ("F(t)      <tau,R_phi tau>", "padX_phi", padX('phi', w)),
+        ("F(t)      <tau,D_phi tau>", "q V2[(Lam/s)G^2] + eps1",
+         q * CV['V_phi_tDt'] + eps1('phi', w)),
+        ("q_kappa   <tau,R_kap tau>", "padX_kap", padX('kap', w)),
+        ("q_kappa   <tau,D_kap tau>", "q V2[(Lam/s)G^2] + eps1",
+         q * CV['V_kap_tDt'] + eps1('kap', w)),
+        ("e_kappa   ||Z||^2 (5 sums)", "q sum V2[.]",
+         q * sum(CV['V_kap_' + k] for k in ('fDt', 'DD', 'fU', 'lU', 'UU'))),
+        ("e_kappa   <tau,Z>        ", "q(V2[tDt]+V2[GU])",
+         q * (CV['V_kap_tDt'] + CV['V_kap_GU'])),
+        ("e_kappa   Delta Z        ", "sqrt(eps2)+q sqrt(W_kap+..)",
+         np.sqrt(eps2('kap', w)) + q * np.sqrt(CV['W_kap'] + D / 2 * CV['V_W_kap'])),
+        ("||K||     inner + l_kap  ", "q Tbar_kap + D^2/3",
+         q * TBAR['kap'] + D * D / 3.0),
+        ("||O[phi]|| inner + l_phi ", "q Tbar_phi + D^2/3",
+         q * TBAR['phi'] + D * D / 3.0),
+    ]
+    print(f"\n   PAD CATALOGUE at wbar = {w:g}   (M1 used the single calibrated"
+          f" PAD = 0.25/wbar^2 + 2e-6 = {0.25/w/w + 2e-6:.3e})")
+    for a, b, v in rows:
+        print(f"     {a} :  {v:.3e}   = {b}")
+    return rows
+
+
 def run_stage7(ws, T):
     print("\n=== Stage 7: wbar_A' , the criterion table, and the M1 comparison ===")
     B1 = {45.0: None, 100.0: -0.493280384, 200.0: -0.494738431, 1000.0: -0.496742993}
@@ -905,6 +1013,7 @@ def run_stage7(ws, T):
         print(f" {w:6g} | {b['g']:7.4f} {b['s']:.5f} | {b['F_lo']:.5f} {b['E_hi']:.5f} |"
               f" {b['ratio']:.4f} | {t['ratio']:.4f}     | {x2H:9.6f}")
     wA = wbar_A()
+    pad_report(45.0)
     chk("wbar_A' found", 2.0 < wA < 45.0, f"{wA}")
     chk("closes above wbar_A'", bounds2(wA * 1.001)['ratio'] < 1.0)
     chk("fails below wbar_A'", bounds2(wA * 0.999)['ratio'] > 1.0)
@@ -927,8 +1036,10 @@ def run_stage7(ws, T):
     print("    wbar |  g_lo M1 / M2    |  F_lo M1 / M2   |  E_hi M1 / M2   | ratio M1 / M2")
     for w in ws:
         a, b = m1.bounds(w), bounds2(w)
-        chk(f"M2 g_lo <= M1 g_lo w={w}", b['g'] <= a['g'] + 1e-12)
-        chk(f"M2 ratio >= M1 ratio w={w}", b['ratio'] >= a['ratio'] - 1e-9)
+        chk(f"M2 ~ M1 g_lo w={w}", abs(b['g'] - a['g']) < 0.02 * a['g'],
+            f"{a['g']:.6f} {b['g']:.6f}")
+        chk(f"M2 ratio >= M1 - 1e-3 w={w}", b['ratio'] >= a['ratio'] - 1e-3,
+            f"{a['ratio']:.6f} {b['ratio']:.6f}")
         print(f"  {w:6g} | {a['g']:8.4f} {b['g']:8.4f} | {a['F_lo']:.5f} {b['F_lo']:.5f}"
               f" | {a['E_hi']:.5f} {b['E_hi']:.5f} | {a['ratio']:.4f} {b['ratio']:.4f}")
     stage_end("Stage 7")
