@@ -329,7 +329,7 @@ def g1_rayleigh_lerch(t, Nv, gamma):
 # ============================================================================
 # Reference constants (gamma=2, VERIFIED upstream P4-C bracket).
 # ============================================================================
-G_TRUE_REF_2 = mp.mpf("1.3181405")
+G_TRUE_REF_2 = mp.mpf("1.3181402121")   # corrected 2026-09-11 (P4-B: (2piC_inf)^2 = 1.31814021; conj2 Segment I enclosure width 3.7e-10); reference constant for evidence asserts only
 C_INF_REF_2 = mp.mpf("0.1827262477")
 KT_LOWER_REF_2 = mp.mpf("1.31714")
 KT_UPPER_REF_2 = mp.mpf("1.31820")
@@ -532,7 +532,7 @@ if __name__ == "__main__":
     # gamma=2 400-truncation matches the known reference (5e-7)
     _, _, _, G400_2 = build_blocks_np(400, 2.0)
     g400_2 = float(np.linalg.eigvalsh(G400_2)[-1])
-    _check("g^(400)(2) matches known reference 1.3181405 (5e-7)",
+    _check("g^(400)(2) matches known reference 1.3181402 (5e-7)",
            abs(g400_2 - float(G_TRUE_REF_2)) < 5e-7, f"got {g400_2:.9f}")
 
     # CRITICAL correctness gate: prop5_tail(N=0,gamma) == prop5_rhs(gamma) EXACTLY
@@ -584,7 +584,7 @@ if __name__ == "__main__":
 
     _check("gamma=2: alpha<mu (Kato-Temple hypothesis) holds", row2["alpha_ok"],
            f"alpha={row2['alpha']}")
-    _check("gamma=2: mu is a valid LOWER bound on known g(2) (mu <= 1.3181405+1e-6)",
+    _check("gamma=2: mu is a valid LOWER bound on known g(2) (mu <= 1.3181402+1e-6)",
            row2["mu"] <= float(G_TRUE_REF_2) + 1e-6, f"mu={row2['mu']:.8f}")
     _check("gamma=2: mu within 2e-3 of KNOWN mu=1.31714 (new pipeline reproduces old script)",
            abs(row2["mu"] - float(KT_LOWER_REF_2)) < 2e-3, f"mu={row2['mu']:.8f}")

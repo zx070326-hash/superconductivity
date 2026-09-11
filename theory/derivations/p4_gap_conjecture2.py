@@ -10,7 +10,7 @@ gamma-model operator on l^2(N_0) (index n from 0), verified upstream (P4-B):
     (G2)_{n,m} = (1-delta_{n,m}) / ( sqrt(2n+1) |n-m|^gamma sqrt(2m+1) )
     (G3)_{n,m} = 1 / ( sqrt(2n+1) (n+m+1)^gamma sqrt(2m+1) )          (>0, PSD)
 
-At gamma=2:  g(2) := rho(G(2)) ~ 1.3181405  (P4-B enclosure width 3.9e-8),
+At gamma=2:  g(2) := rho(G(2)) ~ 1.3181402  (P4-B enclosure width 3.9e-8; conj2 Segment I: [1.318140211762671, 1.318140212136387]),
              C_inf = (1/2pi) sqrt(g(2)) = 0.1827262477... (sharp constant).
 
 KAY's PROVEN analytic upper-bound chain (survey Sec.2.3-2.4), gamma=2, eps=0.65:
@@ -166,7 +166,7 @@ def beta_bbT_bound(N, w, M_cut):
 
 
 # reference true value (P4-B rigorous enclosure midpoint)
-G_TRUE_REF = mp.mpf("1.3181405")
+G_TRUE_REF = mp.mpf("1.3181402121")   # corrected 2026-09-11: upper end of the certified enclosure [1.318140211762671, 1.318140212136387] (conj2 Segment I); evidence-assert reference only
 C_INF_REF = mp.mpf("0.1827262477")
 
 
@@ -195,7 +195,7 @@ if __name__ == "__main__":
            f"got {G4[0,1]:.12f}")
     _check("G symmetric (4x4)", np.allclose(G4, G4.T), "")
 
-    # g_true from truncations converges up to ~1.3181405 (Theorem 2)
+    # g_true from truncations converges up to ~1.3181402 (Theorem 2)
     g_prev = -1.0
     g_seq = {}
     for Nt in [50, 100, 200, 400]:
@@ -204,7 +204,7 @@ if __name__ == "__main__":
         _check(f"monotone-up g^({Nt}) > g^(prev)", g_seq[Nt] > g_prev - 1e-15,
                f"g^({Nt})={g_seq[Nt]:.9f}")
         g_prev = g_seq[Nt]
-    _check("g^(400)(2) matches P4-B reference 1.3181405 (5e-7)",
+    _check("g^(400)(2) matches P4-B reference 1.3181402 (5e-7)",
            abs(g_seq[400] - float(G_TRUE_REF)) < 5e-7,
            f"g^(400)={g_seq[400]:.9f}, ref={float(G_TRUE_REF)}")
     print(f"    g^(N)(2): " + ", ".join(f"N={k}:{v:.9f}" for k, v in g_seq.items()))
