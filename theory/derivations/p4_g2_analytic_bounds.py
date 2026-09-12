@@ -604,9 +604,23 @@ def Kf(n, m):
 
 
 def certificate(p, N1, beta=BETA):
-    """Exact-rational Theorem (*).  p : list of Fractions (length M), N1 >= M integer."""
+    """Exact-rational Theorem (*).  p : list of Fractions (length M), N1 >= M integer.
+
+    Theorem (*) assumes p_n > 0 for every n, and that assumption is LOAD-BEARING:
+    the envelope 0 < g_n <= W/(n+1)^2 for n >= N1 is obtained from
+        g_n = sum_{m<M} p_m K(n,m)   and   K(n,m) <= [(N1+1)^2/(N1-m)^2 + 1]/(n+1)^2,
+    which bounds sum_m p_m K(n,m) by W/(n+1)^2 only because every p_m is positive.
+    With signed p the terms of W cancel against each other while the terms of g_n do
+    not, so W can come out too small, the analytic tail W^2 T(N1) then UNDERestimates
+    the true tail, and r^2 is no longer an upper bound for the true residual -- i.e.
+    the returned `hi` is not a bound at all.  (Concretely, p = (-34, -7, 8), N1 = 3
+    gives cert r^2 = 0.7253 against a true residual of 0.7261, with the analytic tail
+    low by a factor of 30.)  Hence the assertion below: a regression gate must not
+    silently drop a load-bearing hypothesis of the theorem it is gating.
+    """
     M = len(p)
-    assert N1 >= M
+    assert N1 >= M, "Theorem (*) requires N1 >= M"
+    assert all(x > 0 for x in p), "Theorem (*) requires p_n > 0 (envelope needs positivity)"
     nrm2 = sum((2 * n + 1) * p[n] ** 2 for n in range(M))
     quad = sum(p[n] * p[m] * Kf(n, m) for n in range(M) for m in range(M)) \
         - 2 * sum(H2(n) * p[n] ** 2 for n in range(M))
@@ -931,6 +945,27 @@ def stage8():
     """
     import random
     hdr("Stage 8 -- randomized falsification test of Theorem (*) on arbitrary p")
+
+    # 8.0  The positivity hypothesis is load-bearing, and the gate must enforce it.
+    #      p = (-34, -7, 8), N1 = 3 is a signed vector for which the certificate
+    #      formula (if the assert were removed) returns r^2 = 0.72534 against a true
+    #      residual of 0.72610 -- not an upper bound.  Check that it is rejected, and
+    #      that it really is a counterexample to the envelope, not just a guess.
+    bad_p, bad_N1 = [F(-34), F(-7), F(8)], 3
+    rejected = False
+    try:
+        certificate(bad_p, bad_N1)
+    except AssertionError:
+        rejected = True
+    chk(rejected, "certificate() rejects signed p (positivity hypothesis enforced)")
+    # independently confirm the envelope genuinely fails there: g_n changes sign
+    Mb = len(bad_p)
+    gb = [sum(bad_p[m] * Kf(n, m) for m in range(Mb)) for n in range(Mb, Mb + 6)]
+    Wb = sum(bad_p[m] * (F((bad_N1 + 1) ** 2, (bad_N1 - m) ** 2) + 1) for m in range(Mb))
+    chk(any(x < 0 for x in gb) and Wb > 0,
+        "signed-p counterexample really breaks 0 < g_n <= W/(n+1)^2",
+        f"W={float(Wb):.4f}, g_n(n>=M) = {[float(x) for x in gb[:4]]}")
+
     REF_LO = F(13181402121321, 10 ** 13)   # 1.3181402121321 <= g(2) ...
     REF_HI = F(13181402121324, 10 ** 13)   # ... <= 1.3181402121324
     random.seed(20260912)
@@ -957,6 +992,7 @@ def stage8():
             base = [1.0 / (M - n) ** 2 for n in range(M)]
         scale = random.choice([10, 100, 1000, 10 ** 4, 10 ** 6])
         p = [F(max(1, int(round(x * scale)))) for x in base]
+        assert all(x > 0 for x in p)   # so the skip below can only mean rho <= beta
         N1 = max(M, random.choice([M, M, M + 1, M + 3, 2 * M, 3 * M + 5, 100, 200]))
         try:
             c = certificate(p, N1)
