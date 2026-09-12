@@ -1,8 +1,9 @@
 # 3. Existence and uniqueness of the critical temperature
 
 <!-- src: theory/derivations/P4_main_theorems.md §5 (paper skeleton, item 3) -->
-<!-- Draft v0.2, 2026-09-12 (v0.1 drafted, interrupted; v0.2: numbering gap closed, intro
-     cross-references fixed, Remark 3.19(c) sharpened, scratch check completed).
+<!-- Draft v0.3, 2026-09-12 (v0.1 drafted, interrupted; v0.2: numbering gap closed, intro
+     cross-references fixed, scratch check completed; v0.3: Remark 3.19(c) rewritten after
+     the Coulomb probe be11865 — μ*>0 monotonicity is false, not merely unproved).
      Status: COMPLETE as a section — every statement below has a full proof; no TODO in the
      mathematics. Open items are editorial and listed under "Drafting notes" ([decision]).
      Purely analytic section: no computer-assisted certificate enters
@@ -767,21 +768,31 @@ uniqueness and the two one-sided strict inequalities. $\square$
 > (c) All of §3 is at $\mu^*=0$. For $\mu^*>0$ the operator ordering
 > $\mathfrak K-\tilde\mu K_c\preceq\mathfrak K$ preserves the upper bound of Theorem 1(c) but
 > **not** the cone argument: the Coulomb term destroys the structure (2.1), and the top
-> eigenvector of $\mathfrak K-\tilde\mu K_c$ generally leaves $\mathcal C$. Two distinct
-> issues arise. With a *fixed* Matsubara cutoff $N_c$ the question is whether monotonicity
-> survives without a cone; the proof above does not transfer, and no proof is known to us.
-> With the *physical* cutoff $N_c=N_c(T)$, which is a step function of $T$, the map
-> $T\mapsto\lambda_1(\mathfrak K-\tilde\mu K_c)$ is itself discontinuous and can jump
-> downwards at the steps, so several crossings of the level $1/\lambda$ are possible and
-> $T_c$ must be defined as the supremum of the unstable set. Uniqueness for $\mu^*>0$ is
-> therefore open in the first sense, and in the second sense it is a property of the cutoff
-> convention rather than of the operator; see Section 8.
-> <!-- src: P4_main_theorems.md §3 残余假设 3；P4_uniqueness_strategy.md §3 注(iv)、§5；
->      numerics in progress (p4_uniqueness_coulomb_probe.py, sibling worktree, uncommitted):
->      fixed-N_c monotonicity 0 violations on a (N_c, μ̃) grid; stepped N_c(ϖ̄) shows decreasing
->      jumps and up to 3 crossings for some (r, μ̃, λ). Not cited in the text until merged. -->
-> <!-- TODO(§8): cite the Coulomb probe once it is committed; adjust "no proof is known" if
->      the secular-equation route in that script yields a fixed-N_c monotonicity proof. -->
+> eigenvector of $\mathfrak K-\tilde\mu K_c$ generally leaves $\mathcal C$. Nothing weaker is
+> available either — $\mathfrak H'(\varpi)$ is strongly indefinite, so no Loewner argument
+> replaces the cone. Moreover the conclusion itself, not merely the proof, changes: monotonicity
+> in $\varpi$ is **false** for the pencil, both at a fixed cutoff $N_c$ and for mixtures $P$,
+> and with the physical stepped cutoff $N_c=N_c(T)$ the map
+> $T\mapsto\lambda_1(\mathfrak K-\tilde\mu K_c)$ is discontinuous and can jump downwards.
+> Consequently $T_c$ must in general be defined as $\sup\{T:\lambda\lambda_1\ge1\}$, and
+> uniqueness of the crossing can only be asserted under a **regularity hypothesis on the
+> Coulomb window** — for a stepping rate that is not too coarse — together with a restriction
+> on $\tilde\mu$. Both hypotheses do real work: they are not artefacts of the method. Section 8
+> states them explicitly and records the parameter ranges in which each failure occurs; a
+> theorem covering $\mu^*>0$ remains open.
+> <!-- src: P4_main_theorems.md §3 残余假设 3；P4_uniqueness_strategy.md §3 注(iv)、§5。
+>      Numerics: p4_uniqueness_coulomb_probe.py (sibling worktree agent-a7c7ce7d55fb1397f,
+>      commit be11865) — see its FINDINGS block. Three independent monotonicity failures:
+>      (1a) fixed N_c=4, μ̃∈[0.322,0.334], ϖ̄∈[0.71,0.77], dip 1.6e-6 → 3 roots but only for
+>           λ∈(3325,3343); the earlier "0 violations" was a sampling artefact (N_c=4 untested).
+>      (1b) stepped N_c=floor(r ϖ̄): r=3 gives 24/24 downward steps and genuinely breaks
+>           uniqueness at μ̃=0.10, λ=1.0 (2 roots) — INSIDE the physical range. r≥10 is safe
+>           (3/80 downward, all ϖ̄≤0.1, no multiple roots for λ∈[0.5,3]); gap width ~1/r.
+>      (1c) asymmetric 2-atom P, N_c∈[5,12], μ̃≳0.17: 3 roots, but only λ∈(24,75).
+>      Also: λ_min/λ_max(ℌ′)≈−1 at every ϖ̄ (N-independent); cone C fails 267/320, C′ 204/320.
+>      => (1b) is why the window-regularity hypothesis is stated above rather than assumed. -->
+> <!-- TODO(§8): cite be11865 once merged; state the window hypothesis quantitatively (r≥10
+>      is verified, the threshold between 3 and 10 is not) and the μ̃≲0.32 margin condition. -->
 
 ---
 
@@ -928,6 +939,20 @@ complete argument; items marked **[fyi]** are observations that need no action.)
     question (open) from the stepped physical cutoff $N_c(T)$ (discontinuous, hence
     non-unique crossings are a cutoff artefact); wording deliberately avoids quoting the
     in-progress Coulomb numerics — see the HTML comment there.
+
+17. **[decision] Remark 3.19(c) was revised again after the Coulomb probe finished
+    (`p4_uniqueness_coulomb_probe.py`, commit be11865 on the sibling branch).** The v0.2
+    wording said fixed-$N_c$ monotonicity was merely unproved and that the stepped-cutoff
+    non-uniqueness was "a property of the cutoff convention". Both were too kind. The probe
+    finds monotonicity **false** in three independent ways, and one of them — the coarse
+    window $N_c=\lfloor3\varpi\rfloor$, which produces two roots at $\tilde\mu=0.10$,
+    $\lambda=1.0$ — sits inside the physical parameter range. So a hypothesis on the window
+    regularity is load-bearing and must be stated, not inherited. The remark now says so.
+    **Ruling needed:** §8 must decide how to state the hypothesis. $r\ge10$ is verified clean
+    and $r=3$ is verified broken; the threshold in between was not probed, so §8 should either
+    quote "$r\ge10$, verified numerically" or state the hypothesis qualitatively
+    ("$N_c(\cdot)$ continuous, or stepping fine enough") and defer the constant. I have not
+    put any number into the §3 text.
 
 16. **[fyi] Scratch check.** `theory/notes/_scratch_ir/sec3_draft_check.py` (uncommitted, per
     repo convention) recomputes from the entrywise definition (2.1): (S1) to $2\cdot10^{-16}$
