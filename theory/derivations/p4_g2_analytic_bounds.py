@@ -240,10 +240,19 @@ CERT-A  (hand-checkable) : M=3,   N1=12,  p = (200, 45, 13)
 CERT-A' (hand-checkable) : M=4,   N1=16,  p = (1000, 228, 69, 25)
 CERT-B  (headline)       : M=12,  N1=40,  p = (10000, 2286, 704, 275, 129, 70,
                                                41, 27, 18, 13, 9, 7)
-CERT-C  (extended)       : M=30,  N1=80   (integer vector generated in-script)
-CERT-D  (limit demo)     : M=200, N1=500  (integer vector generated in-script)
+CERT-C  (extended)       : M=30,  N1=80   (30 integers, frozen as P_CERT_C;
+                                           printed in full in the write-up)
+CERT-D  (limit demo)     : M=200, N1=500  (200 integers, frozen as P_CERT_D)
+
+The C/D vectors were originally produced by round(scale * v_1(A_M)) but are now
+frozen literals, so that the exact rational endpoints quoted in the write-up do
+not depend on bit-for-bit LAPACK reproducibility.  Stage 5 re-derives them and
+reports the deviation as provenance, not as a validity condition: (*) holds for
+ANY positive rational p.
 
 The width scales like M^{-4}; see the scaling table in Stage 5.
+Stage 8 additionally tries to FALSIFY (*) with 400 random positive rational p of
+shapes far from the top eigenvector; see the write-up's honesty section (C').
 See `P4_g2_analytic.md` for the write-up and the honesty-boundary section.
 """
 
