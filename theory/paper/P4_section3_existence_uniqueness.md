@@ -1,9 +1,11 @@
 # 3. Existence and uniqueness of the critical temperature
 
 <!-- src: theory/derivations/P4_main_theorems.md §5 (paper skeleton, item 3) -->
-<!-- Draft v0.3, 2026-09-12 (v0.1 drafted, interrupted; v0.2: numbering gap closed, intro
+<!-- Draft v0.4, 2026-09-12 (v0.1 drafted, interrupted; v0.2: numbering gap closed, intro
      cross-references fixed, scratch check completed; v0.3: Remark 3.19(c) rewritten after
-     the Coulomb probe be11865 — μ*>0 monotonicity is false, not merely unproved).
+     the Coulomb probe be11865 — μ*>0 monotonicity is false, not merely unproved; v0.4:
+     r-scan d542119 — the physical-range failure is attributable to the window discontinuity
+     alone, drafting note 17 resolved).
      Status: COMPLETE as a section — every statement below has a full proof; no TODO in the
      mathematics. Open items are editorial and listed under "Drafting notes" ([decision]).
      Purely analytic section: no computer-assisted certificate enters
@@ -770,29 +772,42 @@ uniqueness and the two one-sided strict inequalities. $\square$
 > **not** the cone argument: the Coulomb term destroys the structure (2.1), and the top
 > eigenvector of $\mathfrak K-\tilde\mu K_c$ generally leaves $\mathcal C$. Nothing weaker is
 > available either — $\mathfrak H'(\varpi)$ is strongly indefinite, so no Loewner argument
-> replaces the cone. Moreover the conclusion itself, not merely the proof, changes: monotonicity
-> in $\varpi$ is **false** for the pencil, both at a fixed cutoff $N_c$ and for mixtures $P$,
+> replaces the cone. Moreover the conclusion itself, not merely the proof, changes: strict
+> monotonicity in $\varpi$ is **false** for the pencil, both at a fixed cutoff $N_c$ and for
+> mixtures $P$ — although both failures occur far outside the physical range of $\lambda$ —
 > and with the physical stepped cutoff $N_c=N_c(T)$ the map
-> $T\mapsto\lambda_1(\mathfrak K-\tilde\mu K_c)$ is discontinuous and can jump downwards.
-> Consequently $T_c$ must in general be defined as $\sup\{T:\lambda\lambda_1\ge1\}$, and
-> uniqueness of the crossing can only be asserted under a **regularity hypothesis on the
-> Coulomb window** — for a stepping rate that is not too coarse — together with a restriction
-> on $\tilde\mu$. Both hypotheses do real work: they are not artefacts of the method. Section 8
+> $T\mapsto\lambda_1(\mathfrak K-\tilde\mu K_c)$ is not even continuous, and can jump
+> downwards. Within the physical range the entire loss of uniqueness is attributable to that
+> discontinuity and not to the fixed-window function: on each plateau $\lambda_1$ is
+> increasing, so it is the coarseness of the window, not the operator, that must be
+> hypothesised away. Consequently $T_c$ must in general be defined as
+> $\sup\{T:\lambda\lambda_1\ge1\}$ — a definition that also makes the level occasionally being
+> *skipped* by an upward jump harmless — and uniqueness of the crossing can only be asserted
+> under a **regularity hypothesis on the Coulomb window**, together with a restriction on
+> $\tilde\mu$. Both hypotheses do real work: they are not artefacts of the method. Section 8
 > states them explicitly and records the parameter ranges in which each failure occurs; a
 > theorem covering $\mu^*>0$ remains open.
 > <!-- src: P4_main_theorems.md §3 残余假设 3；P4_uniqueness_strategy.md §3 注(iv)、§5。
 >      Numerics: p4_uniqueness_coulomb_probe.py (sibling worktree agent-a7c7ce7d55fb1397f,
->      commit be11865) — see its FINDINGS block. Three independent monotonicity failures:
+>      commits be11865 + d542119) — see its FINDINGS block. Three monotonicity failures:
 >      (1a) fixed N_c=4, μ̃∈[0.322,0.334], ϖ̄∈[0.71,0.77], dip 1.6e-6 → 3 roots but only for
 >           λ∈(3325,3343); the earlier "0 violations" was a sampling artefact (N_c=4 untested).
->      (1b) stepped N_c=floor(r ϖ̄): r=3 gives 24/24 downward steps and genuinely breaks
->           uniqueness at μ̃=0.10, λ=1.0 (2 roots) — INSIDE the physical range. r≥10 is safe
->           (3/80 downward, all ϖ̄≤0.1, no multiple roots for λ∈[0.5,3]); gap width ~1/r.
+>      (1b) stepped N_c=floor(r ϖ̄): r=3 breaks uniqueness at μ̃=0.10, λ∈{1.0,1.5} (2 roots) —
+>           INSIDE the physical range. r-scan {3,3.5,4,…,10} × λ∈{0.5,0.7,1.0,1.5,2.0} ×
+>           μ̃∈{0.05,0.10,0.13,0.26}, N=600, ϖ̄∈[0.02,8]: r=3 is the ONLY one coarse enough to
+>           fail; r≥3.5 gives exactly one T_c in all 20 combinations. True threshold in
+>           (3,3.5], not bisected. Gap width ~1/r.
 >      (1c) asymmetric 2-atom P, N_c∈[5,12], μ̃≳0.17: 3 roots, but only λ∈(24,75).
+>      Plateaus: 4 interior samples + open right limit per plateau, every scanned r — no
+>      in-plateau dip anywhere, hence the "attributable to the discontinuity" sentence above.
 >      Also: λ_min/λ_max(ℌ′)≈−1 at every ϖ̄ (N-independent); cone C fails 267/320, C′ 204/320.
->      => (1b) is why the window-regularity hypothesis is stated above rather than assumed. -->
-> <!-- TODO(§8): cite be11865 once merged; state the window hypothesis quantitatively (r≥10
->      is verified, the threshold between 3 and 10 is not) and the μ̃≲0.32 margin condition. -->
+>      NOT a threshold phenomenon: "exactly one ATTAINED crossing" fails at every r incl. 10,
+>      from (i) upward gaps stepping over the level (λ₁ still increasing; T_c=sup is fine) and
+>      (ii) μ̃=0.26, λ=0.5 where 1/λ=2.0 is simply not reached on ϖ̄≤8 (λ₁ crosses near ϖ̄~15),
+>      which is r-independent window truncation. §8 must not present either as a defect. -->
+> <!-- TODO(§8): cite be11865/d542119 once merged. Window hypothesis: quote "r≥4" (or r≥3.5,
+>      the scanned value) attributed as VERIFIED NUMERICALLY, not derived — 20 (λ,μ̃) points,
+>      ϖ̄∈[0.02,8], N=600 float64, listed r only. Plus the μ̃≲0.32 margin condition. -->
 
 ---
 
@@ -953,6 +968,24 @@ complete argument; items marked **[fyi]** are observations that need no action.)
     quote "$r\ge10$, verified numerically" or state the hypothesis qualitatively
     ("$N_c(\cdot)$ continuous, or stepping fine enough") and defer the constant. I have not
     put any number into the §3 text.
+
+    **Resolved (v0.4).** The $r$-scan is done (commit d542119): $r\in\{3,3.5,4,\dots,10\}$
+    against $\lambda\in\{0.5,0.7,1.0,1.5,2.0\}\times\tilde\mu\in\{0.05,0.10,0.13,0.26\}$,
+    $N=600$, $\varpi\in[0.02,8]$. Only $r=3$ fails (two roots at $\tilde\mu=0.10$,
+    $\lambda\in\{1.0,1.5\}$); every $r\ge3.5$ gives exactly one $T_c$ in all 20 combinations.
+    The true threshold lies in $(3,3.5]$ and was not bisected, so §8 should quote
+    "$r\ge4$" — or "$r\ge3.5$", the scanned value — **attributed as verified numerically, not
+    derived**. The scan also establishes that every plateau is increasing at every scanned
+    $r$, which is what licenses the v0.4 sentence "within the physical range the entire loss
+    of uniqueness is attributable to that discontinuity". Still no number in the §3 text.
+
+    One trap for §8: "exactly one *attained* crossing" fails at **every** $r$, including
+    $r=10$, for two benign reasons (an upward jump can step over the level while $\lambda_1$
+    is still increasing; and at $\tilde\mu=0.26$, $\lambda=0.5$ the level $2.0$ is simply not
+    reached on $\varpi\le8$, an $r$-independent truncation effect — $\lambda_1$ crosses near
+    $\varpi\approx15$). Neither is a defect, and neither says anything about the threshold;
+    both are precisely why $T_c$ is defined as a supremum. §8 should not present them as
+    problems.
 
 16. **[fyi] Scratch check.** `theory/notes/_scratch_ir/sec3_draft_check.py` (uncommitted, per
     repo convention) recomputes from the entrywise definition (2.1): (S1) to $2\cdot10^{-16}$
