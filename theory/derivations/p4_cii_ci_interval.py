@@ -1523,31 +1523,74 @@ def run_gate(full=True):
     # atan -> C*atan and CANNOT see a wrong scale-back factor.  Mutation testing
     # found this: replacing `2 ** m` by `2 ** (m + 1)` passes all three and is
     # caught only by the 600-bit EVIDENCE check below, which is the wrong
-    # strength for a defect this coarse.  The fix is an ABSOLUTE anchor from
-    # rational arithmetic alone: for 0 < u < 1 the arctan series alternates with
-    # strictly decreasing terms, so consecutive partial sums BRACKET the value,
+    # strength for a defect this coarse.  (Layer 2-a reproduced the same blind
+    # spot independently in M5's arctan, for BOTH 2**(k+1) and 2**(k-1) -- so it
+    # is a property of the identity set, not a quirk of this file.)
+    #
+    # The fix is an ABSOLUTE anchor from rational arithmetic alone: for
+    # 0 < u < 1 the arctan series alternates with strictly decreasing terms, so
+    # consecutive partial sums BRACKET the value,
     #     u - u^3/3  <  atan u  <  u - u^3/3 + u^5/5.
-    # Both bounds are exact rationals; no transcendental, no library primitive,
-    # no high-precision reference.  Two anchors, at arguments above the 1/16
-    # halving threshold so that the halving loop, the series and the scale-back
-    # are pinned TOGETHER against pure rational arithmetic.
-    for num, den in ((1, 2), (1, 4)):
-        u = mp.mpf(num) / den
-        lo_r = u - u ** 3 / 3
-        hi_r = lo_r + u ** 5 / 5
-        got = iv_atan_nn(ivf(u))
-        chk("RIGOROUS absolute anchor: the alternating series brackets "
-            "atan(u) between consecutive partial sums (exact rationals), which "
-            "pins the SCALE that the homogeneous identities above cannot see",
-            LB(got) >= lo_r and UB(got) <= hi_r,
-            f"u={num}/{den} got [{mp.nstr(LB(got), 12)}, "
-            f"{mp.nstr(UB(got), 12)}] vs ({mp.nstr(lo_r, 12)}, "
-            f"{mp.nstr(hi_r, 12)})")
-    chk("...and that anchor is DISCRIMINATING for exactly the mutant the "
-        "identities miss: doubling the result (the `2**(m+1)` scale-back bug) "
-        "lands outside the rational bracket",
-        not (2 * UB(iv_atan_nn(ivf(mp.mpf(1) / 2)))
-             <= mp.mpf(1) / 2 - mp.mpf(1) / 24 + mp.mpf(1) / 160))
+    # For u = p/q both ends are exact rationals with explicit integer numerator
+    # and denominator, and the certified endpoints are exact dyadics, so the
+    # comparison is done in EXACT INTEGER ARITHMETIC below -- no transcendental,
+    # no library primitive, no high-precision reference, and (unlike an mpf
+    # evaluation of `u - u**3/3`, which rounds) no floating point on either side
+    # of the inequality.
+    #
+    # Four anchors, chosen so the halving loop runs a DIFFERENT number of times
+    # at each (k = 4, 3, 2, 1): a mutant whose scale-back is right for shallow
+    # reduction and wrong only for deep reduction would survive a single depth.
+    # (2-a's widening; it costs under a millisecond.)  u <= 0.9 because the
+    # bracket needs strictly decreasing terms, and it widens fast as u -> 1.
+    def _cmp_ratio(x, N, D):
+        """Sign of `x - N/D` for an mpf x and integers N, D with D > 0.
+
+        x is a dyadic rational sgn*man*2^exp read straight off `_mpf_` (raw
+        data, not a computation), so clearing the denominator D and the power
+        of two turns the comparison into one between Python integers -- exact,
+        with no floating point on either side of the inequality.
+        """
+        s, man, e, _bc = x._mpf_
+        v = -man if s else man                    # x = v * 2^e, exactly
+        if e >= 0:
+            a, b = v * (1 << e) * D, N
+        else:
+            a, b = v * D, N * (1 << -e)
+        return (a > b) - (a < b)
+
+    _ANCHORS = ((9, 10), (1, 2), (1, 4), (1, 8))   # halving depths 4, 3, 2, 1
+
+    def _bracket(p, q):
+        # lo = p/q - p^3/(3 q^3)          = (3 p q^2 - p^3) / (3 q^3)
+        # hi = lo + p^5/(5 q^5)           = (5 q^2 (3 p q^2 - p^3) + 3 p^5)
+        #                                   / (15 q^5)
+        n_lo, d_lo = 3 * p * q * q - p ** 3, 3 * q ** 3
+        return n_lo, d_lo, 5 * q * q * n_lo + 3 * p ** 5, 15 * q ** 5
+
+    for p, q in _ANCHORS:
+        n_lo, d_lo, n_hi, d_hi = _bracket(p, q)
+        got = iv_atan_nn(ivf(mp.mpf(p) / q))
+        chk("RIGOROUS absolute anchor: the alternating series brackets atan(u) "
+            "between consecutive partial sums, compared in EXACT INTEGER "
+            "arithmetic -- this pins the SCALE that the homogeneous identities "
+            "above cannot see (4 halving depths)",
+            _cmp_ratio(LB(got), n_lo, d_lo) >= 0
+            and _cmp_ratio(UB(got), n_hi, d_hi) <= 0,
+            f"u={p}/{q} got [{mp.nstr(LB(got), 12)}, {mp.nstr(UB(got), 12)}] "
+            f"vs ({n_lo}/{d_lo}, {n_hi}/{d_hi})")
+    # ... and the anchor set must be DISCRIMINATING for exactly the mutants the
+    # identities miss.  Both directions of the scale-back bug, at every depth.
+    for p, q in _ANCHORS:
+        n_lo, d_lo, n_hi, d_hi = _bracket(p, q)
+        got = iv_atan_nn(ivf(mp.mpf(p) / q))
+        chk("...and it is DISCRIMINATING for the mutants the identities miss: "
+            "both doubling and halving the result (the 2**(m+-1) scale-back "
+            "bug) land outside the exact rational bracket",
+            _cmp_ratio(2 * LB(got), n_hi, d_hi) > 0
+            and _cmp_ratio(UB(got) / 2, n_lo, d_lo) < 0, f"u={p}/{q}")
+
+
     chk("the certified atan is NARROW (width <= 1e-27 relative), i.e. the "
         "halving + alternating-series remainder costs nothing",
         UB(iv_atan_nn(ivf(mp.mpf("0.7")))) - LB(iv_atan_nn(ivf(mp.mpf("0.7"))))
