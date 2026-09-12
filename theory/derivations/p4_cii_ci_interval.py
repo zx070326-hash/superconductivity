@@ -1518,6 +1518,36 @@ def run_gate(full=True):
     machin = 4 * (4 * iv_atan_nn(IONE / ivf(5)) - iv_atan_nn(IONE / ivf(239)))
     chk("Machin: pi = 16 atan(1/5) - 4 atan(1/239) agrees with 2*pi/2",
         _contains0(machin - 2 * pi2))
+    # The three identities above are HOMOGENEOUS of degree 1 in atan, and
+    # iv_pi_half is built from iv_atan_nn too -- so they are all invariant under
+    # atan -> C*atan and CANNOT see a wrong scale-back factor.  Mutation testing
+    # found this: replacing `2 ** m` by `2 ** (m + 1)` passes all three and is
+    # caught only by the 600-bit EVIDENCE check below, which is the wrong
+    # strength for a defect this coarse.  The fix is an ABSOLUTE anchor from
+    # rational arithmetic alone: for 0 < u < 1 the arctan series alternates with
+    # strictly decreasing terms, so consecutive partial sums BRACKET the value,
+    #     u - u^3/3  <  atan u  <  u - u^3/3 + u^5/5.
+    # Both bounds are exact rationals; no transcendental, no library primitive,
+    # no high-precision reference.  Two anchors, at arguments above the 1/16
+    # halving threshold so that the halving loop, the series and the scale-back
+    # are pinned TOGETHER against pure rational arithmetic.
+    for num, den in ((1, 2), (1, 4)):
+        u = mp.mpf(num) / den
+        lo_r = u - u ** 3 / 3
+        hi_r = lo_r + u ** 5 / 5
+        got = iv_atan_nn(ivf(u))
+        chk("RIGOROUS absolute anchor: the alternating series brackets "
+            "atan(u) between consecutive partial sums (exact rationals), which "
+            "pins the SCALE that the homogeneous identities above cannot see",
+            LB(got) >= lo_r and UB(got) <= hi_r,
+            f"u={num}/{den} got [{mp.nstr(LB(got), 12)}, "
+            f"{mp.nstr(UB(got), 12)}] vs ({mp.nstr(lo_r, 12)}, "
+            f"{mp.nstr(hi_r, 12)})")
+    chk("...and that anchor is DISCRIMINATING for exactly the mutant the "
+        "identities miss: doubling the result (the `2**(m+1)` scale-back bug) "
+        "lands outside the rational bracket",
+        not (2 * UB(iv_atan_nn(ivf(mp.mpf(1) / 2)))
+             <= mp.mpf(1) / 2 - mp.mpf(1) / 24 + mp.mpf(1) / 160))
     chk("the certified atan is NARROW (width <= 1e-27 relative), i.e. the "
         "halving + alternating-series remainder costs nothing",
         UB(iv_atan_nn(ivf(mp.mpf("0.7")))) - LB(iv_atan_nn(ivf(mp.mpf("0.7"))))
