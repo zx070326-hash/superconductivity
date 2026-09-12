@@ -1,6 +1,6 @@
 # P4 · 段 C-I 区间算术化 —— 可执行性评估与分阶段计划
 
-日期：2026-09-12　作者：implementer（worktree `agent-a64367a0e7fbab99b`，分支 `p4-conj2-ci-iv`）
+日期：2026-09-12　作者：implementer（worktree `agent-a64367a0e7fbab99b`，分支 `worktree-agent-a64367a0e7fbab99b`，基于 `p4-conj2`）
 对象：`theory/derivations/p4_extremal_concavity.py`（1940 检查 / 默认 463；EXT→45 单核 648 s，服务器 EXT→120 单核 52141 s）
 目标：消灭 `P4_main_theorems.md` §5 残余假设第 1 条中「**非区间算术**、显式舍入垫 1e-12、Cholesky 成功当作正定证书」这三项，对段 C-I 而言。
 **结论（先说）：整段 (0,45] 的完全区间化在合理算力内可行**，不需要新数学，只需要一条标准定理（区间 Cholesky ⟹ 正定，见 §4）与一套单边界记账纪律（§5）。(45,120] 也可行但要 3–5 h × 22 核。
