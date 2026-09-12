@@ -1711,10 +1711,21 @@ def run_gate(full=True):
     for (a, b) in ((0.3125, 0.375), (1.0, 1.125), (10.0, 10.25), (44.0, 44.75)):
         m2, ok = mu2_cell_iv(a, b)
         chk("mu_2 segment monotonicity k1, k2, k3 >= 0", ok, f"[{a},{b}]")
-        lam_true = float(np.linalg.eigvalsh(op_np(400, np_tab(
-            802, lambda k: a * a / (k * k + a * a))))[-1])
-        chk("evidence: mu_2 <= lam_1(H(a)) (N=400 float64)",
-            float(m2) <= lam_true, f"[{a},{b}] {float(m2):.6f} vs {lam_true:.6f}")
+        # mu2_cell_iv claims a lower bound on lam_1(H(w)) for EVERY w in [a,b],
+        # not only at the left endpoint.  A compression can only LOWER lam_1
+        # (min-max over a subspace of the full space), so dominating the N x N
+        # float64 lam_1 at INTERIOR points is a NECESSARY condition for the
+        # claim.  Blind spot 6 of the adversarial review: the old check tested
+        # w = a only, i.e. exactly the point where the segment argument is
+        # trivially tight.
+        for t in (0.0, 0.25, 0.5, 0.75, 1.0):
+            wv = a + t * (b - a)
+            lam_true = float(np.linalg.eigvalsh(op_np(400, np_tab(
+                802, lambda k, _w=wv: _w * _w / (k * k + _w * _w))))[-1])
+            chk("evidence: the cell mu_2 stays below lam_1(H(w)) (N=400 "
+                "float64) at INTERIOR points of the cell, not only at w = a",
+                float(m2) <= lam_true,
+                f"[{a},{b}] w={wv} {float(m2):.6f} vs {lam_true:.6f}")
 
     # ---- (g) cross-check against the mpf certificate ------------------------
     # EVIDENCE ONLY (typo insurance).  cell_L_iv is fed EXACTLY the same alpha,
@@ -1773,6 +1784,42 @@ def run_gate(full=True):
                 "structural difference is max(.,.) vs the sum of the SAME two "
                 "blocks)", alpha_iv >= alpha_0 / 3,
                 f"[{A},{B}] {mp.nstr(alpha_iv, 8)} vs {mp.nstr(alpha_0, 8)}")
+            # alpha_cell_iv CLAIMS  alpha >= sup_{w in [A,B]} lam_2(H(w)).  The
+            # two checks above only compare it with ANOTHER bound, and only at
+            # w = A.  Blind spot 6: test the claim itself, at interior points.
+            # lam_2 of the N x N compression is <= lam_2 of the operator, so
+            # domination of the float64 lam_2 is a necessary condition.  Note
+            # this can only ever be a MAGNITUDE sentinel: alpha is dominated by
+            # the Schur envelope terms ||D|| + ||B||, which sit 2-3 orders of
+            # magnitude above the true lam_2 (measured ratio 220-1000x).
+            for t in (0.0, 0.3, 0.6, 1.0):
+                wv = A + t * (B - A)
+                lam2f = float(np.linalg.eigvalsh(op_np(600, np_tab(
+                    1202, lambda k, _w=wv: _w * _w / (k * k + _w * _w))))[-2])
+                chk("the cell-uniform alpha dominates lam_2(H(w)) at INTERIOR "
+                    "points of the cell (N=600 float64 compression, whose "
+                    "lam_2 is <= the operator's)", float(alpha_iv) >= lam2f,
+                    f"[{A},{B}] w={wv} alpha={float(alpha_iv):.6e} "
+                    f"lam2_f64={lam2f:.6e}")
+            # The one step of alpha_cell_iv that no other check touches is the
+            # Weyl/Lipschitz coverage of the cell INTERIOR from the endpoints:
+            #     lam_2(head(w)) <= max(cA, cB) + L1 * (B - A) / 2.
+            # Run the head certificate at the midpoint and verify it directly
+            # (the head certificate itself is the same machinery that produces
+            # cA and cB, so this isolates the coverage step).
+            wm = 0.5 * (A + B)
+            ftm = tab_H_iv(wm, 2 * Na + 4)
+            evm, vecm = np.linalg.eigh(op_np(Na, np_tab(
+                2 * Na + 2, lambda k: wm * wm / (k * k + wm * wm))))
+            c_mid, piv_m, _ = lam2_head_iv(ftm, Na, vecm[:, -1],
+                                           c0=float(evm[-2]))
+            chk("interval Cholesky also certifies the head at the cell MIDPOINT",
+                piv_m > 0, f"w={wm} Na={Na}")
+            chk("the Lipschitz coverage step of alpha_cell_iv holds at the cell "
+                "midpoint: lam_2(head(w)) <= max(cA,cB) + L1*(B-A)/2",
+                c_mid <= max(c_iv, c_iv) + L1_iv * mp.mpf(B - A) / 2,
+                f"[{A},{B}] c_mid={mp.nstr(c_mid, 6)} "
+                f"c_end={mp.nstr(c_iv, 6)} L1*hw={mp.nstr(L1_iv*mp.mpf(B-A)/2, 6)}")
             # identical inputs => the assembly must agree to ~ROUND_PAD
             ub_iv, info_iv = cell_L_iv(A, B, alpha_0, L1_ref, mu0)
             ub_0, info_0 = C0.cell_L(A, B, alpha_0, L1_ref, mu0)
