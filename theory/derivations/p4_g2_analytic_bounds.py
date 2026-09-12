@@ -693,6 +693,65 @@ P_CERT_A = [F(200), F(45), F(13)]
 P_CERT_A2 = [F(1000), F(228), F(69), F(25)]
 P_CERT_B = [F(x) for x in (10000, 2286, 704, 275, 129, 70, 41, 27, 18, 13, 9, 7)]
 
+# CERT-C / CERT-D: frozen integer literals.  They were produced once by
+#   pint(30, H, 10**8)  and  pint(200, H, 10**14),
+# i.e. nearest integers to scale * (top eigenvector of the M x M truncation, float64).
+# They are FROZEN here so that the certificate -- and the exact rationals quoted in
+# P4_g2_analytic.md -- do not depend on bit-for-bit LAPACK reproducibility.  Stage 5
+# still re-derives them and checks agreement, but a mismatch is reported as a
+# provenance note, not as a failure of the certificate (Theorem (*) holds for ANY
+# positive rational p).
+P_CERT_C = [F(x) for x in (
+    100000000, 22857428, 7040522, 2750396, 1291917, 695581,
+    413939, 265377, 180060, 127702, 93829, 70958,
+    54962, 43439, 34928, 28506, 23568, 19709,
+    16649, 14192, 12195, 10557, 9199, 8064,
+    7108, 6297, 5603, 5005, 4482, 3995,
+)]
+
+P_CERT_D = [F(x) for x in (
+    100000000000000, 22857432119997, 7040527826434, 2750401415493, 1291922387591,
+    695585481598, 413942558793, 265380906783, 180063539928, 127704891952,
+    93831771449, 70960718652, 54964469410, 43441671888, 34930973580,
+    28508472364, 23570593365, 19711655708, 16652118172, 14195082013,
+    12199126227, 10560888104, 9203625820, 8069547534, 7114566882,
+    6304654320, 5613258034, 5019454146, 4506602113, 4061355221,
+    3672924019, 3332522214, 3032945681, 2768249668, 2533499151,
+    2324574197, 2138017071, 1970911264, 1820785148, 1685534745,
+    1563361451, 1452721539, 1352284980, 1260901699, 1177573794,
+    1101432542, 1031719299, 967769561, 908999606, 854895263,
+    805002431, 758919044, 716288246, 676792565, 640148937,
+    606104428, 574432556, 544930124, 517414468, 491721077,
+    467701525, 445221663, 424160041, 404406530, 385861108,
+    368432793, 352038704, 336603234, 322057312, 308337758,
+    295386699, 283151062, 271582112, 260635044, 250268619,
+    240444840, 231128651, 222287683, 213892011, 205913945,
+    198327836, 191109901, 184238069, 177691840, 171452151,
+    165501265, 159822662, 154400944, 149221745, 144271654,
+    139538139, 135009482, 130674718, 126523580, 122546444,
+    118734288, 115078644, 111571560, 108205566, 104973635,
+    101869158, 98885914, 96018042, 93260016, 90606627,
+    88052959, 85594371, 83226478, 80945135, 78746423,
+    76626636, 74582262, 72609977, 70706631, 68869239,
+    67094966, 65381127, 63725170, 62124670, 60577326,
+    59080949, 57633458, 56232871, 54877305, 53564965,
+    52294141, 51063204, 49870602, 48714853, 47594545,
+    46508330, 45454920, 44433086, 43441654, 42479502,
+    41545555, 40638789, 39758221, 38902912, 38071963,
+    37264512, 36479735, 35716842, 34975073, 34253705,
+    33552039, 32869408, 32205170, 31558710, 30929438,
+    30316785, 29720207, 29139179, 28573199, 28021781,
+    27484462, 26960792, 26450342, 25952695, 25467455,
+    24994235, 24532667, 24082393, 23643070, 23214368,
+    22795966, 22387557, 21988845, 21599543, 21219375,
+    20848074, 20485384, 20131055, 19784847, 19446530,
+    19115879, 18792677, 18476716, 18167793, 17865712,
+    17570285, 17281327, 16998661, 16722115, 16451523,
+    16186721, 15927554, 15673866, 15425509, 15182335,
+    14944197, 14710951, 14482445, 14258521, 14038997,
+    13823642, 13612096, 13403624, 13195949, 12974371,
+)]
+
 
 def stage45(eig, full=True):
     hdr("Stage 4 -- CERT-A/A' (hand-checkable) and CERT-B (headline), exact rationals")
@@ -717,8 +776,19 @@ def stage45(eig, full=True):
 
     if full:
         hdr("Stage 5 -- CERT-C / CERT-D and the M^{-4} scaling table")
-        certs["CERT-C"] = report(certificate(pint(30, H, 10 ** 8), 80), "CERT-C", eig)
-        certs["CERT-D"] = report(certificate(pint(200, H, 10 ** 14), 500), "CERT-D", eig)
+        certs["CERT-C"] = report(certificate(P_CERT_C, 80), "CERT-C", eig)
+        certs["CERT-D"] = report(certificate(P_CERT_D, 500), "CERT-D", eig)
+        # provenance of the frozen literals: re-derive and compare.  A mismatch in
+        # the last digits only means this machine's LAPACK differs; it does NOT
+        # invalidate the certificate, so it is reported, not asserted.
+        for nm, Pfrozen, M, sc in (("CERT-C", P_CERT_C, 30, 10 ** 8),
+                                   ("CERT-D", P_CERT_D, 200, 10 ** 14)):
+            raw = pint(M, H, sc)
+            worst = max(abs(float((a - b) / b)) for a, b in zip(raw, Pfrozen))
+            print(f"    provenance {nm}: max relative deviation of frozen literal "
+                  f"from round({sc} * v_1(A_{M})) on this machine = {worst:.2e}")
+            chk(worst < 1e-6, f"{nm} frozen p reproduces round(scale * v_1(A_M))",
+                "(informational: certificate is valid for ANY positive rational p)")
         print("\n    width scaling of the certificate (M -> relative width):")
         prev = None
         for M, N1, sc in ((3, 12, 10 ** 3), (4, 16, 10 ** 4), (6, 20, 10 ** 5),
