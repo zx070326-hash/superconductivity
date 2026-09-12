@@ -1425,6 +1425,17 @@ def run_gate(full=True):
         nn = float(np.max(np.abs(np.linalg.eigvalsh(dH))))
         chk("evidence: L1 >= ||d_w H(b)|| (float64 central difference, N=400)",
             float(UB(L1)) >= nn, f"[{a},{b}] {float(UB(L1)):.5f} vs {nn:.5f}")
+    # the grid heuristic must track the certified envelope (a wrong exponent in
+    # _L1_hint would silently produce coarse cells whose Lipschitz slack ruins
+    # alpha -- it cannot make a bound unsound, but it must not be allowed to
+    # drift unnoticed)
+    for w in (0.3125, 1.0, 5.0, 44.0):
+        hint = _L1_hint(w)
+        cert = float(UB(rsum_seg(w, w * 1.02, 1)))
+        chk("the float64 grid heuristic _L1_hint tracks the certified "
+            "rsum_seg(w, 1.02w, 1) to within a factor of 1.5",
+            0.5 * cert <= hint <= 1.5 * cert,
+            f"w={w} hint={hint:.5f} certified={cert:.5f}")
 
     # ---- (f) mu_2 and the head certificate ---------------------------------
     for (a, b) in ((0.3125, 0.375), (1.0, 1.125), (10.0, 10.25), (44.0, 44.75)):
@@ -1538,9 +1549,12 @@ def _L1_hint(w):
     chosen cell by `rsum_seg` (interval), and the tiling check does not look at
     this number at all.  A faithful float64 transcription of the same row sums
     (minus the integral tails, which only make the hint slightly smaller and
-    hence the step slightly larger -- absorbed by adaptive subdivision)."""
+    hence the step slightly larger -- absorbed by adaptive subdivision).
+    The envelope triple is READ OFF `spec_seg_iv` rather than re-typed, so the
+    hint cannot drift out of sync with the certified envelope."""
     a, b = float(w), float(w) * 1.02
-    C, A, p = 2.0 * b, a, 2
+    sp = spec_seg_iv(a, b, 1)
+    C, A, p = float(UB(sp.C)), float(UB(sp.A)), sp.p
     Mrows, Mcols = 60, 900
     m = np.arange(Mcols, dtype=np.float64)
     invm = 1.0 / np.sqrt(2.0 * m + 1.0)
