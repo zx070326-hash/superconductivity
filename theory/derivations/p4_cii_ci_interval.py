@@ -1227,14 +1227,32 @@ def run_gate(full=True):
     chk("LB/UB round-trip is exact", LB(ivlh(LB(z), UB(z))) == LB(z))
     chk("absmax_ub of a straddling interval", absmax_ub(ivlh(-5, 2)) == 5)
     chk("ub_pos clamps a negative interval to 0", ub_pos(ivlh(-5, -2)) == 0)
-    chk("sub_lo rounds OUTWARD (never above the exact difference)",
-        sub_lo(mp.mpf(1) / 3, mp.mpf(1) / 7) <= mp.mpf(1) / 3 - mp.mpf(1) / 7)
-    chk("add_hi rounds OUTWARD", add_hi(mp.mpf(1) / 3, mp.mpf(1) / 7)
-        >= mp.mpf(1) / 3 + mp.mpf(1) / 7)
-    chk("mul_hi rounds OUTWARD", mul_hi(mp.mpf(1) / 3, mp.mpf(1) / 7)
-        >= (mp.mpf(1) / 3) * (mp.mpf(1) / 7))
-    chk("div_hi rounds OUTWARD", div_hi(mp.mpf(1) / 3, mp.mpf(7))
-        >= (mp.mpf(1) / 3) / 7)
+    # The four one-sided mpf combinators.  These tests are DISCRIMINATING: the
+    # operands are chosen so that the exact result is NOT representable at
+    # mp.prec and so that round-to-NEAREST goes the WRONG way.  A naive
+    # implementation (`x - y` etc. in plain mpf) fails every one of them --
+    # verified by mutation testing.  Reference values are computed in
+    # extraprec, where they ARE exact (mpf comparison is exact across precs).
+    _one, _tiny = mp.mpf(1), mp.ldexp(1, -200)
+    _e100 = mp.mpf(1) + mp.ldexp(1, -100)
+    with mp.extraprec(400):
+        _ex_sub, _ex_add = _one - _tiny, _one + _tiny
+        _ex_mul = _e100 * _e100
+    chk("sub_lo rounds OUTWARD: 1 - 2^-200 lands strictly below 1 "
+        "(plain mpf returns exactly 1, i.e. ABOVE the exact difference)",
+        sub_lo(_one, _tiny) <= _ex_sub and (_one - _tiny) > _ex_sub)
+    chk("add_hi rounds OUTWARD: 1 + 2^-200 lands strictly above 1 "
+        "(plain mpf returns exactly 1, i.e. BELOW the exact sum)",
+        add_hi(_one, _tiny) >= _ex_add and (_one + _tiny) < _ex_add)
+    chk("mul_hi rounds OUTWARD: (1+2^-100)^2 = 1+2^-99+2^-200 needs 201 bits "
+        "(plain mpf rounds it DOWN to 1+2^-99)",
+        mul_hi(_e100, _e100) >= _ex_mul and (_e100 * _e100) < _ex_mul)
+    _third, _dh = _one / 3, div_hi(_one, mp.mpf(3))   # nearest vs outward
+    with mp.extraprec(60):              # 3*(a <=103-bit mpf) is then EXACT
+        _ok_dh, _ok_naive = 3 * _dh > 1, 3 * _third < 1
+    chk("div_hi rounds OUTWARD: 3*div_hi(1,3) > 1 "
+        "(1/3 rounds DOWN at prec 103, so 3*(1/3) < 1 in plain mpf)",
+        _ok_dh and _ok_naive)
     chk("iv_sqrt_nn clamps a slightly negative lower endpoint to 0",
         LB(iv_sqrt_nn(ivlh(mp.mpf("-1e-40"), 4))) == 0)
 
