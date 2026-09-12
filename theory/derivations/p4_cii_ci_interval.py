@@ -1614,6 +1614,74 @@ def run_gate(full=True):
             chk("evidence: rsum(majorant) >= ||O[f]|| at N=500",
                 float(UB(R)) >= nn, f"a={a} {nm} rsum={float(UB(R)):.4e} "
                 f"norm={nn:.4e}")
+    # ---- brute-force domination for the Schur envelopes (blind spot 2) -----
+    # row_env / col_env / schur_coupling / schur_tailblock / coupling_restricted
+    # / tail_sq are ALL bound-producing, and all of them are closed-form
+    # envelopes -- exactly the shape of the two historical soundness bugs.  Take
+    # kernels for which the envelope is EXACT (f(k) = C/(k^2+A^2)^p), build the
+    # operator in float64 and check that each envelope dominates the TRUNCATED
+    # sum / norm (truncation only removes nonnegative terms, so domination of
+    # the truncation is a necessary condition).  EVIDENCE (float64 reference).
+    if full:
+        Nb = 420
+        for (Cf, Af, pf) in ((1.0, 0.0, 2), (2.0, 1.0, 2), (6.0, 0.5, 3)):
+            sp = Spec(ivf(Cf), ivf(Af), pf, ("bruteforce", Cf, Af, pf))
+            Mop = op_np(Nb, np_tab(2 * Nb + 2,
+                                   lambda k: Cf / (k * k + Af * Af) ** pf))
+            rows = np.abs(Mop).sum(axis=1)
+            chk("evidence: row_env0 dominates the truncated row sum of "
+                "|O[f]_{0m}|", float(UB(row_env0(sp))) >= rows[0],
+                f"C={Cf} A={Af} p={pf} {float(UB(row_env0(sp))):.6e} vs "
+                f"{rows[0]:.6e}")
+            for n in (1, 2, 5, 17, 140, 419):
+                chk("evidence: row_env(n) dominates the truncated row sum of "
+                    "|O[f]_{nm}| (this is ||D|| via schur_tailblock)",
+                    float(UB(row_env(n, sp))) >= rows[n],
+                    f"C={Cf} A={Af} p={pf} n={n} "
+                    f"{float(UB(row_env(n, sp))):.6e} vs {rows[n]:.6e}")
+            for (m, N) in ((0, 70), (3, 70), (69, 70), (0, 280), (139, 280)):
+                if Af == 0 and N - m - 1 == 0:
+                    continue            # env(0) = C/0^{2p} is not defined
+                cs = float(np.abs(Mop[N:, m]).sum())
+                chk("evidence: col_env(m,N) dominates the truncated column tail "
+                    "sum_{n>=N} |O[f]_{nm}|",
+                    float(UB(col_env(m, N, sp))) >= cs,
+                    f"C={Cf} A={Af} p={pf} m={m} N={N} "
+                    f"{float(UB(col_env(m, N, sp))):.6e} vs {cs:.6e}")
+            for Na in (70, 140):
+                nB = float(np.linalg.norm(Mop[:Na, Na:], 2))
+                nD = float(np.linalg.norm(Mop[Na:, Na:], 2))
+                chk("evidence: schur_tailblock(Na) dominates the truncated ||D||",
+                    float(UB(schur_tailblock(Na, sp))) >= nD,
+                    f"C={Cf} A={Af} p={pf} Na={Na} "
+                    f"{float(UB(schur_tailblock(Na, sp))):.6e} vs {nD:.6e}")
+                if Af == 0:
+                    continue            # schur_coupling hits col_env(Na-1, Na)
+                chk("evidence: schur_coupling(Na) dominates the truncated ||B||",
+                    float(UB(schur_coupling(Na, sp))) >= nB,
+                    f"C={Cf} A={Af} p={pf} Na={Na} "
+                    f"{float(UB(schur_coupling(Na, sp))):.6e} vs {nB:.6e}")
+            for (Ns, Nr) in ((60, 260), (140, 360)):
+                nR = float(np.linalg.norm(Mop[Nr:, :Ns], 2))
+                chk("evidence: coupling_restricted(Ns,Nr) dominates the "
+                    "truncated ||(O[f])_{n>=Nr, m<Ns}||",
+                    float(UB(coupling_restricted(Ns, Nr, sp))) >= nR,
+                    f"C={Cf} A={Af} p={pf} Ns={Ns} Nr={Nr} "
+                    f"{float(UB(coupling_restricted(Ns, Nr, sp))):.6e} vs "
+                    f"{nR:.6e}")
+            # tail_sq: sum_{n>=Mcut} ((O[f] vhat)_n)^2
+            _vnp = trial_vec_np(1.0, 60)
+            _trb = TrialIV(_vnp)
+            _vp = np.zeros(Nb)
+            _vp[:60] = _vnp
+            _y = Mop @ _vp
+            for Mcut in (200, 300):
+                _bf = float((_y[Mcut:] ** 2).sum())
+                chk("evidence: Trial.tail_sq dominates the truncated "
+                    "sum_{n>=M} ((O[f]vhat)_n)^2",
+                    float(UB(_trb.tail_sq(sp, Mcut))) >= _bf,
+                    f"C={Cf} A={Af} p={pf} M={Mcut} "
+                    f"{float(UB(_trb.tail_sq(sp, Mcut))):.6e} vs {_bf:.6e}")
     for (a, b) in ((0.3125, 0.375), (10.0, 10.25)):
         L1 = rsum_seg(a, b, 1)
         L1f = rsum_seg(a, b, 1, Mrows=240, Mcols=1600)

@@ -108,8 +108,19 @@ reviewer 另把 `head_iv` 与 float64 `op_np` 对拍（Na=6,30；w=0.3125,3,44�
 reviewer 对这 7 条都做了独立探测，**当时的实现全部通过**，但门里没有对应检查：
 
 1. **`eph_hi/eps_hi` 的导数包络常数 4b、6b**：`|∂_w ψ_w(k)| ≤ 4b/(k²+a²)³`、`|∂_w φ_w(k)| ≤ 6b/(k²+a²)³` 完全没被门检查——正是 `PSI_P` 那类「常数写错 ⟹ 包络不支配导数」的位置。实测最大比值 0.99999987 / 0.99999973：合法但**极紧**，把 6 改成 4 门不会报警。→ **已加** 56 条逐点支配检查（4 个代表细胞 × 7 个 k × 2 个包络），与 (e0) 同型。
-2. `coupling_restricted`、`tail_sq`、`row_env`/`col_env` 无 brute-force 对拍。实测 `‖B_restricted‖` 界/真值 ≈ 5.8×、`tail_sq` ≈ 17×、`row_env(N)` 覆盖 n∈[N,N+50) 行和，全部支配。→ **未加**（留作已知盲区；三者都是大余量支配，且 M1/M8 类变异已覆盖「包络/尾项写错」的报警路径）。
-3. L1 只在端点 b、N=400 中心差分处对拍；reviewer 核了细胞内部与 N=1200：L1/‖H′‖ ≥ 1.8×，四个细胞都支配。→ **未加**（同上，余量 1.8×）。
+2. `coupling_restricted`、`tail_sq`、`row_env`/`col_env` 无 brute-force 对拍。实测 `‖B_restricted‖` 界/真值 ≈ 5.8×、`tail_sq` ≈ 17×、`row_env(N)` 覆盖 n∈[N,N+50) 行和，全部支配。→ **已加**：取包络**恰好取等**的核 f(k)=C/(k²+A²)^p（三组 (C,A,p) = (1,0,2)、(2,1,2)、(6,0.5,3)），在 float64 里造 420×420 的 𝒪[f]，验 `row_env0`/`row_env(n)`/`col_env(m,N)`/`schur_tailblock`/`schur_coupling`/`coupling_restricted`/`tail_sq` 支配**截断后的**行和 / 列尾和 / 块谱范数 / 尾平方和（截断只丢非负项，故支配截断是必要条件）。实测比值：
+
+   | 量 | 界/截断真值 |
+   |---|---|
+   | `row_env(n)` | 1.18 – 8.9 |
+   | `col_env(m,N)` | 1.10 – 35.8 |
+   | `schur_tailblock(Na)` = ‖D‖ | 1.30 – 1.49 |
+   | `schur_coupling(Na)` = ‖B‖ | 4.2 – 13.5 |
+   | `coupling_restricted(Ns,Nr)` | 5.0 – 9.8 |
+   | `tail_sq(spec,M)` | 5.8 – 55 |
+
+   前三个紧到 1.1–1.2，**确有牙齿**：把 `row_env` 或 `col_env` 整体乘 0.5，门立刻在这两条新检查上报警（已验证）。后三个松，只是量级卫兵：乘 0.5 不由它们报警，而是由「同输入逐量对拍」与「Stage S 保守性」捕获（也已验证）。这一保留写进了 §2.A.5 第 6 条。
+3. L1 只在端点 b、N=400 中心差分处对拍；reviewer 核了细胞内部与 N=1200：L1/‖H′‖ ≥ 1.8×，四个细胞都支配。→ **未加**（余量 1.8×；且 `rsum_seg` 的组成部分 `row_env`/`col_env`/`tail_int` 现已被第 2 条的暴力对拍覆盖）。
 4. `chol_pd` 缺「浮点 Cholesky 会误放行」的对抗用例。→ **已有**：门里 `chol_pd REJECTS a singular (psd, not pd) matrix`（变异 M5 即由它捕获）。
 5. `cell_L_iv` 对**输入**的安全单调性（α↑、L1↑、μ₂↓ 应使 `hpp_ub` 不降）无检查。→ **已加**：Stage A′ 在 [1.0,1.125] 上三向各扰动 5%，断言 `hpp_ub` 不得改善。
 6. `alpha_cell_iv` vs 细胞内 f64 λ₂（N=1200）、`mu2_cell_iv` vs 细胞内 λ₁(H⁽²⁾(w)) 无内部点对拍；实测全部支配。→ **部分已有**（门里有端点处的 f64 证据对拍）；细胞**内部点**的对拍仍是已知盲区。
