@@ -904,6 +904,76 @@ def stage7():
     print("       see the route-comparison section of P4_g2_analytic.md.")
 
 
+def stage8():
+    """Randomized falsification test of Theorem (*) for ARBITRARY positive rational p.
+
+    The shipped certificates all use near-eigenvector trial vectors, where r^2 is
+    tiny -- a sign error or a too-weak envelope could in principle hide there.  This
+    stage hammers (*) with random p of many shapes (including flat, reversed and
+    spiky ones far from the eigenvector) and with N1 = M (the tightest possible use
+    of Lemma 4a) as well as large N1.  If ANY link in the chain
+
+        Lemma 1  ->  A <= B  ->  beta = 13/25  ->  spectral separation  ->  Temple
+        Lemma 4a/4c  ->  envelope g_n <= W/(n+1)^2  ->  r^2 >= true residual
+
+    were wrong, some draw would produce an interval missing g(2).  Certificates with
+    rho <= 13/25 are skipped: (*) does not apply to them, and the assert in
+    certificate() is what enforces that.
+    """
+    import random
+    hdr("Stage 8 -- randomized falsification test of Theorem (*) on arbitrary p")
+    REF_LO = F(13181402121321, 10 ** 13)   # 1.3181402121321 <= g(2) ...
+    REF_HI = F(13181402121324, 10 ** 13)   # ... <= 1.3181402121324
+    random.seed(20260912)
+    good = skipped = bad = 0
+    worst = None
+    for _ in range(400):
+        M = random.choice([1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 25, 30])
+        shape = random.choice(["decay2", "decay3", "decay1", "flat",
+                               "random", "spiky", "reversed"])
+        if shape == "decay2":
+            base = [1.0 / (n + 1) ** 2 for n in range(M)]
+        elif shape == "decay3":
+            base = [1.0 / (n + 1) ** 3 for n in range(M)]
+        elif shape == "decay1":
+            base = [1.0 / (n + 1) for n in range(M)]
+        elif shape == "flat":
+            base = [1.0] * M
+        elif shape == "random":
+            base = [random.uniform(0.05, 1.0) for _ in range(M)]
+        elif shape == "spiky":
+            base = [1.0 / (n + 1) ** 2 for n in range(M)]
+            base[random.randrange(M)] *= random.uniform(2.0, 8.0)
+        else:
+            base = [1.0 / (M - n) ** 2 for n in range(M)]
+        scale = random.choice([10, 100, 1000, 10 ** 4, 10 ** 6])
+        p = [F(max(1, int(round(x * scale)))) for x in base]
+        N1 = max(M, random.choice([M, M, M + 1, M + 3, 2 * M, 3 * M + 5, 100, 200]))
+        try:
+            c = certificate(p, N1)
+        except AssertionError:
+            skipped += 1
+            continue
+        if c["lo"] <= REF_HI and c["hi"] >= REF_LO:
+            good += 1
+            m = float(c["hi"] - REF_LO)
+            if worst is None or m < worst[0]:
+                worst = (m, shape, M, N1, scale)
+        else:
+            bad += 1
+            print(f"    FALSIFIED shape={shape} M={M} N1={N1} scale={scale}  "
+                  f"lo={float(c['lo']):.15f} hi={float(c['hi']):.15f}")
+            print(f"      p={[str(x) for x in p]}")
+    chk(bad == 0, "Theorem (*) not falsified by 400 random positive rational p",
+        f"{good} applicable & bracketing, {skipped} skipped (rho <= 13/25)")
+    if worst:
+        print(f"    tightest upper margin over the random draws: hi - g(2) = {worst[0]:.3e} "
+              f"(shape={worst[1]}, M={worst[2]}, N1={worst[3]}, scale={worst[4]})")
+    print("    Note the skip rate: for trial vectors far from the top eigenvector rho")
+    print("    drops below 13/25 and (*) is simply inapplicable -- that is the assert")
+    print("    in certificate(), not a silent weakening.")
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "full"
     eig = stage0()
@@ -914,6 +984,7 @@ def main():
     stage6(certs, eig)
     if mode != "quick":
         stage7()
+        stage8()
     hdr(f"TOTAL: {NCHECK} checks, {NFAIL} failures, {time.time()-_T0:.1f} s")
     best = min(certs.values(), key=lambda c: c["hi"] - c["lo"])
     hb = certs["CERT-B"]
