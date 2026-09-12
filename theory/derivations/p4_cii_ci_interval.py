@@ -34,8 +34,19 @@ WHAT "INTERVAL" MEANS HERE (the three things that were not true before)
      GONE; `PAD` below is identically zero and is asserted to be zero.  Their
      role -- absorbing the (unquantified) floating-point error of the mpf
      evaluation -- is taken over by outward rounding, which is quantified by
-     construction: every elementary operation returns an interval that
-     PROVABLY contains the exact real result.
+     construction.  Precisely: the ONLY arithmetic primitives used on certified
+     quantities are  + - * /  , integer powers, sqrt and min/max, all taken from
+     `mpmath.iv`, each of which returns an interval containing the exact real
+     result (mpmath's `iv` implements these by directed rounding of the endpoint
+     mpf operations).  ONE transcendental is needed (arctan, for the closed-form
+     tail integral) and it is NOT taken from mpmath: `iv.atan2` is not outward
+     rounded in mpmath 1.3.0 (`mpf_atan2` evaluates `mpf_atan(mpf_div(y,x))` at
+     prec+4 with round-to-NEAREST and only directs the LAST rounding, so the
+     returned interval can fail to enclose -- measured: ~9% of random operands,
+     worst 0.24 ulp at prec 103).  `iv_atan_nn`/`iv_pi_half` below rebuild it
+     from +,-,*,/,sqrt and integer powers only, with an explicit alternating-
+     series remainder, and are cross-checked in Stage A' against three rigorous
+     identities (atan t + atan 1/t = pi/2, the doubling formula, and Machin).
 
  (b) POSITIVE DEFINITENESS IS CERTIFIED, NOT ASSUMED.  The old chain ran
      `mp.cholesky` on an mpf copy of a FLOAT64 head block and treated "no
@@ -85,7 +96,8 @@ WHAT "INTERVAL" MEANS HERE (the three things that were not true before)
      Both are re-certified downstream in `iv`.
 
 ONE-SIDED BOUND DISCIPLINE (plan Sec.5).  Every elementary operation happens in
-`iv`; every NAMED certified quantity is then collapsed to a single mpf endpoint
+`iv` (see (a) for the exact primitive list); every NAMED certified quantity is
+then collapsed to a single mpf endpoint
 (`LB` or `UB`) with the monotonicity that justifies the choice stated inline.
 This prevents the two classic holes ("an intermediate width blew up but a later
 max swallowed it" -- impossible when only one endpoint flows; "an iv value was
@@ -405,6 +417,65 @@ def env_at(spec, k):
     return spec.C / (ivf(k) ** 2 + spec.A ** 2) ** spec.p
 
 
+# --- certified arctangent ---------------------------------------------------
+# mpmath's `iv.atan2` / `iv.atan` are NOT outward rounded (mpmath 1.3.0):
+# `mpf_atan2` evaluates `mpf_atan(mpf_div(y, x, prec + 4), prec + 4)` with
+# ROUND-TO-NEAREST and only directs the FINAL rounding, so the interval it
+# returns can MISS the exact value by a fraction of an ulp (measured on this
+# build: ~9% of random operands, worst 0.24 ulp at prec 103, and 14 misses in
+# 20000 calls when fed through `tail_int`).  An unquantified floating-point
+# error of exactly the kind this module exists to remove -- and `tail_int` is
+# on the load-bearing path of every Stage L cell.  So arctan is done here with
+# nothing but +, -, *, /, sqrt and integer powers, the operations for which
+# mpmath.iv IS provably outward rounded.  (Adversarial review M-1,
+# `notes/2026-09-12_ci_interval_review.md`.)
+ATAN_HALVINGS = 80
+ATAN_TERMS = 20
+_ATAN = {}
+
+
+def iv_atan_nn(t):
+    r"""Enclosure of atan(t) for an interval t >= 0.
+
+    Argument halving:  atan(t) = 2 * atan( t / (1 + sqrt(1 + t^2)) ).  This is
+    an exact identity for every t >= 0 (put t = tan(2u)).  One application maps
+    [0, inf) into [0, 1), and from there the value drops below 1/16 in at most
+    five more steps, so the loop always terminates -- asserted.
+
+    Then the alternating series  atan(u) = sum_j (-1)^j u^(2j+1)/(2j+1), whose
+    terms decrease monotonically for 0 <= u < 1; hence the remainder after N
+    terms is bounded IN ABSOLUTE VALUE by the first omitted term
+    u^(2N+1)/(2N+1).  With u <= 1/16 and N = 20 that is <= 16^-41 < 2^-164,
+    i.e. far below one ulp at prec 103, so this costs nothing in width.
+    """
+    t = t if isinstance(t, IVT) else ivf(t)
+    key = t._mpi_
+    if key in _ATAN:
+        return _ATAN[key]
+    assert LB(t) >= 0, "iv_atan_nn: needs t >= 0"
+    u, m = t, 0
+    while UB(u) > mp.mpf(0.0625) and m < ATAN_HALVINGS:
+        u = u / (IONE + iv_sqrt_nn(IONE + u ** 2))
+        m += 1
+    assert UB(u) <= mp.mpf(0.0625), "iv_atan_nn: halving did not converge"
+    u2, s, tp = u ** 2, IZERO, u
+    for j in range(ATAN_TERMS):
+        c = tp / ivf(2 * j + 1)
+        s = s + c if (j % 2 == 0) else s - c
+        tp = tp * u2                       # tp = u^(2j+3) at the end of step j
+    rem = UB(tp / ivf(2 * ATAN_TERMS + 1))  # >= |first omitted term|, tp >= 0
+    out = (s + ivlh(-rem, rem)) * (2 ** m)
+    _ATAN[key] = out
+    return out
+
+
+def iv_pi_half():
+    """pi/2 = 2*atan(1), from the certified series above -- so that not even
+    `iv.pi` (whose outward rounding rests on a comment in mpmath's `pi_fixed`)
+    is trusted."""
+    return 2 * iv_atan_nn(IONE)
+
+
 def tail_int(spec, x):
     """UPPER interval enclosure of  int_x^inf C dt/(t^2+A^2)^p,  x >= 0.
 
@@ -413,16 +484,17 @@ def tail_int(spec, x):
     atan(t) + atan(1/t) = pi/2 for t > 0).  Using atan(A/x) DIRECTLY rather
     than the difference pi/2 - atan(x/A) avoids 2-3 digits of cancellation at
     large x/A -- irrelevant at dps 30 but free, and it keeps every interval
-    width at its natural size.  At x = 0 the value is atan(+inf) = pi/2."""
+    width at its natural size.  At x = 0 the value is atan(+inf) = pi/2.
+    `iv_atan_nn`, NOT `iv.atan2`: see its docstring."""
     C, A, p = spec.C, spec.A, spec.p
     x = ivf(x)
     if UB(A) == 0 and LB(A) == 0:
         assert LB(x) > 0, "tail_int: A = 0 branch needs x > 0"
         return C / ((2 * p - 1) * x ** (2 * p - 1))
     if UB(x) == 0 and LB(x) == 0:
-        at = iv.pi / 2
+        at = iv_pi_half()
     else:
-        at = iv.atan2(A, x)
+        at = iv_atan_nn(A / x)
     x2A2 = x ** 2 + A ** 2
     if p == 1:
         return C * at / A
@@ -576,8 +648,8 @@ def rsum_seg(a, b, order, Mrows=SEG_MROWS, Mcols=SEG_MCOLS):
           + (1/sqrt(2n+1)) [ sum_{m<Mcols, m!=n} psi(|n-m|)/sqrt(2m+1)
                            + sum_{m<Mcols}      psi(n+m+1)/sqrt(2m+1)
                            + (IntTail(Mcols-n-1)+IntTail(Mcols+n))/sqrt(2Mcols+1) ]
-    Rows n >= Mrows: row_env(Mrows) (decreasing).  We additionally intersect the
-    bulk with the `rsum` bulk bound -- both are valid, the min is used."""
+    Rows n >= Mrows: row_env(Mrows) (decreasing), which is a valid bound for
+    every such row because row_env is decreasing in n."""
     key = (repr(float(a)), repr(float(b)), order, Mrows, Mcols)
     if key in _SEG:
         return _SEG[key]
@@ -1316,12 +1388,15 @@ def run_gate(full=True):
                                     for k in range(1, KTg + 1)], N)
             Phi = head_iv(tab_phi_iv(w, KTg), N)
             bad = mp.zero
+            allzero = True
             for i in range(N):
                 for j in range(N):
                     d = Hxx[i][j] - Hx[i][j] / w + 8 * w ** 2 * Phi[i][j]
                     bad = max(bad, absmax_ub(d))
-            chk("(I1) at OPERATOR level: A_xx + 2 O[phi_x] encloses 0 entrywise",
-                bad < mp.mpf("1e-25"), f"N={N} w={wtxt} worst={mp.nstr(bad, 4)}")
+                    allzero = allzero and _contains0(d)
+            chk("(I1) at OPERATOR level: A_xx + 2 O[phi_x] ENCLOSES 0 entrywise "
+                "(a containment, not a tolerance)",
+                allzero, f"N={N} w={wtxt} worst half-width={mp.nstr(bad, 4)}")
 
     # ---- (d) structure coefficients vs. the matvec -------------------------
     for N, wtxt in ((40, "0.5"), (120, "3.0")):
@@ -1393,6 +1468,115 @@ def run_gate(full=True):
                         "|d_w^j [[k]](w)| simultaneously for every w in [a,b]",
                         UB(env_at(sp, k)) >= absmax_ub(dv),
                         f"j={j} [{a},{b}] t={t} k={k}")
+    # -- the CERTIFIED arctangent (adversarial review M-1) -------------------
+    # Three RIGOROUS self-consistency identities that use nothing but
+    # iv_atan_nn itself, followed by one evidence-grade comparison against a
+    # 600-bit reference.  The identities pin the halving loop AND the series
+    # against each other at wildly different argument scales, which is what
+    # catches a wrong constant / a wrong term count.
+    pi2 = iv_pi_half()
+    for ttxt in ("0.001", "0.3", "1", "2.5", "1000", "1e8"):
+        tt = ivf(mp.mpf(ttxt))
+        chk("atan(t) + atan(1/t) = pi/2  (t > 0) -- relates the small-argument "
+            "series to the halving loop at the reciprocal scale",
+            _contains0(iv_atan_nn(tt) + iv_atan_nn(IONE / tt) - pi2), f"t={ttxt}")
+    for ttxt in ("0.05", "0.2", "0.4"):
+        tt = ivf(mp.mpf(ttxt))
+        chk("atan(2t/(1-t^2)) = 2 atan(t)  (|t| < 1) -- the doubling identity",
+            _contains0(iv_atan_nn(2 * tt / (IONE - tt ** 2)) - 2 * iv_atan_nn(tt)),
+            f"t={ttxt}")
+    machin = 4 * (4 * iv_atan_nn(IONE / ivf(5)) - iv_atan_nn(IONE / ivf(239)))
+    chk("Machin: pi = 16 atan(1/5) - 4 atan(1/239) agrees with 2*pi/2",
+        _contains0(machin - 2 * pi2))
+    chk("the certified atan is NARROW (width <= 1e-27 relative), i.e. the "
+        "halving + alternating-series remainder costs nothing",
+        UB(iv_atan_nn(ivf(mp.mpf("0.7")))) - LB(iv_atan_nn(ivf(mp.mpf("0.7"))))
+        <= mp.mpf("1e-27"))
+    _bad_at = 0
+    for _i in range(1, 241):                     # EVIDENCE (typo insurance)
+        _t = mp.mpf(_i) / 40 * mp.mpf(10) ** ((_i % 11) - 5)
+        _g = iv_atan_nn(ivf(_t))
+        with mp.workprec(600):
+            _r = mp.atan(_t)
+        if not (LB(_g) <= _r <= UB(_g)):
+            _bad_at += 1
+    chk("EVIDENCE: iv_atan_nn encloses a 600-bit reference on 240 operands "
+        "spanning 10 decades (mpmath's own iv.atan2 fails this: its mpf_atan "
+        "runs at prec+4 with round-to-NEAREST and only directs the LAST step)",
+        _bad_at == 0, f"{_bad_at} misses")
+
+    # -- REGRESSION GUARD: no mpmath transcendental on the certified path -----
+    # M-1 was exactly "a library primitive that is not outward rounded slipped
+    # into a load-bearing bound".  The only durable defence is a source-level
+    # one: tokenise THIS file (so that prose in comments/docstrings cannot
+    # trigger or mask it) and assert that Secs 0-6 -- everything that produces a
+    # bound -- calls no transcendental from `mp` or `iv`.  Stage A' (Sec.7) and
+    # the drivers are exempt: they only ever use them as EVIDENCE references.
+    import io
+    import tokenize as _tk
+    _src = open(os.path.abspath(__file__), "r", encoding="utf-8").read()
+    _lines = _src.splitlines()
+    _s0 = next(i for i, L in enumerate(_lines) if "SEC. 0." in L)
+    _s7 = next(i for i, L in enumerate(_lines) if "SEC. 7." in L)
+    _BANNED = {"pi", "e", "atan", "atan2", "asin", "acos", "sin", "cos", "tan",
+               "sinh", "cosh", "tanh", "log", "log10", "exp", "cbrt",
+               "power", "quad", "zeta", "gamma", "expm1", "log1p", "hypot",
+               "besselj", "polylog", "nsum", "findroot", "cholesky"}
+    # `iv.sqrt` is the ONE library transcendental that is genuinely outward
+    # rounded: mpmath's `mpi_sqrt` calls `mpf_sqrt(a, prec, round_floor)` and
+    # `mpf_sqrt(b, prec, round_ceiling)`, i.e. the direction is applied to the
+    # square root itself, not to a nearest-rounded intermediate (contrast
+    # `mpf_atan2`).  It is reached only through `iv_sqrt_nn`.  `mp.sqrt` (plain
+    # mpf, round-to-nearest) stays banned.
+    _BAN = {"mp": _BANNED | {"sqrt"}, "iv": _BANNED}
+    _toks = [t for t in _tk.generate_tokens(io.StringIO(_src).readline)
+             if t.type in (_tk.NAME, _tk.OP)]
+    _hits = []
+    for _i in range(len(_toks) - 2):
+        _a, _b, _c = _toks[_i], _toks[_i + 1], _toks[_i + 2]
+        if (_a.type == _tk.NAME and _a.string in ("mp", "iv")
+                and _b.string == "." and _c.type == _tk.NAME
+                and _c.string in _BAN[_a.string]
+                and _s0 < _a.start[0] - 1 < _s7):
+            _hits.append(f"{_a.string}.{_c.string}@{_a.start[0]}")
+    chk("no mpmath transcendental (pi/atan/log/exp/mp.sqrt/quad/zeta/cholesky) "
+        "is called anywhere in Secs 0-6, i.e. on the certified path: the only "
+        "primitives producing a bound are +,-,*,/,**int, the outward-rounded "
+        "iv.sqrt (via iv_sqrt_nn) and the hand-rolled iv_atan_nn/iv_pi_half",
+        not _hits, "; ".join(_hits))
+    _bad_sq = 0
+    for _i in range(1, 301):                     # the same test that killed atan2
+        _t = mp.mpf(_i) / 7 * mp.mpf(10) ** ((_i % 13) - 6)
+        _g = iv_sqrt_nn(ivf(_t))
+        with mp.workprec(600):
+            _r = mp.sqrt(_t)
+        if not (LB(_g) <= _r <= UB(_g)):
+            _bad_sq += 1
+    chk("iv.sqrt (the only library primitive left on the certified path) "
+        "encloses a 600-bit reference on 300 operands spanning 13 decades",
+        _bad_sq == 0, f"{_bad_sq} misses")
+
+    # -- the two derivative-envelope CONSTANTS 4b and 6b (review blind spot 1)
+    # cell_L_iv bounds  |d_w psi_w(k)| <= 4b/(k^2+a^2)^3  and
+    #                   |d_w phi_w(k)| <= 6b/(k^2+a^2)^3  for all w in [a,b].
+    # Both are sharp at the corner w = b, a = b, so a wrong constant would slip
+    # through any loose test; check them by exact interval domination.
+    for (af, bf) in ((0.3125, 0.375), (1.0, 1.125), (9.9375, 10.0625),
+                     (43.43066, 43.62891)):
+        a_i, b_i = ivf(af), ivf(bf)
+        wcell = ivlh(a_i, b_i)
+        k2c = ivf(0) ** 2
+        for k in (1, 2, 3, 5, 17, 140, 3000):
+            k2 = ivf(k) ** 2
+            den = k2 + wcell ** 2
+            dpsi = 4 * wcell / den ** 3                  # |d_w (k^2+w^2)^-2|
+            dphi = 6 * wcell * k2 / den ** 4             # |d_w k^2(k^2+w^2)^-3|
+            majo = IONE / (k2 + a_i ** 2) ** 3
+            chk("|d_w psi_w(k)| <= 4b/(k^2+a^2)^3 uniformly on the cell",
+                UB(4 * b_i * majo) >= absmax_ub(dpsi), f"[{af},{bf}] k={k}")
+            chk("|d_w phi_w(k)| <= 6b/(k^2+a^2)^3 uniformly on the cell",
+                UB(6 * b_i * majo) >= absmax_ub(dphi), f"[{af},{bf}] k={k}")
+        del k2c
     chk("tail_int(A=0, p=2, x=5) = 1/375",
         _contains0(tail_int(Spec(IONE, 0, 2, ("t1",)), 5) - IONE / ivf(375)))
     chk("tail_int(A=0, p=1, x=7) = 1/7",
@@ -1536,10 +1720,47 @@ def run_gate(full=True):
             ub_use, info_use = cell_L_iv(A, B, alpha_iv, L1_iv, mu_iv)
             chk("the production iv certificate (tighter alpha, iv L1) closes",
                 ub_use is not None and ub_use < 0, f"[{A},{B}]")
+            if A == 1.0:
+                # ---- safety monotonicity in the three INPUTS (blind spot 5) --
+                # cell_L_iv is fed alpha, L1, mu2 from OTHER certificates.  If
+                # it were not monotone the right way, a slightly-too-generous
+                # upstream bound could make hpp_ub LOOK better.  Degrading each
+                # input must never improve the conclusion.
+                for (lbl, aa, ll, mm) in (
+                        ("alpha up", alpha_0 * mp.mpf("1.05"), L1_ref, mu0),
+                        ("L1 up", alpha_0, L1_ref * mp.mpf("1.05"), mu0),
+                        ("mu_2 down", alpha_0, L1_ref, mu0 * mp.mpf("0.95"))):
+                    ub_d, _ = cell_L_iv(A, B, aa, ll, mm)
+                    chk("degrading an INPUT bound never improves hpp_ub "
+                        "(cell_L_iv is monotone in the safe direction)",
+                        ub_d is None or ub_d >= ub_iv,
+                        f"[{A},{B}] {lbl}: {ub_d} vs {ub_iv}")
             print(f"  cross-check [{A},{B}]: hpp_ub mpf {ub_0:.8e} / iv "
                   f"{float(ub_iv):.8e} (ratio {float(ub_iv) / ub_0:.8f}); "
                   f"production iv {float(ub_use):.8e}, pos/F "
                   f"{info_0['ratio']:.4f} -> {info_use['ratio']:.4f}")
+    if have:
+        # ---- (g2) the SAME cross-check for Stage S (rescaled operator) ------
+        # cell_S_iv takes no external inputs, so this compares the two Stage S
+        # pipelines end to end (G(2) trial vector, Davis-Kahan on h~, the
+        # kappa/phi/psi quadratic forms).  EVIDENCE ONLY.
+        for (a, b) in ((0.0, 0.3125), (0.0, 0.25)):
+            ubS_iv, iS_iv = cell_S_iv(a, b)
+            ubS_0, iS_0 = C0.cell_S(a, b)
+            chk("the iv Stage S certificate closes wherever the mpf one does",
+                ubS_iv is not None and ubS_iv < 0 and ubS_0 < 0, f"[{a},{b}]")
+            for kname in ("F_lo", "E_hi", "g_lo", "s", "theta", "alpha", "qk",
+                          "ehat_phi", "ehat_psi", "N", "pos", "hpp_ub"):
+                r0, r1 = iS_0[kname], iS_iv[kname]
+                chk("evidence: Stage S iv vs mpf, quantity by quantity",
+                    abs(r1 - r0) <= 1e-6 * abs(r0) + 1e-11,
+                    f"[{a},{b}] {kname} mpf={r0:.12e} iv={r1:.12e}")
+            chk("the iv Stage S bound is CONSERVATIVE w.r.t. the mpf one "
+                "(interval arithmetic may only give up, never gain)",
+                float(ubS_iv) >= ubS_0 - 1e-11,
+                f"[{a},{b}] iv={float(ubS_iv):.12e} mpf={ubS_0:.12e}")
+            print(f"  cross-check S [{a},{b}]: hpp_ub mpf {ubS_0:.8e} / iv "
+                  f"{float(ubS_iv):.8e} (ratio {float(ubS_iv) / ubS_0:.8f})")
     _summary("Stage A'", f"({time.time() - t0:.1f}s)")
 
 
@@ -1660,7 +1881,12 @@ def _do_node(arg):
     c, pivot, tries = lam2_head_iv(ftab, Na, vec[:, -1], c0=float(ev[-2]))
     chk("interval Cholesky: cI - PAP is positive definite (coarse node)",
         pivot > 0, f"w={w} Na={Na}")
-    return (w, Na, as_tuple(c), as_tuple(pivot), tries, PASS[0] - n0)
+    nch = PASS[0] - n0
+    # The PARENT adds nch (see run_L).  Resetting the worker's own counter makes
+    # the serial path (same process) and the pooled path (child process, counter
+    # discarded) report EXACTLY the same number of checks.
+    PASS[0] = n0
+    return (w, Na, as_tuple(c), as_tuple(pivot), tries, nch)
 
 
 def _do_cell(arg):
@@ -1688,12 +1914,13 @@ def _do_cell(arg):
             got = acc
             break
         k *= 2
-    if got is None:
-        return (A, B, None, PASS[0] - n0, float(L1), float(alpha), float(mu2))
-    for info in got:
-        chk("fine cell: H''(x) < 0 certified for all x in [a^2, b^2]",
-            info["hpp_ub"] < 0, f"[{info['a']:.6f},{info['b']:.6f}]")
-    return (A, B, got, PASS[0] - n0, float(L1), float(alpha), float(mu2))
+    if got is not None:
+        for info in got:
+            chk("fine cell: H''(x) < 0 certified for all x in [a^2, b^2]",
+                info["hpp_ub"] < 0, f"[{info['a']:.6f},{info['b']:.6f}]")
+    nch = PASS[0] - n0
+    PASS[0] = n0                            # see _do_node
+    return (A, B, got, nch, float(L1), float(alpha), float(mu2))
 
 
 def _pool_map(fn, args, jobs):
@@ -1756,6 +1983,14 @@ def run_L(W0, WMAX, jobs=1, tag="Stage L"):
         raise AssertionError("Stage L closed no cell at all")
     Wdone = cells[-1][1]
     check_tiling(cells, float(W0), Wdone)
+    # The two checks inside check_tiling that involve Wdone are internal
+    # consistency only (Wdone is DEFINED as cells[-1][1]).  The claim that
+    # actually matters -- that the ladder covered what it was asked to cover --
+    # is this one, and it must abort rather than silently report a smaller W:
+    chk("the ladder reached the REQUESTED W_max (no coarse cell was abandoned "
+        "and the last certified endpoint is the target)",
+        stopped is None and Wdone == float(WMAX),
+        f"stopped at {stopped}, reached {Wdone!r}, requested {float(WMAX)!r}")
     LAD.update(rows=rows, W=Wdone, worst=worst, stopped=stopped, cells=cells,
                coarse=coarse, pivmin=pivmin)
 
