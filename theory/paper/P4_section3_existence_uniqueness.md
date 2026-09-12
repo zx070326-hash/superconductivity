@@ -1,16 +1,44 @@
 # 3. Existence and uniqueness of the critical temperature
 
 <!-- src: theory/derivations/P4_main_theorems.md §5 (paper skeleton, item 3) -->
-<!-- Draft v0.4, 2026-09-12 (v0.1 drafted, interrupted; v0.2: numbering gap closed, intro
+<!-- Draft v0.5, 2026-09-12 (v0.1 drafted, interrupted; v0.2: numbering gap closed, intro
      cross-references fixed, scratch check completed; v0.3: Remark 3.19(c) rewritten after
      the Coulomb probe be11865 — μ*>0 monotonicity is false, not merely unproved; v0.4:
      r-scan d542119 — the physical-range failure is attributable to the window discontinuity
      alone, drafting note 17 resolved).
+
+     v0.4 -> v0.5 (main-session rulings on all eight [decision] items, plus two new remarks):
+       #3  (S1) is stated and used ONLY in the finite-compression / matrix-entry form; the
+           §3.0 paragraph now says so as a definition rather than as an aside. [§3.0]
+       #5  P((0,∞))=1 is adopted globally as the definition of 𝒫 (matching
+           P4_main_theorems.md §0, so that §§4–6 and Theorem 2 share one 𝒫); Remark 3.17(a)
+           now records that §3 needs only P((0,∞))>0 and separates the three conditions by
+           the example P=½δ₀+½δ₁. [§3.0, Remark 3.17(a)]
+       #6  The moment condition keeps its split treatment; Remark 3.5(b) now states the
+           moment-free form explicitly ("there is T₀ with λ𝔨(P,T₀)>1", no crossing).
+       #9  (F3) and (F4) are now proved inline with no external citation; (F1), (F2), (F5)
+           keep chapter-level references (drafting note 9 carries the TODO to pin numbers).
+           [BP] is consequently no longer cited and has been dropped from the reference list.
+       #10 No mention of the numerical companion in the body; the footnote belongs in §7.
+       #12 The Introduction splits Theorem 1(b) into monotonicity (the theorem) and
+           uniqueness (its corollary); §3.4 accordingly relabels 3.18 as a Corollary.
+       #14 Numbering unchanged; the (2.1)/(2.2)/(S1)/(2.x) placeholders are back-filled once
+           §2 is final.
+       #17 §3 still carries no number; Remark 3.19(c) now points forward to §8, which states
+           the window hypothesis as "r ≥ 4, verified numerically, not derived".
+     New: Remark 3.17′ (λ₁ is convex in the kernel — why monotonicity is cheap and concavity
+     is not) and Remark 3.19(a′) (the constant in Theorem 1(c) is the Allen–Dynes
+     strong-coupling constant, so the bound is asymptotically sharp). Primed labels are used
+     so that the existing numbering 3.1–3.19 is untouched (same device as Remark 3.3′).
+
      Status: COMPLETE as a section — every statement below has a full proof; no TODO in the
-     mathematics. Open items are editorial and listed under "Drafting notes" ([decision]).
-     Purely analytic section: no computer-assisted certificate enters
-     any statement or proof below. Cross-references of the form (2.x) are placeholders for
-     the numbering of Section 2 (Setting and structural identities). -->
+     mathematics. Open items are editorial and listed under "Drafting notes" ([ruled] items
+     are settled; [decision] items are new and still open).
+     Purely analytic section: no computer-assisted certificate enters any statement or proof
+     below. The only numerical input imported from outside §3 is the certified enclosure of
+     the constant 𝔤(2); it appears once, inside Remark 3.19(a′), which is commentary on a
+     theorem proved elsewhere, and no proof in §3 uses it. Cross-references of the form (2.x)
+     are placeholders for the numbering of Section 2 (Setting and structural identities). -->
 
 Throughout this section $\mu^*=0$; the Coulomb pseudopotential is discussed in Section 8.
 The section is self-contained apart from the definitions and the structural identity recalled
@@ -18,8 +46,13 @@ in §3.0, and it uses no computer-assisted input.
 
 Our goal is Theorem 1(a),(b) of the Introduction: for every spectral measure $P$ and every
 coupling $\lambda>0$ the line $\mathcal L(\lambda,P)$ meets the critical surface **exactly
-once**. Part (a) (at least one crossing) is Theorem 3.4; part (b) (strict monotonicity, hence
-at most one crossing) is Theorem 3.16; the two are combined in Theorem 3.18.
+once**. Part (a) (at least one crossing) is Theorem 3.4. Part (b) is stated in the
+Introduction as two sentences, and they are proved here separately: the *theorem* is the
+strict monotonicity of $T\mapsto\mathfrak k(P,T)$, which is Theorem 3.16, and the uniqueness
+of the crossing is its *corollary* together with part (a), which is Corollary 3.18. The
+separation is deliberate — monotonicity is the substantive statement and holds for every $P$
+with no reference to $\lambda$, whereas uniqueness is the one-line consequence obtained by
+intersecting a strictly decreasing continuous function with a level.
 
 Conjecture 2 of [KAY II] (p. 14, eq. (31)), equivalently Conjecture 1 of [KAY III], asserts
 the existence of a critical temperature together with the upper bound $\widetilde T_c$. The
@@ -55,6 +88,12 @@ $$
 P\bigl((0,\infty)\bigr)=1,\qquad
 \langle\omega^2\rangle:=\int\omega^2\,P(d\omega)<\infty .
 $$
+This is the standing convention of the whole paper: the same class $\mathcal P$ is used in
+Sections 4–6 and in Theorem 2, so that no statement has to be re-indexed by a weaker
+hypothesis. No *result* of Section 3 in fact uses more than $P((0,\infty))>0$; only one
+intermediate statement, Lemma 3.1.4, has to be restated under the weaker hypothesis. See
+Remark 3.17(a), where the hypotheses that occur in the literature are sorted out by an
+example.
 For $T>0$ put $\varpi:=\omega/2\pi T$ and $\langle\varpi^2\rangle:=\langle\omega^2\rangle/(2\pi T)^2$.
 
 **Kernels and the kernel-generic operator.** For $k\ge1$ and $\varpi>0$ set
@@ -70,8 +109,14 @@ $$
 \;+\;f(n+m+1)\,u_nu_m ,
 \tag{2.1}
 $$
-i.e. $\mathcal O[f]=-L_1[f]+L_2[f]+L_3[f]$ in the notation of (2.x). The map
-$f\mapsto\mathcal O[f]$ is **linear**, and $\mathcal O[f]$ is symmetric. The two operators of
+i.e. $\mathcal O[f]=-L_1[f]+L_2[f]+L_3[f]$ in the notation of (2.x). Each entry in (2.1) is a
+*finite* linear combination of values of $f$; consequently $f\mapsto\mathcal O[f]$ is
+**linear entrywise, for every** $f$, and $\mathcal O[f]$ is symmetric. Whether that matrix
+defines a bounded operator on $\ell^2$ is a separate question: it does whenever
+$f\in\ell^1(\mathbb N)$ (Lemma 3.2.1), and then entrywise linearity upgrades to linearity of
+$f\mapsto\mathcal O[f]$ as a map $\ell^1(\mathbb N)\to\mathcal B(\ell^2)$. It does *not* for
+$f\equiv1$ — see (S1) below. The two levels are kept apart throughout; the distinction is
+also what the convexity of Remark 3.17′ rests on. The two operators of
 interest are
 $$
 \mathfrak H(\varpi):=\mathcal O\bigl[\llbracket\cdot\rrbracket(\varpi)\bigr],
@@ -95,14 +140,18 @@ $\mathcal S_c=\{(\lambda,T,P):\lambda\,\mathfrak k(P,T)=1\}$ and
 $\mathcal L(\lambda,P):=\{(\lambda,T,P):T>0\}$ is the *line* of fixed $\lambda$ and $P$.
 
 **The structural identity.** The constant kernel $f\equiv1$ gives the rank-one identity
-(2.x), recalled here in the only form used below:
+(2.x). Because $u\notin\ell^2$, the symbol "$\mathcal O[1]$" does not denote a bounded
+operator on $\ell^2$ and "$uu^\top$" does not denote an operator at all; accordingly (2.x) is
+stated — in Section 2 and here — as an identity of **finite compressions**, equivalently of
+matrix entries:
 $$
 P_N\,\mathcal O[1]\,P_N \;=\; 2\,u^{(N)}\bigl(u^{(N)}\bigr)^{\!\top}-I_N,
 \qquad u^{(N)}:=(u_0,\dots,u_{N-1}),
 \tag{S1}
 $$
-for every $N\ge1$. (Since $u\notin\ell^2$, $\mathcal O[1]$ is not a bounded operator on
-$\ell^2$; (S1) is an identity of finite compressions, equivalently of matrix entries.)
+for every $N\ge1$. This is the only form of the identity used anywhere below (in step (iii)
+of the proof of Theorem 3.4), and it is the only form in which it is true; no
+unbounded-operator convention is needed or implied.
 
 *Proof of (S1).* For $n\ne m$, (2.1) gives $\mathcal O[1]_{nm}=u_nu_m+u_nu_m=2u_nu_m$. For
 $n=m$, the $L_2$ term is absent and
@@ -141,8 +190,11 @@ $\varpi\mapsto\llbracket k\rrbracket(\varpi)$ is continuous and strictly increas
 $\varpi=\omega/2\pi T$ is strictly decreasing in $T$; moreover
 $\llbracket k\rrbracket(\omega/2\pi T)=\bigl(1+(2\pi Tk/\omega)^2\bigr)^{-1}\to1$ as
 $T\downarrow0$ for every $\omega>0$. All four statements follow by dominated convergence
-(dominating function $1$, resp. $\omega^2/(2\pi T k)^2$), using $P((0,\infty))=1$ in 1., 3.
-and 4. and $\langle\omega^2\rangle<\infty$ in 2. $\square$
+(dominating function $1$, resp. $\omega^2/(2\pi T k)^2$), using $P((0,\infty))>0$ in 1. and 3.
+— the strict positivity of $F_T$ and the strict monotonicity in $T$ both come from the
+restriction of $P$ to $(0,\infty)$ — and the normalisation $P((0,\infty))=1$ in 4., which is
+the one place where the full normalisation is used (see Remark 3.17(a)); statement 2. uses
+$\langle\omega^2\rangle<\infty$. $\square$
 
 <!-- src: P4_uniqueness_strategy.md §1（F≥0、非增、F(k)≤⟨ϖ²⟩/k²）；P4_conjecture2.md §8(ii) -->
 
@@ -291,10 +343,31 @@ value theorem produces $T\in(T_0,\infty)$ with $\lambda\,\mathfrak k(P,T)=1$. $\
 > weaker $\mathfrak h^{(N)}(\infty)\ge2S_N-2$, which also diverges and suffices for the proof.
 > <!-- src: P4_einstein_extremal.md §2（试探向量路线，2S_N−2）；P4_conjecture2.md §8(iii)（精确 2S_N−1） -->
 >
-> (b) Step (ii)–(iv) use only finite compressions and the bound $|\llbracket k\rrbracket|\le1$;
-> neither $\langle\omega^2\rangle<\infty$ nor compact support of $P$ is needed for the
-> *existence* half. The moment condition enters only through Lemma 3.2 (boundedness,
-> compactness, continuity), and hence through the uniqueness half.
+> (b) Steps (i)–(iii), and with them the first sentence of step (iv), use only finite
+> compressions and the bound $|\llbracket k\rrbracket|\le1$; neither
+> $\langle\omega^2\rangle<\infty$ nor compact support of $P$ is needed for them. The moment
+> condition enters only in the second sentence of step (iv), through Lemma 3.2.3
+> ($\mathfrak k(P,T)\to0$), and hence through the uniqueness half. The split is worth making
+> precise, because the two halves of Theorem 3.4 are not equally cheap. Drop
+> $\langle\omega^2\rangle<\infty$ entirely, keeping the rest of the definition of
+> $\mathcal P$; then $\mathfrak K(P,T)$ need no longer be a bounded operator (already for
+> $F\equiv1$ the $L_2$, $L_3$ blocks are $2u_nu_m$ with $u\notin\ell^2$), so read
+> $$
+> \mathfrak k(P,T):=\sup\bigl\{\langle v,\mathcal O[F_{P,T}]v\rangle:\ \|v\|=1,\ v
+> \text{ finitely supported}\bigr\}\ \in[0,+\infty] ,
+> $$
+> which is a supremum of finite sums, always defined, and which agrees with
+> $\lambda_1(\mathfrak K(P,T))$ whenever the operator *is* bounded. With that reading steps
+> (i)–(iii) still give
+> $$
+> \text{for every }\lambda>0\text{ there is }T_0>0\text{ with }
+> \lambda\,\mathfrak k(P,T_0)>1 ,
+> $$
+> and that is the *whole* moment-free statement. One may not append "hence the line meets the
+> critical surface": with no decay of $\mathfrak k(P,\cdot)$ available there need be no
+> crossing to find. A paper wanting a moment-free existence theorem must therefore state it in
+> the displayed form, without a crossing. We have not pursued this, since Theorem 1(c) and
+> Theorem 2 both need $\langle\omega^2\rangle<\infty$ anyway.
 > <!-- src: P4_conjecture2.md §8 注(1) -->
 >
 > (c) [KAY II] establishes existence only for $\lambda\ge\lambda_*$ with
@@ -588,27 +661,40 @@ Krein–Rutman theorem, positivity improvement, isolation of $\lambda_1$ in the 
 Hellmann–Feynman differentiation, or compact support of $P$. Compactness of $\mathfrak K(P,T)$
 is used once and only to guarantee that $\lambda_1$ is an eigenvalue.
 
-We use the following standard facts.
+We use the following facts. (F1), (F2), (F5) are standard and are quoted with references;
+(F3) and (F4) are also standard but are proved here, since each takes three lines and the
+precise form of (F3) — no isolation of $\lambda_1$ — is not the one usually displayed.
 
 * **(F1)** For a bounded self-adjoint $A$ on a Hilbert space,
   $\lambda_1(A):=\max\operatorname{spec}A=\sup_{\|x\|=1}\langle x,Ax\rangle$, and
   $|\lambda_1(A)-\lambda_1(B)|\le\|A-B\|$. [RS1, §VI.3, §VII.2]
 * **(F2)** A Hilbert–Schmidt operator is compact; a non-zero point of the spectrum of a
   compact self-adjoint operator is an eigenvalue. [RS1, §VI.5, §VI.6]
-* **(F3)** For bounded self-adjoint $A$ with spectral measure $E$ and
-  $\lambda_1=\max\operatorname{spec}A$,
+* **(F3)** Let $A$ be bounded self-adjoint with spectral measure $E$ and
+  $\lambda_1=\max\operatorname{spec}A$. Then
   $$
   E(\{\lambda_1\})=\operatorname*{s-lim}_{t\to\infty}e^{t(A-\lambda_1)} .
   $$
-  Indeed, for any $v$,
-  $\bigl\|\bigl(e^{t(A-\lambda_1)}-E(\{\lambda_1\})\bigr)v\bigr\|^2
-  =\int_{\mu<\lambda_1}e^{2t(\mu-\lambda_1)}\,d\langle v,E_\mu v\rangle\to0$ by dominated
-  convergence. **No isolation of $\lambda_1$ is required.** [RS1, §VII.2]
-* **(F4)** A real square matrix $B$ with non-negative off-diagonal entries (a *Metzler*, or
-  essentially non-negative, matrix) has $e^{tB}$ entrywise non-negative for all $t\ge0$:
-  choose $c$ with $B+cI\ge0$ entrywise, then
-  $e^{tB}=e^{-tc}\sum_{j\ge0}\frac{t^j}{j!}(B+cI)^j\ge0$. Consequently $e^{tB}$ maps the
-  non-negative orthant into itself. [BP, Ch. 6]
+  *Proof.* The two operators are the bounded Borel functions $\varphi_t(\mu)=e^{t(\mu-\lambda_1)}$
+  and $\varphi_\infty=\mathbf 1_{\{\lambda_1\}}$ of $A$, and $\varphi_t=\varphi_\infty=1$ at
+  $\mu=\lambda_1$ while $\varphi_\infty=0$ on $\operatorname{spec}A\cap(-\infty,\lambda_1)$.
+  Hence, for every $v$,
+  $$
+  \bigl\|\bigl(e^{t(A-\lambda_1)}-E(\{\lambda_1\})\bigr)v\bigr\|^2
+  =\int_{\operatorname{spec}A}\!\!|\varphi_t-\varphi_\infty|^2\,d\langle v,E_\mu v\rangle
+  =\int_{\mu<\lambda_1}\!\!e^{2t(\mu-\lambda_1)}\,d\langle v,E_\mu v\rangle .
+  $$
+  The integrand is bounded by $1$ and tends to $0$ pointwise on $\{\mu<\lambda_1\}$, and the
+  measure $d\langle v,E_\mu v\rangle$ is finite (total mass $\|v\|^2$); dominated convergence
+  gives the claim. $\square$ **No isolation of $\lambda_1$ in $\operatorname{spec}A$ is
+  required**, which is why §3.3 needs no spectral gap.
+* **(F4)** A real $N\times N$ matrix $B$ with non-negative off-diagonal entries (a *Metzler*,
+  or essentially non-negative, matrix) has $e^{tB}$ entrywise non-negative for every $t\ge0$;
+  consequently $e^{tB}$ maps the non-negative orthant into itself.
+  *Proof.* Put $c:=\max_L\bigl(-B_{LL}\bigr)^+\ge0$, so that $B+cI$ has all entries $\ge0$.
+  Products of entrywise non-negative matrices are entrywise non-negative, hence so is
+  $e^{t(B+cI)}=\sum_{j\ge0}\frac{t^j}{j!}(B+cI)^j$ for $t\ge0$; and $B$ commutes with $cI$, so
+  $e^{tB}=e^{-tc}e^{t(B+cI)}$, which is entrywise non-negative. $\square$
 * **(F5)** If $A_N\to A$ strongly with $\sup_N\|A_N\|<\infty$ and $\|A\|<\infty$, then
   $e^{tA_N}\to e^{tA}$ strongly, uniformly for $t$ in compacts: $A_N^jv\to A^jv$ for each $j$,
   and the tails are dominated by $\sum_{j>J}t^jC^j/j!$ with $C:=\sup_N\|A_N\|\vee\|A\|$.
@@ -710,9 +796,26 @@ $$
 
 <!-- src: P4_uniqueness_strategy.md §3.A 步骤 3 -->
 
-> **Remark 3.17.** (a) Only $P\bigl((0,\infty)\bigr)>0$ is used for the strictness (through
-> $f(1)>0$); the normalisation $P((0,\infty))=1$ in the definition of $\mathcal P$ is stronger
-> than needed, and atoms at $\omega=0$ are harmless since $\llbracket k\rrbracket(0)=0$.
+> **Remark 3.17.** (a) *(The hypotheses on $P$.)* The strictness above uses only $f(1)>0$,
+> i.e. only $P\bigl((0,\infty)\bigr)>0$; an atom at $\omega=0$ is harmless because
+> $\llbracket k\rrbracket(0)=0$. Three hypotheses occur in the literature —
+> $P((0,\infty))=1$, $P\ne\delta_0$, and $P((0,\infty))>0$ — but only two conditions: for a
+> probability measure on $[0,\infty)$ one has $P((0,\infty))=0$ iff $P=\delta_0$, so the last
+> two coincide. The first is strictly stronger, as
+> $P=\frac12\delta_0+\frac12\delta_1$ shows: it satisfies $P\ne\delta_0$ and
+> $P((0,\infty))=\frac12>0$, but not $P((0,\infty))=1$.
+>
+> Every *result* of Section 3 survives on the weaker hypothesis; one statement of the
+> machinery does not, and it is worth saying which. Put $p:=P((0,\infty))\in(0,1]$. Then
+> Lemma 3.1.1 and 3.1.3 are unchanged (they assert strict positivity and strict monotonicity,
+> and the restriction of $P$ to $(0,\infty)$ already supplies both), and so is everything
+> downstream of them — Lemmas 3.2, 3.3, all of §3.2, all of §3.3, Theorem 3.16. Only
+> Lemma 3.1.4 changes: $F_T(k)\to p$, not $1$, as $T\downarrow0$, whence (3.3) becomes
+> $\lim_{T\downarrow0}\mathfrak k^{(N)}(P,T)=p\,(2S_N-1)$. Since $p>0$ this still diverges in
+> $N$, so Theorem 3.4 and Corollary 3.18 go through verbatim. We nevertheless adopt
+> $P((0,\infty))=1$ as the standing definition of $\mathcal P$ (§3.0), so that Sections 4–6
+> and Theorem 2 quote one and the same class and no statement in the paper has to carry a
+> variant hypothesis.
 >
 > (b) Specialising to the Einstein spectrum $P=\delta_{\omega_E}$ gives: $\varpi\mapsto\mathfrak h(\varpi)$
 > is strictly increasing on all of $(0,\infty)$. This extends [KAY III, Thm. 5], which covers
@@ -734,9 +837,99 @@ $$
 
 ---
 
+> **Remark 3.17′ ($\lambda_1$ is convex in the kernel).** The variational formula used in
+> every Rayleigh step above says more than order preservation, and the surplus explains both
+> why §3.3 is short and why the concavity theorem of this paper — that
+> $H(x):=\mathfrak h(\sqrt x)$ is concave on $(0,\infty)$ — is not.
+>
+> Fix $N\ge1$ and a unit vector $v\in\operatorname{ran}P_N$. By (2.1) the number
+> $\langle v,\mathcal O[f]v\rangle=\sum_{n,m<N}v_nv_m\,\mathcal O[f]_{nm}$ is a **finite**
+> linear combination of the values $f(k)$, $1\le k\le2N-1$; so $f\mapsto\langle v,\mathcal O[f]v\rangle$
+> is a linear functional, defined for *every* $f$ and requiring no integrability. Hence
+> $$
+> f\ \longmapsto\ \lambda_1\bigl(P_N\mathcal O[f]P_N\bigr)
+> =\sup\bigl\{\langle v,\mathcal O[f]v\rangle:\ v\in\operatorname{ran}P_N,\ \|v\|=1\bigr\}
+> \tag{3.9}
+> $$
+> is a pointwise supremum of linear functionals of $f$, and is therefore **convex** in $f$.
+> Nothing beyond the elementary fact that a supremum of affine functions is convex is being
+> used. For $f\in\ell^1(\mathbb N)$ the compressions may be removed: by Lemma 3.2.1 each
+> functional $f\mapsto\langle v,\mathcal O[f]v\rangle$ is bounded, with
+> $|\langle v,\mathcal O[f]v\rangle|\le5\|f\|_{\ell^1}$, so
+> $f\mapsto\lambda_1(\mathcal O[f])=\sup_{\|v\|=1}\langle v,\mathcal O[f]v\rangle$ is again a
+> supremum of continuous linear functionals and is convex — indeed $5$-Lipschitz — on
+> $\ell^1(\mathbb N)$. The two levels must be kept apart, as in §3.0: at level $N$ convexity
+> is unconditional, whereas on $\ell^2$ it is a statement about the linear map
+> $\ell^1(\mathbb N)\to\mathcal B(\ell^2)$, whose domain does not contain the constant
+> kernel — and $\mathcal O[1]$ is indeed not a bounded operator, which is why (S1) is an
+> identity of compressions.
+>
+> **(a) The quadratic-form Jensen inequality is exactly this convexity, hence free.** The map
+> $\omega\mapsto\llbracket\cdot\rrbracket(\omega/2\pi T)$ is continuous from $[0,\infty)$ into
+> $\ell^1(\mathbb N)$ and satisfies
+> $\|\llbracket\cdot\rrbracket(\varpi)\|_{\ell^1}\le\frac{\pi^2}{6}\varpi^2$, so by
+> $\langle\omega^2\rangle<\infty$ it is Bochner integrable, and its Bochner integral is
+> $F_{P,T}$ (coordinate evaluation is a bounded functional on $\ell^1$, so the integral may be
+> computed entrywise). Since $v\mapsto\langle v,\mathcal O[\cdot]v\rangle$ is likewise bounded
+> on $\ell^1$, it commutes with the integral, and for every unit $v$
+> $$
+> \langle v,\mathfrak K(P,T)v\rangle
+> =\int\bigl\langle v,\mathfrak H\!\left(\tfrac{\omega}{2\pi T}\right)v\bigr\rangle P(d\omega)
+> \ \le\ \int\mathfrak h\!\left(\tfrac{\omega}{2\pi T}\right)P(d\omega) .
+> $$
+> Taking the supremum over $v$,
+> $$
+> \mathfrak k(P,T)\ \le\ \int\mathfrak h\!\left(\tfrac{\omega}{2\pi T}\right)P(d\omega) ,
+> \tag{3.10}
+> $$
+> the integrand being continuous in $\omega$ (by (F1) and Lemma 3.2.1) and the integral finite
+> because $0<\mathfrak h(\varpi)\le\frac{5\pi^2}{6}\varpi^2$ for $\varpi>0$
+> (Proposition 3.15.1 applied to $P=\delta_\omega$, and Lemma 3.2.1) together with
+> $\langle\omega^2\rangle<\infty$. This
+> is the *inequality* whose failure to be an *equality* is the content of
+> [KAY II, Remark 2]; (3.10) is its one-line convexity half. It is superseded by the
+> kernel-level bound $\mathfrak k(P,T)\le\mathfrak h(\varpi_{\mathrm{rms}})$ of Theorem 2,
+> which is strictly stronger and is **not** a consequence of convexity — it compares against
+> the *single* Einstein spectrum at the root-mean-square frequency rather than against the
+> $P$-average, and it needs the cone.
+>
+> **(b) Why monotonicity is cheap and concavity is not.** Order preservation is automatic for
+> a supremum: if $\langle v,\mathcal O[g-f]v\rangle\ge0$ for all admissible $v$, the supremum
+> can only increase. That is the entire content of the Rayleigh step in Theorem 3.16; all the
+> work is done by Corollary 3.9, i.e. by the sign of the *difference kernel*, and none by any
+> property of $\lambda_1$. Monotonicity and convexity of $\lambda_1$ point the same way, and
+> that is why the monotonicity argument is three lines. Concavity asks the opposite. Write
+> $x:=\varpi^2$ and $F(x)(k):=x/(k^2+x)$, so that $H(x)=\lambda_1\bigl(\mathcal O[F(x)]\bigr)$.
+> Here $x\mapsto F(x)$ is concave entrywise, while $F\mapsto\lambda_1(\mathcal O[F])$ is
+> convex, and non-decreasing on the class of non-negative non-increasing $\ell^1$ kernels to
+> which every $F(x)$ belongs (Corollary 3.9, as used in Theorem 3.16). A non-decreasing
+> **convex** function of a concave map has no sign in general — whereas had $\lambda_1$ been
+> *concave* in $F$, concavity of $H$ would have followed at once.
+> Concavity of $H$ can therefore hold only because the concavity of the kernel **strictly
+> outweighs** the convexity of $\lambda_1$: the two effects genuinely oppose each other.
+>
+> This is a structural obstruction, not a technical one. No argument resting solely on the
+> variational characterisation of $\lambda_1$ — no Rayleigh comparison, no cone, no
+> monotonicity of the kernel — can produce concavity, because all of them see only the
+> convex, order-preserving envelope (3.9). Any proof must open the operator up and use
+> second-order information about $\mathfrak H(\varpi)$, which is why the concavity theorem is
+> quantitatively hard and is one of only two places in this paper where a computer-assisted
+> certificate enters (the other being the numerical value of the constant
+> $\mathfrak g(2)$, Remark 3.19(a′) and Appendix A). It is also why no abstract route through
+> operator convexity is available: the Loewner-order statement that would give concavity fails
+> here, since $\mathfrak H'(\varpi)$ is not positive semi-definite (Remark 3.17(c)).
+
+---
+
 ## 3.4 The critical temperature is well defined
 
-**Theorem 3.18 (Theorem 1(a)+(b)).**
+The Introduction states Theorem 1(b) in two sentences: strict monotonicity of
+$T\mapsto\mathfrak k(P,T)$, and — as its corollary, together with Theorem 1(a) — uniqueness of
+the crossing. The first is Theorem 3.16 above; the second is the following corollary, which is
+what the Introduction's second sentence asserts. We label it a corollary rather than a theorem
+because its proof adds nothing to Theorems 3.4 and 3.16 beyond the intermediate value theorem.
+
+**Corollary 3.18 (Theorem 1(b), second sentence: uniqueness of $T_c$).**
 Let $P\in\mathcal P$ and $\lambda>0$. Then there is a **unique** $T_c=T_c(\lambda,P)\in(0,\infty)$
 with
 $$
@@ -757,12 +950,50 @@ uniqueness and the two one-sided strict inequalities. $\square$
 
 > **Remark 3.19.** (a) [KAY II, KAY III] do not define $T_c$ in general: the critical surface
 > is not known a priori to be a graph, and [KAY II, pp. 7–8] explicitly allows several
-> crossings. Theorem 3.18 removes that ambiguity for $\mu^*=0$: there is exactly one crossing,
+> crossings. Corollary 3.18 removes that ambiguity for $\mu^*=0$: there is exactly one crossing,
 > so $T_c$ may be defined without further qualification. This completes the existence and
 > uniqueness half of Conjecture 2 of [KAY II] (= Conjecture 1 of [KAY III]); the bound
 > $T_c<\widetilde T_c$ is Theorem 1(c), proved in Sections 4–5.
 >
-> (b) Theorem 3.18 is in fact stronger than what the conjecture asserts: not only is there a
+> (a′) *(The bound of Theorem 1(c) is asymptotically sharp.)* That bound reads
+> $T_c(\lambda,P)<\widetilde T_c(\lambda,P)=\frac1{2\pi}\sqrt{\mathfrak g(2)\,\langle\omega^2\rangle\lambda}$,
+> where $\mathfrak g(2):=\lambda_1\bigl(\mathcal O[k\mapsto k^{-2}]\bigr)$, so that
+> $\widetilde T_c=C_\infty\sqrt{\lambda\langle\omega^2\rangle}$ with
+> $C_\infty:=\frac1{2\pi}\sqrt{\mathfrak g(2)}$. The certified enclosure
+> $\mathfrak g(2)\in[1.318140211762671,\,1.318140212136387]$ of Appendix A gives
+> $$
+> C_\infty\ \in\ [\,0.182726247746,\ 0.182726247773\,] ,
+> \qquad\text{i.e.}\qquad
+> \widetilde T_c=0.1827262477\ldots\times\sqrt{\lambda\langle\omega^2\rangle} .
+> $$
+> This is precisely the constant in the strong-coupling asymptotics of Allen and Dynes,
+> $T_c\simeq0.1827\sqrt{\lambda\langle\omega^2\rangle}$ as $\lambda\to\infty$ [AD, eq. (22)],
+> a coincidence already noted in [KAY II, Remark 3]. We do not reprove that asymptotics here,
+> and nothing in this paper depends on it. What the coincidence adds is interpretation, and it
+> is worth stating: Theorem 1(c) is not merely *an* upper bound with *some* constant. Granted
+> the Allen–Dynes asymptotics, its constant is the sharp one — the bound is approached as
+> $\lambda\to\infty$, so no smaller constant can serve in an inequality valid for all
+> $\lambda$ — and the family along which it is approached, the Einstein spectra, is by
+> Theorem 2 also the exact maximiser of $\mathfrak k$ at every finite $\lambda$. An inequality
+> valid for all $\lambda>0$ and all $P$ is thereby upgraded from a bound to a **saturated**
+> bound, saturated along the family that is extremal at every finite coupling. Two things are
+> *not* claimed: we do not prove the asymptotics, and Theorem 2 does not exclude that some
+> non-Einstein family also approaches $C_\infty$ in the limit — its strictness holds at fixed
+> $T$, and we make no claim about the rate at which the gap closes as $\lambda\to\infty$.
+> This belongs in the Introduction; see the suggested wording in drafting note 18.
+> <!-- src: P4_main_theorems.md 定理 1(c) 后的「注（T̃_c 渐近锐）」；𝔤(2) 包围 = 同文件推论 (iv)。
+>      数值核对：theory/notes/_scratch_ir/ad_constant_check.py (uncommitted, repo convention),
+>      mpmath dps=40, endpoints evaluated separately:
+>        (1/2π)√1.318140211762671 = 0.18272624774670139534
+>        (1/2π)√1.318140212136387 = 0.18272624777260445246
+>      width 2.59e-11; contains the truncated literature value C_∞ = 0.1827262477 (gap
+>      +4.67e-11 above the lower end). CAUTION: P4_main_theorems.md quotes the upper end as
+>      0.18272624777260, which is a TRUNCATION and lies 4.45e-15 BELOW the true image of the
+>      𝔤(2) enclosure — the displayed interval above is rounded OUTWARD (…746 / …773) so that
+>      it is a genuine enclosure. Main session should fix the master-doc endpoint.
+>      The correct 5-significant-figure value is 0.18273, not 0.18274. -->
+>
+> (b) Corollary 3.18 is in fact stronger than what the conjecture asserts: not only is there a
 > unique crossing for each $(\lambda,P)$, but the whole function $T\mapsto\mathfrak k(P,T)$ is
 > strictly decreasing for **every** $P\in\mathcal P$, so that $\lambda\mapsto T_c(\lambda,P)$
 > is itself strictly increasing and continuous.
@@ -786,7 +1017,11 @@ uniqueness and the two one-sided strict inequalities. $\square$
 > under a **regularity hypothesis on the Coulomb window**, together with a restriction on
 > $\tilde\mu$. Both hypotheses do real work: they are not artefacts of the method. Section 8
 > states them explicitly and records the parameter ranges in which each failure occurs; a
-> theorem covering $\mu^*>0$ remains open.
+> theorem covering $\mu^*>0$ remains open. We quote no threshold here on purpose. The window
+> hypothesis is a lower bound on the ratio of the Coulomb cutoff to the phonon scale, and
+> Section 8 gives it in the only form we can support — as a **numerically verified**
+> condition, not a derived one — together with the scan that supports it; putting a number in
+> §3 would suggest a sharp constant that has not been established.
 > <!-- src: P4_main_theorems.md §3 残余假设 3；P4_uniqueness_strategy.md §3 注(iv)、§5。
 >      Numerics: p4_uniqueness_coulomb_probe.py (sibling worktree agent-a7c7ce7d55fb1397f,
 >      commits be11865 + d542119) — see its FINDINGS block. Three monotonicity failures:
@@ -805,24 +1040,37 @@ uniqueness and the two one-sided strict inequalities. $\square$
 >      from (i) upward gaps stepping over the level (λ₁ still increasing; T_c=sup is fine) and
 >      (ii) μ̃=0.26, λ=0.5 where 1/λ=2.0 is simply not reached on ϖ̄≤8 (λ₁ crosses near ϖ̄~15),
 >      which is r-independent window truncation. §8 must not present either as a defect. -->
-> <!-- TODO(§8): cite be11865/d542119 once merged. Window hypothesis: quote "r≥4" (or r≥3.5,
->      the scanned value) attributed as VERIFIED NUMERICALLY, not derived — 20 (λ,μ̃) points,
->      ϖ̄∈[0.02,8], N=600 float64, listed r only. Plus the μ̃≲0.32 margin condition. -->
+> <!-- TODO(§8): cite be11865/d542119 once merged. Window hypothesis — RULED (main session,
+>      2026-09-12, decision #17): §8 quotes "**r ≥ 4**", explicitly labelled VERIFIED
+>      NUMERICALLY, NOT DERIVED. Basis: r≥3.5 passes the whole scan and r=3 fails, so the true
+>      threshold lies in (3,3.5] and was never bisected; 4 is the scanned value with a safety
+>      margin. Evidence base to state alongside it: 20 (λ,μ̃) points, ϖ̄∈[0.02,8], N=600
+>      float64, listed r only. Plus the μ̃≲0.32 margin condition. -->
+> <!-- WARNING(§8), carried forward unchanged: "exactly one *attained* crossing" is FALSE at
+>      every r, r=10 included. Two causes, both harmless: (i) an upward jump can step over the
+>      level while λ₁ is still increasing; (ii) at μ̃=0.26, λ=0.5 the level 1/λ=2.0 is simply
+>      never reached on ϖ̄≤8 (λ₁ crosses near ϖ̄≈15) — an r-independent truncation effect, not
+>      a threshold phenomenon. Neither is a defect and neither bears on the threshold; both
+>      are exactly why T_c is defined as a supremum. §8 MUST NOT present either as a defect,
+>      and must not read them as evidence against r≥4. -->
 
 ---
 
 ## References cited in this section
 
 * [KAY II], [KAY III] — as in the Introduction. Specific pointers used above:
-  [KAY II, p. 14, eq. (31)] (Conjecture 2), [KAY II, Remark 2, p. 10], [KAY II, Prop. 7, p. 31],
-  [KAY II, pp. 7–8] (multiple crossings), [KAY III, Conjecture 1, p. 12, eq. (28)],
+  [KAY II, p. 14, eq. (31)] (Conjecture 2), [KAY II, Remark 2, p. 10], [KAY II, Remark 3]
+  (the strong-coupling constant; pointer to be pinned — drafting note 9),
+  [KAY II, Prop. 7, p. 31], [KAY II, pp. 7–8] (multiple crossings),
+  [KAY III, Conjecture 1, p. 12, eq. (28)],
   [KAY III, Thm. 5, p. 8] and [KAY III, p. 28] (monotonicity on $[0,\varpi_*)$; "would require
   a different strategy"), [KAY III, eq. (23)] ($\mathfrak h^{(N)}(\infty)$).
+* [AD] P. B. Allen and R. C. Dynes, *Transition temperature of strong-coupled superconductors
+  reanalyzed*, Phys. Rev. B **12**, 905 (1975); eq. (22) for the strong-coupling asymptotic
+  constant. Cited only in Remark 3.19(a′), which no proof depends on.
 * [RS1] M. Reed and B. Simon, *Methods of Modern Mathematical Physics I: Functional Analysis*,
   rev. ed., Academic Press, 1980.
 * [Ka] T. Kato, *Perturbation Theory for Linear Operators*, 2nd ed., Springer, 1976.
-* [BP] A. Berman and R. J. Plemmons, *Nonnegative Matrices in the Mathematical Sciences*,
-  SIAM Classics in Applied Mathematics 9, 1994.
 
 ---
 ---
@@ -830,9 +1078,15 @@ uniqueness and the two one-sided strict inequalities. $\square$
 # Drafting notes
 
 *(Not part of the paper. Written while converting the source notes to theorem–proof form.
-Nothing in the source notes was modified. Items marked **[decision]** need a main-session
-ruling; items marked **[glue]** are steps I wrote out that the source notes assert without a
-complete argument; items marked **[fyi]** are observations that need no action.)*
+Nothing in the source notes was modified. Marks: **[ruled]** — settled by the main session on
+2026-09-12; the original point of dispute is kept verbatim so that the ruling can be re-examined
+later, and the ruling itself is appended under "**Ruling.**". **[decision]** — still open, needs
+a main-session ruling. **[glue]** — steps I wrote out that the source notes assert without a
+complete argument. **[fyi]** — observations that need no action.)*
+
+*(v0.5 status of the eight items ruled on: 3, 5, 6, 9, 10, 12, 14, 17 are now **[ruled]** and
+all of them are implemented in the text above. New items 18–21 were opened while implementing
+them; 19 and 21 are genuine discrepancies found in the sources and need main-session attention.)*
 
 1. **[glue] Norm continuity of $T\mapsto\mathfrak K(P,T)$ and the decay as $T\to\infty$
    (Lemma 3.2).**
@@ -860,7 +1114,7 @@ complete argument; items marked **[fyi]** are observations that need no action.)
    needs the small auxiliary estimate $\sum_{n+m+1=j}u_n^2u_m^2=\frac1j\sum_{n<j}(2n+1)^{-1}\le1$.
    Worth an independent check.
 
-3. **[decision] Form of the structural identity (S1).** The source writes
+3. **[ruled] Form of the structural identity (S1).** The source writes
    $\mathcal O[1]=2uu^\top-I$ with the parenthetical "$u\notin\ell^2$"
    (`P4_main_theorems.md` §0; `P4_einstein_extremal.md` §1.C). Since $u\notin\ell^2$,
    $\mathcal O[1]$ is *not* a bounded operator on $\ell^2$ and $uu^\top$ is not an operator at
@@ -868,6 +1122,17 @@ complete argument; items marked **[fyi]** are observations that need no action.)
    §3 uses only the compression form, which I stated as (S1). Recommend Section 2 of the paper
    state (S1) in the compression form (or as an identity of matrix entries) to avoid an
    unbounded-operator ambiguity; this affects the wording of §2, not any proof.
+
+   **Ruling.** Adopt the finite-compression form (equivalently, say explicitly that it is an
+   identity of matrix entries). Wording only; no proof changes. *Implemented:* the §3.0
+   paragraph "The structural identity" now states this as the definition rather than as a
+   parenthetical aside, and says it is the only form in which the identity is true. The single
+   use of (S1) in §3 — step (iii) of the proof of Theorem 3.4 — was already in compression
+   form and needed no change; Remark 3.5(a) (the trial-vector alternative) is unaffected.
+   Related and also implemented: the linearity claim in §3.0 now distinguishes *entrywise*
+   linearity (valid for every $f$) from linearity of $\ell^1(\mathbb N)\to\mathcal B(\ell^2)$
+   (valid when $f\in\ell^1$), which is the distinction Remark 3.17′ rests on. **For §2:** the
+   same two-level statement should be made where $\mathcal O$ is first defined.
 
 4. **[fyi] Two values of $\mathfrak h^{(N)}(\infty)$ in the sources.**
    `P4_conjecture2.md` §8 (iii) and `P4_main_theorems.md` §2 give the exact $2S_N-1$ via (S1);
@@ -878,7 +1143,7 @@ complete argument; items marked **[fyi]** are observations that need no action.)
    No inconsistency to resolve, but the paper should not quote both forms as if they were
    different results.
 
-5. **[decision] Hypotheses on $P$: $P((0,\infty))=1$ vs. $P\ne\delta_0$ vs.
+5. **[ruled] Hypotheses on $P$: $P((0,\infty))=1$ vs. $P\ne\delta_0$ vs.
    $P((0,\infty))>0$.** The sources use all three
    (`P4_conjecture2.md` §8 "P((0,∞))=1（即 P≠δ₀）";
    `P4_uniqueness_strategy.md` §3.A "P∈𝒫，P((0,∞))=1"; the Corollary in §3.A "P≠δ₀"). These
@@ -890,13 +1155,39 @@ complete argument; items marked **[fyi]** are observations that need no action.)
    Remark 3.17(a). Ruling needed on which convention the paper adopts globally, since Sections
    4–6 and Theorem 2 may want the same $\mathcal P$.
 
-6. **[decision] Where the moment condition $\langle\omega^2\rangle<\infty$ is needed.**
+   **Ruling.** $P((0,\infty))=1$ is the global definition of $\mathcal P$, exactly so that
+   §§4–6 and Theorem 2 quote one class. Remark 3.17(a) records that §3 needs only
+   $P((0,\infty))>0$ and exhibits $P=\frac12\delta_0+\frac12\delta_1$. *Implemented* in §3.0
+   (definition, with a forward pointer) and Remark 3.17(a) (rewritten).
+
+   **Two corrections to the note as originally written**, both now in Remark 3.17(a):
+   (i) the three conditions are really only **two**. On $[0,\infty)$, $P=\delta_0$ iff
+   $P((0,\infty))=0$, so "$P\ne\delta_0$" and "$P((0,\infty))>0$" are the *same* condition;
+   the example separates $P((0,\infty))=1$ from those two, not all three from each other.
+   (ii) "every step of §3 needs only $P((0,\infty))>0$" is true of every *result* but **not**
+   of every *statement*: Lemma 3.1.4 as written ($F_T(k)\to1$ as $T\downarrow0$) is false when
+   $p:=P((0,\infty))<1$ — the limit is $p$ — and (3.3) correspondingly becomes $p(2S_N-1)$.
+   Since $p>0$ this still diverges and Theorem 3.4 is unaffected, but a paper that adopted the
+   weaker hypothesis would have to restate Lemma 3.1.4 and (3.3). Remark 3.17(a) now says
+   precisely this, and the proof of Lemma 3.1 continues to flag where $P((0,\infty))=1$ is used.
+
+6. **[ruled] Where the moment condition $\langle\omega^2\rangle<\infty$ is needed.**
    Existence (Theorem 3.4) does not use it (`P4_conjecture2.md` §8 note (1) says so
    explicitly), but as stated Theorem 3.4 also asserts a crossing, which needs
    $\mathfrak k(P,T)\to0$, which *does* use it. I split the statement accordingly (the
    crossing is deduced at the end of the proof using Lemma 3.2.3) and recorded the point in
    Remark 3.5(b). If the paper wants a genuinely moment-free existence statement, it should be
    phrased as "there is $T_0$ with $\lambda\mathfrak k(P,T_0)>1$" only, without the crossing.
+
+   **Ruling.** Keep the present split. Do **not** add a moment-free theorem; instead state in
+   Remark 3.5(b) that a genuinely moment-free claim can only be "there is $T_0$ with
+   $\lambda\mathfrak k(P,T_0)>1$", with no crossing. *Implemented:* Remark 3.5(b) rewritten.
+   One technical point had to be added to make the moment-free sentence well formed — without
+   $\langle\omega^2\rangle<\infty$ the matrix $\mathcal O[F_{P,T}]$ need not define a bounded
+   operator (already $F\equiv1$ gives the $L_2$, $L_3$ blocks $2u_nu_m$ with $u\notin\ell^2$),
+   so "$\mathfrak k(P,T)$" has to be read as the supremum of the quadratic form over
+   *finitely supported* unit vectors, a value in $[0,+\infty]$ that agrees with
+   $\lambda_1(\mathfrak K(P,T))$ whenever the operator is bounded. Remark 3.5(b) says so.
 
 7. **[fyi] Case II.b.2 of Lemma B: range of the monotonicity-in-$N'$ step.** The source states
    the case as $n+2\le N'\le n+K+1$ and the review note remarks that the increment
@@ -910,13 +1201,28 @@ complete argument; items marked **[fyi]** are observations that need no action.)
    Corollary A′ writes the lower bound as $a_L^2f(1)u_0^2$; since $u_0=1$ this equals
    $a_L^2f(1)$, and the review note confirms $\min_LQ_{LL}(\delta_1)=1$ exactly.
 
-9. **[decision] Precision of the functional-analysis citations (F1)–(F5).** I cited
+9. **[ruled] Precision of the functional-analysis citations (F1)–(F5).** I cited
    [RS1]/[Ka]/[BP] at the level of chapter/section rather than numbered theorems, because I
    could not verify theorem numbers against the actual editions from this worktree. Someone
    should pin these down (or decide to prove (F3) and (F4) inline — both are three lines, and
    (F3) is already written out in full in the bullet).
 
-10. **[decision] Do we cite the numerical companion?** `p4_uniqueness_lemmas.py` (37 checks,
+   **Ruling.** Prove (F3) and (F4) inline, about three lines each, and drop their external
+   citations. Keep (F1), (F2), (F5) with chapter-level references. *Implemented:* both bullets
+   now carry a self-contained "*Proof.* … $\square$"; the lead-in sentence says which facts are
+   quoted and which are proved. (F3)'s proof was completed (the functional-calculus identity is
+   now displayed rather than asserted); (F4)'s proof now names $c:=\max_L(-B_{LL})^+$ and notes
+   that $B$ commutes with $cI$, which the one-line version elided.
+   **Consequence:** [BP] is no longer cited anywhere in §3 and has been removed from the
+   reference list. If §2 or a later section uses Metzler/M-matrix theory it should be restored
+   there.
+   **Still open (this is the residue of the original item):** the chapter-level pointers for
+   (F1), (F2), (F5) — [RS1, §VI.3], [RS1, §VI.5–6], [RS1, §VII.2], [Ka, Ch. IX §2] — are not
+   verified against the actual editions and should be replaced by numbered theorems before
+   submission. Two further pointers in §3 need the same treatment: [KAY III, eq. (23)] and the
+   newly added [KAY II, Remark 3] (drafting note 18).
+
+10. **[ruled] Do we cite the numerical companion?** `p4_uniqueness_lemmas.py` (37 checks,
     $N=500$) is a regression gate for the closed forms (3.4), (3.6), (3.8) and pins down the
     equality sets exactly; the independent reviewer reproduction is in
     `notes/2026-09-12_uniqueness_review.md`. Since §3 is fully analytic, the script is *not*
@@ -924,16 +1230,36 @@ complete argument; items marked **[fyi]** are observations that need no action.)
     reproducibility section (§7) saying the closed forms were cross-checked numerically.
     I wrote §3 with no mention; recommend (ii).
 
+    **Ruling.** Option (ii). The body of §3 mentions no script — unchanged, nothing to do
+    here. **Action for §7 (reproducibility):** add a footnote recording that the closed forms
+    (3.4), (3.6), (3.8) and their equality sets were cross-checked numerically
+    (`p4_uniqueness_lemmas.py`, 37 checks, $N=500$; reviewer reproduction in
+    `notes/2026-09-12_uniqueness_review.md`), with the explicit caveat that **§3 is purely
+    analytic and the script constitutes no part of the evidence** — it is a regression gate
+    against transcription error in the closed forms, nothing more. The footnote must not be
+    attached to §3 itself.
+
 11. **[fyi] Strictness in (3.8).** The source says (3.8) is strictly positive for $K\ge1$ "by
     strict convexity of $u$ and $d_n>0$". I made this explicit by exhibiting the $j=1$ term
     $\ge d_n(u_{n-1}+u_{n+1}-2u_n)>0$; note this needs $n\ge K\ge1$ so that $n-1\ge0$, which
     holds. (For $K\ge1$ and $n\ge K\ge1$ we indeed have $n-1\ge0$.)
 
-12. **[decision] Section 3 currently proves Theorem 1(b) in the form "strictly decreasing,
+12. **[ruled] Section 3 currently proves Theorem 1(b) in the form "strictly decreasing,
     continuous, $\to0$". The Introduction's Theorem 1(b) also says the crossing is unique.**
     I put the combination in Theorem 3.18 (§3.4) rather than inside Theorem 1(b). If the
     Introduction keeps the current phrasing, Theorem 3.18 should be labelled "Theorem 1(a)+(b)"
     there too, or the Introduction's (b) should be split.
+
+    **Ruling.** Split the Introduction's (b) into two sentences: strict monotonicity is the
+    *theorem*, uniqueness of the crossing is its *corollary*. *Implemented in §3:*
+    Theorem 3.18 is relabelled **Corollary 3.18**, titled "Theorem 1(b), second sentence:
+    uniqueness of $T_c$"; §3.4 opens with a paragraph making the correspondence explicit and
+    saying why the split is the right one (uniqueness adds nothing to Theorems 3.4 and 3.16
+    beyond the intermediate value theorem); the section-opening paragraph was rewritten to
+    match; Remark 3.19(a),(b) and Remark 3.17(a) now say "Corollary 3.18".
+    Theorem 3.16 keeps the label "Theorem 1(b)" — it is now the whole of 1(b) in the strict
+    sense. **Action for the Introduction:** phrase Theorem 1(b) as two sentences and label the
+    second one a corollary there as well, so the two documents do not drift apart.
 
 13. **[fyi] Literature wording.** Followed the fixed rules: Conjecture 2 = [KAY II] p. 14
     eq. (31) = [KAY III] Conjecture 1; nearest precedents cited as [KAY II, Remark 2] and
@@ -942,9 +1268,23 @@ complete argument; items marked **[fyi]** are observations that need no action.)
     nobody stated anything. §3 makes no Allen–Dynes/Einstein-extremality claim, so that rule
     does not bite here.
 
-14. **[decision] Numbering.** Internal labels are 3.1–3.19 and (3.1)–(3.8); external
+14. **[ruled] Numbering.** Internal labels are 3.1–3.19 and (3.1)–(3.8); external
     references are the placeholders (2.1), (2.2), (S1) and one bare "(2.x)" for the
     $L_1,L_2,L_3$ notation. These need to be reconciled once Section 2 is drafted.
+
+    **Ruling.** Leave the numbering exactly as it is for now; back-fill (2.1), (2.2), (S1) and
+    (2.x) in one pass once §2 is final. *Implemented:* nothing renumbered. The two new remarks
+    were therefore given **primed** labels, Remark 3.17′ and Remark 3.19(a′), reusing the
+    device already present at Remark 3.3′, so that the 3.1–3.19 sequence is untouched and no
+    cross-reference elsewhere in the paper can go stale. Two new equation tags were added,
+    (3.9) and (3.10), both inside Remark 3.17′; the internal equation range is now (3.1)–(3.10).
+    **Back-fill checklist for the §2 pass:** (2.1) entrywise definition of $\mathcal O$;
+    (2.2) definition of $\mathfrak H$, $\mathfrak K$, $F_{P,T}$; (S1) the compression identity;
+    "(2.x)" occurs twice — once for the $L_1,L_2,L_3$ notation (§3.0) and once for the
+    rank-one identity (§3.0, "The structural identity"). If §2 renumbers 3.17′/3.19(a′) into
+    plain integers, the three cross-references in the body must move with them: §3.0 →
+    Remark 3.17′; Remark 3.17′ → Remark 3.19(a′); the [AD] entry of the reference list →
+    Remark 3.19(a′). (The drafting notes reference both freely and matter less.)
 
 15. **[fyi] v0.2 edits.** (i) v0.1 had no item 3.4 (labels jumped from Lemma 3.3 to
     Theorem 3.5) and the introduction pointed to "Theorem 3.13 / 3.14" for parts (b) and
@@ -955,7 +1295,7 @@ complete argument; items marked **[fyi]** are observations that need no action.)
     non-unique crossings are a cutoff artefact); wording deliberately avoids quoting the
     in-progress Coulomb numerics — see the HTML comment there.
 
-17. **[decision] Remark 3.19(c) was revised again after the Coulomb probe finished
+17. **[ruled] Remark 3.19(c) was revised again after the Coulomb probe finished
     (`p4_uniqueness_coulomb_probe.py`, commit be11865 on the sibling branch).** The v0.2
     wording said fixed-$N_c$ monotonicity was merely unproved and that the stepped-cutoff
     non-uniqueness was "a property of the cutoff convention". Both were too kind. The probe
@@ -987,6 +1327,17 @@ complete argument; items marked **[fyi]** are observations that need no action.)
     both are precisely why $T_c$ is defined as a supremum. §8 should not present them as
     problems.
 
+    **Ruling (v0.5).** §8 quotes **"$r\ge4$"**, explicitly marked **verified numerically, not
+    derived**. Rationale of record: the scan shows $r\ge3.5$ clean and $r=3$ broken, so the
+    true threshold lies in $(3,3.5]$ and was never bisected; $4$ is taken as the quoted value
+    to leave a safety margin over the last passing scanned point. §3 still carries **no
+    number** — *implemented:* Remark 3.19(c) now closes with a sentence saying that §8 gives
+    the window hypothesis as a lower bound on the cutoff-to-phonon-scale ratio, in numerically
+    verified form, and that putting a number in §3 would falsely suggest a sharp constant.
+    The two HTML comments at the end of Remark 3.19(c) were rewritten to carry the ruling and,
+    separately and unchanged in substance, the "attained crossing" warning above — §8 must not
+    present either failure as a defect, nor read them as evidence against $r\ge4$.
+
 16. **[fyi] Scratch check.** `theory/notes/_scratch_ir/sec3_draft_check.py` (uncommitted, per
     repo convention) recomputes from the entrywise definition (2.1): (S1) to $2\cdot10^{-16}$
     and $\mathfrak h^{(N)}(\infty)=2S_N-1$ for $N\in\{1,5,40\}$; the closed form (3.4) for
@@ -998,3 +1349,103 @@ complete argument; items marked **[fyi]** are observations that need no action.)
     Lemma 3.2; and the HS ratio $\|\mathcal O[f]\|_{\mathrm{HS}}/\|f\|_1\le0.036\ll5$ on random
     non-negative $f$. All pass (the v0.1 run died on an index bug in the last two lines, not on
     a failed check).
+
+---
+
+*New in v0.5 (opened while implementing the eight rulings).*
+
+18. **[decision] Suggested Introduction wording for the asymptotic sharpness of $\widetilde T_c$
+    (Remark 3.19(a′)), and the two citations it needs.**
+    §3 is not the right home for this — it does not prove Theorem 1(c) — so Remark 3.19(a′) is
+    deliberately short and defers to the Introduction. Suggested paragraph, to be lifted
+    verbatim into the Introduction (and, in a longer form, into the section that proves
+    Theorem 1(c)):
+
+    > The constant in Theorem 1(c) is not an artefact of the method. Writing
+    > $\widetilde T_c=C_\infty\sqrt{\lambda\langle\omega^2\rangle}$ with
+    > $C_\infty=\frac1{2\pi}\sqrt{\mathfrak g(2)}$, the certified enclosure of $\mathfrak g(2)$
+    > (Appendix A) gives $C_\infty=0.1827262477\ldots$, which is exactly the constant in the
+    > strong-coupling asymptotics of Allen and Dynes,
+    > $T_c\simeq0.1827\sqrt{\lambda\langle\omega^2\rangle}$ as $\lambda\to\infty$
+    > [AD, eq. (22)] — a coincidence already remarked on in [KAY II, Remark 3]. Granted that
+    > asymptotics, which we do not reprove, Theorem 1(c) is therefore a *sharp* bound: no
+    > smaller constant can serve, because the bound is approached as $\lambda\to\infty$ along
+    > the Einstein family; and by Theorem 2 that same family is the exact maximiser of
+    > $\mathfrak k$ at every finite $\lambda$. Theorem 1(c) and Theorem 2 thus fit together
+    > into a single statement: for every $P$ and every $\lambda$, $T_c$ is bounded by a
+    > constant times $\sqrt{\lambda\langle\omega^2\rangle}$; the constant is the Allen–Dynes
+    > one; and the bound is saturated, in the limit, along the family that is extremal at
+    > every finite coupling.
+
+    Do **not** strengthen the last clause to "the Einstein spectra are the only ones that
+    approach $C_\infty$". Theorem 2 gives strictness at fixed $T$ and says nothing about the
+    rate at which the gap closes as $\lambda\to\infty$, so a non-Einstein family approaching
+    $C_\infty$ is not excluded by anything we prove. Remark 3.19(a′) states this caveat
+    explicitly and the Introduction should keep it.
+
+    **Two things to rule on / check before this ships.**
+    (i) *Wording rule.* The repository's fixed rule for the Einstein-extremality claim
+    (`P4_einstein_extremal.md` §0.A) forbids "to our knowledge nobody has stated this" and
+    requires crediting Allen–Dynes 1975 as quoted by Moussa–Cohen 2006. The paragraph above
+    complies: it credits [AD] for the constant and [KAY II] for the observation, and claims
+    novelty only for the *bound*, never for the asymptotics. Do not weaken this.
+    (ii) *Citations not verified from this worktree.* "[AD, eq. (22)]" and "[KAY II, Remark 3]"
+    both come from `P4_rigorous_tc_bound.md` §1.5 (survey record: "C_∞=0.1827262477 …
+    = Allen–Dynes eq. (22) 那个数，KAY Remark 3 亲口说的"). `P4_einstein_extremal.md` §0.A
+    separately records that the **Allen–Dynes original was never obtained** and that the last
+    link of the attribution chain is the Moussa–Cohen restatement. The equation number (22) and
+    the KAY remark number therefore rest on a secondary record and **must be checked against
+    the originals** before submission; if [AD] cannot be checked, quote it through
+    [Moussa–Cohen, PRB **74**, 094520 (2006)] as the extremality claim already is.
+
+19. **[fyi → needs a one-line fix in the master document] The enclosure of $C_\infty$ quoted in
+    `P4_main_theorems.md` is not outward-rounded.** That document (the note after Theorem 1(c))
+    gives $(1/2\pi)\sqrt{\mathfrak g(2)}\in[0.18272624774670,\,0.18272624777260]$. Recomputing
+    from the certified $\mathfrak g(2)\in[1.318140211762671,\,1.318140212136387]$ at
+    `mpmath` `dps=40`, evaluating the endpoint map once at each end
+    (`theory/notes/_scratch_ir/ad_constant_check.py`, uncommitted per repo convention):
+    $$
+    \tfrac1{2\pi}\sqrt{1.318140211762671}=0.18272624774670139534,\qquad
+    \tfrac1{2\pi}\sqrt{1.318140212136387}=0.18272624777260445246 ,
+    $$
+    width $2.59\times10^{-11}$. The quoted upper endpoint is a **truncation** and sits
+    $4.45\times10^{-15}$ *below* the true image, so as written the interval is not an enclosure.
+    Harmless numerically, but a paper that advertises certified arithmetic should not ship a
+    non-enclosure: the upper end should be rounded up (e.g. $0.18272624777261$). §3 sidesteps
+    the issue by quoting the deliberately coarser, outward-rounded
+    $[0.182726247746,\,0.182726247773]$.
+    Two further checks recorded here: the interval **does** contain the literature value
+    $C_\infty=0.1827262477$ (itself a truncation; it sits $4.67\times10^{-11}$ below the lower
+    end, i.e. inside), and the correct five-significant-figure value is **0.18273**, not
+    0.18274 — the latter is off by $1.4\times10^{-5}$ and should not appear anywhere.
+
+20. **[fyi] Convexity of $\lambda_1$ (Remark 3.17′) is consistent with, and sharpens, an
+    existing repository conclusion.** `P4_einstein_extremal.md` §0.A records, as the outcome of
+    the literature search, that "the abstract concavity route is closed — $\lambda_1$ is always
+    convex in the operator, so concavity could only come from Loewner order, which is
+    excluded". Remark 3.17′ is the written-out form of that sentence, with two additions: the
+    convexity is stated in the kernel variable $f$ rather than in the operator (which is what
+    makes it applicable, since $x\mapsto F(x)$ is the concave object), and it is derived at the
+    level of finite compressions first, so that it is available without any integrability
+    hypothesis and does not silently assume $\mathcal O[f]$ is bounded. The Loewner exclusion
+    is cross-referenced to Remark 3.17(c), where the indefiniteness of $\mathfrak H'(\varpi)$
+    is already recorded. Nothing here is new mathematics; the point is that it converts "the
+    concavity proof is long" into "the concavity proof *must* be long", which is worth one
+    paragraph in the concavity section as well.
+
+21. **[decision] Section numbering across documents has drifted.** §3 forward-references
+    "Sections 4–6" (the bound), "Section 8" (Coulomb / $\mu^*>0$) and — via drafting note 10 —
+    "§7" (reproducibility). The skeleton in `P4_main_theorems.md` §8 (v0.2) instead lists
+    4 = Lemma M, 5 = existence, 6 = concavity, 7 = Appendix A ($\mathfrak g(2)$),
+    8 = Appendix B (certificates), 9 = Discussion. Under that skeleton §3 would not be
+    "existence and uniqueness" at all, and "Section 8" would be an appendix rather than the
+    Coulomb section. The two numbering schemes are incompatible and one of them is stale.
+    The main session's rulings #10 and #17 use the §3 draft's scheme (§7 = reproducibility,
+    §8 = Coulomb), so I have kept it; `P4_main_theorems.md` §8 should be updated to match, or
+    a ruling issued the other way. Until then, **every cross-section number in §3 is
+    provisional**, including the new one in Remark 3.19(a′) ("Appendix A" for the
+    $\mathfrak g(2)$ enclosure). One related gap: Remark 3.17′ refers to the concavity theorem
+    *by content* ("$H(x)=\mathfrak h(\sqrt x)$ is concave") and not by label, because that
+    theorem has no agreed label yet — it is "引理 C" in the source notes, Corollary (vii) in
+    `P4_main_theorems.md` §2, and an independent theorem in its §3. Once it is labelled, the
+    two references to it in Remark 3.17′ should be given the label.
