@@ -1072,6 +1072,17 @@ def trial_at(p, Ns):
 
 TARGET = 0.75
 
+# Iteration cap for the (V1)-(V3) Davis-Kahan bootstrap below.  It is NOT part
+# of any bound: every iterate is independently a valid upper bound on the sine
+# of the angle (see the comment at the loop), so the cap only decides how GOOD
+# the certificate is, never whether it is valid.  Named so that Stage A' can
+# vary it and check exactly that -- the loop's convergence behaviour must not
+# be load-bearing.  (Cf. the failure mode found in `p4_cii_m3_interval.py`
+# `theta_star_iv`, where a pad was taken from a bisection width: there the
+# convergence quantity WAS the error bound, and tighter convergence made the
+# enclosure worse.  Here it cannot, and the gate proves it.)
+DK_ITERS = 12
+
 
 def cell_L_iv(a, b, alpha_ub, L1_ub, mu2_lb):
     """Certified  sup_{x in [a^2,b^2]} H''(x)  on a cell [a,b], 0 < a <= b.
@@ -1136,9 +1147,19 @@ def cell_L_iv(a, b, alpha_ub, L1_ub, mu2_lb):
     # s |-> s_p + hw*2b^3*(eps_hi + s*(N+|qpsi|))/g_lo is an increasing affine
     # map sending VALID upper bounds on sin angle to VALID upper bounds; every
     # iterate is independently legitimate.  Start from E <= N.
+    #
+    # Why the loop's CONVERGENCE is not load-bearing (the `theta_star_iv` test):
+    # the start s_0 is valid because E <= N_ub holds a priori (E is the norm of
+    # O[psi_w] applied to a unit vector), so sigma <= s_p + C*E <= s_p + C*N_ub;
+    # and the map is increasing, so sigma <= s ==> sigma <= Phi(s).  Hence EVERY
+    # iterate is a valid bound, and the value used would still be valid if the
+    # cap were 0 or 10^6.  The exit test `s_new >= s` therefore decides only
+    # when to stop improving -- it is never used as, or converted into, an error
+    # estimate.  No pad anywhere in this function is derived from a convergence
+    # or bracketing width; Stage A' checks the insensitivity directly.
     b3 = biv ** 3
     s = min(mp.one, UB(ivf(s_p) + hw * 2 * b3 * ivf(N_ub) / ivf(g_lo)))
-    for _ in range(12):
+    for _ in range(DK_ITERS):
         E_hi = UB(ivf(eps_hi) + ivf(s) * (ivf(N_ub) + ivf(apsi_ub)))
         s_new = UB(ivf(s_p) + hw * 2 * b3 * ivf(E_hi) / ivf(g_lo))
         if s_new >= s:
@@ -1158,6 +1179,14 @@ def cell_L_iv(a, b, alpha_ub, L1_ub, mu2_lb):
                 alpha=float(alpha_ub), rnorm=float(rnorm_ub), rtail=float(UB(rtail)),
                 ehat_phi=float(eph), ehat_psi=float(eps_), N=float(N_ub),
                 hpp_ub=float(hpp_ub), ratio=ratio, regime="L",
+                # The SIGN decision, evaluated in mpf.  `hpp_ub` above is a
+                # float64 narrowing kept for printing and for the mpf<->iv
+                # cross-checks; nothing may branch on it.  (float() of a
+                # negative mpf could in principle underflow to -0.0, for which
+                # `< 0` is False in Python -- impossible here since every
+                # certified cell has |hpp_ub| > 1, but the point of this whole
+                # section is not to rely on "impossible here".)
+                hpp_neg=bool(hpp_ub < 0),
                 cnn=bool(tr.all_nonneg), min_c=float(tr.min_c),
                 lip_psi=float(eps_hi - eps_),
                 ang_psi=float(mul_hi(s, add_hi(N_ub, apsi_ub))),
@@ -1261,6 +1290,7 @@ def cell_S_iv(a, b):
                 s=float(s), g_lo=float(g_lo), E_hi=float(E_hi), theta=float(theta_lo),
                 alpha=float(alpha_t), qk=float(UB(qk)), ehat_phi=float(eph),
                 ehat_psi=float(eps_), N=float(N_ub), hpp_ub=float(hpp_ub),
+                hpp_neg=bool(hpp_ub < 0),          # mpf sign; see cell_L_iv
                 ratio=float(div_hi(pos_ub, F_lo)) if F_lo > 0 else 9e9, regime="S")
     return hpp_ub, info
 
@@ -1493,17 +1523,26 @@ def run_gate(full=True):
         UB(iv_atan_nn(ivf(mp.mpf("0.7")))) - LB(iv_atan_nn(ivf(mp.mpf("0.7"))))
         <= mp.mpf("1e-27"))
     _bad_at = 0
+    _bad_at2 = 0
     for _i in range(1, 241):                     # EVIDENCE (typo insurance)
         _t = mp.mpf(_i) / 40 * mp.mpf(10) ** ((_i % 11) - 5)
         _g = iv_atan_nn(ivf(_t))
         with mp.workprec(600):
-            _r = mp.atan(_t)
+            _r = mp.atan(_t)                     # MATERIALISED, not a lazy const
         if not (LB(_g) <= _r <= UB(_g)):
             _bad_at += 1
+        _h = iv.atan2(ivf(_t), IONE)             # the defect itself, for contrast
+        if not (LB(_h) <= _r <= UB(_h)):
+            _bad_at2 += 1
     chk("EVIDENCE: iv_atan_nn encloses a 600-bit reference on 240 operands "
         "spanning 10 decades (mpmath's own iv.atan2 fails this: its mpf_atan "
         "runs at prec+4 with round-to-NEAREST and only directs the LAST step)",
         _bad_at == 0, f"{_bad_at} misses")
+    chk("...and that test is DISCRIMINATING: mpmath's iv.atan2 MISSES the same "
+        "reference on the same operands, so 0 misses above is not vacuous "
+        "(this is the only place iv.atan2 is still evaluated -- Sec.7 only, as "
+        "a negative control, never as a bound)",
+        _bad_at2 > 0, f"iv.atan2 missed {_bad_at2}/240 (expected > 0)")
 
     # -- REGRESSION GUARD: no mpmath transcendental on the certified path -----
     # M-1 was exactly "a library primitive that is not outward rounded slipped
@@ -1545,16 +1584,29 @@ def run_gate(full=True):
         "iv.sqrt (via iv_sqrt_nn) and the hand-rolled iv_atan_nn/iv_pi_half",
         not _hits, "; ".join(_hits))
     _bad_sq = 0
+    _bad_naive = 0
     for _i in range(1, 301):                     # the same test that killed atan2
         _t = mp.mpf(_i) / 7 * mp.mpf(10) ** ((_i % 13) - 6)
         _g = iv_sqrt_nn(ivf(_t))
         with mp.workprec(600):
-            _r = mp.sqrt(_t)
+            _r = mp.sqrt(_t)                     # a MATERIALISED 599-bit mpf:
+        # not a lazy constant like `mp.pi` (which re-evaluates at whatever
+        # mp.prec is current when it is compared, and has produced false
+        # all-clears elsewhere in this project).  The comparison below happens
+        # at the ambient precision but mpf<->mpf comparison is exact across
+        # precisions, so no truncation can hide a violation.
+        _n = mp.sqrt(_t)                         # nearest rounding at prec 103
+        if not (_n <= _r <= _n):
+            _bad_naive += 1
         if not (LB(_g) <= _r <= UB(_g)):
             _bad_sq += 1
     chk("iv.sqrt (the only library primitive left on the certified path) "
         "encloses a 600-bit reference on 300 operands spanning 13 decades",
         _bad_sq == 0, f"{_bad_sq} misses")
+    chk("...and that test is DISCRIMINATING: a nearest-rounded point 'sqrt' "
+        "(the defect class iv.atan2 has) misses the same reference on the "
+        "overwhelming majority of those operands, so 0 misses is not vacuous",
+        _bad_naive >= 250, f"naive missed only {_bad_naive}/300")
 
     # -- the two derivative-envelope CONSTANTS 4b and 6b (review blind spot 1)
     # cell_L_iv bounds  |d_w psi_w(k)| <= 4b/(k^2+a^2)^3  and
@@ -1850,6 +1902,83 @@ def run_gate(full=True):
                         "(cell_L_iv is monotone in the safe direction)",
                         ub_d is None or ub_d >= ub_iv,
                         f"[{A},{B}] {lbl}: {ub_d} vs {ub_iv}")
+                # ---- the (V1)-(V3) bootstrap cap is NOT load-bearing --------
+                # The failure mode found in `p4_cii_m3_interval.py`
+                # `theta_star_iv` was a pad taken from a BISECTION WIDTH: the
+                # better the root-finder converged, the smaller the pad, and the
+                # worse the enclosure -- self-concealing, and it missed the true
+                # value by 4.8e-17 in the unsafe direction.  The one iteration
+                # on this module's certified path is the angle bootstrap above.
+                # Its validity rests on "every iterate is independently a valid
+                # bound", never on convergence, and that is a testable claim:
+                #   (i)  it must return a bound at EVERY cap, including 0;
+                #   (ii) hpp_ub must be non-increasing in the cap -- an extra
+                #        iterate only TIGHTENS a bound that was already valid;
+                #   (iii) at cap 0 the cell must FAIL TO CLOSE rather than close
+                #        falsely, and the ladder's response to a non-closing
+                #        cell is rejection + subdivision.
+                # The honest statement, which (iii) pins down: the bootstrap IS
+                # load-bearing for whether the certificate CLOSES (cap 0 gives
+                # hpp_ub = +0.348 here, cap 12 gives -0.0229), but it is NOT
+                # load-bearing for whether a closed certificate is VALID.  That
+                # is exactly the structural difference from `theta_star_iv` in
+                # `p4_cii_m3_interval.py`, where the pad WAS the bisection width:
+                # there, truncating the loop made the enclosure WRONG -- it
+                # claimed a bound it did not have.  Here, truncating makes the
+                # cell fail closed (`ub >= 0` => `bad = True` => subdivide), so
+                # under-convergence can cost compute and can make the ladder
+                # stall, but it cannot manufacture a false positive.
+                # Measured: the map contracts with ratio ~0.36 and has not
+                # bottomed out at cap 12 -- caps 12 and 24 differ by 1.3e-5
+                # relative, with 24 the tighter.  DK_ITERS = 12 therefore leaves
+                # a little sharpness on the table, in the safe direction.
+                global DK_ITERS
+                _dk0, _caps = DK_ITERS, (0, 1, 2, 3, 6, 12, 24)
+                _seq = []
+                try:
+                    for _n in _caps:
+                        DK_ITERS = _n
+                        _seq.append(cell_L_iv(A, B, alpha_0, L1_ref, mu0)[0])
+                finally:
+                    DK_ITERS = _dk0
+                _allb = all(u is not None for u in _seq)
+                chk("the angle bootstrap yields a bound at EVERY iteration cap "
+                    "including 0, i.e. no iteration is needed for VALIDITY "
+                    "(the start is valid a priori because E <= N)",
+                    _allb, f"[{A},{B}] {[u is not None for u in _seq]}")
+                if _allb:
+                    for _i in range(1, len(_caps)):
+                        chk("hpp_ub is non-increasing in the bootstrap cap: an "
+                            "extra iterate only tightens an already-valid "
+                            "bound, it never repairs an invalid one",
+                            _seq[_i] <= _seq[_i - 1],
+                            f"[{A},{B}] cap {_caps[_i-1]}->{_caps[_i]}: "
+                            f"{mp.nstr(_seq[_i-1], 12)} -> "
+                            f"{mp.nstr(_seq[_i], 12)}")
+                    chk("truncating the bootstrap FAILS CLOSED: at cap 0 this "
+                        "cell returns hpp_ub > 0, which the ladder rejects "
+                        "(`ub >= 0` => subdivide), rather than returning a "
+                        "wrong negative value.  Under-convergence can stall the "
+                        "ladder; it cannot manufacture a false positive -- this "
+                        "is the property a pad taken from a convergence width "
+                        "does NOT have.",
+                        _seq[0] > 0, f"[{A},{B}] cap0 {mp.nstr(_seq[0], 12)}")
+                    chk("...so the bootstrap is genuinely load-bearing for "
+                        "SHARPNESS (cap 12 closes the cell, cap 0 does not), "
+                        "which makes the monotonicity checks above non-vacuous",
+                        _seq[-2] < 0 < _seq[0],
+                        f"[{A},{B}] cap0 {mp.nstr(_seq[0], 12)} vs "
+                        f"cap12 {mp.nstr(_seq[-2], 12)}")
+                    chk("the residual sharpness left by DK_ITERS = 12 is below "
+                        "1e-3 relative and lies in the SAFE direction (cap 24 "
+                        "is the tighter), so the production constant costs "
+                        "nothing that matters",
+                        _seq[-1] <= _seq[-2] and _seq[-2] - _seq[-1]
+                        <= mp.mpf("1e-3") * abs(_seq[-2]),
+                        f"[{A},{B}] 12: {mp.nstr(_seq[-2], 16)} / "
+                        f"24: {mp.nstr(_seq[-1], 16)}")
+                    print(f"  bootstrap cap sweep [{A},{B}]: " + ", ".join(
+                        f"{c}:{mp.nstr(u, 9)}" for c, u in zip(_caps, _seq)))
             print(f"  cross-check [{A},{B}]: hpp_ub mpf {ub_0:.8e} / iv "
                   f"{float(ub_iv):.8e} (ratio {float(ub_iv) / ub_0:.8f}); "
                   f"production iv {float(ub_use):.8e}, pos/F "
@@ -2031,8 +2160,14 @@ def _do_cell(arg):
         k *= 2
     if got is not None:
         for info in got:
+            # info["hpp_neg"] is the mpf sign test, not float(hpp_ub) < 0:
+            # the certified conclusion must never pass through a float64.
             chk("fine cell: H''(x) < 0 certified for all x in [a^2, b^2]",
-                info["hpp_ub"] < 0, f"[{info['a']:.6f},{info['b']:.6f}]")
+                info["hpp_neg"], f"[{info['a']:.6f},{info['b']:.6f}]")
+            chk("the float64 hpp_ub printed in the report agrees in sign with "
+                "the mpf decision (no narrowing anywhere in the sign chain)",
+                info["hpp_neg"] == (info["hpp_ub"] < 0),
+                f"[{info['a']:.6f},{info['b']:.6f}] {info['hpp_ub']!r}")
     nch = PASS[0] - n0
     PASS[0] = n0                            # see _do_node
     return (A, B, got, nch, float(L1), float(alpha), float(mu2))
