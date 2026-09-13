@@ -5,3 +5,7 @@ __pycache__/
 .pytest_cache/
 theory/data/external/*
 !theory/data/external/MANIFEST.md
+# agent worktrees (git metadata lives in .git/worktrees; these are checkouts)
+.claude/worktrees/
+# scratch / probe scripts: uncommitted by convention, use `git add -f` to override
+theory/notes/_scratch_ir/
