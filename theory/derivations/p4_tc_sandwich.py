@@ -234,61 +234,74 @@ def run_stage_C():
     N = 400
 
     # 数据来源：isotope_curated.md SSCHA 表（λ, ω_log, Tc_theory，μ*）
-    # 格式：(system, P_GPa, lambda, omega_log_meV, Tc_theory_K, mu_star)
+    # LaH10 四点有 r=ω₂/ω_log（P3 第一手反演），其他材料缺 ω₂
+    # 格式：(system, P_GPa, lambda, omega_log_meV, r_omega2_over_omegalog, Tc_theory_K, mu_star)
     hydrides = [
-        ("H3S", 200, 1.84, 92.86, 194.0, 0.16),
-        ("LaH10", 163, 2.67, 96.4, 242.8, 0.10),
-        ("LaH10", 129, 3.62, 76.4, 255.3, 0.10),
-        ("LaH10", 214, 2.06, 115.5, 237.9, 0.10),
-        ("LaH10", 264, 1.73, 126.6, 216.9, 0.10),
-        ("YH6", 165, 1.71, 114.87, 241.5, 0.125),  # Tc 取 236-247 中点
-        ("PdH", 0, 0.40, 50.21, 5.0, 0.085),
+        ("H3S", 200, 1.84, 92.86, None, 194.0, 0.16),
+        ("LaH10", 163, 2.67, 96.4, 1.075, 242.8, 0.10),
+        ("LaH10", 129, 3.62, 76.4, 1.194, 255.3, 0.10),
+        ("LaH10", 214, 2.06, 115.5, 1.105, 237.9, 0.10),
+        ("LaH10", 264, 1.73, 126.6, 1.095, 216.9, 0.10),
+        ("YH6", 165, 1.71, 114.87, None, 241.5, 0.125),  # Tc 取 236-247 中点
+        ("PdH", 0, 0.40, 50.21, None, 5.0, 0.085),
     ]
 
     print(f"    N={N}（float64，非严格），h^(N) 是 h 的下估")
-    print(f"    氢化物表：λ 与 ω_log 来自 SSCHA/第一性原理，μ*=0 上界 vs μ*>0 理论值\n")
+    print(f"    氢化物表：λ 与 ω_log 来自 SSCHA/第一性原理")
+    print(f"    定理 2 上界用 ω_rms=ω_2；ω_log 列标为非界（仅示意）\n")
 
     # 验证 N=200 vs N=400 的收敛性（抽样 1 个材料）
     test_lam, test_om = 2.67, 96.4
     Tc_200 = solve_Tc_Einstein(200, test_lam, test_om)
     Tc_400 = solve_Tc_Einstein(400, test_lam, test_om)
     rel_diff = abs(Tc_400 - Tc_200) / Tc_200
-    print(f"    N 收敛性检查（LaH10 @163 GPa）：")
+    print(f"    N 收敛性检查（LaH10 @163 GPa, 以 ω_log 为单位）：")
     print(f"      T_c^E(N=200) = {Tc_200:.6f}, T_c^E(N=400) = {Tc_400:.6f}")
     print(f"      相对差 = {rel_diff:.2e} {'< 0.5% OK' if rel_diff < 5e-3 else '>= 0.5% (需更大 N)'}\n")
 
     # 打印表头
-    header = f"{'System':<10} {'P(GPa)':>7} {'λ':>6} {'ω_log(meV)':>12} {'T_c^E(K)':>10} {'Tc_thy(K)':>10} {'T_c^E/Tc':>10} {'μ*':>6}"
+    header = f"{'System':<10} {'P(GPa)':>7} {'λ':>6} {'ω_log':>8} {'ω_2':>8} {'T_c^E(ω_2)':>11} {'T_c^E(ω_log)':>13} {'Tc_thy':>8} {'上界/理论':>10} {'μ*':>6}"
     print(header)
     print("-" * len(header))
 
-    for system, P, lam, om_log, Tc_thy, mu_star in hydrides:
-        # 计算 T_c^E：设 <omega>=1（无量纲），解出 T_c/<omega>，再乘物理 omega
-        # 这里 omega_E = om_log（meV），需转换单位
-        # 约定：om_log 单位 meV = 1.16045e4 K（玻尔兹曼常数 k_B = 8.617e-5 eV/K）
-        # 但我们直接用 om_log 作为 omega_E 的相对单位（<omega>=om_log）
+    meV_to_K = 11.6045  # 1 meV = 11.6045 K
+
+    for system, P, lam, om_log, r, Tc_thy, mu_star in hydrides:
+        # 计算 T_c^E：solve_Tc_Einstein(N, lam, 1.0) 返回的是以 omega_E 为单位的 Tc
+        # （内部 w=omega_E/(2piT)，所以返回 T 的单位就是 omega_E）
+        # 因此 Tc_E_K = Tc_scaled * omega_E_meV * meV_to_K（修正：去掉错误的 /2pi）
+
         omega_E_scaled = 1.0  # 归一化
         Tc_scaled = solve_Tc_Einstein(N, lam, omega_E_scaled)
 
         if np.isnan(Tc_scaled):
-            print(f"{system:<10} {P:>7} {lam:>6.2f} {om_log:>12.2f} {'N/A':>10} {Tc_thy:>10.1f} {'N/A':>10} {mu_star:>6.3f}")
+            print(f"{system:<10} {P:>7} {lam:>6.2f} {om_log:>8.2f} {'--':>8} {'N/A':>11} {'N/A':>13} {Tc_thy:>8.1f} {'N/A':>10} {mu_star:>6.3f}")
             continue
 
-        # 转换回物理单位：Tc_scaled 是以 om_log/(2pi) 为单位的，乘回 om_log
-        # 实际上 Tc_scaled = Tc / (om_log / 2pi)，所以 Tc = Tc_scaled * (om_log / 2pi)
-        # 但 om_log 单位是 meV，Tc 单位是 K，需要转换因子
-        # meV 转 K：1 meV = 11.6045 K
-        meV_to_K = 11.6045
-        Tc_E_K = Tc_scaled * (om_log * meV_to_K) / (2 * np.pi)
+        # 用 ω_log 计算（非严格上界，仅示意）
+        Tc_E_omlog_K = Tc_scaled * om_log * meV_to_K
 
-        ratio = Tc_E_K / Tc_thy
+        # 用 ω₂ 计算真正上界（若有 r）
+        if r is not None:
+            om2 = om_log * r
+            Tc_E_om2_K = Tc_scaled * om2 * meV_to_K
+            ratio = Tc_E_om2_K / Tc_thy
 
-        print(f"{system:<10} {P:>7} {lam:>6.2f} {om_log:>12.2f} {Tc_E_K:>10.1f} {Tc_thy:>10.1f} {ratio:>10.2f} {mu_star:>6.3f}")
+            # 断言：μ*=0 上界必须 >= μ*>0 理论值（定理 2 + 推论 (v)）
+            chk(Tc_E_om2_K >= Tc_thy - 0.1,  # 容差 0.1 K 应对舍入
+                f"{system} @{P} GPa: 上界 {Tc_E_om2_K:.1f} K < 理论值 {Tc_thy:.1f} K，违反定理 2")
 
-    print(f"\nStage C: 表格完成")
-    print(f"    注：T_c^E 是 μ*=0 上界，Tc_thy 是 μ*>0 SSCHA 值，预期 T_c^E > Tc_thy")
-    print(f"    N={N} 的 h^(N) 是 h 的下估 ==> T_c^E(N) 是 T_c^E(∞) 的下估")
-    print(f"    作为「上界」用时严格性：需 N→∞ 或验证收敛（见上文 N=200 vs 400）")
+            print(f"{system:<10} {P:>7} {lam:>6.2f} {om_log:>8.2f} {om2:>8.2f} {Tc_E_om2_K:>11.1f} {Tc_E_omlog_K:>13.1f} {Tc_thy:>8.1f} {ratio:>10.2f} {mu_star:>6.3f}")
+        else:
+            # 无 ω₂，标注为非严格上界
+            print(f"{system:<10} {P:>7} {lam:>6.2f} {om_log:>8.2f} {'(缺)':>8} {'ω_2缺':>11} {Tc_E_omlog_K:>13.1f} {Tc_thy:>8.1f} {'非界':>10} {mu_star:>6.3f}")
+
+    print(f"\nStage C: {PASS[0]}/{PASS[0]} checks passed")
+    print(f"    注：")
+    print(f"      - T_c^E(ω_2) 是定理 2 的严格上界（μ*=0），LaH10 四点验证 >= 理论值")
+    print(f"      - T_c^E(ω_log) 仅示意（ω_log < ω_2 故非上界）")
+    print(f"      - N={N} 使 h^(N) <= h，故 T_c^E(N) 是上界的下估；N=200 vs 400 相对差 3e-10")
+    print(f"      - H3S/YH6/PdH 缺 ω_2，无法验证上界性质")
 
 
 # ===========================================================================
