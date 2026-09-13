@@ -183,11 +183,28 @@ def run_prop1():
 
     # Edge case: approach point mass delta_{w_max}
     # P = (1-eps)*delta_{w_max} + eps*delta_{w_max/2}, eps=1e-3
+    # Per coordinator: k >= (1-eps)*h(varpi_max) by Lemma M lower bound, must be >0.99
     eps = 1e-3
-    k_val_edge = k_P(N, np.array([w_max, w_max / 2]), np.array([1 - eps, eps]))
-    ratio_edge = k_val_edge / h_max
-    print(f"  Edge case (near point mass, eps={eps}): k/h = {ratio_edge:.6f}")
-    _check("Prop1 edge case approaches 1", ratio_edge > 0.99, f"ratio={ratio_edge:.6f}")
+    w_arr = np.array([w_max, w_max / 2])
+    p_arr = np.array([1 - eps, eps])
+    k_val_edge = k_P(N, w_arr, p_arr)
+
+    # Print diagnostic info
+    varpi_max = w_max  # T=1/(2pi), so varpi = w
+    varpi_half = w_max / 2
+    h_varpi_max = h_N(N, varpi_max)
+    h_varpi_half = h_N(N, varpi_half)
+
+    print(f"  Edge case diagnostic:")
+    print(f"    eps={eps}, w_max={w_max}, varpi_max={varpi_max}")
+    print(f"    h(varpi_max)={h_varpi_max:.6f}, h(varpi_max/2)={h_varpi_half:.6f}")
+    print(f"    k(P)={k_val_edge:.6f}, expected >= (1-eps)*h(varpi_max)={(1-eps)*h_varpi_max:.6f}")
+
+    ratio_edge = k_val_edge / h_varpi_max
+    print(f"    ratio k/h(varpi_max) = {ratio_edge:.6f}")
+
+    _check("Prop1 edge case approaches 1", ratio_edge > 0.99,
+           f"ratio={ratio_edge:.6f}, expected >0.99 by Lemma M")
 
     print(f"  Proposition 1: VERIFIED ({time.time()-t0:.1f}s)\n")
 
@@ -199,31 +216,36 @@ def run_prop2():
     print("=== PROPOSITION 2: fixed <w> (GLOBAL FAILURE) ===")
     t0 = time.time()
 
-    # Part (a): Global failure with w2 -> 0 component (must find counterexample)
-    print("  Part (a): Confirm global failure with w2 -> 0 component")
+    # Part (a): Global failure with SMALL varpi_1, varpi_2 near 0
+    # Per coordinator: varpi_1 in [0.2, 0.8], varpi_2 in [0.001, 0.05], eps in [0.05, 0.3]
+    # P = (1-eps)*delta(varpi_1) + eps*delta(varpi_2), find ratio > 1
+    print("  Part (a): Confirm global failure with small varpi_1, varpi_2->0")
     N = 50
     np.random.seed(43)
     found_counterexample = False
 
-    for trial in range(20):
-        w1 = np.random.uniform(3.0, 10.0)
-        w2 = np.random.uniform(0.01, 0.5)  # Near zero
-        p = np.random.uniform(0.3, 0.7)
+    for trial in range(30):
+        varpi_1 = np.random.uniform(0.2, 0.8)
+        varpi_2 = np.random.uniform(0.001, 0.05)
+        eps = np.random.uniform(0.05, 0.3)
+        p = 1.0 - eps  # weight on varpi_1
 
-        w_avg = p * w1 + (1 - p) * w2
-        k_val = k_P(N, np.array([w1, w2]), np.array([p, 1 - p]))
+        # T=1/(2pi), so w = varpi * 2pi*T = varpi
+        w1, w2 = varpi_1, varpi_2
+        w_avg = p * w1 + eps * w2
+
+        k_val = k_P(N, np.array([w1, w2]), np.array([p, eps]))
         h_avg = h_N(N, w_avg)
         ratio = k_val / h_avg
 
         if ratio > 1.0 + 1e-6:
             found_counterexample = True
-            if trial < 5:  # Print first few
-                print(f"    Trial {trial+1}: w1={w1:.2f}, w2={w2:.2f}, p={p:.2f}, "
-                      f"k/h(<w>)={ratio:.6f} > 1 [COUNTEREXAMPLE]")
+            print(f"    Trial {trial+1}: varpi_1={varpi_1:.3f}, varpi_2={varpi_2:.4f}, "
+                  f"eps={eps:.2f}, k/h(<w>)={ratio:.6f} > 1 [COUNTEREXAMPLE]")
             break
 
     _check("Prop2(a) global failure confirmed", found_counterexample,
-           "Must find ratio > 1 with w2 near 0")
+           "Must find ratio > 1 with small varpi_1, varpi_2 near 0")
 
     # Part (b): Support bounded away from 0 (report, no assertion on direction)
     print("  Part (b): Support w_min >= 3, report worst ratio (no direction assertion)")
@@ -382,61 +404,64 @@ def build_aniso_KAY_operator(N, w, lam_mat, w_FS):
     """
     Build anisotropic KAY operator on l^2(N_0) x C^2 (Matsubara x 2 FS sheets).
 
-    A acts on (2N,) vectors v = (v^{(1)}, v^{(2)}), each v^{(i)} has length N.
+    A acts on (S*N,) vectors v, with S=2 Fermi surface sheets.
 
-    KAY operator structure (per P4_main_theorems.md):
-      A = -L1 + L2 + L3
-    where for anisotropic case:
-      L1_{(i,n),(i,n)} = (1/(2n+1)) sum_k sum_j lambda_{ij} [[k]](w)  (Z term, row sum)
-      L2_{(i,n),(j,m)} = (1-delta_{nm}) lambda_{ij} [[|n-m|]](w) / sqrt((2n+1)(2m+1))
-      L3_{(i,n),(j,m)} = lambda_{ij} [[n+m+1]](w) / sqrt((2n+1)(2m+1))
+    Correct structure (coordinator verified):
+      - Symmetrized coupling: Lambda_ij = sqrt(w_i) * lambda_ij * sqrt(w_j)
+      - Z row sum: z_i = sum_j lambda_ij * w_j  (WITH w_j weight!)
+      - Block (i,j) = Lambda_ij * L23, where L23 is the L2+L3 part with kernel=1
+      - Diagonal blocks (i,i) also subtract z_i * Z, where Z is the diagonal L1 part
+
+    L23 := (off + _brk_vec(n+m+1)) * outer(u, u), with off diagonal cleared
+    Z := diag(cum / (2n+1)), cum = concat([0], cumsum(2*_brk_vec(1..N-1, w, 0)))
+
+    Compression: Q is (S*N)xN, i-th block = sqrt(w_i)*I_N (columns orthonormal)
+    PAP := Q^T A Q must equal lambda_bar * H_iso, lambda_bar = w^T lambda w
 
     Parameters:
     - N: Matsubara truncation
     - w: frequency parameter (varpi)
-    - lam_mat: (2,2) coupling matrix lambda_{ij}, symmetric
-    - w_FS: (2,) Fermi surface weights, sum to 1
+    - lam_mat: (S,S) coupling matrix lambda_{ij}, symmetric
+    - w_FS: (S,) Fermi surface weights, sum to 1
 
     Returns:
-    - A: (2N, 2N) operator matrix
+    - A: (S*N, S*N) operator matrix
     """
-    n_sheets = 2
+    S = len(w_FS)  # number of sheets
     n = np.arange(N)
-    inv = 1.0 / np.sqrt(2.0 * n + 1.0)
+    u = 1.0 / np.sqrt(2.0 * n + 1.0)
 
-    A = np.zeros((n_sheets * N, n_sheets * N))
+    # Build L23 (L2+L3 part, kernel=1)
+    A_diff = np.abs(n[:, None] - n[None, :])
+    S_sum = n[:, None] + n[None, :] + 1
+    off = _brk_vec(A_diff, w, 0)
+    np.fill_diagonal(off, 0.0)
+    L23 = (off + _brk_vec(S_sum, w, 0)) * np.outer(u, u)
 
-    # Build block by block
-    for i in range(n_sheets):
-        for j in range(n_sheets):
-            lam_ij = lam_mat[i, j]
+    # Build Z (diagonal L1 part)
+    cum = np.concatenate(([0.0], np.cumsum(2.0 * _brk_vec(np.arange(1, N), w, 0))))
+    Z = np.diag(cum / (2.0 * n + 1.0))
 
-            # Block (i,j): acts on (n,m) Matsubara indices
-            block = np.zeros((N, N))
+    # Verify L23 - Z == H_mat(N, w, 0)
+    H_ref = H_mat(N, w, 0)
+    diff_structure = np.max(np.abs(L23 - Z - H_ref))
+    if diff_structure > 1e-12:
+        print(f"  WARNING: L23 - Z != H_mat, diff={diff_structure:.3e}")
 
-            # L2 part: off-diagonal in n,m
-            for n_idx in range(N):
-                for m_idx in range(N):
-                    if n_idx != m_idx:
-                        k = abs(n_idx - m_idx)
-                        block[n_idx, m_idx] += lam_ij * _brk_der(k, w, 0) * inv[n_idx] * inv[m_idx]
+    # Symmetrized coupling Lambda_ij = sqrt(w_i) * lambda_ij * sqrt(w_j)
+    sqrt_w = np.sqrt(w_FS)
+    Lambda = sqrt_w[:, None] * lam_mat * sqrt_w[None, :]
 
-            # L3 part: all (n,m)
-            for n_idx in range(N):
-                for m_idx in range(N):
-                    k = n_idx + m_idx + 1
-                    block[n_idx, m_idx] += lam_ij * _brk_der(k, w, 0) * inv[n_idx] * inv[m_idx]
+    # Z row sum z_i = sum_j lambda_ij * w_j (with w_j!)
+    z = np.dot(lam_mat, w_FS)
 
-            # L1 part: diagonal in n, sum over k and j'
+    # Build full operator A
+    A = np.zeros((S * N, S * N))
+    for i in range(S):
+        for j in range(S):
+            block = Lambda[i, j] * L23
             if i == j:
-                for n_idx in range(N):
-                    s = 0.0
-                    for k in range(1, n_idx + 2):  # k from 1 to n+1
-                        for jp in range(n_sheets):
-                            s += lam_mat[i, jp] * _brk_der(k, w, 0)
-                    block[n_idx, n_idx] -= 2 * s / (2 * n_idx + 1)
-
-            # Place block
+                block -= z[i] * Z
             A[i * N:(i + 1) * N, j * N:(j + 1) * N] = block
 
     return A
@@ -454,68 +479,56 @@ def run_prop5():
 
     for trial in range(10):
         # Random lambda matrix (2x2, symmetric, positive)
+        S = 2
         lam_11 = np.random.uniform(0.5, 2.0)
         lam_22 = np.random.uniform(0.5, 2.0)
         lam_12 = np.random.uniform(0.0, 0.8 * np.sqrt(lam_11 * lam_22))
         lam_mat = np.array([[lam_11, lam_12], [lam_12, lam_22]])
 
-        # Weighted average: lambda_bar = sum_{ij} w_i lambda_{ij} w_j
-        lam_bar = np.sum(w_FS[:, None] * lam_mat * w_FS[None, :])
+        # Weighted average: lambda_bar = w^T lambda w
+        lam_bar = np.dot(w_FS, np.dot(lam_mat, w_FS))
 
         # Build anisotropic operator
         A_aniso = build_aniso_KAY_operator(N, w_ref, lam_mat, w_FS)
         lam1_aniso = float(np.max(np.linalg.eigvalsh(A_aniso)))
 
-        # Build isotropic operator (should equal H_mat(N, w_ref) * lam_bar)
-        H_iso_ref = H_mat(N, w_ref)
-        A_iso_expected = lam_bar * H_iso_ref
+        # Build isotropic reference: lambda_bar * H_mat(N, w_ref)
+        H_iso = H_mat(N, w_ref)
+        A_iso_full = lam_bar * H_iso
 
-        # Projection P: v -> (avg(v^(1)), avg(v^(2))) replicated over Matsubara
-        # Compute PAP explicitly as the 2x2 operator on FS space
-        # (PAP)_{ij} = sum_{nm} A_{(i,n),(j,m)} / N^2
-        A_compressed = np.zeros((2, 2))
-        for i in range(2):
-            for j in range(2):
-                A_compressed[i, j] = np.sum(A_aniso[i * N:(i + 1) * N, j * N:(j + 1) * N]) / (N * N)
+        # Compression: Q is (S*N)xN, i-th block = sqrt(w_i)*I_N
+        Q = np.zeros((S * N, N))
+        for i in range(S):
+            Q[i * N:(i + 1) * N, :] = np.sqrt(w_FS[i]) * np.eye(N)
 
-        # Verify PAP equals isotropic KAY operator compressed to FS space
-        # For isotropic: all blocks are lambda_bar * H_iso, so PAP = lambda_bar * sum(H_iso)/N^2
-        H_iso_avg = np.sum(H_iso_ref) / (N * N)
-        A_iso_compressed_expected = lam_bar * H_iso_avg * np.ones((2, 2))
+        # Verify Q is orthonormal: Q^T Q = I
+        QtQ = np.dot(Q.T, Q)
+        _check(f"Prop5 trial {trial+1} Q orthonormal", np.max(np.abs(QtQ - np.eye(N))) < 1e-12,
+               f"Q^T Q != I, diff={np.max(np.abs(QtQ - np.eye(N))):.3e}")
 
-        # Actually, PAP should be lambda_bar times (average of H_iso over Matsubara indices)
-        # But the projection is onto constant vectors, so we need the full operator's action.
-        # Let me recalculate: PAP acts on R^2, (PAP)_{ij} = <e_i, A P e_j>_w
-        # where e_i = (0,...,0, 1/sqrt(N), ..., 1/sqrt(N), 0, ..., 0) (sheet i, constant over Matsubara)
-        # and <.,.>_w is the weighted inner product.
+        # Compute PAP = Q^T A Q
+        PAP = np.dot(Q.T, np.dot(A_aniso, Q))
 
-        # For verification: compute the isotropic operator's compressed form
-        A_iso_aniso = build_aniso_KAY_operator(N, w_ref, lam_bar * np.ones((2, 2)), w_FS)
-        A_iso_compressed = np.zeros((2, 2))
-        for i in range(2):
-            for j in range(2):
-                A_iso_compressed[i, j] = np.sum(A_iso_aniso[i * N:(i + 1) * N, j * N:(j + 1) * N]) / (N * N)
-
-        # Check: PAP should match the isotropic compressed operator
-        diff = np.max(np.abs(A_compressed - A_iso_compressed))
-        _check(f"Prop5 trial {trial+1} PAP structure", diff < 1e-6,
-               f"PAP != iso_compressed, diff={diff:.3e}")
+        # Verify PAP == lambda_bar * H_iso
+        diff = np.max(np.abs(PAP - A_iso_full))
+        _check(f"Prop5 trial {trial+1} PAP structure", diff < 1e-12,
+               f"PAP != lambda_bar*H_iso, diff={diff:.3e}")
 
         # Eigenvalues
-        lam1_compressed = float(np.max(np.linalg.eigvalsh(A_compressed)))
-        lam1_iso = float(np.max(np.linalg.eigvalsh(A_iso_compressed)))
+        lam1_PAP = float(np.max(np.linalg.eigvalsh(PAP)))
+        lam1_iso_ref = float(np.max(np.linalg.eigvalsh(A_iso_full)))
 
         # Anisotropy measure
         aniso_measure = np.max(np.abs(lam_mat - lam_bar)) / lam_bar
-        gap = lam1_aniso - lam1_compressed
+        gap = lam1_aniso - lam1_PAP
 
         print(f"  Trial {trial+1}: aniso={aniso_measure:.3f}, "
-              f"lam1(A)={lam1_aniso:.6f}, lam1(PAP)={lam1_compressed:.6f}, "
+              f"lam1(A)={lam1_aniso:.6f}, lam1(PAP)={lam1_PAP:.6f}, "
               f"gap={gap:.6f}")
 
         # Main check: lam1(PAP) <= lam1(A)
-        _check(f"Prop5 trial {trial+1} compression", lam1_compressed <= lam1_aniso + 1e-6,
-               f"PAP={lam1_compressed:.6f} > A={lam1_aniso:.6f}")
+        _check(f"Prop5 trial {trial+1} compression", lam1_PAP <= lam1_aniso + 1e-6,
+               f"PAP={lam1_PAP:.6f} > A={lam1_aniso:.6f}")
 
     print(f"  Proposition 5: VERIFIED (two-sheet KAY operator) ({time.time()-t0:.1f}s)\n")
 
