@@ -57,28 +57,6 @@ def _report_checks():
 # Direct import per project convention (do NOT copy code)
 from p4_interchange_uniformity import H_mat, _brk_vec
 
-def _brk_der(k, w, order=0):
-    """[[k]](w) or its w-derivative (order 0..5).  For scalar use."""
-    k = int(k)
-    if k == 0:
-        return 1.0 if order == 0 else 0.0
-    k2 = k * k
-    w = float(w)
-    d = k2 + w * w
-    if order == 0:
-        return w * w / d
-    if order == 1:
-        return 2 * k2 * w / d**2
-    if order == 2:
-        return 2 * k2 * (k2 - 3 * w * w) / d**3
-    if order == 3:
-        return 6 * k2 * w * (w * w - k2) / d**4
-    if order == 4:
-        return 6 * k2 * (5 * w**4 - 10 * k2 * w * w + k2 * k2) / d**5
-    if order == 5:
-        return 240 * k2 * w * (3 * w**4 - 10 * k2 * w * w + 3 * k2 * k2) / d**6
-    raise ValueError(order)
-
 
 def h_N(N, w):
     """Top eigenvalue h^(N)(w) = lam_1(H^(N)(w))."""
@@ -88,65 +66,31 @@ def h_N(N, w):
 def k_P(N, w_array, p_array):
     """k^(N)(P,T=1/(2pi w_grid_unit)) for discrete measure P = sum p_i delta_{w_i}.
 
+    Correct implementation (v0.4, per coordinator):
+    O[F_T] is LINEAR in P, so k(P) = lam_1(sum_i p_i * H_mat(N, w_i)).
+
     w_array: frequencies (omega), shape (M,)
     p_array: probabilities (sum to 1), shape (M,)
-    Returns: top eigenvalue of O[F_T], F_T(k) = int phi_k(w) P(dw).
+    Returns: top eigenvalue of O[F_T].
     """
-    # Compute F_T(k) for k=1..N
-    # phi_k(w) = (w/(2pi T))^2 / (k^2 + (w/(2pi T))^2) = [[k]](w/(2pi T))
-    # We take T=1/(2pi), so w/(2pi T) = w.
-    # Thus F_T(k) = sum_i p_i [[k]](w_i).
-    F = np.zeros(N)
-    for i, (w, p) in enumerate(zip(w_array, p_array)):
-        for k in range(1, N + 1):
-            F[k - 1] += p * _brk_der(k, w, 0)
-    # Build O[F] matrix
-    return float(np.max(np.linalg.eigvalsh(build_O_matrix(N, F))))
+    # O[F] is linear in F, so O[sum p_i F_i] = sum p_i O[F_i]
+    # For F_i = kernel from delta_{w_i}, we have O[F_i] = H_mat(N, w_i, 0)
+    A = sum(p * H_mat(N, w, 0) for w, p in zip(w_array, p_array))
+    return float(np.linalg.eigvalsh(A)[-1])
 
 
-def build_O_matrix(N, F):
-    """Build O[F] matrix for kernel F: (N,) array, F[k-1] = F(k).
+# Self-check: for single-atom P = delta_w, k_P must equal h_N
+def _self_check_k_P():
+    """Verify k_P(N, [w], [1]) == h_N(N, w) for single-atom measure."""
+    N = 30
+    for w in [0.5, 1.0, 3.0, 10.0]:
+        k_single = k_P(N, np.array([w]), np.array([1.0]))
+        h_ref = h_N(N, w)
+        diff = abs(k_single - h_ref)
+        if diff >= 1e-12:
+            raise RuntimeError(f"k_P self-check FAILED: w={w}, diff={diff:.3e}")
+    print("  k_P self-check: PASSED (single-atom measures agree with h_N)")
 
-    O[F] = -L1[F] + L2[F] + L3[F], where:
-      L1_{nn} = (1/(2n+1)) sum_{k=1}^n 2 F(k)
-      L2_{nm} = (1-delta_{nm}) F(|n-m|) / sqrt((2n+1)(2m+1))
-      L3_{nm} = F(n+m+1) / sqrt((2n+1)(2m+1))
-    """
-    n = np.arange(N)
-    inv = 1.0 / np.sqrt(2.0 * n + 1.0)
-    nrm = np.outer(inv, inv)
-
-    # L2: off-diagonal part
-    A = np.abs(n[:, None] - n[None, :])
-    # F is indexed from 0, F[k-1] = F(k), so F(|n-m|) = F[|n-m|-1] if |n-m|>=1, else 0
-    L2 = np.zeros((N, N))
-    for i in range(N):
-        for j in range(N):
-            if i != j:
-                k = abs(i - j)
-                if k >= 1:
-                    L2[i, j] = F[k - 1]
-    L2 = L2 * nrm
-
-    # L3: F(n+m+1), n,m start from 0, so n+m+1 >= 1
-    S = n[:, None] + n[None, :] + 1
-    L3 = np.zeros((N, N))
-    for i in range(N):
-        for j in range(N):
-            k = i + j + 1
-            if k >= 1 and k <= len(F):
-                L3[i, j] = F[k - 1]
-            # If k > len(F), we'd need to pad F or assume F(k)=0 for k > N.
-            # For safety, we only use F up to index N-1.
-    L3 = L3 * nrm
-
-    # L1: diagonal, sum_{k=1}^n 2 F(k)
-    L1 = np.zeros((N, N))
-    for i in range(N):
-        s = sum(2.0 * F[k - 1] for k in range(1, i + 1 + 1) if k <= len(F))
-        L1[i, i] = s / (2.0 * i + 1.0)
-
-    return -L1 + L2 + L3
 
 
 # ============================================================================
@@ -155,6 +99,9 @@ def build_O_matrix(N, F):
 def run_prop1():
     print("=== PROPOSITION 1: fixed w_max (Semenok constraint) ===")
     t0 = time.time()
+
+    # Self-check k_P implementation
+    _self_check_k_P()
 
     # Setup: w_max = 5, T = 1/(2pi), so varpi_max = w_max / (2pi T) = w_max.
     w_max = 5.0
