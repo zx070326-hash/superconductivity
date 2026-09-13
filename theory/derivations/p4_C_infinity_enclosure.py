@@ -23,10 +23,18 @@ That makes the lower-bound direction free; the upper bound is the real work.
 
 Reference values (KAY I p.17 / survey Sec.3.2), C^(N) = (1/2pi) sqrt(g^(N)(2)):
     N=1  0.159154943    (g^(1) = 1 exactly, gamma-independent, KAY I eq.67)
-    N=2  0.1796160944
+    N=2  0.1796160946   (survey had ...944 -- typo; 40-digit recheck and our
+                         dps=30 value 0.179616094559 both round to ...946)
     N=3  0.1820383
     N=4  0.1825137102
     N>200 (KAY I): C_inf = 0.1827262477...
+
+Ground truth for construction: the eq.42-44 componentwise definition ONLY.
+The survey's eq.31 4x4 display had a transcription typo at (2,2): it showed
+1/5*(1/3^g - 2/2^g - 2) where the definition gives 1/5*(1/5^g - 2/2^g - 2)
+[since (G3)_{2,2} = 1/(sqrt(5)*5^g*sqrt(5)) = 1/(5*5^g)]. Fixed in the survey
+(commit 6e9fe7e); our verify_eq31_explicit_entries checks the survey-literal
+entries against build_G and derives (2,2) from the definition.
 
 Run: python theory/derivations/p4_C_infinity_enclosure.py
 """
@@ -189,41 +197,26 @@ def verify_eq31_explicit_entries(gamma):
     # (1,3): 1/sqrt(21) * (1/5^g + 1/2^g)
     checks.append(("G[1,3]", G[1, 3], 1/mp.sqrt(21) * (1/mp.mpf(5)**g + 1/mp.mpf(2)**g)))
 
-    # (2,2): 1/5 * (1/3^g - 2/2^g - 2)
-    # Note: -G1(2,2) + G3(2,2)  = -[1/5 * (2/1^g + 2/2^g)] + 1/(5 * 5^g)
-    #   diagonal of G1 at n=2: 1/5 * (2/1 + 2/2) = 1/5 * 3 = 3/5 at g=1 etc.
-    #   But eq.31 says 1/5 * (1/3^g - 2/2^g - 2)
-    # Let me verify: -G1 + G3 on diagonal at n=2:
-    #   -[sum_{k=1}^{2} 2/k^g] / 5 + 1/(sqrt(5)*5^g*sqrt(5))
-    #   = -(2 + 2/2^g)/5 + 1/(5 * 5^g)
-    # eq.31 says 1/5 * (1/3^g - 2/2^g - 2)
-    # Factor out 1/5: -(2 + 2/2^g) + 1/5^g  ... but 5 = 2*2+1, and 5^g = (n+m+1)^g at n=m=2
-    # Wait n+m+1=5, yes. So: 1/5 * ( 1/5^g - 2 - 2/2^g )
-    # eq.31 says 1/5 * (1/3^g - 2/2^g - 2)  -- but that would need 1/3^g not 1/5^g
-    # Hmm. Let me re-read the survey transcription...
-    # Survey line for (2,2): 1/5 [1/3^γ − 2/2^γ − 2]
-    # But from our formula: -G1_{2,2} + G3_{2,2} = -(2+2/2^g)/5 + 1/(5*5^g)
-    # = (1/5^g - 2 - 2/2^g)/5 = 1/5 * (1/5^g - 2/2^g - 2)
-    # So the survey has 1/3^g where we get 1/5^g. That could be a transcription error
-    # in the survey, or I could be misreading. Let me use the componentwise formula
-    # which we already verified elementwise above.
-    #
-    # Actually wait -- (2,2) means n=m=2, so (n+m+1)^g = 5^g. The survey says 1/3^g
-    # which does NOT match. This is either a survey transcription error or the eq.31
-    # in the original paper is different. Since we've already cross-checked build_G
-    # against eq31_element (which uses the definition directly), let's trust the
-    # definition and flag this discrepancy.
-    #
-    # For safety, compute from our definition:
-    expected_22 = eq31_element(2, 2, gamma)
-    checks.append(("G[2,2]", G[2, 2], expected_22))
+    # (2,2): survey originally transcribed 1/5*(1/3^g - 2/2^g - 2), a typo.
+    # From the eq.42-44 definition: (G3)_{2,2} = 1/(sqrt(5)*5^g*sqrt(5)) =
+    # 1/(5*5^g), so the correct entry is 1/5*(1/5^g - 2/2^g - 2).
+    # Coordinator confirmed and fixed the survey (commit 6e9fe7e).
+    # We check BOTH the corrected literal form and the definition-derived value.
+    expected_22 = 1 / mp.mpf(5) * (1 / mp.mpf(5)**g - 2 / mp.mpf(2)**g - 2)
+    checks.append(("G[2,2] (corrected eq.31 literal)", G[2, 2], expected_22))
+    checks.append(("G[2,2] (definition eq.42-44)", G[2, 2],
+                   eq31_element(2, 2, gamma)))
 
     # (2,3): 1/sqrt(35) * (1/6^g + 1)
     checks.append(("G[2,3]", G[2, 3], 1/mp.sqrt(35) * (1/mp.mpf(6)**g + 1)))
 
-    # (3,3): 1/7 * (1/7^g - 2/3^g - 2/2^g - 2)
-    expected_33 = eq31_element(3, 3, gamma)
-    checks.append(("G[3,3]", G[3, 3], expected_33))
+    # (3,3): 1/7 * (1/7^g - 2/3^g - 2/2^g - 2); check the corrected literal
+    # (term order irrelevant) and the definition-derived value.
+    expected_33 = 1 / mp.mpf(7) * (1 / mp.mpf(7)**g - 2 / mp.mpf(3)**g
+                                   - 2 / mp.mpf(2)**g - 2)
+    checks.append(("G[3,3] (corrected eq.31 literal)", G[3, 3], expected_33))
+    checks.append(("G[3,3] (definition eq.42-44)", G[3, 3],
+                   eq31_element(3, 3, gamma)))
 
     all_ok = True
     for name, got, expected in checks:
@@ -364,12 +357,12 @@ if __name__ == "__main__":
     print("Stage 1b: eigenvalue checks for N=1..4 at gamma=2")
     print("=" * 60)
 
-    # Reference values from survey Sec.3.2:
-    #   C^(N) = (1/2pi) * sqrt(g^(N)(2))
-    # so g^(N)(2) = (2*pi * C^(N))^2
+    # Reference values: C^(N) = (1/2pi) * sqrt(g^(N)(2)), so g^(N)(2) = (2*pi*C^(N))^2.
+    # N=2: survey had ...944 -- transcription typo; our dps=30 value
+    # 0.179616094559 rounds to ...946, confirming the coordinator's 40-digit recheck.
     REF_C = {
         1: mp.mpf("0.159154943"),
-        2: mp.mpf("0.1796160944"),
+        2: mp.mpf("0.1796160946"),
         3: mp.mpf("0.1820383"),
         4: mp.mpf("0.1825137102"),
     }
