@@ -3,16 +3,20 @@
 **Status: THEOREM (one-sided), load-bearing on the certified Einstein bracket (③).**
 For *every* coupling $\lambda>0$ and *every* phonon spectrum $P$ (probability measure on
 $\mathbb R_+$ with finite second moment $\langle\omega^2\rangle$, $P\neq\delta_0$), we
-certify a single scalar upper bound
+establish a single scalar upper bound
 $$
 \boxed{\;T_c(P;\lambda)\;\le\;F_{\mathrm{hi}}^{E}(\lambda)\,\sqrt{\langle\omega^2\rangle}\;}
 $$
-where $F_{\mathrm{hi}}^{E}(\lambda)$ is the **certified upper curve of $T_c/\omega_E$ vs
-$\lambda$ for the single-frequency (Einstein) spectrum** — deliverable ③
-(`p4_global_tc_certified.{md,py}`). The bound is **strictly sharper at every finite
-$\lambda$** than the asymptotic ceiling $T_c\le C_\infty\sqrt{\lambda\langle\omega^2\rangle}$,
-$C_\infty=(1/2\pi)\sqrt{\mathfrak g(2)}=0.1827262477\ldots$, which is tight only as
-$\lambda\to\infty$.
+where $F_{\mathrm{hi}}^{E}(\lambda)$ is the upper curve of $T_c/\omega_E$ vs
+$\lambda$ for the single-frequency (Einstein) spectrum — deliverable ③
+(`p4_global_tc_certified.{md,py}`), **finite-$N$ certified on $\lambda\in[0.345,\,34.4]$**
+and asymptotic (analytic) outside that window. The bound is **analytically strictly sharper
+at every finite $\lambda$** than the asymptotic ceiling
+$T_c\le C_\infty\sqrt{\lambda\langle\omega^2\rangle}$,
+$C_\infty=(1/2\pi)\sqrt{\mathfrak g(2)}=0.1827262477\ldots$ (tight only as
+$\lambda\to\infty$); the **sharpening is additionally finite-$N$ certified on
+$\lambda\in[0.345,\,34.4]$** (below $0.345$ it is analytic-asymptotic; above $\approx34.4$
+the certified bracket no longer separates from the ceiling).
 
 Deliverable script: `theory/derivations/p4_universal_tc_envelope.py`
 (run `OMP_NUM_THREADS=1 python p4_universal_tc_envelope.py`; prints `PASS 66  FAIL 0`,
@@ -139,8 +143,11 @@ sharpening test $\varpi_{\mathrm{lo}}^2G_{2,\mathrm{LO}}\lambda\ge1$.
 | 30.0 | $9.881502\times10^{-1}$ | $9.911227\times10^{-1}$ | $1.000833\times10^{0\phantom{-}}$ | $0.99031$ | $1.010$ | crossover |
 
 **Reading.** At $\lambda=1$ the $C_\infty$ ceiling overstates the true universal bound by
-$\approx59\%$; the overstatement falls to $\approx7.4\%$ ($\lambda=5$), $\approx3.4\%$
-($\lambda=10$), $\approx1.0\%$ ($\lambda=30$), and $\to0$ only as $\lambda\to\infty$. At weak
+**at least** $\approx59\%$; the overstatement falls to at least $\approx7.4\%$ ($\lambda=5$),
+$\approx3.4\%$ ($\lambda=10$), $\approx1.0\%$ ($\lambda=30$), and $\to0$ only as
+$\lambda\to\infty$. (These are certified *lower* bounds on the overstatement — computed from
+$F_{\mathrm{hi}}^E$ and the CERT-B lower value $G_{2,\mathrm{LO}}$; the true overstatements
+are marginally larger, $\approx7.5\%,\,3.6\%,\,1.2\%$.) At weak
 coupling the gap is enormous ($\times 8.7$ at $\lambda=0.3$) because $T_c/\omega_E$ is
 exponentially small, $\sim e^{-1/\lambda}$, far below the power-law ceiling.
 
@@ -181,9 +188,16 @@ $$
 approached only by **degenerate** spectra whose mass escapes to $\{0,\infty\}$. Concretely,
 $P_\Omega=(1-p)\,\delta_{\varepsilon}+p\,\delta_{\Omega}$ with
 $p=(\sigma^2-\varepsilon^2)/(\Omega^2-\varepsilon^2)$ keeps $\langle\omega^2\rangle=\sigma^2$
-fixed while $\varepsilon\to0$, $\Omega\to\infty$ ($p\to0$); then $F_T(k)\to0$ for every $k$
-(the near-zero atom contributes $[\![k]\!](\varepsilon/2\pi T)\to0$; the far atom carries
-vanishing weight $p\to0$), so $\mathfrak k(P_\Omega,T)\to0$ and the crossing $T_c\to0$. The gate
+fixed while $\varepsilon\to0$, $\Omega\to\infty$ ($p\to0$); then, by the **quadratic-form
+Jensen bound** (convexity of $\lambda_1$ in the kernel — $\langle v,\mathcal O[\varphi]v\rangle$
+is linear in $\varphi$, so $\lambda_1=\max_v$ is convex; `P4_main_theorems.md` line 45),
+$$
+\mathfrak k(P_\Omega,T)\;\le\;(1-p)\,h\!\big(\tfrac{\varepsilon}{2\pi T}\big)\;+\;p\,h\!\big(\tfrac{\Omega}{2\pi T}\big)\;\longrightarrow\;0,
+$$
+since $h(\varepsilon/2\pi T)\to0$ and $p\to0$ faster than $h(\Omega/2\pi T)\sim\ln\Omega$
+grows (the pointwise decay $F_T(k)\to0$ alone would *not* control $\lambda_1$, because the
+near-constant kernel on $k\ll\Omega$ couples to the divergent $\sum_n(2n+1)^{-1}$). Hence the
+crossing $T_c\to0$. The gate
 (check group [D]) exhibits this at $\sigma^2=4$: with the Einstein maximum $h=1.336$, the
 sequence gives $\mathfrak k=0.353,\,0.115,\,0.0358,\,0.00742,\,0.00234,\,6.66\times10^{-4}$ as
 $\Omega=5,10,20,50,100,300$ — monotonically collapsing toward $0$, all below the Einstein
@@ -239,12 +253,20 @@ $\lambda\lesssim0.34$ (the $\lambda=0.3$ row), explicitly flagged.
 
 ## 6. Reproduce
 
+**Hard dependency (merge order).** This gate imports deliverable ③
+(`p4_global_tc_certified.{py,md}`, commit `1184684`, branch
+`worktree-agent-a3f0ef72c019fcbd0`, parent 522a453). Those files are **not** in this
+branch's tree nor in base 522a453; they must be co-located in `theory/derivations/` for the
+gate to run (the script already puts its own dir on `sys.path`). **③ must be merged before or
+together with this deliverable** — merging this branch alone ships an unrunnable gate
+(`ModuleNotFoundError: p4_global_tc_certified`).
+
 ```
 cd theory/derivations
-# inherited certificate ③ (present in this worktree; commit 1184684):
+# inherited certificate ③ (requires commit 1184684 materialized in this dir):
 OMP_NUM_THREADS=1 python p4_global_tc_certified.py test        # PASS 28  FAIL 0
 # this deliverable:
-OMP_NUM_THREADS=1 python p4_universal_tc_envelope.py           # PASS 66  FAIL 0  (~73 s)
+OMP_NUM_THREADS=1 python p4_universal_tc_envelope.py           # PASS 66  FAIL 0  (~1-2 min)
 ```
 
 The gate checks: [A] Einstein extremality on 6 genuine multi-frequency $P$ + 3 point-mass
