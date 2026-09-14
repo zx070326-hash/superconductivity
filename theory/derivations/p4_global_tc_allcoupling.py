@@ -282,10 +282,10 @@ def h_hi_headK(w, N, K, Mq=4000):
 
 
 # ==========================================================================
-# Prop. A -- PROVEN analytic bracket, valid at EVERY w (no matrix)
+# Prop. A -- PROVEN analytic (Theta*-fill), valid at EVERY w (no matrix)
 # ==========================================================================
 def h_hi_analytic(w, M=400000):
-    """Upper bound on h(w) from calR <= Theta* I:  root of U(h)=1.
+    """PROVEN upper bound (Theta*-fill, no calibrated envelope).  Root of U(h)=1.
 
     U(h) = sum_n 2 tau_n^2/(h + D_n^lo - Theta*)  with
       D_n^lo = 1/(2n+1) + (2/(2n+1)) w [atan((n+1)/w) - atan(1/w)]   <= D_n
@@ -374,7 +374,7 @@ def schur_c(w, Nc, M):
 
 
 def h_hi_schur(w, Nc=3000, M=200000):
-    """PROVEN upper bound on h(w) via calR <= diag(c) (Prop. A').  No matrix."""
+    """Proven-sup + calibrated-pad upper bound (Prop. A'); UNUSED in dispatch."""
     n = np.arange(M, dtype=float)
     s = (n + 0.5) / w
     G = 1.0 / (1.0 + s**2)
@@ -398,11 +398,12 @@ def h_hi_schur(w, Nc=3000, M=200000):
 
 
 # ==========================================================================
-# Prop. B -- dyadic-block bound: PROVEN at EVERY w, cost O(log w)
+# Prop. B -- dyadic-block bound: proven-sup + calibrated-pad, valid w>25
 # ==========================================================================
 def h_hi_dyadic(w, ratio=1.002, nmax_mult=400.0):
-    """PROVEN upper bound on h(w) valid for ARBITRARILY large w (no O(w) sum).
+    """Proven-sup + calibrated-pad upper bound, VALID on dispatched band w>25 only.
 
+    Returns None for w <= 0.75 (bisection cap would be hit vacuously).
     Partition n >= 1 into blocks [a,b).  On each block:
         sum_{n in [a,b)} tau_n^2 <= G(s_a)^2 * sum_{n in [a,b)} 1/(2n+1)
                                    = G(s_a)^2 * (1/2)[psi(b+1/2) - psi(a+1/2)]
@@ -414,6 +415,8 @@ def h_hi_dyadic(w, ratio=1.002, nmax_mult=400.0):
     tail bounds.  F(h) <= U(h) := sum_blk 2 S_blk/(h + D_blk - c_blk) + tail,
     and root(U=1) >= h(w).  Cost: O(log w) blocks with ratio ~ 1.0002.
     """
+    if w <= 0.75:
+        return None  # bisection cap 200.0 would be hit vacuously; dispatched only w>25
     from scipy.special import psi  # digamma function
     Nmax = max(64.0, nmax_mult * w)
     blocks = []
@@ -633,19 +636,28 @@ def main(K=8, quick=False):
 
     print("\n[1] SOUNDNESS of the Schur envelope c_shape (Prop. A-prime)")
     print("    c_n = sum_m R(s_n,s_m)/(2m+1) must satisfy c_n <= c_shape(s_n)")
-    for w in (2.0, 3.0, 10.0, 100.0):
+    print("    ON THE DISPATCHED BAND w>25 (Prop B consumes c_shape only there):")
+    for w in (26.0, 50.0, 100.0, 200.0):
         Nc = max(80, int(4 * w))
         c = schur_c(w, Nc, int(max(60 * w, 60000)))
         a = (np.arange(Nc) + 0.5) / w
         r = float((c / c_shape(a)).max())
         ck(r <= 1.0 + 1e-9, "c_n <= c_shape at w=%s (ratio %.6f)" % (w, r))
         print("    w=%7.1f: max c_n/c_shape(s_n) = %.6f" % (w, r))
+    print("    NEGATIVE CONTROL (w < 2.8 boundary, c_shape FAILS; NOT dispatched):")
+    for w in (0.7, 1.0, 1.8):
+        Nc = max(80, int(4 * w))
+        c = schur_c(w, Nc, 200000)
+        a = (np.arange(Nc) + 0.5) / w
+        r = float((c / c_shape(a)).max())
+        ck(r > 1.0, "teeth: c_shape FAILS at w=%s (%.4f>1, band excluded)" % (w, r))
+        print("    w=%7.1f: max c_n/c_shape(s_n) = %.6f  EXCEEDS (ok, not used)" % (w, r))
 
     print("\n[2] ENCLOSURE vs an INDEPENDENT builder (dense H_mat eigenvalue)")
     print("    NOTE: H_mat is built from the KAY entry formulas, NOT from the")
     print("    (M1) tau/calR/D decomposition -- a genuinely independent route.")
     print("    %7s %11s %11s %11s %12s %5s" % ("w", "h_lo", "h_true", "h_hi", "method", "ok"))
-    for w in (0.3, 1.0, 2.0, 3.0, 5.0, 10.0, 20.0):
+    for w in (0.3, 1.0, 2.0, 3.0, 5.0, 10.0, 20.0, 26.0, 50.0, 200.0):
         lo, hi, meth, rig = h_bracket(w, K=K)
         ht = float(np.linalg.eigvalsh(H_mat(2500, w))[-1])
         ok = (lo <= ht <= hi)
@@ -667,8 +679,8 @@ def main(K=8, quick=False):
     # route is NOT valid for w <~ 0.93, where h(w) < Theta*, so the strong/cross
     # seam is tested against node_cert, not against head-K.)
     for w, m1, m2 in ((0.14, "strong", "cross"), (0.30, "strong", "cross"),
-                      (3.0, "cross", None), (5.0, "cross", None),
-                      (24.0, None, "dyadic"), (30.0, None, "dyadic")):
+                      (3.0, "cross", "head"), (5.0, "cross", "head"),
+                      (24.0, "head", "dyadic"), (30.0, "head", "dyadic")):
         la, ha, ma, _ = h_bracket(w, K=K, mode=m1)
         lb, hb, mb, _ = h_bracket(w, K=K, mode=m2)
         ov = (la <= hb) and (lb <= ha)
