@@ -4,10 +4,12 @@
 (`P4_global_tc_certified.md`) left one gap: for $\lambda\lesssim0.582$ its *upper*
 $T_c$ side was the **asymptotic** form $h\sim L+c_0+b_1/L+\mathrm{REM}/L^2$ with an
 empirically calibrated pad $\mathrm{REM}=0.75$ — not a certificate. This note
-replaces that with two upper bounds that are **proven modulo one calibrated scalar
-envelope** $C(a)$ (Prop. A′ and Prop. B) and one **certificate-level** one
-(Prop. U), so that **every** $\lambda>0$ now carries a two-sided bracket in which
-neither side is asymptotic.
+replaces that with two upper bounds: Prop. B, which after the Prop. C upgrade
+(2026-09-15) rests on an **exact closed form for the row sum and is fully
+proven with zero calibrated constants**, and Prop. U, which is
+**certificate-level** (finite-$N$). Every $\lambda>0$ now carries a two-sided
+bracket in which neither side is asymptotic and — after Prop. C — no band's
+upper side rests on any measured constant.
 
 **Precise rigor claim (revised 2026-09-15 after review — the earlier wording said
 "both sides proven or finite-$N$ certified" without qualification, which
@@ -18,12 +20,12 @@ overstated the two $C$-dependent bands):**
 | $\varpi\le0.14$ ($\lambda\gtrsim34$) | Weyl $\mathfrak g(2)$ envelope | **fully analytic** |
 | $(0.14,3]$ | Rayleigh + Kato–Temple | **certificate** (finite-$N$, interval) |
 | $(3,25]$ | Prop. L + Prop. U | **certificate** (finite-$N$) |
-| $>25$ ($\lambda\lesssim0.2$) | Prop. B (+A′) with $C(a)$ | **proven sup $+$ calibrated pad ($\varpi>25$)** |
+| $>25$ ($\lambda\lesssim0.2$) | Prop. B via Prop. C envelope | **fully analytic** (zero calibrated constants) |
 
-So the honest headline is: *no band is asymptotic any more* (that gap is genuinely
-closed), and every band is at least certificate-level, but the deep band's upper
-side is not yet fully analytic — it inherits three measured constants. Closing
-that is the single identified missing ingredient (§7 item 3).
+So the honest headline, after the Prop. C upgrade (Track 2, 2026-09-15), is:
+*no band is asymptotic, every band is at least certificate-level, and the deep
+band's upper side is now fully analytic with zero calibrated constants* — the
+last calibration dependency is gone (gate 97/97, section [8]).
 
 Deliverable script: `theory/derivations/p4_global_tc_allcoupling.py`
 (run `OMP_NUM_THREADS=1 python p4_global_tc_allcoupling.py [quick] [K=8]`).
@@ -163,7 +165,74 @@ Gate step [1] re-verifies $c_n\le C(s_n)$ at every run.
 Note $\max_n c_n=0.6372>\Theta^\*$: $\Theta^\*$ bounds $\|\mathcal R\|$, **not** the
 row sums, so using $\Theta^\*$ as a pointwise $c$-fill would be unsound.
 
-### Prop. B (upper, **proven modulo the calibrated envelope $C$**, cost $O(\log\varpi)$ — the only route that reaches $\lambda\to0$)
+### Prop. C (2026-09-15, Track 2 — **exact closed form** for the row sum $c_n$, and the zero-calibration envelope)
+
+Write $1/(2m+1)=1/(2\varpi s_m)$ with $s_m=(m+\tfrac12)/\varpi$. Then
+
+$$c_n=\frac1\varpi\sum_{m\ge0} g(a,s_m),\qquad
+g(a,b):=\frac{R(a,b)}{2b}=\frac{a^2 b\,(5+a^2+b^2)}
+{(1+(a-b)^2)(1+(a+b)^2)(1+a^2)(1+b^2)},\quad a=\frac{n+\tfrac12}{\varpi}.$$
+
+As a function of $b$, $g$ is rational with **six simple poles** $b=\pm i,\ a\pm i,\ -a\pm i$
+and $g=O(b^{-3})$, so $\sum\mathrm{res}=0=\sum\mathrm{res}\cdot\mathrm{pole}$ and the
+half-integer-shifted lattice sum evaluates by the standard digamma formula. The
+residues are elementary (verified against $N(p)/D'(p)$ to $10^{-32}$):
+$\mathrm{res}_{\pm i}=\frac{1}{2(1+a^2)}$,
+$\mathrm{res}_{a+i}=\mathrm{res}_{-a-i}=-\frac{1+ia}{4(1+a^2)}$,
+$\mathrm{res}_{a-i}=\mathrm{res}_{-a+i}=-\frac{1-ia}{4(1+a^2)}$.
+At the physical nodes $a\varpi=n+\tfrac12$ **exactly**, the reflection formula
+$\psi(-n-i\varpi)=\psi(n+1+i\varpi)-i\pi\coth(\pi\varpi)$ applies with no residual
+phase and the six terms collapse to the real closed form
+
+$$\boxed{\;c_n=\frac{-\operatorname{Re}\psi(\tfrac12+i\varpi)
++\operatorname{Re}\psi(n{+}1+i\varpi)-a\,\operatorname{Im}\psi(n{+}1+i\varpi)
++\tfrac{a\pi}{2}\coth(\pi\varpi)}{1+a^2}.\;}\qquad\text{(C1)}$$
+
+This is an **identity**, not an asymptotic: against a Richardson-extrapolated
+brute-force lattice sum it agrees to $2\times10^{-8}$ relative — the float64
+cancellation floor of the extrapolation, flat in $\varpi$ (at fixed $\varpi$ the
+residual falls as $M^{-2}$ down to $3\times10^{-10}$). The coth law the reviewer
+observed, $a\,c_n\to\frac\pi2\coth(\pi\varpi)$, is now the *leading term of (C1)* —
+exact rather than fitted; the gate asserts its $O(1/n)$ decay rate.
+
+**The proven envelope.** Three standard digamma inequalities (from the integral
+representation, $x>0$): $\operatorname{Re}\psi(x{+}iy)\le\frac12\ln(x^2{+}y^2)$ (B1);
+$\operatorname{Re}\psi\ge\frac12\ln-\frac{x}{x^2+y^2}$ (B2);
+$\operatorname{Im}\psi\ge\arctan\frac{y}{x}-\frac{y}{2(x^2+y^2)}$ (B3). *Direction
+discipline:* $\operatorname{Im}$ enters (C1) with a minus sign, so the upper bound
+needs Im from **below** — the mirrored upper companion is false (3600/3600 grid
+violations), exactly the house-rule hazard; both sides are kept separate. (C1)
+with B1–B3 gives $c_{\rm prov}(n,\varpi)$ and a smooth envelope
+$E(a,\varpi)=c_{\rm prov}$ as a closed-form function of $(a,\varpi)$ — no measured
+constant anywhere. The per-block sup for Prop. B is then **rigorous closed form**
+(`c_env_blocksup`): $T_1$ and $-\arctan$ increasing, $w/2q$ and $\frac1{1+a^2}$
+decreasing, $a\cdot B$ by sign branch — each factor at its own monotone extreme,
+no unimodality assumption. Measured cost on the dispatched band: block sup within
+$1.041\times$ of the true max ($1.002\times$ tail); brackets *tighter* than the
+calibrated version they replace; shipped $T_c$ table byte-identical.
+
+**Finding recorded (correction to an earlier claim of ours).** The finite-$\varpi$
+row-sum sup **exceeds** $\Theta^\*$ and decays down to it only as $\varpi\to\infty$:
+$\varpi{=}26\to0.64333$, $\varpi{=}200\to0.63600$, $\varpi{=}10^5\to0.6349309$,
+$\varpi{=}10^9\to0.6349287919$, vs $\Theta^\*=0.6349287918$. An earlier gate
+assertion "sup $\le\Theta^\*$ on the dyadic band" was **false** and is removed.
+No bracket depended on it: $\Theta^\*$ bounds the *operator norm* $\|\mathcal R\|$
+(Lemma M, head/analytic routes), not the row-sum functional, and Prop. B subtracts
+its own per-block sup, never $\Theta^\*$. The old pad $C_\infty=0.6375$ was, in
+retrospect, absorbing exactly this finite-$\varpi$ excess. The peak sits at
+$n\approx1.5\varpi$ — search windows must scale with $\varpi$.
+
+### Prop. B (upper, **fully proven via the Prop. C envelope**, cost $O(\log\varpi)$ — the only route that reaches $\lambda\to0$)
+
+*Upgrade 2026-09-15 (Track 2).* The per-block constant $c_{\rm blk}$ below no
+longer comes from the calibrated envelope $C(a)$: it is the **rigorous
+closed-form block sup** of the Prop. C envelope (`c_env_blocksup`), obtained by
+bounding each factor of the exact row-sum closed form at its own monotone
+extreme over the block — no unimodality assumption, no grid, no pad. On the
+dispatched band $\varpi>25$ the block sup is within $1.041\times$ of the true
+block max ($1.002\times$ on the tail block), and the resulting brackets are
+actually *tighter* than the calibrated version they replace ($h_{\rm hi}(30)$:
+$4.14086$ vs $4.14268$). The shipped $T_c$ table is byte-identical either way.
 Partition $n\ge1$ into blocks $[a,b)$. On each block, $G$ decreasing and the
 **exact** digamma sum $\sum_{n=a}^{b-1}\frac1{2n+1}=\tfrac12[\psi(b{+}\tfrac12)-\psi(a{+}\tfrac12)]$ give
 $$\sum_{n\in[a,b)}\tau_n^2\le G(s_a)^2\cdot\tfrac12\big[\psi(b{+}\tfrac12)-\psi(a{+}\tfrac12)\big],$$
@@ -204,7 +273,7 @@ Measured overshoot $h_{\rm hi}-h_{\rm true}$ (vs. a dense independent eigenvalue
 | strong | $\le0.14$ | Weyl $\mathfrak g(2)\varpi^2$ envelope | few $\%$ | **proven analytic** (Cor ii) |
 | crossover | $(0.14,3]$ | `node_cert`: Rayleigh + Kato–Temple | $\sim\!5\times10^{-4}$ | **certificate** (finite-$N$) |
 | head-$K$ | $(3,25]$ | Prop. L + Prop. U, $K{=}8$ | $\sim\!3\times10^{-4}$ | **certificate** (finite-$N$) |
-| deep | $>25$ | Cor (iii) + Prop. B | $\Delta h\approx0.17\!\to\!0.04$ | **proven sup $+$ calibrated pad ($\varpi>25$)** |
+| deep | $>25$ | Cor (iii) + Prop. B (Prop. C envelope) | $\Delta h\approx0.17\!\to\!0.04$ | **fully analytic** |
 
 Both sides of every band are proven or certificate-level. **No band anywhere relies
 on an asymptotic-only upper side** — which is precisely the gap this note closes.
@@ -238,16 +307,18 @@ Enclosure vs. the independent dense eigenvalue:
 
 Seam overlaps (both brackets contain $h$): all six tested pairs overlap.
 
-**Certified $T_c/\omega_E$ bracket** (quick grid, 108 nodes over
-$\varpi\in[0.1,10^{13}]$):
+**Certified $T_c/\omega_E$ bracket** (full grid, 464 nodes over
+$\varpi\in[0.1,10^{13}]$; monotone hardening lifts the tighter head-$K$ lower
+bound across the $\varpi{=}25$ seam, which is what tightened the deep rows from
+the earlier quick-grid widths):
 
 | $\lambda$ | $F_{\rm lo}$ | $F_{\rm hi}$ | rel. width | route | rigor |
 |---|---|---|---|---|---|
-| 0.050 | $3.746\times10^{-10}$ | $8.126\times10^{-10}$ | $1.17$ | deep-dyadic | proven-cal |
-| 0.100 | $8.819\times10^{-6}$ | $1.299\times10^{-5}$ | $0.47$ | deep-dyadic | proven-cal |
-| 0.300 | $8.057\times10^{-3}$ | $1.020\times10^{-2}$ | $0.27$ | head-K8 | certificate |
-| 0.582 | $4.192\times10^{-2}$ | $5.965\times10^{-2}$ | $0.42$ | crossover-KT | certificate |
-| 1.000 | $1.072\times10^{-1}$ | $1.206\times10^{-1}$ | $0.12$ | crossover-KT | certificate |
+| 0.050 | $5.149\times10^{-10}$ | $5.599\times10^{-10}$ | $0.087$ | deep-dyadic | **proven** |
+| 0.100 | $1.096\times10^{-5}$ | $1.296\times10^{-5}$ | $0.18$ | deep-dyadic | **proven** |
+| 0.300 | $9.728\times10^{-3}$ | $1.059\times10^{-2}$ | $0.089$ | head-K8 | certificate |
+| 0.582 | $4.874\times10^{-2}$ | $5.459\times10^{-2}$ | $0.12$ | crossover-KT | certificate |
+| 1.000 | $1.115\times10^{-1}$ | $1.148\times10^{-1}$ | $0.029$ | crossover-KT | certificate |
 | 10.00 | $5.539\times10^{-1}$ | $6.228\times10^{-1}$ | $0.12$ | crossover-KT | certificate |
 | 50.00 | $1.119$ | $1.415$ | $0.26$ | strong-Weyl | proven |
 
@@ -330,8 +401,11 @@ test against the wrong constant.
 | Prop. L lower (head Schur complement $\succeq$) | **proven inequality**, finite-$N$ inputs |
 | Prop. U upper (Schur + geometric remainder) | **proven inequality**, finite-$N$ inputs |
 | Prop. A′ Schur test $\mathcal R\preceq\mathrm{diag}(c)$ | **proven inequality**; weight collapse verified $10^{-16}$ — but the *value* returned uses the calibrated $C$ below, so any bracket built on it is `proven-cal`, not `proven` |
-| envelope constants $C_1,C_\infty,C_2$ | **proven sups** ($\Theta^*$, $3/2$ exact, $1.68504$) $+$ calibrated $O(1/\varpi^2)$ midpoint pad; valid $\varpi>25$ only, false for $\varpi\lesssim2.8$ (teeth in gate [1b]) |
-| Prop. B block bounds (digamma, $G$/$\mathcal D$ monotone) | **proven inequality**; uses calibrated $C$ |
+| Prop. C exact closed form (C1) for $c_n$ | **proven identity** (digamma summation; agrees with Richardson brute sum to $2\times10^{-8}$, the float64 floor) |
+| digamma bounds B1/B2/B3 | **proven** (integral representation); mirrored Im companion FALSE — kept one-sided (house rule) |
+| Prop. C envelope + block sup | **proven closed form**; zero calibrated constants; block sup via per-factor monotone extremes |
+| envelope constants $C_1,C_\infty,C_2$ (legacy) | **retired from the shipped chain** by Prop. C; historic: proven sups $+$ pad, false for $\varpi\lesssim2.8$ (gate [1b] teeth) |
+| Prop. B block bounds (digamma, $G$/$\mathcal D$ monotone) | **proven inequality**; $c$-sup now from Prop. C (was calibrated $C$) |
 | Cor (iii) lower $h\ge\ln\varpi+c_0-\frac1{12\varpi}-\frac3{16\varpi^2}$ | **proven analytic** |
 | Weyl envelope, $\mathfrak g(2)$ CERT-D | **proven analytic** / certified constant |
 | `node_cert` (Rayleigh + Kato–Temple) | certificate (inherited from ③) |
@@ -347,13 +421,15 @@ test against the wrong constant.
    single monotone grid costs $\sim\!10^{-1}$ relative width per $\lambda$, versus
    $3\times10^{-3}$ for ③'s dense crossover-only grid. Nothing is wrong with the
    mathematics; the grid is simply coarse. A dense run refines this $\propto1/N$.
-3. ~~**The envelope constants are calibrated, not proven.**~~ **CLOSED 2026-09-15**
-   (reviewer T2): all three sups are now closed-form from the rational kernel —
-   $\Theta^*$, $3/2$ exactly, and $1.68504$ — see the Prop. A′ update. What
-   survives is only the $O(1/\varpi^2)$ midpoint pad, plus the finding that
-   $C_{\text{shape}}$ is genuinely **false for $\varpi\lesssim2.8$** (at
-   $\varpi=0.3$, $\max_n c_n=0.979$). Sound only because the dispatch confines it
-   to $\varpi>25$; asserted as teeth in gate [1b].
+3. ~~**The envelope constants are calibrated, not proven.**~~ **CLOSED twice over.**
+   First (reviewer T2): all three sups closed-form from the rational kernel—
+   $\Theta^*$, $3/2$ exactly, $1.68504$ (Prop. A′ update below). Then **fully
+   superseded by Prop. C (Track 2, 2026-09-15)**: the calibrated constants are no
+   longer in the shipped chain at all. Prop. B now uses the exact row-sum closed
+   form with proven digamma bounds; $C_{\text{shape}}$ retains only the historical
+   role in gate [1]'s envelope soundness checks. The boundary finding stands as a
+   recorded fact: $C_{\text{shape}}$ is genuinely false for $\varpi\lesssim2.8$
+   (at $\varpi=0.3$, $\max_n c_n=0.979$).
 3b. **Prop. A′ is dead code in the live dispatch.** `h_hi_schur` has **zero call
    sites**: `h_bracket` routes $\varpi>25$ to `h_hi_dyadic` (Prop. B) and never
    calls the $O(\varpi M)$ Schur bound. Prop. A′ is retained as the *derivation*
