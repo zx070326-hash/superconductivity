@@ -156,6 +156,19 @@ def main():
     chk(r2 is None, "PSLQ(2k2;1,pi2,pi3,z3) unexpectedly found a relation: %s" % (r2,))
     print("  PSLQ(b2;1,pi2,pi4)          =", r1, " (60-digit null)")
     print("  PSLQ(2 kappa2;1,pi2,pi3,z3) =", r2, " (weight-3, not in Q[pi^2])")
+    # physical-observable refutation is UNCONDITIONAL on the gamma open problem:
+    # b2Tc = 2 k2 - b1 + b1^2/2, and (-b1 + b1^2/2) is a polynomial in pi^2, so
+    # b2Tc in Q[pi^2] <=> 2 k2 in Q[pi^2]; gamma has cancelled entirely.
+    a = mp.mpf(49) / 144
+    shift_closed = mp.mpf(1) / 2 * a**2 * mp.pi**4 - 4 * a * mp.pi**2 + mp.mpf(15) / 2
+    chk(abs((-b1 + b1**2 / 2) - shift_closed) < mp.mpf(10)**-50,
+        "shift -b1+b1^2/2 not equal closed Q[pi^2] poly")
+    r3 = mp.pslq([b2Tc, mp.mpf(1), mp.pi**2, mp.pi**4], tol=mp.mpf(10)**-45, maxcoeff=10**7)
+    r4 = mp.pslq([2 * k2, mp.mpf(1), mp.pi**2, mp.pi**4], tol=mp.mpf(10)**-45, maxcoeff=10**7)
+    chk(r3 is None, "PSLQ(b2Tc;1,pi2,pi4) unexpectedly found a relation: %s" % (r3,))
+    chk(r4 is None, "PSLQ(2k2;1,pi2,pi4) unexpectedly found a relation: %s" % (r4,))
+    print("  PSLQ(b2Tc;1,pi2,pi4)        =", r3, " (physical; gamma-free, still not in Q[pi^2])")
+    print("  PSLQ(2 kappa2;1,pi2,pi4)    =", r4, " (sole obstruction; no gamma conditionality)")
     # spurious-PSLQ artifact: a large-basis "relation" appears at dps=45 but
     # VANISHES at dps=60 -> it was a numerical artifact, so no closed form is
     # folded in.  A real relation is precision-stable; this one changes.
