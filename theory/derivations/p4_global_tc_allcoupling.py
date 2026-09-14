@@ -1103,6 +1103,50 @@ def main(K=8, quick=False):
        "teeth: envelope shaved to %.6f x at its tightest point breaks domination"
        % shave)
 
+    # DIRECTION DISCIPLINE for B3 (was prose-only until 2026-09-15; a reviewer
+    # could not reproduce it because no check enforced it -- now it is a gate).
+    # Im psi enters (C1) with a MINUS sign, so an UPPER bound on c_n needs Im
+    # from BELOW.  B3 (shipped):      Im psi >= atan(w/x) - w/(2|z|^2)   VALID
+    # Mirrored upper companion:       Im psi <= atan(w/x) + w/(2|z|^2)   FALSE
+    # (the next Stirling term -Im(1/(12 z^2)) is positive here and wins).
+    #
+    # SCOPE of that falsity -- it is about SYMMETRISING B3, not about upper
+    # bounds on Im psi in general.  Audited 2026-09-15 against INDEPENDENT
+    # mpmath (dps=40, not _psi_complex) on a 240-node grid:
+    #     atan(w/x) + w/(2q)   -> 240/240 violations  (the shipped mirror)
+    #     atan(w/x)            -> 240/240 violations
+    #     atan(w/x) + w/q      ->   0/240  VALID upper bound
+    #     atan(w/(x-1))        ->   0/240  VALID upper bound
+    # So a reviewer who reconstructs "the" mirror as a doubled correction or an
+    # x-shift will see 0 violations and think the claim fails; the claim is
+    # specifically that flipping the sign of B3's own correction term is FALSE.
+    # Asserting BOTH sides keeps the one-sided house rule honest: if a future
+    # edit "symmetrises" B3, the second check below fails loudly.
+    _b3_lo_vio = _b3_up_vio = _b3_tot = 0
+    _b3_worst = 0.0
+    for w in np.geomspace(0.5, 400.0, 60):
+        for n in range(0, 60):
+            x = n + 1.0
+            q = x * x + w * w
+            im_true = float(np.imag(_psi_complex(np.array([x]), w)[0]))
+            _b3_tot += 1
+            if im_true < np.arctan(w / x) - w / (2.0 * q) - 1e-13:
+                _b3_lo_vio += 1
+            _d = im_true - (np.arctan(w / x) + w / (2.0 * q))
+            if _d > 1e-13:
+                _b3_up_vio += 1
+                _b3_worst = max(_b3_worst, _d)
+    print("      B3 lower (shipped) violations %d/%d ; mirrored upper %d/%d "
+          "(worst %+.3e)"
+          % (_b3_lo_vio, _b3_tot, _b3_up_vio, _b3_tot, _b3_worst))
+    ck(_b3_lo_vio == 0,
+       "B3 LOWER bound on Im psi holds at all %d nodes (the direction (C1) needs)"
+       % _b3_tot)
+    ck(_b3_up_vio == _b3_tot,
+       "mirrored Im UPPER companion is FALSE at all %d/%d nodes (worst %+.3e) -- "
+       "one-sided house rule, sides stay separate"
+       % (_b3_up_vio, _b3_tot, _b3_worst))
+
     # (C2) coth law.  a*c_n -> (pi/2)coth(pi w) with an O(1/n) correction, so a
     # single n cannot be pinned to a fixed tolerance; assert the DECAY RATE:
     # doubling n must halve the residual (ratio in [1.6, 2.4]).
@@ -1116,47 +1160,74 @@ def main(K=8, quick=False):
         ck(1.6 < rat < 2.4,
            "coth law w=%.3g: residual halves under n->2n (ratio %.3f)" % (w, rat))
 
-    # NOTE (finding, 2026-09-15): sup_a E(a,w) EXCEEDS Theta* at finite w and
-    # decays DOWN to it only as w->oo:
-    #     w=26 -> 0.64333,  w=200 -> 0.63600,  w=1e5 -> 0.6349309,
-    #     w=1e9 -> 0.6349287919   vs  Theta* = 0.6349287918.
-    # An earlier assertion ("sup <= Theta* on the dyadic band") was FALSE and is
-    # removed.  Nothing in the brackets depended on it: Theta* bounds the
-    # OPERATOR NORM ||calR|| (Lemma M, head/analytic routes), not the row-sum
-    # functional c_n, and h_hi_dyadic subtracts its own per-block sup, never
-    # Theta*.  The old calibrated pad C_SUP=0.6375 was absorbing exactly this
-    # finite-w excess.  The peak sits at n ~ 1.5 w, so the search window MUST
-    # scale with w (a fixed n-window silently returns ~0 for w >= 1e4).
-    def _sup_rows(w, span=3.0, pts=1200):
+    # NOTE (finding, 2026-09-15; CORRECTED after review 2026-09-15):
+    # Theta* is NOT a valid pointwise fill for the row-sum functional c_n: the
+    # TRUE row sum exceeds it at small w.  Measured with c_exact (the (C1)
+    # identity), sup_n c_n(w) vs Theta* = 0.6349287918:
+    #     w=0.5 -> 0.769610503 (+1.35e-01)   w=1.0 -> 0.660434453 (+2.55e-02)
+    #     w=1.5 -> 0.638525502 (+3.60e-03)   w=3.0 -> 0.637157183 (+2.23e-03)
+    # and it settles BELOW Theta* for w >~ 20 (w=26 -> 0.634896511, -3.2e-05;
+    # w=100 -> 0.634927676, -1.1e-06), approaching Theta* from below as w->oo.
+    #
+    # CORRECTION: an earlier version of this block sup'd c_proven_upper (the
+    # LOOSE envelope) and reported w=26 -> 0.64333 as a row-sum excess.  That
+    # number is envelope SLACK, not row-sum value: at the w=26 peak n=39,
+    # c_proven_upper - c_exact = 8.07e-03 while c_exact itself is 3.2e-05
+    # BELOW Theta*.  The retired claim "the old pad C_SUP=0.6375 was absorbing
+    # this finite-w excess" was likewise a misdiagnosis at w=26.  The LOGIC is
+    # unaffected and still holds on the corrected (small-w) evidence.
+    #
+    # Nothing in the brackets ever depended on this: Theta* bounds the OPERATOR
+    # NORM ||calR|| (Lemma M, head/analytic routes), not the row-sum functional,
+    # and h_hi_dyadic subtracts its own per-block sup, never Theta*.
+    # The peak sits at n ~ 1.5 w, so any search window MUST scale with w.
+    def _sup_rows_exact(w, span=4.0, pts=1200):
+        """TRUE sup_n c_n(w) from the (C1) identity -- NOT the envelope."""
         hi = max(64.0, span * w)
         ns = np.unique(np.linspace(0.0, hi, pts).astype(np.int64))
-        return max(float(c_proven_upper(int(n), w)) for n in ns)
+        return max(float(c_exact(int(n), w)) for n in ns)
 
-    sup_far = _sup_rows(2000.0)
-    ck(sup_far > THETA,
-       "row-sum sup %.10f EXCEEDS Theta* %.10f (operator norm != row sum)"
-       % (sup_far, THETA))
-    e26 = _sup_rows(26.0)
-    e1e9 = _sup_rows(1e9)
-    # e1e9 is a 1200-point discrete sup, so it can undershoot the true peak by
-    # O(grid) (~2e-8 here); compare with that resolution, not exactly.
-    GRID_TOL = 1e-7
-    ck(e26 > sup_far > e1e9 - GRID_TOL and e1e9 > THETA - GRID_TOL,
-       "row-sum sup decreases in w toward Theta* (%.9f > %.9f > %.9f)"
-       % (e26, sup_far, e1e9))
-    ck(abs(e1e9 - THETA) < GRID_TOL,
-       "w->oo limit of the row-sum sup IS Theta* (|diff| %.2e)" % abs(e1e9 - THETA))
-    ck(e26 - THETA > 8e-3,
-       "teeth: the finite-w excess is REAL, not grid noise (w=26 exceeds Theta* "
-       "by %.3e >> grid %.0e)" % (e26 - THETA, GRID_TOL))
+    for w_ex, lo_ex in ((0.5, 1.3e-1), (1.0, 2.5e-2), (3.0, 2.2e-3)):
+        s_ex = _sup_rows_exact(w_ex)
+        print("      w=%-5.3g true sup_n c_n = %.9f  vs Theta*: %+.3e"
+              % (w_ex, s_ex, s_ex - THETA))
+        ck(s_ex - THETA > lo_ex,
+           "TRUE row sum at w=%.3g exceeds Theta* by %.3e (Theta* is not a valid "
+           "row-sum fill)" % (w_ex, s_ex - THETA))
+
+    # ... and the complementary honest half: for large w the true sup is BELOW
+    # Theta*, so the excess is a small-w phenomenon only.  This is the assertion
+    # the retired w=26 "excess" got backwards.
+    for w_bl in (26.0, 100.0):
+        s_bl = _sup_rows_exact(w_bl)
+        ck(s_bl < THETA,
+           "TRUE row sum at w=%.3g is BELOW Theta* (%.9f < %.9f) -- the excess is "
+           "a small-w effect" % (w_bl, s_bl, THETA))
+
+    # teeth: the quantity above must be the identity, not the envelope.  If a
+    # future edit swaps c_exact back to c_proven_upper here, the envelope slack
+    # at the w=26 peak (8.07e-03) would masquerade as a row-sum excess.
+    _n26 = 39
+    ck(c_proven_upper(_n26, 26.0) - c_exact(_n26, 26.0) > 5e-3
+       and c_exact(_n26, 26.0) < THETA,
+       "teeth: envelope slack at (n=39,w=26) is %.3e and c_exact is BELOW Theta* "
+       "-- sup'ing the envelope here would fake an excess"
+       % (c_proven_upper(_n26, 26.0) - c_exact(_n26, 26.0)))
 
     # The rebuilt Prop. B (proven envelope in place of the calibrated c_shape)
     # must still enclose h_true on the dispatched band.
-    print("    [8e] Prop. B with the proven envelope still encloses h_true")
+    # DIRECTION NOTE (house rule: audit every truncation).  H_mat(N,w) interlaces
+    # upward in N, so h^(N) <= h^(inf): shrinking N makes `ht <= hi` EASIER (a
+    # weaker test of the upper bound) and `lo <= ht` HARDER.  Full mode therefore
+    # keeps N=6000; quick mode drops to 2500 (agrees to 7 dp at w=30, 1.1s vs
+    # 17s per node) and is a deliberately weaker upper-bound probe, not a proof.
+    _n8e = 2500 if quick else 6000
+    print("    [8e] Prop. B with the proven envelope still encloses h_true"
+          "  (N=%d%s)" % (_n8e, ", quick: weaker upper probe" if quick else ""))
     for w in (30.0, 50.0, 200.0, 1000.0):
         hi = h_hi_dyadic(w)
         lo = h_lo_analytic(w)
-        ht = float(np.max(np.linalg.eigvalsh(H_mat(6000, w))))
+        ht = float(np.max(np.linalg.eigvalsh(H_mat(_n8e, w))))
         ck(lo <= ht <= hi, "[8e] w=%.0f: %.7f <= %.7f <= %.7f (width %.4f)"
            % (w, lo, ht, hi, (hi - lo) / lo))
 
@@ -1166,7 +1237,10 @@ def main(K=8, quick=False):
 
 if __name__ == "__main__":
     K = 8
-    quick = "quick" in sys.argv
+    # NB: match the bare word AND the dashed forms -- a plain `"quick" in sys.argv`
+    # silently misses `--quick` and runs the full-density grid (regressed once
+    # during the 2026-09-15 rebuild; caught by a 900s timeout).
+    quick = any(a in ("quick", "--quick", "-q") for a in sys.argv[1:])
     for a in sys.argv[1:]:
         if a.startswith("K="):
             K = int(a[2:])

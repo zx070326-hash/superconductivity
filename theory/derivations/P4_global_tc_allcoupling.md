@@ -204,29 +204,63 @@ exact rather than fitted; the gate asserts its $O(1/n)$ decay rate.
 
 **The proven envelope.** Three standard digamma inequalities (from the integral
 representation, $x>0$): $\operatorname{Re}\psi(x{+}iy)\le\frac12\ln(x^2{+}y^2)$ (B1);
-$\operatorname{Re}\psi\ge\frac12\ln-\frac{x}{x^2+y^2}$ (B2);
+$\operatorname{Re}\psi\ge\frac12\ln(x^2{+}y^2)-\frac{x}{x^2+y^2}$ (B2);
 $\operatorname{Im}\psi\ge\arctan\frac{y}{x}-\frac{y}{2(x^2+y^2)}$ (B3). *Direction
 discipline:* $\operatorname{Im}$ enters (C1) with a minus sign, so the upper bound
-needs Im from **below** — the mirrored upper companion is false (3600/3600 grid
-violations), exactly the house-rule hazard; both sides are kept separate. (C1)
+needs Im from **below** — flipping the sign of B3's own correction term to get an
+upper companion, $\operatorname{Im}\psi\le\arctan\frac{y}{x}+\frac{y}{2(x^2+y^2)}$,
+is **false** at every node tested (240/240 under independent mpmath at dps 40; the
+next Stirling term $-\operatorname{Im}(12z^2)^{-1}$ is positive here and wins),
+exactly the house-rule hazard; both sides are kept separate.
+
+> **Scope of that counterexample** (added 2026-09-15 after a reviewer reported
+> 0/240). The falsity is specific to *symmetrising B3*. Other upper bounds on
+> $\operatorname{Im}\psi$ are perfectly valid — e.g. $\arctan\frac{y}{x}+\frac{y}{x^2+y^2}$
+> (doubled correction) and $\arctan\frac{y}{x-1}$ both hold 0/240. A reconstruction
+> that picks one of those will not reproduce the violation; gate [8b] pins the
+> shipped mirror so the intended claim is unambiguous. (C1)
 with B1–B3 gives $c_{\rm prov}(n,\varpi)$ and a smooth envelope
 $E(a,\varpi)=c_{\rm prov}$ as a closed-form function of $(a,\varpi)$ — no measured
 constant anywhere. The per-block sup for Prop. B is then **rigorous closed form**
 (`c_env_blocksup`): $T_1$ and $-\arctan$ increasing, $w/2q$ and $\frac1{1+a^2}$
 decreasing, $a\cdot B$ by sign branch — each factor at its own monotone extreme,
 no unimodality assumption. Measured cost on the dispatched band: block sup within
-$1.041\times$ of the true max ($1.002\times$ tail); brackets *tighter* than the
-calibrated version they replace; shipped $T_c$ table byte-identical.
+$1.041\times$ of the true max ($1.002\times$ tail); brackets **match** the
+calibrated version they replace to $\sim\!10^{-8}$ (not tighter — see the erratum
+at Prop. B); shipped $T_c$ table byte-identical.
 
-**Finding recorded (correction to an earlier claim of ours).** The finite-$\varpi$
-row-sum sup **exceeds** $\Theta^\*$ and decays down to it only as $\varpi\to\infty$:
-$\varpi{=}26\to0.64333$, $\varpi{=}200\to0.63600$, $\varpi{=}10^5\to0.6349309$,
-$\varpi{=}10^9\to0.6349287919$, vs $\Theta^\*=0.6349287918$. An earlier gate
-assertion "sup $\le\Theta^\*$ on the dyadic band" was **false** and is removed.
-No bracket depended on it: $\Theta^\*$ bounds the *operator norm* $\|\mathcal R\|$
-(Lemma M, head/analytic routes), not the row-sum functional, and Prop. B subtracts
-its own per-block sup, never $\Theta^\*$. The old pad $C_\infty=0.6375$ was, in
-retrospect, absorbing exactly this finite-$\varpi$ excess. The peak sits at
+**Finding recorded (twice corrected — see the erratum below).** $\Theta^\*$ is
+**not** a valid pointwise fill for the row-sum functional $c_n$: the true row sum
+**exceeds** it at small $\varpi$. Measured with `c_exact` (the (C1) identity),
+$\sup_n c_n(\varpi)$ vs $\Theta^\*=0.6349287918$:
+
+| $\varpi$ | $0.5$ | $1.0$ | $1.5$ | $3.0$ | $26$ | $100$ |
+|---|---|---|---|---|---|---|
+| $\sup_n c_n$ | $0.769611$ | $0.660434$ | $0.638526$ | $0.637157$ | $0.634897$ | $0.634928$ |
+| vs $\Theta^\*$ | $+1.35\!\times\!10^{-1}$ | $+2.55\!\times\!10^{-2}$ | $+3.60\!\times\!10^{-3}$ | $+2.23\!\times\!10^{-3}$ | $-3.2\!\times\!10^{-5}$ | $-1.1\!\times\!10^{-6}$ |
+
+So the excess is a **small-$\varpi$** phenomenon; for $\varpi\gtrsim20$ the true sup
+sits *below* $\Theta^\*$ and approaches it from below as $\varpi\to\infty$. An
+earlier gate assertion "sup $\le\Theta^\*$ on the dyadic band" was **false** and is
+removed.
+
+> **Erratum (review, 2026-09-15).** The first version of this paragraph reported
+> $\varpi{=}26\to0.64333$ and $\varpi{=}200\to0.63600$ as row-sum values. Those
+> came from sup'ing `c_proven_upper` (the **loose envelope**), so they are envelope
+> *slack*, not row-sum values: at the $\varpi{=}26$ peak $n{=}39$,
+> $c_{\rm prov}-c_{\rm exact}=8.07\times10^{-3}$ while $c_{\rm exact}$ is
+> $3.2\times10^{-5}$ **below** $\Theta^\*$. The companion claim that "the old pad
+> $C_\infty=0.6375$ was absorbing this finite-$\varpi$ excess" was a misdiagnosis
+> for the same reason ($0.6349\ll0.6375$ at $\varpi{=}26$). The **conclusion** is
+> unaffected — $\Theta^\*$ genuinely fails as a row-sum fill — but it rests on the
+> small-$\varpi$ column above, not on $\varpi{=}26$. Gate [8] now sup's `c_exact`,
+> asserts the excess at $\varpi\in\{0.5,1,3\}$, asserts the true sup is *below*
+> $\Theta^\*$ at $\varpi\in\{26,100\}$, and carries teeth that fire if a future
+> edit swaps the identity back for the envelope.
+
+No bracket ever depended on any of this: $\Theta^\*$ bounds the *operator norm*
+$\|\mathcal R\|$ (Lemma M, head/analytic routes), not the row-sum functional, and
+Prop. B subtracts its own per-block sup, never $\Theta^\*$. The peak sits at
 $n\approx1.5\varpi$ — search windows must scale with $\varpi$.
 
 ### Prop. B (upper, **fully proven via the Prop. C envelope**, cost $O(\log\varpi)$ — the only route that reaches $\lambda\to0$)
@@ -237,9 +271,16 @@ closed-form block sup** of the Prop. C envelope (`c_env_blocksup`), obtained by
 bounding each factor of the exact row-sum closed form at its own monotone
 extreme over the block — no unimodality assumption, no grid, no pad. On the
 dispatched band $\varpi>25$ the block sup is within $1.041\times$ of the true
-block max ($1.002\times$ on the tail block), and the resulting brackets are
-actually *tighter* than the calibrated version they replace ($h_{\rm hi}(30)$:
-$4.14086$ vs $4.14268$). The shipped $T_c$ table is byte-identical either way.
+block max ($1.002\times$ on the tail block), and the resulting brackets **match**
+the calibrated version they replace to $\sim\!10^{-8}$: on defaults
+$h_{\rm hi}(30)=4.142889385$ (calibrated route $4.14268$–$4.14289$ depending on
+`ratio`). The shipped $T_c$ table is byte-identical either way.
+
+> **Erratum (review, 2026-09-15).** An earlier version of this paragraph claimed
+> the proven brackets were *tighter* ($4.14086$ vs $4.14268$). That $4.14086$ is
+> not reproducible on defaults — `h_hi_dyadic(30)` returns $4.142889385$. The
+> honest statement is that eliminating the calibration cost **nothing**, not that
+> it gained tightness.
 Partition $n\ge1$ into blocks $[a,b)$. On each block, $G$ decreasing and the
 **exact** digamma sum $\sum_{n=a}^{b-1}\frac1{2n+1}=\tfrac12[\psi(b{+}\tfrac12)-\psi(a{+}\tfrac12)]$ give
 $$\sum_{n\in[a,b)}\tau_n^2\le G(s_a)^2\cdot\tfrac12\big[\psi(b{+}\tfrac12)-\psi(a{+}\tfrac12)\big],$$
@@ -407,9 +448,9 @@ test against the wrong constant.
 | $\|\mathcal R\|\le\Theta^\*$ | certified (Lemma M) |
 | Prop. L lower (head Schur complement $\succeq$) | **proven inequality**, finite-$N$ inputs |
 | Prop. U upper (Schur + geometric remainder) | **proven inequality**, finite-$N$ inputs |
-| Prop. A′ Schur test $\mathcal R\preceq\mathrm{diag}(c)$ | **proven inequality**; weight collapse verified $10^{-16}$ — but the *value* returned uses the calibrated $C$ below, so any bracket built on it is `proven-cal`, not `proven` |
+| Prop. A′ Schur test $\mathcal R\preceq\mathrm{diag}(c)$ | **proven inequality**; weight collapse verified $10^{-16}$. The *value* now comes from the Prop. C closed-form envelope, so brackets built on it are `proven`; the `proven-cal` caveat applies only to the retired calibrated route below |
 | Prop. C exact closed form (C1) for $c_n$ | **proven identity** (digamma summation; agrees with Richardson brute sum to $2\times10^{-8}$, the float64 floor) |
-| digamma bounds B1/B2/B3 | **proven** (integral representation); mirrored Im companion FALSE — kept one-sided (house rule) |
+| digamma bounds B1/B2/B3 | **proven** (integral representation); *sign-flipped* B3 upper companion FALSE 240/240 (mpmath dps 40) — kept one-sided (house rule); other Im upper bounds are valid, see scope note §Prop. C |
 | Prop. C envelope + block sup | **proven closed form**; zero calibrated constants; block sup via per-factor monotone extremes |
 | envelope constants $C_1,C_\infty,C_2$ (legacy) | **retired from the shipped chain** by Prop. C; historic: proven sups $+$ pad, false for $\varpi\lesssim2.8$ (gate [1b] teeth) |
 | Prop. B block bounds (digamma, $G$/$\mathcal D$ monotone) | **proven inequality**; $c$-sup now from Prop. C (was calibrated $C$) |
