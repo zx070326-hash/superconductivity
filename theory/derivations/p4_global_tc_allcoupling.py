@@ -62,7 +62,7 @@ BAND MAP (see the companion .md for the theorem statement)
     strong  (34.4, 50]     Weyl envelope             PROVEN analytic
     crossover [0.582,34.4] Rayleigh + Kato-Temple    CERTIFICATE (node_cert)
     weak-W  [~0.20,0.582]  Prop. L + Prop. U         CERTIFICATE (finite-N)
-    deep    (0, ~0.20]     Cor (iii) + Prop. A       PROVEN analytic (loose)
+    deep    (0, ~0.20]     Cor (iii) + Prop. B        PROVEN (modulo calibrated C)
 
 The matrix route CANNOT reach lambda=0.05: that needs h=20, i.e. w ~ e^19.4 ~ 3e8,
 so N ~ 1e10.  This is a structural limit, reported honestly, and is exactly why
@@ -100,8 +100,13 @@ def ck(cond, msg=""):
 # certified constants
 # --------------------------------------------------------------------------
 THETA = 0.6349287917881079          # >= ||calR||               (Lemma M)
-G2_LO = mp.mpf("1.3181093293757127")  # <= g(2)                 (CERT-B)
-G2_HI = mp.mpf("1.3181615784372800")  # >= g(2)                 (CERT-B)
+# g(2) enclosure.  CERT-D (P4_g2_analytic.md, interval arithmetic, width
+# 6.1e-10) supersedes the CERT-B bracket (width 4.0e-5) used in v1 of this
+# file; CERT-B is retained ONLY as a nested-enclosure sentinel (section [0]).
+G2_LO = mp.mpf("1.318140211762671")   # <= g(2)                 (CERT-D)
+G2_HI = mp.mpf("1.318140212373478")   # >= g(2)                 (CERT-D)
+G2_LO_B = mp.mpf("1.3181093293757127")  # <= g(2)               (CERT-B, sentinel)
+G2_HI_B = mp.mpf("1.3181615784372800")  # >= g(2)               (CERT-B, sentinel)
 Z4 = mp.zeta(4)
 EG = 0.5772156649015329
 C0 = EG + np.log(4.0) - 1.5          # gamma + ln4 - 3/2
@@ -494,7 +499,7 @@ def h_bracket(w, K=8, N=None, mode="auto"):
         lo, hi = strong_bracket(w)
         return lo, hi, "strong-Weyl", "proven"
     if mode == "dyadic" or (mode == "auto" and w > W_HEAD):
-        return (h_lo_analytic(w), h_hi_dyadic(w), "deep-dyadic", "proven")
+        return (h_lo_analytic(w), h_hi_dyadic(w), "deep-dyadic", "proven-cal")
     if mode == "cross" or (mode == "auto" and w <= W_CROSS):
         # Crossover band.  The head-K route needs h(w) > Theta* (the Neumann
         # series and the Schur-complement step both divide by h - Theta*), and
@@ -518,6 +523,16 @@ def main(K=8, quick=False):
     print("=" * 78)
     print("P4 GLOBAL T_c ALL-COUPLING -- unified two-sided bracket, ALL lambda>0")
     print("=" * 78)
+
+    print("\n[0] CERTIFIED-CONSTANT HYGIENE (g(2) CERT-D nested in CERT-B)")
+    # Guard against a transcription slip in the tighter CERT-D digits: CERT-D
+    # must nest strictly inside the independently-derived CERT-B bracket.
+    ck(G2_LO_B < G2_LO and G2_HI < G2_HI_B,
+       "CERT-D nests strictly inside CERT-B")
+    ck(G2_LO < G2_HI and float(G2_HI - G2_LO) < 1e-8,
+       "CERT-D bracket ordered, width < 1e-8")
+    print("    CERT-D width %.3e  nested in CERT-B width %.3e"
+          % (float(G2_HI - G2_LO), float(G2_HI_B - G2_LO_B)))
 
     print("\n[1] SOUNDNESS of the Schur envelope c_shape (Prop. A-prime)")
     print("    c_n = sum_m R(s_n,s_m)/(2m+1) must satisfy c_n <= c_shape(s_n)")
@@ -620,7 +635,9 @@ def main(K=8, quick=False):
             wlo, whi = r
             j = int(np.argmin(np.abs(ws_grid - 0.5 * (wlo + whi))))
             meth = meth_grid[j]
-            rig = "proven" if meth in ("deep-dyadic", "strong-Weyl") else "certificate"
+            rig = ("proven" if meth == "strong-Weyl"
+                   else "proven-cal" if meth == "deep-dyadic"
+                   else "certificate")
         Flo, Fhi = tc_from_w(wlo, whi)
         rw = (Fhi - Flo) / Flo
         rows.append((lam, Flo, Fhi, rw, meth, rig))
@@ -643,15 +660,91 @@ def main(K=8, quick=False):
     pref = float(mp.e**mp.mpf(C0) / TWO_PI)
     ck(abs(pref - 0.2529996837) < 1e-8, "weak prefactor = %s" % pref)
     print("    weak  lambda->0 : (1/2pi)exp(c0) = %.10f  (target 0.2529996837)" % pref)
-    s_hi = float(1 / (TWO_PI * mp.sqrt(G2_LO)))
-    s_lo = float(1 / (TWO_PI * mp.sqrt(G2_HI)))
-    ck(s_lo <= s_hi and abs(s_hi - s_lo) < 1e-5,
-       "strong prefactor bracket is tight and ordered")
-    ck(s_lo <= 0.138624 <= s_hi, "strong prefactor encloses 1/(2pi sqrt(g2))")
-    print("    strong lambda->oo: 1/(2pi sqrt(g2)) in [%.7f,%.7f]" % (s_lo, s_hi))
-    print("      (note: T_c/w_E ~ %.4f sqrt(lambda).  The often-quoted 0.1827" % s_lo)
-    print("       belongs to the Allen-Dynes sqrt(<w^2>) normalisation, a")
-    print("       DIFFERENT frequency scale -- not comparable to this constant.)")
+    # CORRECTED 2026-09-15 (v1 had this reciprocal-flipped, see .md section 5).
+    # h(w) -> g(2) w^2 as w -> 0, so h(w*)=1/lambda gives w* = 1/sqrt(g(2) lambda)
+    # and T_c/w_E = 1/(2 pi w*) = sqrt(g(2) lambda)/(2 pi).  The prefactor is
+    # therefore sqrt(g(2))/(2 pi), NOT 1/(2 pi sqrt(g(2))): the two differ by
+    # exactly the factor g(2)=1.3181, a reciprocal-sqrt slip, and for an
+    # Einstein spectrum sqrt(<w^2>) = w_E so no normalisation can absorb it.
+    s_lo = float(mp.sqrt(G2_LO) / TWO_PI)
+    s_hi = float(mp.sqrt(G2_HI) / TWO_PI)
+    ck(s_lo <= s_hi and abs(s_hi - s_lo) < 1e-8,
+       "strong prefactor bracket is tight and ordered (CERT-D)")
+    # NOTE the CERT-D bracket has width 4.2e-11, i.e. TIGHTER than the 10-digit
+    # literal 0.1827262478, and it straddles the ...77|...78 rounding boundary
+    # ([0.18272624774670, 0.18272624778904]).  So NEITHER 10-dp literal is
+    # enclosed, and asserting enclosure of one would be a false check.  The two
+    # sound checks are (a) nesting inside the INDEPENDENT CERT-B derivation
+    # (M=12 rational arithmetic -- a different proof, not a re-run of CERT-D),
+    # and (b) agreement with the published headline to the published precision.
+    b_lo = float(mp.sqrt(G2_LO_B) / TWO_PI)
+    b_hi = float(mp.sqrt(G2_HI_B) / TWO_PI)
+    mid = 0.5 * (s_lo + s_hi)
+    ck(b_lo < s_lo and s_hi < b_hi,
+       "CERT-D prefactor nests strictly in the independent CERT-B prefactor")
+    ck(abs(mid - 0.1827262477) < 1e-9 and abs(mid - 0.1827262478) < 1e-9,
+       "prefactor agrees with KAY f(0)=0.1827262477 to 1e-9 (straddles 77|78)")
+    # Claim C publishes 0.1827 to FOUR decimals, so the correct agreement test is
+    # a 4-dp round-trip (half-ulp 5e-5), not a 5e-6 window -- the true gap is
+    # 0.18272624-0.1827 = 2.6e-5, which is agreement at the published precision
+    # and would be a spurious FAIL against a tolerance tighter than the headline.
+    ck(round(mid, 4) == 0.1827 and abs(mid - 0.1827) < 5e-5,
+       "prefactor rounds to the merged Claim C headline 0.1827 at 4 dp")
+    # the WRONG v1 constant must be OUTSIDE the bracket -- teeth test
+    ck(not (s_lo <= 0.1386242875 <= s_hi),
+       "the v1 value 1/(2pi sqrt(g2))=0.13862 is correctly EXCLUDED")
+    ck(abs(0.1827262478 / 0.1386242875 - float(0.5 * (G2_LO + G2_HI))) < 1e-6,
+       "the v1/v2 ratio is exactly g(2) -- confirms a reciprocal-sqrt slip")
+    print("    strong lambda->oo: sqrt(g2)/(2pi) in [%.14f,%.14f] (CERT-D, w %.1e)"
+          % (s_lo, s_hi, s_hi - s_lo))
+    print("      nested in CERT-B [%.14f,%.14f] (independent derivation)"
+          % (b_lo, b_hi))
+    print("      reconciles with the merged Claim C (T_c < 0.1827 sqrt(eta/M))")
+    print("      and KAY Thm 1(c) f(0)=0.1827262477..; same w_E scale.")
+    # end-to-end: the certified inversion itself must land on this constant
+    for lam in (1.0e4, 1.0e6):
+        r = strong_invert(1.0 / lam)
+        tlo, thi = tc_from_w(r[0], r[1])
+        rl, rh = tlo / mp.sqrt(lam), thi / mp.sqrt(lam)
+        # the inverted bracket is WIDER than the prefactor bracket (it carries the
+        # Weyl O(w^2) correction too), so here enclosure IS the right assertion:
+        # it must contain the whole CERT-D prefactor interval, hence the limit.
+        ck(float(rl) <= s_lo and s_hi <= float(rh),
+           "inverted bracket encloses the CERT-D prefactor at lambda=%g" % lam)
+        print("      lambda=%-9g T_c/(w_E sqrt(lambda)) in [%.9f,%.9f]"
+              % (lam, float(rl), float(rh)))
+
+    # --- INDEPENDENT confirmation of the strong constant (added 2026-09-15) ---
+    # The two rows above both come from strong_invert, i.e. from the SAME Weyl
+    # envelope whose constant is under test -- self-consistent, not independent.
+    # Strong coupling means SMALL w*, which is cheap for the KAY-entry builder
+    # H_mat, so we can solve lam*h(w*)=1 directly with no envelope anywhere and
+    # Richardson-extrapolate the O(w^2) Weyl correction away.  This is the check
+    # that would have caught the v1 reciprocal-sqrt slip on its own.
+    def _h_true(w, Nq):
+        return float(np.linalg.eigvalsh(H_mat(Nq, w))[-1])
+
+    def _solve_w(lam, Nq):
+        u, a, b = 1.0 / lam, 1e-9, 1.0
+        for _ in range(60):
+            m = 0.5 * (a + b)
+            if _h_true(m, Nq) > u:
+                b = m
+            else:
+                a = m
+        return 0.5 * (a + b)
+
+    pf = {}
+    for lam in (1600.0, 6400.0):
+        pf[lam] = 1.0 / (2.0 * np.pi * _solve_w(lam, 300) * np.sqrt(lam))
+    rich = (4.0 * pf[6400.0] - pf[1600.0]) / 3.0
+    print("      independent H_mat solve of lam*h(w*)=1 (no envelope):")
+    print("        prefactor(1600)=%.9f  prefactor(6400)=%.9f" % (pf[1600.0], pf[6400.0]))
+    print("        Richardson limit=%.9f  vs CERT-D mid %.9f" % (rich, mid))
+    ck(abs(rich - mid) < 1e-8,
+       "INDEPENDENT builder reproduces sqrt(g2)/2pi to 1e-8 (envelope-free)")
+    ck(abs(rich - 0.1386242875) > 1e-3,
+       "INDEPENDENT builder EXCLUDES the v1 constant 0.13862 (teeth test)")
 
     print("\nTIME %.1fs   PASS %d  FAIL %d" % (time.time() - t0, PASS[0], FAIL[0]))
     return rows

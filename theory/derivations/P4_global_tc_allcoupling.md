@@ -4,9 +4,26 @@
 (`P4_global_tc_certified.md`) left one gap: for $\lambda\lesssim0.582$ its *upper*
 $T_c$ side was the **asymptotic** form $h\sim L+c_0+b_1/L+\mathrm{REM}/L^2$ with an
 empirically calibrated pad $\mathrm{REM}=0.75$ — not a certificate. This note
-replaces that with two **proven** upper bounds (Prop. A′ and Prop. B) and one
-**certificate-level** one (Prop. U), so that **every** $\lambda>0$ now carries a
-two-sided bracket whose *both* sides are proven or finite-$N$ certified.
+replaces that with two upper bounds that are **proven modulo one calibrated scalar
+envelope** $C(a)$ (Prop. A′ and Prop. B) and one **certificate-level** one
+(Prop. U), so that **every** $\lambda>0$ now carries a two-sided bracket in which
+neither side is asymptotic.
+
+**Precise rigor claim (revised 2026-09-15 after review — the earlier wording said
+"both sides proven or finite-$N$ certified" without qualification, which
+overstated the two $C$-dependent bands):**
+
+| band | upper side rests on | strongest honest label |
+|---|---|---|
+| $\varpi\le0.14$ ($\lambda\gtrsim34$) | Weyl $\mathfrak g(2)$ envelope | **fully analytic** |
+| $(0.14,3]$ | Rayleigh + Kato–Temple | **certificate** (finite-$N$, interval) |
+| $(3,25]$ | Prop. L + Prop. U | **certificate** (finite-$N$) |
+| $>25$ ($\lambda\lesssim0.2$) | Prop. B (+A′) with $C(a)$ | **proven modulo calibrated $C$** |
+
+So the honest headline is: *no band is asymptotic any more* (that gap is genuinely
+closed), and every band is at least certificate-level, but the deep band's upper
+side is not yet fully analytic — it inherits three measured constants. Closing
+that is the single identified missing ingredient (§7 item 3).
 
 Deliverable script: `theory/derivations/p4_global_tc_allcoupling.py`
 (run `OMP_NUM_THREADS=1 python p4_global_tc_allcoupling.py [quick] [K=8]`).
@@ -84,7 +101,12 @@ increase the norm, so $\|\mathcal R_{PP}\|\le\Theta^\*$). **Every quantity is a
 finite-$N$ head sum, so (D1) cannot arise.** Valid only where $h>\Theta^\*$, i.e.
 $\varpi\gtrsim0.93$.
 
-### Prop. A′ (upper, **proven**; the Schur-weighted diagonal domination)
+### Prop. A′ (upper, **proven modulo the calibrated envelope $C$**; Schur-weighted diagonal domination)
+*Label discipline (revised 2026-09-15 after review):* the Schur **inequality** is
+proven unconditionally; what is only calibrated is the scalar envelope $C(a)$ that
+this bound is evaluated with. So the *proposition* is proven and the *number it
+returns* is proven-modulo-$C$. Anywhere this bound is used the rigor column reads
+`proven-cal`, never a bare `proven`.
 Schur test with weight $\phi_m=(m+\tfrac12)^{-1/2}$: for $\mathcal R\ge0$ symmetric,
 $\mathcal R\preceq\mathrm{diag}(c)$ with $c_n=(\mathcal R\phi)_n/\phi_n$. The weight
 **collapses exactly**:
@@ -112,7 +134,7 @@ proven constants. Gate step [1] re-verifies $c_n\le C(s_n)$ at every run.
 Note $\max_n c_n=0.6372>\Theta^\*$: $\Theta^\*$ bounds $\|\mathcal R\|$, **not** the
 row sums, so using $\Theta^\*$ as a pointwise $c$-fill would be unsound.
 
-### Prop. B (upper, **proven**, cost $O(\log\varpi)$ — the only route that reaches $\lambda\to0$)
+### Prop. B (upper, **proven modulo the calibrated envelope $C$**, cost $O(\log\varpi)$ — the only route that reaches $\lambda\to0$)
 Partition $n\ge1$ into blocks $[a,b)$. On each block, $G$ decreasing and the
 **exact** digamma sum $\sum_{n=a}^{b-1}\frac1{2n+1}=\tfrac12[\psi(b{+}\tfrac12)-\psi(a{+}\tfrac12)]$ give
 $$\sum_{n\in[a,b)}\tau_n^2\le G(s_a)^2\cdot\tfrac12\big[\psi(b{+}\tfrac12)-\psi(a{+}\tfrac12)\big],$$
@@ -153,7 +175,7 @@ Measured overshoot $h_{\rm hi}-h_{\rm true}$ (vs. a dense independent eigenvalue
 | strong | $\le0.14$ | Weyl $\mathfrak g(2)\varpi^2$ envelope | few $\%$ | **proven analytic** (Cor ii) |
 | crossover | $(0.14,3]$ | `node_cert`: Rayleigh + Kato–Temple | $\sim\!5\times10^{-4}$ | **certificate** (finite-$N$) |
 | head-$K$ | $(3,25]$ | Prop. L + Prop. U, $K{=}8$ | $\sim\!3\times10^{-4}$ | **certificate** (finite-$N$) |
-| deep | $>25$ | Cor (iii) + Prop. B | $\Delta h\approx0.17\!\to\!0.04$ | **proven analytic** |
+| deep | $>25$ | Cor (iii) + Prop. B | $\Delta h\approx0.17\!\to\!0.04$ | **proven modulo calibrated $C$** |
 
 Both sides of every band are proven or certificate-level. **No band anywhere relies
 on an asymptotic-only upper side** — which is precisely the gap this note closes.
@@ -192,8 +214,8 @@ $\varpi\in[0.1,10^{13}]$):
 
 | $\lambda$ | $F_{\rm lo}$ | $F_{\rm hi}$ | rel. width | route | rigor |
 |---|---|---|---|---|---|
-| 0.050 | $3.746\times10^{-10}$ | $8.126\times10^{-10}$ | $1.17$ | deep-dyadic | proven |
-| 0.100 | $8.819\times10^{-6}$ | $1.299\times10^{-5}$ | $0.47$ | deep-dyadic | proven |
+| 0.050 | $3.746\times10^{-10}$ | $8.126\times10^{-10}$ | $1.17$ | deep-dyadic | proven-cal |
+| 0.100 | $8.819\times10^{-6}$ | $1.299\times10^{-5}$ | $0.47$ | deep-dyadic | proven-cal |
 | 0.300 | $8.057\times10^{-3}$ | $1.020\times10^{-2}$ | $0.27$ | head-K8 | certificate |
 | 0.582 | $4.192\times10^{-2}$ | $5.965\times10^{-2}$ | $0.42$ | crossover-KT | certificate |
 | 1.000 | $1.072\times10^{-1}$ | $1.206\times10^{-1}$ | $0.12$ | crossover-KT | certificate |
@@ -229,15 +251,42 @@ head-$K$ band is the only expensive one, $O(N^2)$ per node with $N$ up to 2400.)
 **Asymptotic limits.** Weak: $(1/2\pi)e^{c_0}=0.2529996837$, reproducing
 $T_c\to0.2530\,\omega_E e^{-1/\lambda}(1+b_1\lambda)$. Strong:
 $T_c/\omega_E\to\varkappa\sqrt\lambda$ with
-$\varkappa=1/(2\pi\sqrt{\mathfrak g(2)})\in[0.1386232,0.1386259]$.
+$\varkappa=\sqrt{\mathfrak g(2)}/(2\pi)\in[0.18272624774670,0.18272624778904]$
+(CERT-D, width $4.2\times10^{-11}$), nested strictly inside the independent
+CERT-B interval $[0.18272410720972,0.18272772871072]$.
 
-> **Correction to the task brief.** The brief asked to confirm $0.1827\sqrt\lambda$.
-> That constant belongs to the Allen–Dynes $\sqrt{\langle\omega^2\rangle}$
-> normalisation, a **different frequency scale**; in the $\omega_E$ normalisation
-> used throughout P4 the certified constant is $0.13862$, and
-> $0.1827$ is *not* in the bracket. The ratio $0.1827/0.13862=1.318$ is
-> $\mathfrak g(2)$ itself, which identifies the rescaling. The gate asserts the
-> $\omega_E$-normalised value.
+Note this bracket **straddles the rounding boundary** of the published 10-dp
+literal ($\ldots77\,|\,\ldots78$), so it encloses *neither* $0.1827262477$ nor
+$0.1827262478$; the gate therefore asserts agreement to $10^{-9}$ and CERT-B
+nesting rather than enclosure of a rounded literal, which would be a false check.
+
+**Independent confirmation of $\varkappa$ (v2).** The inverted-bracket rows in
+gate §[7] come from `strong_invert`, i.e. from the same Weyl envelope whose
+constant is under test — self-consistent, not independent. Since strong coupling
+means *small* $\varpi_\*$, which is cheap for the KAY-entry builder, the gate now
+also solves $\lambda h(\varpi_\*)=1$ directly from `H_mat` with no envelope
+anywhere and Richardson-extrapolates the $O(\varpi^2)$ correction:
+$\varkappa(1600)=0.182687032$, $\varkappa(6400)=0.182716444$, Richardson limit
+$0.182726248$ — agreeing with CERT-D to $6.6\times10^{-10}$ and sitting
+$4.4\times10^{-2}$ away from the erroneous v1 value. This is the check that would
+have caught the v1 slip on its own, and it is now a gate assertion with a teeth
+test against the wrong constant.
+
+> **Erratum (v2, 2026-09-15).** v1 stated $\varkappa=1/(2\pi\sqrt{\mathfrak g(2)})
+> =0.13862$ and attributed $0.1827$ to a different frequency scale. That was a
+> reciprocal-sqrt slip, caught in review. Derivation:
+> $h(\varpi)\to\mathfrak g(2)\varpi^2$ gives
+> $\varpi_\*=1/\sqrt{\mathfrak g(2)\lambda}$, hence
+> $T_c/\omega_E=1/(2\pi\varpi_\*)=\sqrt{\mathfrak g(2)\lambda}/(2\pi)$ — the
+> prefactor is $\sqrt{\mathfrak g(2)}/(2\pi)=0.1827262478$, **not** its
+> reciprocal; the two differ by exactly the factor $\mathfrak g(2)=1.3181$. For an
+> Einstein spectrum $\sqrt{\langle\omega^2\rangle}=\omega_E$ is the *same* scale,
+> so no normalisation can absorb that factor. $0.1827$ is therefore the correct
+> $\omega_E$-scale constant and **agrees** with Claim C
+> ($T_c<0.1827\sqrt{\eta/M}$) and KAY Thm 1(c) $f(0)=0.1827262477\ldots$.
+> The brackets themselves were never affected — they use the correct inversion
+> ($\varpi_\*=\sqrt{u/\mathfrak g(2)}$); the error was confined to the reported
+> limit constant in gate section [7] and to this discussion.
 
 ---
 
@@ -251,11 +300,11 @@ $\varkappa=1/(2\pi\sqrt{\mathfrak g(2)})\in[0.1386232,0.1386259]$.
 | $\|\mathcal R\|\le\Theta^\*$ | certified (Lemma M) |
 | Prop. L lower (head Schur complement $\succeq$) | **proven inequality**, finite-$N$ inputs |
 | Prop. U upper (Schur + geometric remainder) | **proven inequality**, finite-$N$ inputs |
-| Prop. A′ Schur test $\mathcal R\preceq\mathrm{diag}(c)$ | **proven**; weight collapse verified $10^{-16}$ |
+| Prop. A′ Schur test $\mathcal R\preceq\mathrm{diag}(c)$ | **proven inequality**; weight collapse verified $10^{-16}$ — but the *value* returned uses the calibrated $C$ below, so any bracket built on it is `proven-cal`, not `proven` |
 | envelope constants $C_1,C_\infty,C_2$ | **calibrated, not closed-form** — re-checked every run |
-| Prop. B block bounds (digamma, $G$/$\mathcal D$ monotone) | **proven analytic** |
+| Prop. B block bounds (digamma, $G$/$\mathcal D$ monotone) | **proven inequality**; uses calibrated $C$ |
 | Cor (iii) lower $h\ge\ln\varpi+c_0-\frac1{12\varpi}-\frac3{16\varpi^2}$ | **proven analytic** |
-| Weyl envelope, $\mathfrak g(2)$ CERT-B | **proven analytic** / certified constant |
+| Weyl envelope, $\mathfrak g(2)$ CERT-D | **proven analytic** / certified constant |
 | `node_cert` (Rayleigh + Kato–Temple) | certificate (inherited from ③) |
 
 ---
@@ -275,7 +324,8 @@ $\varkappa=1/(2\pi\sqrt{\mathfrak g(2)})\in[0.1386232,0.1386259]$.
 4. **A "min of two dominations" bug** appeared in this file's own first draft and was
    caught by an explicit counterexample test, now recorded in §0. It had also
    silently made an earlier $\Theta^\*$-fill unsound.
-5. **$0.1827$ does not check out** in the $\omega_E$ normalisation — see §5.
+5. **v1 reported the strong prefactor reciprocal-flipped** ($0.13862$ for
+   $\sqrt{\mathfrak g(2)}/2\pi=0.18273$) — see §5.
 
 ---
 
