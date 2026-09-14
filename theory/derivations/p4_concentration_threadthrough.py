@@ -69,11 +69,33 @@ def eps_bound_sfree(x, N, hval):
     coeff = u2 * np.minimum(1.0, a/hval)          # = B(m)/(2 s / hval); s cancels
     return (Goff@coeff + Gl3@coeff)/hval
 
-def c_of(x, a_range, N, hval):
+def c_of(x, a_range, N, hval):   # TRUNCATED c = UPPER bound on true c (see base cert 4.1)
     eb = eps_bound_sfree(x, N, hval); sqx = np.sqrt(x)
     nt = int(round(a_range*sqx))
     if nt < 1: return float('nan')
     return 1.0 - eb[:nt+1].max()
+
+# --- rigorous Psi m-tail (decay lemma) => TAIL-INCLUSIVE strict lower bound on c ---
+def Ftot_ub(x): return 0.502*np.pi*np.sqrt(x)
+def a_ub(x, m):
+    m = np.asarray(m, float); F = Ftot_ub(x); f = f_lor(x)
+    S = lambda K: 1.0 + 0.5*np.log(2.0*K + 1.0)
+    return (f(np.ceil(m/2.0))*S(np.floor(m/2.0)) + 2.0*F/(m+1.0)
+            + f(m+1.0)*S(m) + F/(2.0*m+3.0))
+def tail_bnd(x, N, hlo, Mbig=200000):
+    m = np.arange(N, Mbig+1, dtype=float); part = np.sum((1.0/(2.0*m+1.0))*a_ub(x, m))
+    F = Ftot_ub(x); Mb = float(Mbig)
+    R = 1.5*F/Mb + 1.5*x*(1.0+0.5*np.log(2.0*Mb+1.0))/(Mb*Mb)
+    return (2.0/hlo**2)*(part + R)
+def c_tail(x, a_range, Nc=2000):   # tail-inclusive rigorous LOWER bound on c(a,x); no eigh
+    u = u_vec(Nc); A = O_of(f_lor(x), Nc); best = -1e9
+    for L in [2,4,8,16,32,64,128,256,512,1024]:
+        if L > Nc: break
+        psi = u.copy(); psi[L:] = 0.0; best = max(best, (psi@(A@psi))/(psi@psi))
+    eb = eps_bound_sfree(x, Nc, best); sqx = np.sqrt(x)
+    nt = int(round(a_range*sqx))
+    if nt < 1: return float('nan')
+    return 1.0 - (eb[:nt+1].max() + tail_bnd(x, Nc, best))
 
 def h_lower_from_A(A, N):
     u = u_vec(N); best = -1e9
@@ -106,23 +128,23 @@ for x in GRID:
     A = O_of(f_lor(x), N); h, v = top_eig(A); v0 = v[0]
     hlo = h_lower_from_A(A, N)
     h_[x]=h; hlo_[x]=hlo; v0_[x]=v0
-    c_half_[x] = c_of(x, 0.5, N, hlo)
-    c_one_[x]  = c_of(x, 1.0, N, hlo)
+    c_half_[x] = c_tail(x, 0.5)          # TAIL-INCLUSIVE rigorous lower bound (Nc=2000)
+    c_one_[x]  = c_tail(x, 1.0)
     Phi_half_[x] = Phi_partial(x, N, 0.5)
     Phi_one_[x]  = Phi_partial(x, N, 1.0)
     Phi_full_[x] = Phi_partial(x, N, np.inf)
     ck(hlo <= h + 1e-9 and hlo >= 0.9*h, "h_lo in [0.9h,h] x=%g" % x, "hlo/h=%.3f"%(hlo/h))
 
 # ---------- (1) THRESHOLD ϖ>=5 : c(a=1/2) > 0 across x>=25, and >=0.20 at x=25 ----------
-ck(c_half_[25.0] >= 0.195, "c(a=1/2, x=25) >= 0.20 (threshold wpi>=5)", "c=%.4f"%c_half_[25.0])
-ck(all(c_half_[x] > 0 for x in GRID), "c(a=1/2) > 0 for all x>=25")
+ck(c_half_[25.0] >= 0.19, "c_tail(a=1/2, x=25) >= 0.19 (threshold wpi>=5)", "c=%.4f"%c_half_[25.0])
+ck(all(c_half_[x] > 0 for x in GRID), "c_tail(a=1/2) > 0 for all x>=25")
 ck(all(c_half_[GRID[i+1]] > c_half_[GRID[i]] - 1e-3 for i in range(len(GRID)-1)),
-   "c(a=1/2) monotone-nondecreasing in x")
+   "c_tail(a=1/2) nondecreasing on GRID (coarse subseq; c is NOT monotone in x, see base 4.3)")
 
 # ---------- (2) THRESHOLD ϖ>=12 : c(a=1) turns positive at x=144, negative below ----------
-ck(c_one_[144.0] > 0, "c(a=1, x=144) > 0 (threshold wpi>=12)", "c=%.4f"%c_one_[144.0])
-ck(c_one_[64.0]  < 0, "c(a=1, x=64) < 0 (below wpi=12 threshold)", "c=%.4f"%c_one_[64.0])
-ck(all(c_one_[x] > 0 for x in GRID if x >= 144.0), "c(a=1) > 0 for all x>=144")
+ck(c_one_[144.0] > 0, "c_tail(a=1, x=144) > 0 (threshold wpi>=12)", "c=%.4f"%c_one_[144.0])
+ck(c_one_[64.0]  < 0, "c_tail(a=1, x=64) < 0 (below wpi=12 threshold)", "c=%.4f"%c_one_[64.0])
+ck(all(c_one_[x] > 0 for x in GRID if x >= 144.0), "c_tail(a=1) > 0 for all x>=144")
 
 # ---------- (3) LOG-CANCELLATION: x*v0^2*Phi is FLAT (order 1/x), not decaying ----------
 K1 = {x: x*v0_[x]**2*Phi_one_[x]  for x in GRID}     # a=1 kernel constant

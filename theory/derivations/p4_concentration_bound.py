@@ -113,10 +113,38 @@ def eps_bound_sfree(x, N, hval):
     return (Goff@coeff + Gl3@coeff)/hval
 
 def c_of(x, a_range, N, hval):
+    # TRUNCATED c: 1 - max Psi_n^{trunc,N}.  Since a truncated Psi UNDERESTIMATES the true
+    # (infinite) Psi (all terms >= 0), this is an UPPER bound on the true valid c -- NOT a
+    # rigorous lower bound.  Use c_tail(...) below for a genuine lower bound.
     eb = eps_bound_sfree(x, N, hval); sqx = np.sqrt(x)
     nt = int(round(a_range*sqx))
     if nt < 1: return float('nan')
     return 1.0 - eb[:nt+1].max()
+
+# ---------- rigorous m-tail of Psi (decay lemma) => tail-inclusive LOWER bound on c ----------
+# Decay lemma (analytic, see P4_concentration_bound.md 3.1):  for all m>=1,
+#   a_m <= a_ub(x,m) := f(ceil(m/2))*S(floor(m/2)) + 2 Ftot/(m+1) + f(m+1)*S(m) + Ftot/(2m+3),
+#   S(K):=sum_{j=0}^K 1/(2j+1) <= 1 + 0.5 ln(2K+1);   Ftot <= 0.502 pi sqrt(x)   [ (F) ].
+# Then, since 0<=g̃<1 (bracket<=2) and min(1,a_m/h)<=a_m/h,
+#   Psi_n^{tail,>=N} <= (2/h^2) sum_{m>=N} u_m^2 a_ub(x,m) =: tail_bnd(x,N,h)   (n-independent).
+# Hence c_tail := 1 - (max_n Psi_n^{trunc,N} + tail_bnd) is a rigorous LOWER bound on c.
+def Ftot_ub(x): return 0.502*np.pi*np.sqrt(x)
+def a_ub(x, m):
+    m = np.asarray(m, float); F = Ftot_ub(x); f = f_lor(x)
+    S = lambda K: 1.0 + 0.5*np.log(2.0*K + 1.0)
+    return (f(np.ceil(m/2.0))*S(np.floor(m/2.0)) + 2.0*F/(m+1.0)
+            + f(m+1.0)*S(m) + F/(2.0*m+3.0))
+def tail_bnd(x, N, hlo, Mbig=200000):
+    m = np.arange(N, Mbig+1, dtype=float)
+    part = np.sum((1.0/(2.0*m+1.0))*a_ub(x, m))
+    F = Ftot_ub(x); Mb = float(Mbig)
+    R = 1.5*F/Mb + 1.5*x*(1.0+0.5*np.log(2.0*Mb+1.0))/(Mb*Mb)   # analytic remainder m>Mbig
+    return (2.0/hlo**2)*(part + R)
+def c_tail(x, a_range, N, hval):
+    eb = eps_bound_sfree(x, N, hval); sqx = np.sqrt(x)
+    nt = int(round(a_range*sqx))
+    if nt < 1: return float('nan')
+    return 1.0 - (eb[:nt+1].max() + tail_bnd(x, N, hval))
 
 for x in [25,100,400]:
     N = 1500; u, u2, Foff, Fl3, Goff, Gl3 = build_kernels(x, N)
@@ -140,27 +168,77 @@ for x in [25,100,400,1600]:
     idx = int(2*np.sqrt(x))
     ck(np.all(eps_true[:idx+1] <= eb[:idx+1] + 1e-9), "eps_true<=eps_bound(h_lo) x=%s" % x)
 
-# ---------- N-consistency + true-profile ----------
-print("="*96)
-print("MAIN RESULT: rigorous profile constant c(a,x)  [ v_n >= c v_0 u_n on n<=a sqrt(x) ], via h_lo")
-print("%6s%9s%7s | %10s%10s | %9s%9s | %13s%12s" %
-      ("omega","x","h_lo","c(.5)N400","c(.5)N700","c(1)N400","c(1)N700","true c(1)@sqx","min r_n<=sqx"))
-for om in [0.5,1,2,3,5,8,12,20,30,40]:
-    x = om*om; row = {}
-    for N in [400,700]:
-        u = u_vec(N); A = O_of(f_lor(x), N); h, v = top_eig(A); s = u@v
-        hlo = h_lower(x, N)
-        c05 = c_of(x, 0.5, N, hlo); c10 = c_of(x, 1.0, N, hlo)
-        sqx = np.sqrt(x); nt = max(1, int(round(sqx)))
-        eps_true = (O_of(gtil(x), N)@v)/(2*s*u)
-        true_c1 = 1 - eps_true[:nt+1].max() if nt < N else float('nan')
-        r = v/(v[0]*u)
-        row[N] = (c05, c10, true_c1, r[:nt+1].min())
-    ck((not np.isnan(row[400][0])) and abs(row[400][0]-row[700][0]) < 0.05 or np.isnan(row[400][0]),
-       "N-consistency c(.5) om=%s" % om)
-    print("%6.1f%9.2f%7.3f | %10.3f%10.3f | %9.3f%9.3f | %13.3f%12.3f" %
-          (om, x, hlo, row[400][0], row[700][0], row[400][1], row[700][1], row[700][2], row[700][3]))
+# ---------- decay lemma check: a_m <= a_ub(x,m) (validates 3.1) ----------
+for x in [4.0, 25.0, 100.0, 400.0]:
+    N = 2000; u2 = u_vec(N)**2
+    _, _, Foff, Fl3, _, _ = build_kernels(x, N)
+    a_exact = Foff@u2 + Fl3@u2
+    aub = a_ub(x, np.arange(1, N))
+    ck(np.all(a_exact[1:] <= aub + 1e-12), "decay lemma a_m<=a_ub x=%s" % x,
+       "max ratio %.3f" % np.max(a_exact[1:]/aub))
 
-print("="*96)
+# ---------- memoized c-pack (one kernel build per x): (hlo, cT.5, ci.5, cT1, ci1) ----------
+_cpack = {}
+def c_pack(x, N=2000):
+    key = (round(x, 6), N)
+    if key in _cpack: return _cpack[key]
+    u, u2, Foff, Fl3, Goff, Gl3 = build_kernels(x, N)
+    A = O_of(f_lor(x), N); best = -1e9
+    for L in [2,4,8,16,32,64,128,256,512,1024]:
+        if L > N: break
+        psi = u.copy(); psi[L:] = 0.0; best = max(best, (psi@(A@psi))/(psi@psi))
+    hlo = best
+    a = Foff@u2 + Fl3@u2; coeff = u2*np.minimum(1.0, a/hlo)
+    Psi = (Goff@coeff + Gl3@coeff)/hlo
+    tb = tail_bnd(x, N, hlo); sqx = np.sqrt(x)
+    def cc(ar, inc):
+        nt = int(round(ar*sqx))
+        if nt < 1: return float('nan')
+        return 1.0 - (Psi[:nt+1].max() + (tb if inc else 0.0))
+    val = (hlo, cc(0.5,False), cc(0.5,True), cc(1.0,False), cc(1.0,True))
+    _cpack[key] = val; return val
+def cti(x, a): return c_pack(x)[2] if a == 0.5 else c_pack(x)[4]   # tail-incl c
+def ctr(x, a): return c_pack(x)[1] if a == 0.5 else c_pack(x)[3]   # truncated c
+
+# ---------- N-consistency of the tail-inclusive c (tol ~0.006, was 0.05) ----------
+for x in [64.0, 400.0, 1600.0]:
+    c12 = c_pack(x, 1200)[2]; c20 = c_pack(x, 2000)[2]
+    ck(abs(c12 - c20) < 0.006, "N-consistency c_tail(.5) x=%s" % x, "|d|=%.4f" % abs(c12-c20))
+
+# ---------- MAIN RESULT: TAIL-INCLUSIVE rigorous lower bound c_tail(a,x) ----------
+# c_trunc is the truncated UPPER bound; c_tail = c_trunc - tail_bnd is the rigorous LOWER bound.
+print("="*100)
+print("MAIN RESULT: rigorous profile constant  v_n >= c(a,x) v_0 u_n  on n<=a sqrt(x)")
+print("  c_tail = TAIL-INCLUSIVE strict lower bound (via decay-lemma Psi tail);  "
+      "c_trunc = truncated UPPER bound")
+print("%6s%9s%7s | %9s%9s | %9s%9s" %
+      ("omega","x","h_lo","cT(.5)","c_tail.5","cT(1)","c_tail1"))
+for om in [1,2,3,5,8,12,20,30,40]:
+    x = float(om*om); hlo, ct5, ci5, ct1, ci1 = c_pack(x)
+    ck(np.isnan(ci5) or ci5 <= ct5 + 1e-12, "tail<=trunc c(.5) om=%s" % om)  # truncation=UPPER bound
+    print("%6.1f%9.2f%7.3f | %9.4f%9.4f | %9.4f%9.4f" % (om, x, hlo, ct5, ci5, ct1, ci1))
+
+# ---------- corrected tail-inclusive constants (the only values labeled 严格下界) ----------
+ck(cti(25.0,   0.5) >= 0.19, "c_tail(.5,x=25) >= 0.19",   "%.4f"%cti(25.0,0.5))
+ck(cti(144.0,  0.5) >= 0.38, "c_tail(.5,x=144) >= 0.38",  "%.4f"%cti(144.0,0.5))
+ck(cti(400.0,  0.5) >= 0.46, "c_tail(.5,x=400) >= 0.46",  "%.4f"%cti(400.0,0.5))
+ck(cti(1600.0, 0.5) >= 0.54, "c_tail(.5,x=1600) >= 0.54", "%.4f"%cti(1600.0,0.5))
+ck(cti(144.0,  1.0) >  0.0,  "c_tail(1,x=144) > 0",       "%.4f"%cti(144.0,1.0))
+ck(cti(400.0,  1.0) >= 0.10, "c_tail(1,x=400) >= 0.10",   "%.4f"%cti(400.0,1.0))
+ck(cti(1600.0, 1.0) >= 0.18, "c_tail(1,x=1600) >= 0.18",  "%.4f"%cti(1600.0,1.0))
+
+# ---------- SAWTOOTH structure (c is NOT monotone in x; 4.3) ----------
+# tooth-boundary subsequence x=(k/a)^2 is where index n=k enters the max -> local dip;
+# these left-ends are the tooth minima and are non-decreasing in k.
+ck(cti(36.0, 0.5) < cti(25.0, 0.5), "sawtooth: c_tail(.5,36) < c_tail(.5,25)")   # non-monotone
+ck(all(cti(float(4*k*k), 0.5) >= 0.19 for k in range(3, 11)),
+   "sawtooth inf: c_tail(.5, 4k^2) >= 0.19 for k=3..10")                          # inf over x>=25
+cb = [cti(float(k*k), 1.0) for k in [11,12,13,14,20]]
+ck(all(cb[i+1] > cb[i] - 1e-4 for i in range(len(cb)-1)), "a=1 boundary subseq non-decreasing")
+ck(cti(100.0, 1.0) < 0.0, "a=1: c_tail(1,x=100) < 0")
+ck(cti(121.0, 1.0) < 0.0, "a=1: c_tail(1,x=121) < 0 (sawtooth dip)")
+ck(cti(144.0, 1.0) > 0.0, "a=1: c_tail(1,x=144) > 0")
+
+print("="*100)
 print("ck PASS = %d    FAILS = %d" % (CK, len(FAILS)))
 for nm, d in FAILS: print("   FAIL:", nm, d)
