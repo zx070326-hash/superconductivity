@@ -361,7 +361,7 @@ def h_hi_schur(w, Nc=3000, M=200000):
 # ==========================================================================
 # Prop. B -- dyadic-block bound: PROVEN at EVERY w, cost O(log w)
 # ==========================================================================
-def h_hi_dyadic(w, ratio=1.0002, nmax_mult=400.0):
+def h_hi_dyadic(w, ratio=1.002, nmax_mult=400.0):
     """PROVEN upper bound on h(w) valid for ARBITRARILY large w (no O(w) sum).
 
     Partition n >= 1 into blocks [a,b).  On each block:

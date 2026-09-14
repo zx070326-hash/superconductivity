@@ -166,7 +166,7 @@ Rayleigh/Kato–Temple route has no such restriction.
 
 ## 5. Results
 
-Gate: **`PASS 30  FAIL 0`** (quick mode, 107 s, single-thread). Checks cover:
+Gate: **`PASS 30  FAIL 0`** (quick mode, 42 s, single-thread). Checks cover:
 the envelope soundness $c_n\le C(s_n)$; enclosure of $h_{\rm true}$ at seven
 $\varpi$ against the **independent** `H_mat` builder (KAY entry formulas, *not* the
 (M1) decomposition — a genuinely different discretization, per the quadrature-bias
@@ -209,6 +209,22 @@ $3\!-\!7\times10^{-4}$ wide in the certified bands. Refining the grid shrinks th
 $\propto1/N$ **without** touching the mathematics. The two numbers answer different
 questions: ③ answers "how tight can the crossover get?", this note answers "is
 anything left uncertified anywhere?".
+
+**Direct evidence that the width is grid-limited.** Re-running with the grid
+densified only in the two *cheap* bands (crossover $\to$ 90 nodes, dyadic $\to$ 260
+nodes; head-$K$ deliberately omitted, 350 nodes, 30 s) shrinks the widths by
+$\approx5\times$ with **no change to any bound**:
+
+| $\lambda$ | rel. width, 108-node grid | rel. width, densified cheap bands |
+|---|---|---|
+| 0.05 | $1.17$ | $\mathbf{0.23}$ |
+| 0.10 | $0.47$ | $\mathbf{0.23}$ |
+| 1.00 | $0.124$ | $\mathbf{0.039}$ |
+| 20.0 | $0.124$ | $\mathbf{0.039}$ |
+
+(The head-$K$ band, excluded from that particular refinement run, is what leaves a
+gap at $\lambda\approx0.3\!-\!0.5$ there; it is covered in the gate proper. The
+head-$K$ band is the only expensive one, $O(N^2)$ per node with $N$ up to 2400.)
 
 **Asymptotic limits.** Weak: $(1/2\pi)e^{c_0}=0.2529996837$, reproducing
 $T_c\to0.2530\,\omega_E e^{-1/\lambda}(1+b_1\lambda)$. Strong:
@@ -267,7 +283,7 @@ $\varkappa=1/(2\pi\sqrt{\mathfrak g(2)})\in[0.1386232,0.1386259]$.
 
 ```
 cd theory/derivations
-OMP_NUM_THREADS=1 python p4_global_tc_allcoupling.py quick   # ~107 s, PASS 30 FAIL 0
+OMP_NUM_THREADS=1 python p4_global_tc_allcoupling.py quick   # ~42 s, PASS 30 FAIL 0
 OMP_NUM_THREADS=1 python p4_global_tc_allcoupling.py         # dense grid, tighter widths
 ```
 All soundness checks are counted by `ck(...)`; the run prints `PASS N  FAIL M`.
