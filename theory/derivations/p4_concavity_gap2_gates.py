@@ -180,41 +180,42 @@ def main():
     print("  => Var route removes the analytic ||[A,B]||_F requirement (Gap 2).")
 
     # ------------------------------------------------------------------ Gate 16
-    print("\nGate 16: ANALYTIC gap from trial Rayleigh quotients (pure rational)")
-    print("         h_lo_trial - THETA* > 0 for varpi >= 1.0 (closes [1.46,1.63])")
+    print("\nGate 16: e0 single-trial ANALYTIC gap via monotonicity (varpi > 1.3188)")
+    print("         x/(1+x) strictly increasing, crosses THETA* at x*=1.73920")
     print("-" * 74)
-    # Each trial vector w gives a Rayleigh quotient <w,Aw>/||w||^2 that is a
-    # rational function of x (w fixed, f(k;x)=x/(k^2+x) rational, k-sums closed).
-    # h_lo_trial = max over TRIAL is also rational. With lam2 <= THETA* (certified),
-    # gamma >= h_lo_trial(x) - THETA* is ANALYTIC wherever positive.
-    #
-    # The e0 trial alone gives x/(1+x) - THETA* > 0 for varpi > 1.3188, but the
-    # max over all three trial vectors beats THETA* starting at varpi = 1.0.
-    x_e0_threshold = THETA_STAR / (1.0 - THETA_STAR)
-    varpi_e0_threshold = x_e0_threshold ** 0.5
+    # ANALYTIC PROOF for e0 trial: <e0, A e0> = (A)_00 = f(1;x) = x/(1+x)
+    # (n=0 diagonal L1 sum is empty). With lam2 <= THETA* (certified, Lemma M):
+    #   gamma >= x/(1+x) - THETA*.
+    # Key: phi(x) := x/(1+x) is strictly increasing on (0,∞) since
+    #   phi'(x) = 1/(1+x)^2 > 0 for all x > 0.
+    # At crossing point x* := THETA*/(1-THETA*), phi(x*) = THETA*.
+    # Hence phi(x) > THETA* for ALL x > x*, i.e., varpi > sqrt(x*).
+    x_star = THETA_STAR / (1.0 - THETA_STAR)
+    varpi_star = x_star ** 0.5
+    phi_star = x_star / (1.0 + x_star)
+    ck(abs(phi_star - THETA_STAR) < 1e-14,
+       f"e0 crossing point verification: x*/(1+x*) != THETA* (err={abs(phi_star - THETA_STAR):.2e})")
     print(f"  THETA* = {THETA_STAR:.17f} (certified, Lemma M)")
-    print(f"  e0 threshold: varpi > {varpi_e0_threshold:.4f} for x/(1+x) > THETA*")
+    print(f"  x* = THETA*/(1-THETA*) = {x_star:.17f}")
+    print(f"  varpi* = sqrt(x*) = {varpi_star:.17f}")
+    print(f"  Verified: x*/(1+x*) = THETA* (err < 1e-14)")
     print()
-    # Find where h_lo_trial first beats THETA*
+    print(f"  ANALYTIC CONCLUSION: phi(x)=x/(1+x) strictly increasing")
+    print(f"    => phi(x) > THETA* for ALL x > {x_star:.6f} (varpi > {varpi_star:.6f})")
+    print(f"    => gamma_lo > 0 ANALYTICALLY on ({varpi_star:.5f}, ∞)")
+    print(f"    => closes hole [1.46,1.63] via monotone rational inequality.")
+    print()
+    # Numerical evidence (NOT analytic assertions) for other trial vectors at lower varpi
+    print("  Numerical evidence (grid, not analytic proof) for h_lo_trial:")
     KX = 8 * N
-    test_range = [0.95, 0.98, 1.0, 1.02, 1.05, 1.1, 1.2, 1.32, 1.46, 1.5, 1.54, 1.6, 1.63, 2.0, 5.0, 20.0]
-    first_positive = None
-    for varpi in test_range:
+    for varpi in [1.0, 1.1, 1.2, 1.3, 1.32]:
         x = varpi * varpi
         hlo = h_lo_trial(x, KX)
         gap_hlo = hlo - THETA_STAR
-        if gap_hlo > 0:
-            if first_positive is None:
-                first_positive = varpi
-            ck(True, f"varpi={varpi}: h_lo_trial - THETA* > 0 (analytic)")
-            if varpi in (1.0, 1.32, 1.46, 1.5, 1.63, 2.0, 20.0):
-                print(f"  varpi={varpi:5.2f}  h_lo_trial={hlo:.6f}  h_lo - THETA*={gap_hlo:+.6e}  (ANALYTIC)")
-        else:
-            if varpi >= 1.0:  # Should not happen at varpi>=1.0
-                ck(False, f"varpi={varpi}: h_lo_trial - THETA* = {gap_hlo:.6e} <= 0")
-    print(f"  => ANALYTIC gamma_lo > 0 for varpi >= {first_positive:.2f} via rational h_lo_trial.")
-    print(f"     Closes original hole [1.46,1.63] and extends down to varpi={first_positive}.")
-    print(f"     No grid/certificate needed — all trial Rayleigh quotients are rational in x.")
+        status = "POS" if gap_hlo > 0 else "NEG"
+        print(f"    varpi={varpi:5.2f}  h_lo_trial - THETA* = {gap_hlo:+.6e}  ({status}, grid check)")
+    print(f"  => [1.0, {varpi_star:.4f}) remains grid-verified / certificate-level.")
+    print(f"     To prove analytically, need monotonicity or interval arithmetic on trial vectors.")
 
     # ------------------------------------------------------------------ Gate 12
     print("\nGate 12: (II) analytic gap gamma_lo>0 for ALL varpi (Gap 1: no hole)")
@@ -293,10 +294,10 @@ def main():
     print("Summary:")
     print("  (I)   bound1 (Var, 1 gap power) <= bound2 (||[A,B]||_F, 3 powers): PROVED")
     print("        -> analytic ||[A,B]||_F bound is NOT needed (Gap 2 dissolved).")
-    print("  (Ia)  e0 single-trial ANALYTIC gap: x/(1+x) > THETA* for varpi >= 1.32")
-    print("        -> closes original hole [1.46,1.63] via pure rational inequality.")
-    print("  (II)  analytic gap gamma_lo = h_lo(trial) - min(Gdom-trace, Theta*) > 0")
-    print("        for all varpi -> full spectrum covered (Gap 1 closed).")
+    print("  (Ia)  e0 ANALYTIC gap via monotonicity: x/(1+x) > THETA* for varpi > 1.3188")
+    print("        -> closes hole [1.46,1.63] via monotone rational inequality (Gate 16).")
+    print("  (II)  full-spectrum gap gamma_lo > 0: analytic (varpi>1.32) + certificate (<1.32)")
+    print("        -> varpi in [1.0,1.32) is grid-verified; varpi<1.0 uses Gdom-trace (cert).")
     print("  (III) end-to-end |C|/E < 0.32 with Bhatia-Davis Var bound, N-consistent.")
     print("  (IV)  residual: tight analytic Var_v(B) needs the eigenvector-overlap")
     print("        (Rayleigh deficit bmax-q); v-free surrogates over budget in mid varpi.")

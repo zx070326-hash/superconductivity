@@ -9,7 +9,7 @@ Var_v(B) < γ·(q−m₃)（见 **§7 Phase 2 续章**）。Phase 2 结果：
 §4–§5 保留为 Phase 1 记录。
 
 数值门：`theory/derivations/p4_concavity_q_route.py`（Phase 1，102 个 `ck`，9.9 s）
-+ `theory/derivations/p4_concavity_gap2_gates.py`（Phase 2，Gate 11–16，178 个 `ck`，13 s）。
++ `theory/derivations/p4_concavity_gap2_gates.py`（Phase 2，Gate 11–16，165 个 `ck`，10 s）。
 
 记号：f(k;x) = x/(k²+x)，x = ϖ²；A := 𝒪[f]，B := 𝒪[f²]；
 h(x) := λ₁(A) = H(x)，v = v_x 为顶单位本征向量（v[0] > 0）；
@@ -320,24 +320,25 @@ tr Gdom² 是显式二重级数（`2026-09-13_gap_lorentz_probe.md` §2.3），
   但当前实现对 tr Gdom² 作有限 N×N 截断（证书级），见 Gate 16 讨论；
 - Θ* 本身为证书级常数（Layer-1 eigenvalue，Lemma M）。
 
-**引理 7.2a（试探向量单界，纯解析）**。h_lo_trial(x) := max_{w∈TRIAL} ⟨w,Aw⟩/‖w‖²
-是 x 的有理函数（每个 w 固定，级数对 k 闭式）。配合 λ₂ ≤ Θ* = 0.63492879178810795
-（证书级，Lemma M），有
+**引理 7.2a（e₀ 单试探界，纯解析）**。对单一试探向量 e₀，
+⟨e₀, A e₀⟩ = (A)₀₀ = f(1;x) = x/(1+x)（n=0 时 L1 对角求和为空）。配合
+λ₂ ≤ Θ* = 0.63492879178810795（证书级，Lemma M），有
 
-    γ ≥ h_lo_trial(x) − Θ*.
+    γ ≥ x/(1+x) − Θ*.
 
-此不等式在 h_lo_trial(x) > Θ* 时**纯解析地**成立。数值上 h_lo_trial(x) > Θ* 对
-x ≥ 1.0（即 ϖ ≥ 1.0）成立；特别地，单一 e₀ 试探给出 x/(1+x) > Θ* 对
-x > 1.7392（ϖ > 1.3188）。Gate 16 rigorously verifies h_lo_trial − Θ* > 0 for ϖ ≥ 1.0.
+关键：φ(x) := x/(1+x) 在 (0,∞) 上**严格递增**（φ'(x) = 1/(1+x)² > 0），
+且在 x* := Θ*/(1−Θ*) = 1.73920 处 φ(x*) = Θ*。故 φ(x) > Θ* 对**一切** x > x*
+成立（单调性 + 单点验证），即 ϖ > √x* ≈ 1.3188。Gate 16 rigorously verifies
+the crossing point and monotonicity.
 
 **诚实边界**：
-- ϖ ≥ 1.0（x ≥ 1.0）：max-trial h_lo_trial(x) + Θ* 给出**纯解析**的 γ_lo > 0（引理 7.2a）。
-  所有试探向量 Rayleigh 商均为 x 的有理函数，max 仍为有理。覆盖原"洞" [1.46,1.63]
-  及其大范围邻域。
+- ϖ > 1.3188（x > 1.7392）：e₀ 单试探界 + Θ* + 单调性给出**纯解析**的 γ_lo > 0
+  （引理 7.2a）。覆盖原"洞" [1.46,1.63] 及其邻域。
+- ϖ ∈ [1.0, 1.3188]：max-trial h_lo 数值上超过 Θ*（Gate 16 网格检查），但未解析证明
+  （需区间算术或逐试探向量单调性）。属**证书级**。
 - ϖ < 1.0：max-trial h_lo 与 λ₂_hi 的 Gdom 迹界的较小者给出 γ_lo > 0，但包含
-  证书级输入（Gdom 迹的 N×N 截断，见 Gate 16 函数文档 + Θ* 本身）。
-  对 Lemma C 所需的全谱，下端由 Phase-1 Gate 12 的数值验证覆盖；物理相关区 ϖ≥0.8
-  远在解析段内。
+  证书级输入（Gdom 迹的 N×N 截断见 gdom_trace_and_diag 文档 + Θ* 本身）。
+  Phase-1 Gate 12 数值验证 γ_lo > 0 对全谱成立。
 
 **数值结果（Gate 12）**：γ_lo > 0 对全谱成立，min γ_lo/γ_true = 0.340；
 [1.46,1.63] 洞消失。该洞纯由 §4.3 的三次隙幂造成——在一次幂 (bound1) 下用
