@@ -104,6 +104,13 @@ finite-$N$ head sum, so (D1) cannot arise.** Valid only where $h>\Theta^\*$, i.e
 $\varpi\gtrsim0.93$.
 
 ### Prop. A′ (upper, **proven modulo the calibrated envelope $C$**; Schur-weighted diagonal domination)
+> **RETIRED from the shipped chain (Track 2, 2026-09-15).** Prop. B no longer
+> evaluates this bound with $C_{\text{shape}}$; it uses the Prop. C envelope
+> (`c_env_blocksup`), which is closed-form and pad-free. Everything in this
+> subsection — including the `proven-cal` label discipline below — describes the
+> *retired* route and is kept for provenance. The deep band now ships as bare
+> `proven`; gates [1]/[1b] remain as legacy audits of this retired scheme.
+
 *Label discipline (revised 2026-09-15 after review):* the Schur **inequality** is
 proven unconditionally; what is only calibrated is the scalar envelope $C(a)$ that
 this bound is evaluated with. So the *proposition* is proven and the *number it

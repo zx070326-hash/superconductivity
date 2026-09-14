@@ -137,8 +137,9 @@ FL = 1e-12                           # float64 rounding pad (generous)
 # Each constant below therefore = a PROVEN sup + an explicit pad.  The pad's job
 # is to absorb the discrete-minus-continuum (midpoint-rule) excess, measured as
 # +0.0197/w^2 at the a~1.5 peak, stable over w=3..200.  Pad 2.571e-3 covers that
-# for w >= 2.77; c_shape is LIVE only on the Prop-B band w > 25 (h_hi_schur has
-# no call site), where the excess is 3.2e-5, i.e. 82x inside the pad.
+# for w >= 2.77; c_shape/C_K1/C_K2/C_SUP are RETIRED from the shipped chain
+# (h_hi_dyadic uses Prop. C envelope c_env_blocksup, proven, zero calibrated
+# constants); kept here as legacy audit constants for gates [1]/[1b].
 # HONEST BOUNDARY: the O(1/w^2) midpoint excess is measured, not proven, so the
 # label is proven-sup + calibrated-pad.  It is NOT valid for small w -- at w=0.3
 # max_n c_n = 0.979 and at w=1.0 it is 0.317/0.304 = 1.04x over c_shape.  Those w
@@ -468,7 +469,12 @@ def h_hi_dyadic(w, ratio=1.002, nmax_mult=400.0):
         return (2.0 * float(np.sum(Sarr / d))
                 + 2.0 * Btail / (h - c_tail) - 1.0)
 
-    return bisect(g, C_SUP + 1e-9, 200.0) + FL
+    # Bisection ENDPOINTS, not bounds: g is a decreasing majorant of F-1, so its
+    # root is the returned upper bound wherever it is bracketed.  The left
+    # endpoint is the certified THETA (Lemma M), not the retired calibrated
+    # C_SUP -- verified numerically identical (0.000e+00 at w=26..1000), swapped
+    # so that no calibrated symbol appears anywhere in the shipped deep route.
+    return bisect(g, THETA + 1e-9, 200.0) + FL
 
 
 # ==========================================================================
@@ -686,7 +692,12 @@ def h_bracket(w, K=8, N=None, mode="auto"):
         lo, hi = strong_bracket(w)
         return lo, hi, "strong-Weyl", "proven"
     if mode == "dyadic" or (mode == "auto" and w > W_HEAD):
-        return (h_lo_analytic(w), h_hi_dyadic(w), "deep-dyadic", "proven-cal")
+        hi = h_hi_dyadic(w)
+        if hi is None:
+            # w <= 0.75: bisection cap unreachable; fall back to proven Weyl envelope
+            lo2, hi2 = strong_bracket(w)
+            return lo2, hi2, "strong-Weyl", "proven"
+        return (h_lo_analytic(w), hi, "deep-dyadic", "proven")
     if mode == "cross" or (mode == "auto" and w <= W_CROSS):
         # Crossover band.  The head-K route needs h(w) > Theta* (the Neumann
         # series and the Schur-complement step both divide by h - Theta*), and
@@ -762,16 +773,16 @@ def main(K=8, quick=False):
     ck(float((Cg / bad).max()) > 1.0,
        "teeth: C_SUP shaved under Theta* stops dominating C (control)")
 
-    print("\n[1b] DISCRETE-vs-CONTINUUM excess and the pad budget (T2, honest)")
-    print("     c_n is a midpoint rule for C(a); the pad absorbs the O(1/w^2) excess")
+    print("\n[1b] LEGACY audit: discrete-vs-continuum excess (RETIRED calibrated-pad scheme)")
+    print("     Shipped route uses Prop. C proven envelope (pad-free); this audits the old c_shape.")
     K_EXC = 0.0197
     w_ok = (K_EXC / (C_SUP - THETA_STAR))**0.5
     ck(w_ok < W_HEAD, "pad-coverage threshold w=%.3f is below the live band %.0f"
        % (w_ok, W_HEAD))
     print("     excess ~ %.4f/w^2 at the peak; pad %.3e covers it for w >= %.3f"
           % (K_EXC, C_SUP - THETA_STAR, w_ok))
-    print("     c_shape is LIVE only for w > %.0f (Prop B); h_hi_schur is unused."
-          % W_HEAD)
+    print("     c_shape/C_SUP/C_K2 RETIRED from shipped chain (Prop. C envelope is proven,"
+          " pad-free); kept as LEGACY audit below.")
     ck(K_EXC / W_HEAD**2 < 0.05 * (C_SUP - THETA_STAR),
        "at w=%.0f the excess is >20x inside the pad" % W_HEAD)
     for wsm in (0.3, 1.0):
@@ -784,9 +795,9 @@ def main(K=8, quick=False):
         print("     w=%4.1f: max c_n/c_shape = %.4f  EXCEEDS 1 (not dispatched here)"
               % (wsm, rsm))
 
-    print("\n[1] SOUNDNESS of the Schur envelope c_shape (Prop. A-prime)")
-    print("    c_n = sum_m R(s_n,s_m)/(2m+1) must satisfy c_n <= c_shape(s_n)")
-    print("    ON THE DISPATCHED BAND w>25 (Prop B consumes c_shape only there):")
+    print("\n[1] LEGACY audit: Schur envelope c_shape soundness (RETIRED from shipped chain)")
+    print("    Shipped route uses Prop. C proven envelope (proven, pad-free).")
+    print("    This checks the OLD c_shape envelope on former dispatch band w>25:")
     for w in (26.0, 50.0, 100.0, 200.0):
         Nc = max(80, int(4 * w))
         c = schur_c(w, Nc, int(max(60 * w, 60000)))
@@ -934,8 +945,7 @@ def main(K=8, quick=False):
             wlo, whi = r
             j = int(np.argmin(np.abs(ws_grid - 0.5 * (wlo + whi))))
             meth = meth_grid[j]
-            rig = ("proven" if meth == "strong-Weyl"
-                   else "proven-cal" if meth == "deep-dyadic"
+            rig = ("proven" if meth in ("strong-Weyl", "deep-dyadic")
                    else "certificate")
         Flo, Fhi = tc_from_w(wlo, whi)
         rw = (Fhi - Flo) / Flo
