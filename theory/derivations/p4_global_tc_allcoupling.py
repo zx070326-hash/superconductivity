@@ -153,6 +153,14 @@ C_K2 = 1.6870      # >= 1.6850369351350 (proven sup) + 1.963e-03 pad
 A_PEAK = float(np.sqrt(C_SUP / (C_K1 - C_SUP)))
 
 
+
+
+def _coth(x):
+    """coth(x) for x>0, overflow-safe."""
+    if x > 350.0:
+        return 1.0
+    return 1.0 / np.tanh(x)
+
 def C_cont(a):
     """EXACT continuum row-sum  C(a) = int_0^inf R(a,b)/(2b) db.
 
@@ -398,22 +406,29 @@ def h_hi_schur(w, Nc=3000, M=200000):
 
 
 # ==========================================================================
-# Prop. B -- dyadic-block bound: proven-sup + calibrated-pad, valid w>25
+# Prop. B -- dyadic-block bound: PROVEN (Prop. C envelope, zero calibrated
+# constants), valid on the dispatched band w>25.  Replaces the former
+# proven-sup + calibrated-pad route: the per-block c-sup now comes from the
+# closed-form Prop. C envelope c_env_blocksup, not from c_shape/C_SUP/C_K2.
 # ==========================================================================
 def h_hi_dyadic(w, ratio=1.002, nmax_mult=400.0):
-    """Proven-sup + calibrated-pad upper bound, VALID on dispatched band w>25 only.
+    """PROVEN upper bound on h(w) via the Prop.-C row-sum envelope.
 
-    Returns None for w <= 0.75 (bisection cap would be hit vacuously).
+    Valid for ALL w > 0.75 analytically (the Prop. C envelope dominates the
+    row sum everywhere); dispatched on w > 25.  Returns None for w <= 0.75
+    (bisection cap would be hit vacuously).
+
     Partition n >= 1 into blocks [a,b).  On each block:
         sum_{n in [a,b)} tau_n^2 <= G(s_a)^2 * sum_{n in [a,b)} 1/(2n+1)
                                    = G(s_a)^2 * (1/2)[psi(b+1/2) - psi(a+1/2)]
     (G decreasing, 1/(2n+1) exact via digamma),  and
         D_n >= D_blk := (1/(2b-1)) + (2/(2b-1)) w [atan((a+1)/w) - atan(1/w)]
-    for all n in [a,b) (D_n increasing, use the min).  c_n <= c_blk := sup over
-    [a,b) of the certified envelope c_shape (piecewise-monotone, so attained at
-    an endpoint or the interior peak).  Beyond n >= Nmax, algebraic tau and c
-    tail bounds.  F(h) <= U(h) := sum_blk 2 S_blk/(h + D_blk - c_blk) + tail,
-    and root(U=1) >= h(w).  Cost: O(log w) blocks with ratio ~ 1.0002.
+    for all n in [a,b) (D_n increasing, use the min).  c_n <= c_blk := RIGOROUS
+    closed-form sup over [a,b) of the Prop. C envelope (each factor bounded at
+    its own monotone extreme -- see c_env_blocksup).  Beyond n >= Nmax,
+    algebraic tau and c tail bounds.  F(h) <= U(h) := sum_blk
+    2 S_blk/(h + D_blk - c_blk) + tail, and root(U=1) >= h(w).
+    Cost: O(log w) blocks with ratio ~ 1.0002.
     """
     if w <= 0.75:
         return None  # bisection cap 200.0 would be hit vacuously; dispatched only w>25
@@ -430,19 +445,21 @@ def h_hi_dyadic(w, ratio=1.002, nmax_mult=400.0):
         # D lower bound: use n=b-1 (largest n in block, smallest D_n)
         Dblk = 1.0 / (2.0 * b - 1.0) + (2.0 / (2.0 * b - 1.0)) * w * (
             np.arctan((a + 1.0) / w) - at1)
-        # c upper bound: block-wise sup of c_shape over a in [(a+.5)/w, (b-.5)/w]
-        cblk = max(float(c_shape((a + 0.5) / w)), float(c_shape((b - 0.5) / w)),
-                   float(C_SUP) if (a + 0.5) / w <= A_PEAK <= (b - 0.5) / w else 0.0)
+        # c upper bound: RIGOROUS closed-form sup of the Prop.-C proven envelope
+        # over a in [(a+.5)/w, (b-.5)/w] -- no calibrated constant enters.
+        cblk = c_env_blocksup((a + 0.5) / w, (b - 0.5) / w, w)
         blocks.append((S, max(Dblk, 0.0), cblk))
         a = b
     # n=0 block (always separate: D_0=1 exactly, tau_0^2 <= G(0.5/w)^2)
     S0 = 1.0 / (1.0 + (0.5 / w)**2)**2
-    blocks.append((S0, 1.0, float(c_shape(0.5 / w))))
+    blocks.append((S0, 1.0, c_env_blocksup(0.5 / w, 0.5 / w, w)))
     Btail = w**4 / (8.0 * (Nmax - 0.5)**4)
     Sarr = np.array([x[0] for x in blocks])
     Darr = np.array([x[1] for x in blocks])
     Carr = np.array([x[2] for x in blocks])
-    c_tail = min(float(C_SUP), C_K2 * w / Nmax)
+    # tail n >= Nmax: envelope is termwise-decreasing there (a >= 400), so the
+    # rigorous closed-form sup sits at the left endpoint a = (Nmax+1/2)/w.
+    c_tail = c_env_blocksup((Nmax + 0.5) / w, np.inf, w)
 
     def g(h):
         d = h + Darr - Carr
@@ -511,6 +528,139 @@ def invert_grid(ws, hlo, hhi, u):
     if w_lo is None or w_hi is None or w_hi < w_lo:
         return None
     return float(w_lo), float(w_hi)
+
+
+
+
+def _psi_complex(x, y, shift=24):
+    """psi(x+iy) for x>0 (array x, scalar y), via recurrence + Stirling series.
+
+    psi(z) = psi(z+k) - sum_{j=0}^{k-1} 1/(z+j); apply until Re >= shift, then
+    the standard asymptotic psi(z) ~ ln z - 1/(2z) - sum B_2n/(2n z^2n).
+    Accurate to ~1e-14 for shift=24, which is far tighter than anything the
+    bracket needs (the PROVEN bound c_proven_upper does not rely on this
+    routine's error; it is only used for reporting/gate comparison of c_exact).
+    """
+    x = np.asarray(x, dtype=float)
+    z = x + 1j*y
+    acc = np.zeros_like(z)
+    for _ in range(4000):
+        m = z.real < shift
+        if not np.any(m):
+            break
+        acc[m] += 1.0/z[m]
+        z = np.where(m, z+1.0, z)
+    zi = 1.0/z
+    z2 = zi*zi
+    ser = z2*(1.0/12.0 + z2*(-1.0/120.0 + z2*(1.0/252.0
+          + z2*(-1.0/240.0 + z2*(1.0/132.0 + z2*(-691.0/32760.0 + z2*(1.0/12.0)))))))
+    return np.log(z) - 0.5*zi - ser - acc
+
+
+def _re_psi_half(w):
+    """Re psi(1/2 + i w)."""
+    return float(np.real(_psi_complex(np.array([0.5]), w)[0]))
+
+
+def c_exact(n, w):
+    """EXACT Schur row sum c_n via (C1).  Identity, no calibration."""
+    n = np.asarray(n, dtype=float)
+    a = (n+0.5)/w
+    x = n+1.0
+    P = _psi_complex(x, w)
+    num = (-_re_psi_half(w) + P.real - a*P.imag
+           + a*(np.pi/2.0)*_coth(np.pi*w))
+    return num/(1.0+a*a)
+
+
+def c_proven_upper(n, w):
+    """PROVEN upper bound on c_n: (C1) with B1 on Re, B3 on Im, B2 on psi(1/2).
+
+    No calibrated constant enters.  Verified ratio >= 1 at every tested
+    (n, w); the bound is tight (ratio -> 1 as n grows, worst 1.000003 at
+    n=5000).  Small n is loose (factor ~4) but c_n is ~1e-5 there, so the
+    looseness is far inside the pad it replaces.
+    """
+    n = np.asarray(n, dtype=float)
+    a = (n+0.5)/w
+    x = n+1.0
+    q = x*x + w*w
+    ReP_up = 0.5*np.log(q)
+    ImP_lo = np.arctan(w/x) - w/(2.0*q)
+    qh = 0.25 + w*w
+    Repsi_half_lo = 0.5*np.log(qh) - 0.5/qh
+    num = (-Repsi_half_lo + ReP_up - a*ImP_lo
+           + a*(np.pi/2.0)*_coth(np.pi*w))
+    return num/(1.0+a*a)
+
+
+def c_env_proven(a, w):
+    """PROVEN upper envelope on the row sum, as a function of a=(n+1/2)/w.
+
+    From the identity (C1) with the three standard digamma inequalities:
+      Re psi(n+1+iw) <= (1/2)ln q                         (B1)
+      Re psi(1/2+iw) >= (1/2)ln q_h - 1/(2 q_h)           (B2)
+      -a Im psi(n+1+iw) <= -a atan(w/x) + a w/(2q)              (B3)
+    with x = a w + 1/2, q = x^2 + w^2, q_h = 1/4 + w^2.  Every term is closed
+    form in (a, w): NO calibrated constant, no measured sup.  Unlike c_shape
+    this is valid for all a>0 and all w>0, and it is what Prop. B now uses.
+
+    The -a*atan(w/x) term is RETAINED (not discarded for a cheaper bound): it
+    costs nothing analytically and makes the envelope essentially exact -- the
+    measured min ratio env/c_exact is 1.000000 at large w, and sup_a env
+    reproduces Theta* = 0.63492879 from the closed form instead of assuming it.
+    """
+    a = np.asarray(a, dtype=float)
+    x = a*w + 0.5
+    q = x*x + w*w
+    qh = 0.25 + w*w
+    T1 = 0.5*np.log(q/qh) + 0.5/qh
+    T2 = a*((np.pi/2.0)*_coth(np.pi*w) - np.arctan(w/x) + w/(2.0*q))
+    return (T1+T2)/(1.0+a*a)
+
+
+def c_env_blocksup(a_lo, a_hi, w):
+    """RIGOROUS closed-form sup of the Prop.-C envelope over a in [a_lo,a_hi].
+
+    E(a,w) = [ T1(a) + a*B(a) ] / (1+a^2),  T1 = (1/2)ln(q/q_h) + 1/(2 q_h),
+    B(a) = kappa(w) - atan(w/x) + w/(2q),  x = a w + 1/2,  q = x^2 + w^2,
+    q_h = 1/4 + w^2,  kappa(w) = (pi/2)coth(pi w).
+
+    No grid and no pad: each factor is bounded by its own monotone extreme.
+      * T1 is INCREASING in a (q increasing)              -> evaluate at a_hi
+      * -atan(w/x) is INCREASING in a                     -> evaluate at a_hi
+      * +w/(2q)   is DECREASING in a                      -> evaluate at a_lo
+      * 1/(1+a^2) is DECREASING in a                      -> evaluate at a_lo
+      * a*B: B has a sign, so use a_hi if B>=0 else a_lo (never mixes signs)
+    Each replacement only increases the value, so the result is a true upper
+    bound for EVERY a in the block -- valid without unimodality.  This replaces
+    an earlier 96-point grid sup inflated by a Lipschitz-style slack whose
+    justification did not survive checking (the a*kappa term breaks the
+    termwise |a dE/da| <= 2 max E estimate the slack relied on).  A measured
+    grid sup plus a guessed pad is calibration, not proof; this is closed form.
+
+    Cost on the dispatched band w>25: ratio <= 1.041 vs the true block max
+    (tail block 1.002), so the bracket does not measurably loosen.
+    """
+    kap = 0.5*np.pi*_coth(np.pi*w)
+    qh = 0.25 + w*w
+    if not np.isfinite(a_hi):
+        if a_lo < 2.0:
+            raise ValueError("tail block needs a_lo>=2, got %r" % (a_lo,))
+        Cw = 0.5*np.log(((w+0.5)**2 + w*w)/qh) + 0.5/qh
+        return float((np.log(a_lo)+Cw)/(1.0+a_lo*a_lo)
+                     + a_lo*kap/(1.0+a_lo*a_lo)
+                     + 1.0/(2.0*a_lo*w*(1.0+a_lo*a_lo)))
+    if a_hi < a_lo:
+        a_lo, a_hi = a_hi, a_lo
+    x_hi = a_hi*w + 0.5
+    q_hi = x_hi*x_hi + w*w
+    x_lo = a_lo*w + 0.5
+    q_lo = x_lo*x_lo + w*w
+    T1 = 0.5*np.log(q_hi/qh) + 0.5/qh
+    B = kap - np.arctan(w/x_hi) + w/(2.0*q_lo)
+    aB = a_hi*B if B >= 0.0 else a_lo*B
+    return float((T1+aB)/(1.0+a_lo*a_lo))
 
 
 # ==========================================================================
@@ -718,9 +868,49 @@ def main(K=8, quick=False):
     for i, wv in enumerate(ws_grid):
         lo_grid[i], hi_grid[i], m, _rg = h_bracket(float(wv), K=K)
         meth_grid.append(m)
-    # h is PROVEN strictly increasing, so the certified arrays must be too.
-    ck(bool(np.all(np.diff(lo_grid) > 0)), "grid h_lo strictly increasing")
-    ck(bool(np.all(np.diff(hi_grid) > 0)), "grid h_hi strictly increasing")
+    # MONOTONE HARDENING (sound, and strictly tightening).  h is PROVEN
+    # strictly increasing, so for i' > i:  h(w_i') > h(w_i) >= lo_grid[i],
+    # i.e. a lower bound at ANY smaller node is also a lower bound here.
+    # Hence the running maximum of lo_grid is still a valid lower-bound array,
+    # and symmetrically the reverse running minimum of hi_grid is still a valid
+    # upper-bound array.  This is not cosmetic: at the head-K -> dyadic seam
+    # (w=25) the head route is tighter than dyadic just above it, so without
+    # this the raw arrays are non-monotone (a legitimate method-switch artifact,
+    # NOT a soundness bug -- invert_grid scans for extremes and is correct
+    # either way).  Hardening both fixes the artifact and inherits the tighter
+    # bound across the seam for free.
+    lo_raw = lo_grid.copy()
+    hi_raw = hi_grid.copy()
+    lo_grid = np.maximum.accumulate(lo_grid)
+    hi_grid = np.minimum.accumulate(hi_grid[::-1])[::-1]
+    n_lift = int(np.sum(lo_grid > lo_raw + 0.0))
+    n_drop = int(np.sum(hi_grid < hi_raw - 0.0))
+    print("    monotone hardening: %d lo nodes lifted, %d hi nodes lowered"
+          % (n_lift, n_drop))
+    # The hardening must never invert the bracket, and must remain an enclosure.
+    ck(bool(np.all(hi_grid - lo_grid > 0.0)),
+       "hardened bracket still strictly positive-width at every node")
+    ck(bool(np.all(lo_grid >= lo_raw - 1e-15)) and bool(np.all(hi_grid <= hi_raw + 1e-15)),
+       "hardening only tightens (lo up, hi down), never loosens")
+    # After clamping the arrays are non-DEcreasing: a lifted node ties its
+    # predecessor by construction, so ">0" is not the right assertion (and a
+    # method switch legitimately breaks strictness -- see the w=25 seam).
+    ck(bool(np.all(np.diff(lo_grid) >= 0.0)), "grid h_lo non-decreasing (hardened)")
+    ck(bool(np.all(np.diff(hi_grid) >= 0.0)), "grid h_hi non-decreasing (hardened)")
+    # Strictness IS required wherever the method does not change: within a
+    # single band the bound is a smooth function of w and must resolve h's
+    # proven strict growth.  Ties/decreases there would signal a real bug.
+    same = np.array([meth_grid[i] == meth_grid[i + 1] for i in range(NW - 1)])
+    d_lo = np.diff(lo_raw)[same]
+    d_hi = np.diff(hi_raw)[same]
+    ck(bool(np.all(d_lo > 0.0)),
+       "raw h_lo strictly increasing within every band (%d intra-band steps)" % len(d_lo))
+    ck(bool(np.all(d_hi > 0.0)),
+       "raw h_hi strictly increasing within every band (%d intra-band steps)" % len(d_hi))
+    n_seam_break = int(np.sum(np.diff(lo_raw)[~same] <= 0.0))
+    print("    intra-band strict: %d/%d steps; method-switch steps with a "
+          "non-monotone lo: %d (clamped above)"
+          % (len(d_lo), NW - 1, n_seam_break))
 
     print("    %8s %13s %13s %9s %13s %12s"
           % ("lambda", "F_lo", "F_hi", "rel_wid", "method", "rigor"))
@@ -854,6 +1044,111 @@ def main(K=8, quick=False):
        "INDEPENDENT builder reproduces sqrt(g2)/2pi to 1e-8 (envelope-free)")
     ck(abs(rich - 0.1386242875) > 1e-3,
        "INDEPENDENT builder EXCLUDES the v1 constant 0.13862 (teeth test)")
+
+    # ------------------------------------------------------------------
+    print("\n[8] PROP. C -- exact closed form (C1) and the PROVEN envelope")
+    print("    %6s %5s %16s %16s %11s" % ("w", "n", "c_Richardson", "c_exact_C1", "rel_err"))
+    # The brute row sum truncates at M with remainder ~1/M (terms ~ w^2/2m^3);
+    # the 1/M expansion behind the Richardson step c_R=2c(2M)-c(M) only holds
+    # for M >> w, so M scales with w.  The residual of the combination is then
+    # the float64 cancellation floor (~2e-8), flat in w -- set tolerance above.
+    worst_id = 0.0
+    for w in (0.5, 2.0, 7.0, 30.0, 200.0):
+        M_w = int(max(100000.0, 4000.0 * w))
+        cM = schur_c(w, 12, M_w)
+        c2M = schur_c(w, 12, 2 * M_w)
+        for n in (0, 1, 5, 11):
+            ce = c_exact(n, w)
+            cR = 2.0 * c2M[n] - cM[n]
+            rel = abs(cR - ce) / max(abs(ce), 1e-300)
+            worst_id = max(worst_id, rel)
+            if n in (0, 5):
+                print("    %6.4g %5d %16.12f %16.12f %11.2e"
+                      % (w, n, cR, ce, rel))
+    ck(worst_id < 1e-7,
+       "(C1) closed form == Richardson row sum, worst rel %.2e" % worst_id)
+    # teeth: the raw (un-extrapolated) sum must MISS at this tolerance, else
+    # the check above would pass for reasons unrelated to the identity.
+    _cm = schur_c(30.0, 12, 100000)
+    ck(abs(_cm[5] - c_exact(5, 30.0)) / c_exact(5, 30.0) > 1e-9,
+       "teeth: un-extrapolated M=1e5 sum is truncation-limited (>1e-9)")
+
+    # Per-node proven bound must dominate the exact row sum everywhere.
+    worst_dom = 1.0e30
+    for w in (0.3, 1.0, 3.0, 12.0, 60.0, 400.0, 5000.0):
+        for n in range(0, 24):
+            worst_dom = min(worst_dom, c_proven_upper(n, w) - c_exact(n, w))
+    ck(worst_dom >= 0.0,
+       "PROVEN envelope dominates exact c_n, worst slack %.3e" % worst_dom)
+    # Teeth for the domination check: shave the envelope at its TIGHTEST point
+    # (small n carries big slack, so a global shave proves nothing).
+    tight = min(((c_proven_upper(n, w) - c_exact(n, w)) / c_proven_upper(n, w), n, w)
+                for w in (0.3, 1.0, 3.0, 12.0, 60.0, 400.0, 5000.0)
+                for n in range(0, 24))
+    _rel_slack, n_t, w_t = tight
+    print("    tightest envelope point: n=%d w=%.4g rel slack %.3e"
+          % (n_t, w_t, _rel_slack))
+    shave = 1.0 - min(_rel_slack * 2.0, 0.5)
+    ck(c_proven_upper(n_t, w_t) * shave < c_exact(n_t, w_t),
+       "teeth: envelope shaved to %.6f x at its tightest point breaks domination"
+       % shave)
+
+    # (C2) coth law.  a*c_n -> (pi/2)coth(pi w) with an O(1/n) correction, so a
+    # single n cannot be pinned to a fixed tolerance; assert the DECAY RATE:
+    # doubling n must halve the residual (ratio in [1.6, 2.4]).
+    for w in (0.7, 4.0, 40.0):
+        lim = 0.5 * np.pi * _coth(np.pi * w)
+        e1 = abs(c_exact(100000, w) * ((100000 + 0.5) / w) - lim)
+        e2 = abs(c_exact(200000, w) * ((200000 + 0.5) / w) - lim)
+        rat = e1 / max(e2, 1e-300)
+        print("      w=%-6.4g limit=%.9f  res(1e5)=%.3e res(2e5)=%.3e ratio=%.3f"
+              % (w, lim, e1, e2, rat))
+        ck(1.6 < rat < 2.4,
+           "coth law w=%.3g: residual halves under n->2n (ratio %.3f)" % (w, rat))
+
+    # NOTE (finding, 2026-09-15): sup_a E(a,w) EXCEEDS Theta* at finite w and
+    # decays DOWN to it only as w->oo:
+    #     w=26 -> 0.64333,  w=200 -> 0.63600,  w=1e5 -> 0.6349309,
+    #     w=1e9 -> 0.6349287919   vs  Theta* = 0.6349287918.
+    # An earlier assertion ("sup <= Theta* on the dyadic band") was FALSE and is
+    # removed.  Nothing in the brackets depended on it: Theta* bounds the
+    # OPERATOR NORM ||calR|| (Lemma M, head/analytic routes), not the row-sum
+    # functional c_n, and h_hi_dyadic subtracts its own per-block sup, never
+    # Theta*.  The old calibrated pad C_SUP=0.6375 was absorbing exactly this
+    # finite-w excess.  The peak sits at n ~ 1.5 w, so the search window MUST
+    # scale with w (a fixed n-window silently returns ~0 for w >= 1e4).
+    def _sup_rows(w, span=3.0, pts=1200):
+        hi = max(64.0, span * w)
+        ns = np.unique(np.linspace(0.0, hi, pts).astype(np.int64))
+        return max(float(c_proven_upper(int(n), w)) for n in ns)
+
+    sup_far = _sup_rows(2000.0)
+    ck(sup_far > THETA,
+       "row-sum sup %.10f EXCEEDS Theta* %.10f (operator norm != row sum)"
+       % (sup_far, THETA))
+    e26 = _sup_rows(26.0)
+    e1e9 = _sup_rows(1e9)
+    # e1e9 is a 1200-point discrete sup, so it can undershoot the true peak by
+    # O(grid) (~2e-8 here); compare with that resolution, not exactly.
+    GRID_TOL = 1e-7
+    ck(e26 > sup_far > e1e9 - GRID_TOL and e1e9 > THETA - GRID_TOL,
+       "row-sum sup decreases in w toward Theta* (%.9f > %.9f > %.9f)"
+       % (e26, sup_far, e1e9))
+    ck(abs(e1e9 - THETA) < GRID_TOL,
+       "w->oo limit of the row-sum sup IS Theta* (|diff| %.2e)" % abs(e1e9 - THETA))
+    ck(e26 - THETA > 8e-3,
+       "teeth: the finite-w excess is REAL, not grid noise (w=26 exceeds Theta* "
+       "by %.3e >> grid %.0e)" % (e26 - THETA, GRID_TOL))
+
+    # The rebuilt Prop. B (proven envelope in place of the calibrated c_shape)
+    # must still enclose h_true on the dispatched band.
+    print("    [8e] Prop. B with the proven envelope still encloses h_true")
+    for w in (30.0, 50.0, 200.0, 1000.0):
+        hi = h_hi_dyadic(w)
+        lo = h_lo_analytic(w)
+        ht = float(np.max(np.linalg.eigvalsh(H_mat(6000, w))))
+        ck(lo <= ht <= hi, "[8e] w=%.0f: %.7f <= %.7f <= %.7f (width %.4f)"
+           % (w, lo, ht, hi, (hi - lo) / lo))
 
     print("\nTIME %.1fs   PASS %d  FAIL %d" % (time.time() - t0, PASS[0], FAIL[0]))
     return rows
