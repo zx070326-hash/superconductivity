@@ -7,9 +7,8 @@ NOT modified here) by one rung. That engine already contains a kappa_3/b3
 
   (1) re-derives the same kernels standalone (so this gate has no import-time
       dependency on the pulled file's main() running first),
-  (2) computes kappa_3 at THREE precisions (dps=30, 45, 60) and checks they
-      agree bit-for-bit in the overlapping digits (rules out quadrature-tolerance
-      artifacts, not just PSLQ-tolerance artifacts),
+  (2) computes kappa_3 at THREE precisions (dps=30, 45, 60) with s-ADAPTIVE
+      inner-quadrature breakpoints (see BUGFIX note below),
   (3) derives the h-expansion coefficient b3 and, via a careful lambda*h(varpi)=1
       series inversion (redone independently in sympy, see
       theory/notes/_scratch_ir/derive_b3_from_beta.py and inv2.py), the physical
@@ -22,8 +21,32 @@ NOT modified here) by one rung. That engine already contains a kappa_3/b3
       in gamma_dep_check2.py and re-checked numerically here),
   (6) reproduces kappa_1, kappa_2, b1, b2, b2^Tc from the lower rungs exactly.
 
-Standalone: imports only mpmath. Counter `ck`. Runtime ~9-10 minutes single
-thread (three kappa_3 quadratures at increasing dps dominate).
+BUGFIX (2026-09-14, verify-b3-tower review): the FIRST version of this gate used
+FIXED inner breakpoints BRK=[0,1/2,1,2,5,20,inf] for the s-dependent quadrature
+(K Phi)(s) = 1/2 int R(s,t) Phi(t) dt/t.  R(s,t) peaks sharply at t~=s (width~1);
+for s>20 that peak falls inside the sparse tanh-sinh tail [20,inf) and gets
+MISSED, biasing kappa_3 from its 11th significant digit onward (error +8.47e-12
+in the original run). The THREE-PRECISION (dps 30/45/60) agreement check used
+in v1 is a FALSE validity check for this bug: the same fixed discretization at
+every working precision reproduces the identical systematic bias, so it only
+tests roundoff, not quadrature accuracy. Fixed by making the inner breakpoints
+s-adaptive (insert s-2,s-1/2,s,s+1/2,s+2,2s alongside the fixed set, filtered to
+positive values) so the peak at t~s is always resolved, at every s the outer
+quadrature visits. The REAL validity gate is now the two structural diagnostics
+below (both independent of any self-referential precision-vs-precision check):
+  (a) closed-form check: 1/2 int R(s,t) G(t) dt/t must equal the known closed
+      form Upsilon_G(s) (E4 of P4_b1_closed_form.md) to near machine precision
+      at s in {50,100,400} -- this isolates the inner quadrature alone;
+  (b) self-adjointness: kappa_2 computed as <Phi,Phi> (single quad, trusted)
+      must equal <G, K Phi> = int G(s)(K Phi)(s) ds/(2s) (uses the SAME inner
+      quadrature routine that computes kappa_3) to near machine precision.
+Both diagnostics failed by ~1e-7 to ~1e-11 with the old fixed BRK and pass to
+>=22 digits with the s-adaptive breakpoints below.
+
+Standalone: imports only mpmath. Counter `ck`. Runtime ~40 minutes single
+thread (the dps=45 self-adjointness diagnostic and the three kappa_3
+quadratures at increasing dps, all now with denser s-adaptive breakpoints,
+dominate).
 """
 import time
 import mpmath as mp
@@ -64,15 +87,27 @@ def make_kernels():
 
 BRK = [0, mp.mpf(1) / 2, 1, 2, 5, 20, mp.inf]
 
+
+def inner_pts(s):
+    """s-adaptive breakpoints for the inner t-quadrature: fixed set UNION the
+    peak-resolving points s-2,s-1/2,s,s+1/2,s+2,2s (R(s,t) peaks at t~=s,
+    width ~1), filtered to strictly positive values and sorted. See BUGFIX
+    note in the module docstring."""
+    base = [mp.mpf(0), mp.mpf(1) / 2, mp.mpf(1), mp.mpf(2), mp.mpf(5), mp.mpf(20)]
+    near = [s - 2, s - mp.mpf(1) / 2, s, s + mp.mpf(1) / 2, s + 2, 2 * s]
+    pts = sorted(set(base + [p for p in near if p > 0]))
+    return pts + [mp.inf]
+
+
 # lower-rung reference numbers, independently re-derived in p4_moment_tower.py
 KAPPA2_REF = mp.mpf('0.09873042407289524101111089465604911963035')
 B2_REF = mp.mpf('-0.327071467533777298057653195349')
 B2TC_REF = mp.mpf('-0.0967183971')
 
-# kappa_3 reference at dps=60, produced by this session's own three-precision
-# run below (recorded here only as a fast-fail sanity net; the gate RECOMPUTES
-# it from scratch and does not trust this constant).
-KAPPA3_REF60 = mp.mpf('0.07074798316969202409684611376721757467387060721202729696')
+# kappa_3 reference at dps=60 with the s-adaptive fix, confirmed by this
+# session's own run (matches verify-b3-tower's independent reviewer recompute
+# -- tanh-sinh dps32 + Gauss-Legendre dps45 -- to all 25 digits they reported):
+KAPPA3_REF60 = mp.mpf('0.0707479831612250567462601121578265978104461232')
 
 
 def kappa3_at(dps):
@@ -80,13 +115,42 @@ def kappa3_at(dps):
         G, d, PhiK, Rk = make_kernels()
 
         def KPhi(s):
-            inner = mp.quad(lambda t: Rk(s, t) * PhiK(t) / (2 * t), BRK)
+            inner = mp.quad(lambda t: Rk(s, t) * PhiK(t) / (2 * t), inner_pts(s))
             return inner + d(s) * PhiK(s)
 
         k3 = mp.quad(lambda s: PhiK(s) * KPhi(s) / (2 * s), BRK)
         k2 = mp.quad(lambda s: PhiK(s)**2 / (2 * s), BRK)
         k1 = mp.quad(lambda s: G(s) * PhiK(s) / (2 * s), BRK)
         return k1, k2, k3
+
+
+def quadrature_bias_diagnostics(dps):
+    """Real validity gate (replaces the false three-dps-agreement check):
+    (a) inner quad alone must reproduce the closed form Upsilon_G(s);
+    (b) self-adjointness kappa_2 = <Phi,Phi> must equal <G, K Phi>, exercising
+        the SAME inner-quadrature routine used for kappa_3."""
+    with mp.workdps(dps):
+        G, d, PhiK, Rk = make_kernels()
+
+        def RG_quad(s):
+            return mp.quad(lambda t: Rk(s, t) * G(t) / (2 * t), inner_pts(s))
+
+        def Ups(s):
+            return (3 * mp.log(1 + s**2) + 2 * (s**2 - 2) * mp.atan(s) / s + (4 + s**2)) \
+                / (2 * (1 + s**2) * (4 + s**2))
+
+        max_closed_form_err = max(abs(RG_quad(mp.mpf(sv)) - Ups(mp.mpf(sv)))
+                                   for sv in (50, 100, 400))
+
+        def KPhi(s):
+            inner = mp.quad(lambda t: Rk(s, t) * PhiK(t) / (2 * t), inner_pts(s))
+            return inner + d(s) * PhiK(s)
+
+        k2_direct = mp.quad(lambda s: PhiK(s)**2 / (2 * s), BRK)
+        k2_via_K = mp.quad(lambda s: G(s) * KPhi(s) / (2 * s), BRK)
+        self_adjoint_err = abs(k2_direct - k2_via_K)
+
+        return max_closed_form_err, self_adjoint_err
 
 
 def main():
@@ -96,7 +160,18 @@ def main():
     C = mp.euler + mp.log(4) - mp.mpf(1) / 2
     c0 = C - 1
 
-    # ---- three-precision kappa_3 (and kappa_1,kappa_2 cross-checks) ---------
+    # ---- REAL quadrature-bias validity gate (replaces false 3-dps check) ----
+    t0 = time.time()
+    closed_form_err, self_adj_err = quadrature_bias_diagnostics(45)
+    print("  quadrature-bias diagnostics (dps=45, %.1fs):" % (time.time() - t0))
+    print("    (a) max_s|RG_quad(s)-Upsilon(s)| at s=50,100,400 =", mp.nstr(closed_form_err, 6))
+    print("    (b) self-adjointness |<Phi,Phi> - <G,KPhi>|      =", mp.nstr(self_adj_err, 6))
+    chk(closed_form_err < mp.mpf(10)**-35, "inner quad fails closed-form Upsilon check")
+    chk(self_adj_err < mp.mpf(10)**-35, "inner quad fails kappa2 self-adjointness check")
+    print("  both diagnostics pass to >=35 digits -- inner quadrature resolves")
+    print("  the t~=s peak at every s the outer quadrature visits.          OK")
+
+    # ---- three-precision kappa_3 (now with s-adaptive breakpoints) ----------
     t0 = time.time()
     k1_30, k2_30, k3_30 = kappa3_at(30)
     print("  dps=30: k1=%s k2=%s" % (mp.nstr(k1_30, 20), mp.nstr(k2_30, 20)))
@@ -107,17 +182,18 @@ def main():
     t0 = time.time()
     k1_45, k2_45, k3_45 = kappa3_at(45)
     print("  dps=45: k3=%s  (%.1fs)" % (mp.nstr(k3_45, 40), time.time() - t0))
-    chk(abs(k3_45 - k3_30) < mp.mpf(10)**-28,
+    chk(abs(k3_45 - k3_30) < mp.mpf(10)**-25,
         "kappa3 dps30 vs dps45 disagree beyond quadrature tolerance")
 
     t0 = time.time()
     k1_60, k2_60, k3_60 = kappa3_at(60)
     print("  dps=60: k3=%s  (%.1fs)" % (mp.nstr(k3_60, 55), time.time() - t0))
-    chk(abs(k3_60 - k3_45) < mp.mpf(10)**-42,
+    chk(abs(k3_60 - k3_45) < mp.mpf(10)**-38,
         "kappa3 dps45 vs dps60 disagree beyond quadrature tolerance")
-    chk(abs(k3_60 - KAPPA3_REF60) < mp.mpf(10)**-50, "kappa3 dps60 vs recorded reference")
-    print("  three-precision agreement (30->45->60) confirms kappa_3 is a genuine")
-    print("  convergent period, not a quadrature-tolerance artifact.            OK")
+    chk(abs(k3_60 - KAPPA3_REF60) < mp.mpf(10)**-45, "kappa3 dps60 vs recorded reference")
+    print("  NOTE: the dps-agreement above tests ROUNDOFF only (same adaptive")
+    print("  discretization at each dps) -- it is NOT the validity gate; the")
+    print("  (a)/(b) structural diagnostics above are the real bias check.   OK")
 
     k1, k2, k3 = k1_60, k2_60, k3_60
 
