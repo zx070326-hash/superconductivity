@@ -966,9 +966,14 @@ uniqueness and the two one-sided strict inequalities. $\square$
 > \qquad\text{i.e.}\qquad
 > \widetilde T_c=0.1827262477\ldots\times\sqrt{\lambda\langle\omega^2\rangle} .
 > $$
-> This is precisely the constant in the strong-coupling asymptotics of Allen and Dynes,
-> $T_c\simeq0.1827\sqrt{\lambda\langle\omega^2\rangle}$ as $\lambda\to\infty$ [AD, eq. (22)],
-> a coincidence already noted in [KAY II, Remark 3]. We do not reprove that asymptotics here,
+> This is precisely the sharp constant in the strong-coupling asymptotics of the linearized
+> Eliashberg equation. Allen and Dynes [AD, eq. (22)] showed that
+> $T_c\to(\lambda\langle\omega^2\rangle)^{1/2}f(\mu^*)$ as $\lambda\to\infty$, with $f$ a
+> function of $\mu^*$ alone, and reported the numerical value $f(0)\approx0.182$ from a
+> $64$-frequency computation [AD, eq. (25)]; the sharp value
+> $f(0)=\frac1{2\pi}\sqrt{\mathfrak g(2)}=0.1827262477\ldots$ was identified in [KAY I] (see
+> also [KAY II, Remark 3] and [KAY III, p. 28]), and our certified enclosure agrees with it.
+> We do not reprove that asymptotics here,
 > and nothing in this paper depends on it. What the coincidence adds is interpretation, and it
 > is worth stating: Theorem 1(c) is not merely *an* upper bound with *some* constant. Granted
 > the Allen–Dynes asymptotics, its constant is the sharp one — the bound is approached as
@@ -1060,14 +1065,15 @@ uniqueness and the two one-sided strict inequalities. $\square$
 
 * [KAY II], [KAY III] — as in the Introduction. Specific pointers used above:
   [KAY II, p. 14, eq. (31)] (Conjecture 2), [KAY II, Remark 2, p. 10], [KAY II, Remark 3]
-  (the strong-coupling constant; pointer to be pinned — drafting note 9),
+  (the strong-coupling asymptotic *form*; the sharp constant itself is [KAY I], [KAY III, p. 28]),
   [KAY II, Prop. 7, p. 31], [KAY II, pp. 7–8] (multiple crossings),
   [KAY III, Conjecture 1, p. 12, eq. (28)],
   [KAY III, Thm. 5, p. 8] and [KAY III, p. 28] (monotonicity on $[0,\varpi_*)$; "would require
   a different strategy"), [KAY III, eq. (23)] ($\mathfrak h^{(N)}(\infty)$).
 * [AD] P. B. Allen and R. C. Dynes, *Transition temperature of strong-coupled superconductors
-  reanalyzed*, Phys. Rev. B **12**, 905 (1975); eq. (22) for the strong-coupling asymptotic
-  constant. Cited only in Remark 3.19(a′), which no proof depends on.
+  reanalyzed*, Phys. Rev. B **12**, 905 (1975); eq. (22) for the
+  $(\lambda\langle\omega^2\rangle)^{1/2}$ asymptotic form, eq. (25) for the numerical constant
+  $0.182$ ($\mu^*=0$). Cited only in Remark 3.19(a′), which no proof depends on.
 * [RS1] M. Reed and B. Simon, *Methods of Modern Mathematical Physics I: Functional Analysis*,
   rev. ed., Academic Press, 1980.
 * [Ka] T. Kato, *Perturbation Theory for Linear Operators*, 2nd ed., Springer, 1976.
@@ -1364,10 +1370,11 @@ them; 19 and 21 are genuine discrepancies found in the sources and need main-ses
     > The constant in Theorem 1(c) is not an artefact of the method. Writing
     > $\widetilde T_c=C_\infty\sqrt{\lambda\langle\omega^2\rangle}$ with
     > $C_\infty=\frac1{2\pi}\sqrt{\mathfrak g(2)}$, the certified enclosure of $\mathfrak g(2)$
-    > (Appendix A) gives $C_\infty=0.1827262477\ldots$, which is exactly the constant in the
-    > strong-coupling asymptotics of Allen and Dynes,
-    > $T_c\simeq0.1827\sqrt{\lambda\langle\omega^2\rangle}$ as $\lambda\to\infty$
-    > [AD, eq. (22)] — a coincidence already remarked on in [KAY II, Remark 3]. Granted that
+    > (Appendix A) gives $C_\infty=0.1827262477\ldots$. Allen and Dynes [AD, eq. (22)] showed
+    > that $T_c\to(\lambda\langle\omega^2\rangle)^{1/2}f(\mu^*)$ as $\lambda\to\infty$ and gave
+    > the numerical value $f(0)\approx0.182$ [AD, eq. (25)]; the sharp value
+    > $f(0)=\frac1{2\pi}\sqrt{\mathfrak g(2)}=0.1827262477\ldots$ was identified in [KAY I] (see
+    > also [KAY II, Remark 3]), and $C_\infty$ reproduces it. Granted that
     > asymptotics, which we do not reprove, Theorem 1(c) is therefore a *sharp* bound: no
     > smaller constant can serve, because the bound is approached as $\lambda\to\infty$ along
     > the Einstein family; and by Theorem 2 that same family is the exact maximiser of
@@ -1387,16 +1394,24 @@ them; 19 and 21 are genuine discrepancies found in the sources and need main-ses
     (i) *Wording rule.* The repository's fixed rule for the Einstein-extremality claim
     (`P4_einstein_extremal.md` §0.A) forbids "to our knowledge nobody has stated this" and
     requires crediting Allen–Dynes 1975 as quoted by Moussa–Cohen 2006. The paragraph above
-    complies: it credits [AD] for the constant and [KAY II] for the observation, and claims
-    novelty only for the *bound*, never for the asymptotics. Do not weaken this.
-    (ii) *Citations not verified from this worktree.* "[AD, eq. (22)]" and "[KAY II, Remark 3]"
-    both come from `P4_rigorous_tc_bound.md` §1.5 (survey record: "C_∞=0.1827262477 …
-    = Allen–Dynes eq. (22) 那个数，KAY Remark 3 亲口说的"). `P4_einstein_extremal.md` §0.A
-    separately records that the **Allen–Dynes original was never obtained** and that the last
-    link of the attribution chain is the Moussa–Cohen restatement. The equation number (22) and
-    the KAY remark number therefore rest on a secondary record and **must be checked against
-    the originals** before submission; if [AD] cannot be checked, quote it through
-    [Moussa–Cohen, PRB **74**, 094520 (2006)] as the extremality claim already is.
+    complies: it credits [AD] for the asymptotic *form* and its numerical value $0.182$, [KAY I]
+    for the sharp ten-digit constant, and [KAY II] for the observation, and claims novelty only
+    for the *bound*, never for the asymptotics. Do not weaken this.
+    (ii) *Citations verified 2026-09-14 from page images.* The Allen–Dynes original was obtained
+    in full via the APS open-access scan
+    (`harvest.aps.org/v2/journals/articles/10.1103/PhysRevB.12.905/fulltext`) and read as page
+    images independently by cite-check (survey `surveys/P4_citation_verification_2026-09-14.md`
+    §1) and by the main session (this worktree). p.908 confirms: **eq. (22) is the scaling form
+    $T_c\to(\lambda\langle\omega^2\rangle)^{1/2}f(\mu^*)$ with $f$ undetermined — it carries no
+    numerical constant**; $0.182$ ($\mu^*=0$) is eq. (25) (64-frequency computation), $0.180$ is
+    eq. (24) (2×2 lower bound); the string "0.1827" appears nowhere in [AD]. The ten-digit
+    $0.1827262477\ldots=\frac1{2\pi}\sqrt{\mathfrak g(2)}$ is KAY's, printed in [KAY I] and at
+    [KAY III, p. 28]. The wording above and the [AD] reference entry have been corrected
+    accordingly. [KAY II, Remark 3] is confirmed verbatim (p.14) as attributing the asymptotic
+    *form* to [AD, eq. (22)]; the elementwise $P$-average pointer belongs at [KAY II, p. 10,
+    Remark 2], not Remark 3. A further citable point closed by this check: [AD] Appendix A
+    proves the elementwise Einstein inequality but only *asserts* the eigenvalue consequence
+    (p.909), which is exactly the step Theorem 2 supplies — the Introduction may say so.
 
 19. **[fyi → needs a one-line fix in the master document] The enclosure of $C_\infty$ quoted in
     `P4_main_theorems.md` is not outward-rounded.** That document (the note after Theorem 1(c))

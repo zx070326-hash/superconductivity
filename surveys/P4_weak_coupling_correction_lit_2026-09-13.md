@@ -27,8 +27,8 @@ After systematic search of 15+ sources including Marsiglio 2018, Chubukov et al.
 **Citation**: F. Marsiglio, "Eliashberg theory in the weak-coupling limit", Phys. Rev. B **98**, 024523 (2018)
 
 **Content**:
-- **Equation (37)**: Tc/ω_E = (1/1.13) exp[−1/λ] for Einstein phonon, μ*=0, weak coupling
-  - Confirms the 0.2530 prefactor (since 1/1.13 ≈ 0.885, and √e ≈ 1.649, giving 0.885/√e ≈ 0.537... wait, this needs recalculation: 1/(1.13√e) = 0.2530 ✓)
+- **Equation (37)** *(二手；投稿前需一手核，见 §5 [decision] 4)*: 弱耦合、Einstein、μ*=0 下 Tc ∝ ω_E e^{−1/λ}。文献间对 eq.(37) 确切写法记载不一：本 survey v1.0 记为 Tc/ω_E = (1/1.13)e^{−1/λ}（= 0.885 e^{−1/λ}），与 `P4_weak_coupling_series.md` §4 记的 T_c = (1.13/√e)ω_E e^{−(1+λ)/λ}（= 0.2521 ω_E e^{−1/λ}）冲突——正文引用不带方程号，只取前因子数值。
+  - **精确前因子（mpmath dps=30 复核，2026-09-14）**：(2/π)e^{γ−3/2} = 0.2529996837…（≈ 0.2530），源头是 Combescot 1990 eq.(21)（见 §5）。1.13 = 2e^γ/π = 1.13387 的两位舍入，(1.13/√e)·e^{−1} = 0.2521。**订正**：v1.0 此处写「1/(1.13√e) = 0.2530 ✓」是算术错——实际 1/(1.13√e) = 0.537；该自相矛盾行作废。
 - **Figure 6**: Plots Tc(λ) from numerical solution vs asymptotic formula for Einstein spectrum
   - Shows deviation grows with λ, but **no fit formula** or λ-dependence characterization given
   - Visual inspection suggests systematic positive deviation (numerical > asymptotic) at finite λ
@@ -82,15 +82,15 @@ After systematic search of 15+ sources including Marsiglio 2018, Chubukov et al.
 
 ---
 
-### 5. Combescot, PRB 42, 7810 (1990)
-**Status**: Second-hand (abstract only from WebSearch)  
-**Citation**: R. Combescot, "Analytical results for the longitudinal and transverse Tsuneto functions and application to unconventional superconductivity", Phys. Rev. B **42**, 7810 (1990)
+### 5. Combescot, PRB 42, 7810 (1990)  — 【订正 2026-09-14】
+**Status**: 一手核实（页图，harvest.aps.org 全文；主会话 2026-09-14 读 p.7813）
+**Citation**: R. Combescot, "Critical temperature of superconductors: Exact solution from Eliashberg equations on the weak-coupling side", Phys. Rev. B **42**, 7810 (1990)
 
-**Content**:
-- Discusses **Tsuneto functions** and unconventional pairing
-- **Not relevant** to conventional electron-phonon weak-coupling
+**Content**（此前 v1.0 把标题误记为 Tsuneto-function 论文、判「错主题」——两处均误，已订正）:
+- 正是**常规电子-声子弱耦合**的 Eliashberg Tc：eq.(21) T_c = (2/π)e^{γ−1/2}ω₀e^{−(1+λ)/λ}，前因子（对 ω_E e^{−1/λ}）= (2/π)e^{γ−3/2} = 0.2529996837…（≈ 0.2530）——**我们弱耦合前因子的原始出处**，早于 Marsiglio 2018 二十八年。
+- 明言只算到 λ 的**最低阶**（"only to lowest order in λ"），故把 O(λ) 系数 b₁ **留作未决**——正是本文 `P4_b1_closed_form.md` 补齐的那一项。
 
-**Verdict**: Wrong topic (unconventional SC, not phonon-mediated).
+**Verdict**: 高度相关（b₁ 的直接前驱）。执行摘要「无人报 b₁」仍成立：Combescot 给出前因子但未给 O(λ) 系数。
 
 ---
 
@@ -300,7 +300,7 @@ No source surveyed reports:
 | Wang et al. PRL 2016 | Primary (L1) | N/A | N/A | No | Wrong regime |
 | Karakozov et al. 1975 | Secondary (scan) | Mixed | With μ* | Unclear | No Einstein scan |
 | Allen-Dynes 1975 | Secondary | N/A | N/A | No | Strong-coupling |
-| Combescot 1990 | Secondary | N/A | N/A | No | Unconventional |
+| Combescot 1990 | Primary (页图核实) | Yes (前因子) | μ*=0 | b₁ 留未决 | b₁ 直接前驱 |
 | KAY trilogy 2025 | Primary (L1) | Yes | Yes | Conj. 2 open | N/A (rigorous) |
 | Chubukov et al. 2020 | Primary (L1) | Yes | Yes | No | No |
 | Marsiglio et al. 2020 | Primary (L1) | Yes | Yes | No | No (Δ(ω) only) |

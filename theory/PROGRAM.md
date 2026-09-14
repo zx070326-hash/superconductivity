@@ -168,7 +168,7 @@ P5 ← D3 切入点 1
 **缘起（用户指令，2026-09-09）**：面向凝聚态/超导大难题立项，用户选定方向 1（声子 Tc 物理上限）∩ 2（严格数学物理定理）——两者交点 = **证明/收紧声子介导超导 Tc 的严格上界常数**，长在 P3 轨道上。
 
 **地形（两篇一手调研）**：`surveys/P4_rigorous_tc_bound_scoping_2026-09-09.md` + `surveys/P4_KAY_I_and_combescot_2026-09-09.md`
-- **KAY 三部曲**（Kiessling–Altshuler–Yuzbashyan 2025，J. Stat. Phys.）把 Eliashberg 线性稳定边界证成紧自伴算子 𝔎/𝔊 的最大本征值问题。**"确定 sharp constant"已不开放**：C_∞=0.1827262477… 已被定义、证为大 λ 渐近常数、算到 10 位，且 KAY Remark 3 亲口说它 = Allen–Dynes eq.(22) 那个常数（= P3 引的 0.1827）。**开放的是**：(a) 该 10 位只有浮点无严格包围；(b) 已证显式上界比它大 2.034×（KAY II；KAY I 原文对 T_c^(4) 是 2.032）；(c) 升级为全 λ 上界（Conjecture 2）。
+- **KAY 三部曲**（Kiessling–Altshuler–Yuzbashyan 2025，J. Stat. Phys.）把 Eliashberg 线性稳定边界证成紧自伴算子 𝔎/𝔊 的最大本征值问题。**"确定 sharp constant"已不开放**：C_∞=0.1827262477… 已被定义、证为大 λ 渐近常数、算到 10 位，且 KAY I 报出该锐值 = (1/2π)√𝔤(2)（= P3 引的 0.1827）；注 KAY 只是把 λ→∞ 的标度**形式**归给 Allen–Dynes eq.(22)，**0.1827 本身是 KAY 的数、非 AD 原文**（AD 的数值是 eq.(25) 的 0.182；订正见 `surveys/P4_citation_verification_2026-09-14.md`）。**开放的是**：(a) 该 10 位只有浮点无严格包围；(b) 已证显式上界比它大 2.034×（KAY II；KAY I 原文对 T_c^(4) 是 2.032）；(c) 升级为全 λ 上界（Conjecture 2）。
 - **常数分层（务必不混）**：C^(1)=1/2π、C^(4)=0.1825137、**C_∞=0.1827262477（真渐近）**、C_ADfit=0.1878（AD 拟合式渐近，高 2.78%）、C^♯=2.034·C_∞=0.3717（唯一已证上界）。
 - **记号同构（金子）**：KAY 的 P(dω) = P3/Semenok 谱形函数 P(ω) 逐字同一；⟨ω²⟩ 定义逐位同 ⟹ P3 的 σ/γ₃ 与 LaH₁₀ 反演 r 值可直接复用。
 - **YAP PRL 的 λ≲4 不是定理**（准经典近似，λ≳3.4 才自洽）；Hainzl–Seiringer 严格纲领是**纯瞬时 BCS**（推迟核严格 Tc 界=处女地，但等价于控制 Migdal，极难，不选）；除 KAY 外无第二组给过严格 Eliashberg 大 λ 常数（Combescot 1995 非数学物理、仅近似解，U9 降级）。
