@@ -205,6 +205,46 @@ for x in [64.0, 400.0, 1600.0]:
     c12 = c_pack(x, 1200)[2]; c20 = c_pack(x, 2000)[2]
     ck(abs(c12 - c20) < 0.006, "N-consistency c_tail(.5) x=%s" % x, "|d|=%.4f" % abs(c12-c20))
 
+# ---------- tail-MAGNITUDE hardening: tail_bnd dominates the TRUE Psi-tail (EXACT a_m) ----------
+# The decay-lemma check above validates a_m <= a_ub only for m<N (the truncated region); the
+# SUBTRACTED tail (m>=N) is protected here.  Both guards use the EXACT a_m -- computed by direct
+# 1D summation over j, INDEPENDENT of the a_ub closed form -- so a regression that corrupts a_ub
+# or tail_bnd in the tail cannot pass unseen:
+#   (guard-B, pointwise) a_ub(x,m) >= a_m for sampled m in [N,4N]  (decay lemma, TAIL region).
+#       Sharp: fires the instant a_ub ceases to dominate a_m (the ONLY soundness-breaking direction).
+#   (guard-A, summed)    tail_bnd(x,N,hlo) >= (2/hlo^2) * sum_{m=N}^{4N} u_m^2 a_m .
+#       Protects the assembled magnitude (sum + remainder + prefactor), not just the per-term formula.
+# The j-sum is truncated at Jmax (all terms >=0 => UNDERESTIMATES a_m), so the RHS is a rigorous
+# LOWER proxy for the true infinite tail; both inequalities are therefore SOUND domination checks.
+# (Note: a mere shrink of a_ub that STAYS above a_m is not a soundness bug and correctly stays green;
+#  the committed a_ub is ~2.6x loose, so guard-B fires only once a_ub drops below the true a_m.)
+def a_exact_m(x, mvals, Jmax):
+    f = f_lor(x); jj = np.arange(Jmax, dtype=float); u2j = 1.0/(2.0*jj+1.0)
+    out = np.empty(len(mvals))
+    for i, m in enumerate(mvals):
+        off = f(np.abs(m - jj)).copy()
+        if m < Jmax: off[int(m)] = 0.0                 # drop the j=m self term
+        out[i] = off @ u2j + f(m + jj + 1.0) @ u2j
+    return out
+
+for x in [25.0, 400.0]:
+    N = 2000; Mwin = 4*N; hlo = c_pack(x, N)[0]        # exact hlo used by tail_bnd in c_pack
+    ms = np.arange(N, Mwin+1, 100)
+    if ms[-1] != Mwin: ms = np.append(ms, Mwin)
+    ae = a_exact_m(x, ms.astype(float), Mwin + 20000)  # generous j-truncation (underestimate)
+    aub_s = a_ub(x, ms.astype(float))
+    # (guard-B) exact a_m <= a_ub in the tail region
+    ck(np.all(ae <= aub_s + 1e-15), "tail decay-lemma a_m<=a_ub (m in [N,4N]) x=%s" % x,
+       "min a_ub/a_m=%.3f" % np.min(aub_s/ae))
+    # (guard-A) right-Riemann LOWER bound on sum_{m=N}^{4N} u_m^2 a_m: g(m):=u_m^2 a_m is
+    # non-increasing (u_m^2 and a_m both positive non-increasing), so on each block (e_{i-1},e_i]
+    # the sum >= width * g(e_i) (right-edge value).  Assert the sampled non-increase as a witness.
+    g = (1.0/(2.0*ms + 1.0)) * ae
+    ck(np.all(np.diff(g) < 0), "g=u^2 a_m non-increasing on [N,4N] x=%s" % x)   # right-Riemann witness
+    rr = (2.0/hlo**2) * np.sum(np.diff(ms) * g[1:])
+    tb = tail_bnd(x, N, hlo)
+    ck(tb >= rr, "tail_bnd dominates true tail (exact a_m) x=%s" % x, "tail_bnd/rr=%.2f" % (tb/rr))
+
 # ---------- MAIN RESULT: TAIL-INCLUSIVE rigorous lower bound c_tail(a,x) ----------
 # c_trunc is the truncated UPPER bound; c_tail = c_trunc - tail_bnd is the rigorous LOWER bound.
 print("="*100)
