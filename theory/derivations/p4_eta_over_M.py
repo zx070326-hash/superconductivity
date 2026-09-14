@@ -21,8 +21,11 @@ v0.2 (2026-09-15).  Consistency checks (NOT proofs) for the eta/M theorem:
         P4_universal_tc_envelope, not the float64 point value of G (Stage 4b);
   (vi)  the two arithmetic facts behind the u_+ branch exclusion lemma that
         makes (2.2) legitimate: the rational inequality at both CERT-D ends of
-        g(2), and the first-basis Rayleigh bound h >= H_00 = w^2/(1+w^2)
-        (Stage 4c).
+        g(2), and the first-basis Rayleigh bound h >= H_00 = w^2/(1+w^2);
+        plus the vacuity of (2.2) over the whole hydride range (discriminant
+        strictly negative at every material lambda) and a bracket-mixing
+        sentinel that every CERT-D answer differs measurably from its CERT-B
+        counterpart (Stage 4c).
 
 All theorems are proven in `P4_eta_over_M.md`; this file only checks that the
 numerics agree.  UNITS ARE THE HISTORICAL FAILURE MODE OF THIS PROJECT
@@ -37,7 +40,7 @@ mpmath only for the analytic constants (effective dps is 30: the imported
 precision).  h(varpi) via H_mat imported VERBATIM from
 `p4_interchange_uniformity.py` (nothing re-derived here).
 NOTE: the per-stage lines print CUMULATIVE counters; the per-stage increments
-are 8 / 70 / 3 / 30 / 8 / 20 / 56 / 27 / 16 (sum 238).
+are 8 / 70 / 3 / 30 / 8 / 20 / 56 / 50 / 16 (sum 261).
 Runtime target < 5 min; measured ~120 s single-process.
 """
 
@@ -89,6 +92,11 @@ def stage(tag):
 # g(2) analytic enclosure, CERT-D (P4_g2_analytic.md; P4_main_theorems.md sec.4.1).
 G2_LO = mp.mpf('1.318140211762671')
 G2_HI = mp.mpf('1.318140212373478')
+# NOT a bound used anywhere -- kept solely as the bracket-mixing sentinel of
+# Stage 4c: the older, 4.0e-5-wide CERT-B lower bound.  Mixing brackets is how
+# the "1.3181405" typo reached two scripts (P4_conjecture2.md:274), so the gate
+# asserts the CERT-D answers differ measurably from the CERT-B ones.
+G2_CERTB_SENTINEL = mp.mpf('1.3181093293757127')
 
 # Published enclosure of (1/2pi)sqrt(g(2)) (P4_main_theorems.md sec.2, note).
 DOC_C_LO = mp.mpf('0.182726247746')
@@ -808,10 +816,46 @@ def run_stage4c():
               f"u_0 = {mp.nstr(u0, 9)},  u_0/(1+u_0) = {mp.nstr(lhs, 9)} > "
               f"1/lambda* = {mp.nstr(inv_lam_star, 9)}")
     lam_star = float(16 * z4 / G2_HI ** 2)
-    ck(abs(lam_star - 9.9668) < 1e-3, "lambda* drifted from 9.9668")
-    print(f"        => lambda* = 16 zeta(4)/g(2)^2 = {lam_star:.4f}; (2.2) is "
-          f"VACUOUS for lambda < lambda* (no real roots), so it says nothing "
-          f"in the physical range lambda in (0.5, 3).")
+    ck(abs(lam_star - 9.96675) < 1e-4, "lambda* drifted from CERT-D 9.96675")
+    w0_certd = float(mp.sqrt(G2_HI / (8 * z4)))
+    ck(abs(w0_certd - 0.390173) < 1e-5, "varpi_0 drifted from CERT-D 0.390173")
+    print(f"        => lambda* = 16 zeta(4)/g(2)^2 = {lam_star:.5f}, "
+          f"varpi_0 = sqrt(u_0) = {w0_certd:.6f}  (both on CERT-D)")
+
+    # bracket-mixing sentinel: CERT-B would give visibly different answers.
+    lam_star_b = float(16 * z4 / G2_CERTB_SENTINEL ** 2)
+    w0_b = float(mp.sqrt(G2_CERTB_SENTINEL / (8 * z4)))
+    ck(abs(w0_certd - w0_b) > 4e-6,
+       "CERT-D and CERT-B varpi_0 indistinguishable -- sentinel is blind")
+    ck(abs(lam_star - lam_star_b) > 1e-4,
+       "CERT-D and CERT-B lambda* indistinguishable -- sentinel is blind")
+    ck(lam_star < lam_star_b,
+       "CERT-D lambda* should sit below the CERT-B one (g(2)_CERT-D is larger)")
+    print(f"        bracket-mixing sentinel: CERT-B (width 4.0e-5) would give "
+          f"lambda* = {lam_star_b:.5f}, varpi_0 = {w0_b:.6f} -- differs by "
+          f"{abs(lam_star-lam_star_b):.2e} / {abs(w0_certd-w0_b):.2e}; the doc "
+          f"and this gate quote the CERT-D values only.")
+
+    # (2.2) is not merely loose in the physical range -- it is EMPTY there.
+    print("\n    (i-b) discriminant g(2)^2 - 16 zeta(4)/lambda at the "
+          "material lambda (negative => (2.2) vacuous):")
+    for lam, want_neg in ((0.40, True), (1.71, True), (1.73, True),
+                          (1.84, True), (2.06, True), (2.67, True),
+                          (3.62, True), (9.00, True), (10.0, False)):
+        for tag, g2 in (("LO", G2_LO), ("HI", G2_HI)):
+            disc = g2 ** 2 - 16 * z4 / mp.mpf(repr(lam))
+            ck((disc < 0) == want_neg,
+               f"discriminant sign at lambda={lam} ({tag} end) contradicts "
+               f"vacuity claim (expected {'<0' if want_neg else '>=0'})")
+        disc_hi = float(G2_HI ** 2 - 16 * z4 / mp.mpf(repr(lam)))
+        print(f"        lambda = {lam:6.2f}:  D = {disc_hi:+10.4f}  "
+              f"{'VACUOUS' if want_neg else 'non-empty'}")
+    ck(all(float(G2_HI ** 2 - 16 * z4 / mp.mpf(repr(l))) < 0
+           for l in (0.40, 1.71, 1.73, 1.84, 2.06, 2.67, 3.62)),
+       "(2.2) claimed vacuous over the hydride range but some D >= 0")
+    print("        => (2.2) is EMPTY for every material lambda in this file "
+          "(all <= 3.62); the honest finite-lambda statement there is the "
+          "certified F_hi^E of Stage 4b(d).")
 
     print("\n    (ii) first-basis Rayleigh bound h(varpi) >= H_00 = "
           "varpi^2/(1+varpi^2), exact and N-independent:")
