@@ -1,6 +1,6 @@
-# P4 — A universal, certified $T_c$ upper envelope over **all** phonon spectra ($\mu^\*=0$)
+# P4 — A universal $T_c$ upper envelope over **all** phonon spectra ($\mu^\*=0$)
 
-**Status: THEOREM (one-sided), load-bearing on the certified Einstein bracket (③).**
+**Status: THEOREM (one-sided); the Einstein bracket (③) is finite-$N$ certified on $\lambda\in[0.345,\,34.4]$, analytic-asymptotic outside.**
 For *every* coupling $\lambda>0$ and *every* phonon spectrum $P$ (probability measure on
 $\mathbb R_+$ with finite second moment $\langle\omega^2\rangle$, $P\neq\delta_0$), we
 establish a single scalar upper bound
@@ -20,7 +20,7 @@ the certified bracket no longer separates from the ceiling).
 
 Deliverable script: `theory/derivations/p4_universal_tc_envelope.py`
 (run `OMP_NUM_THREADS=1 python p4_universal_tc_envelope.py`; prints `PASS 66  FAIL 0`,
-$\approx 73$ s). It imports `H_mat` from `p4_interchange_uniformity` (committed base) and the
+$\sim$1–2 min). It imports `H_mat` from `p4_interchange_uniformity` (committed base) and the
 certified inversion pieces (`node_cert`, `invert_envelope`, `tc_from_w`, `strong_invert`,
 `_weak_invert`, `_weak_asympt_invert`, `G2_LO`, `G2_HI`, `TWO_PI`) from
 `p4_global_tc_certified` (deliverable ③, commit `1184684`, **inherited certificate-level**).
