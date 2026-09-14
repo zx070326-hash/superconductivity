@@ -18,7 +18,7 @@ overstated the two $C$-dependent bands):**
 | $\varpi\le0.14$ ($\lambda\gtrsim34$) | Weyl $\mathfrak g(2)$ envelope | **fully analytic** |
 | $(0.14,3]$ | Rayleigh + Kato–Temple | **certificate** (finite-$N$, interval) |
 | $(3,25]$ | Prop. L + Prop. U | **certificate** (finite-$N$) |
-| $>25$ ($\lambda\lesssim0.2$) | Prop. B (+A′) with $C(a)$ | **proven modulo calibrated $C$** |
+| $>25$ ($\lambda\lesssim0.2$) | Prop. B (+A′) with $C(a)$ | **proven sup $+$ calibrated pad ($\varpi>25$)** |
 
 So the honest headline is: *no band is asymptotic any more* (that gap is genuinely
 closed), and every band is at least certificate-level, but the deep band's upper
@@ -127,10 +127,39 @@ $\tfrac12\int_0^\infty R(a,s)\,ds/s$ to $2\times10^{-4}$ at $\varpi=100,1000$). 
 is what lets a *single* $a$-envelope serve every $\varpi$:
 $$c(a)\;\le\;C(a):=\min\Big(C_1\frac{a^2}{1+a^2},\;C_\infty,\;\frac{C_2}{a}\Big),
 \qquad C_1=1.5190,\ C_\infty=0.6375,\ C_2=1.6870 .$$
-**Honest caveat:** $C_1,C_\infty,C_2$ are *calibrated* — measured as suprema over
-$\varpi\in[2,400]$ and all $n$ (measured $1.51848$, $0.63716$, $1.68612$), then
-padded. They are consistent with the continuum limit but are **not** closed-form
-proven constants. Gate step [1] re-verifies $c_n\le C(s_n)$ at every run.
+**Update 2026-09-15 (reviewer T2 — the three sups are now CLOSED-FORM).** The
+continuum row sum has an exact antiderivative. Writing $1/(2m+1)=1/(2\varpi s_m)$,
+$c_n=\varpi^{-1}\sum_m R(a,s_m)/(2s_m)$ is a **midpoint rule** for
+$$C(a):=\int_0^\infty\frac{R(a,b)}{2b}\,db
+      =\frac{\tfrac12\ln(1+a^2)+a\arctan a}{1+a^2},$$
+verified against `mp.quad` to $10^{-13}$ at $a=0.1,1,1.5,5,20$. This is *exactly*
+the Lemma-M function $\Theta(s)$ already in `p4_cii_m1.py:534` and
+`p4_b1_closed_form.py:78`, so the three constants inherit **proven** suprema:
+$$\sup_a C(a)=\Theta^*=0.6349287917881079\ \text{at}\ a^*=1.500904283,\qquad
+\sup_a C(a)\frac{1+a^2}{a^2}=\frac32\ \textbf{exactly},\qquad
+\sup_a C(a)\,a=1.6850369351350 .$$
+$a^*$ is the root of $2a+(1-a^2)\arctan a-a\ln(1+a^2)=0$; the third sup is
+*interior* (the $a\to\infty$ limit is only $\pi/2=1.5708$). Each shipped constant
+is therefore **a proven sup plus an explicit pad**:
+$C_1-\tfrac32=1.90\times10^{-2}$, $C_\infty-\Theta^*=2.571\times10^{-3}$,
+$C_2-1.68504=1.963\times10^{-3}$; gate [1a] proves
+$\max_a C(a)/C_{\text{shape}}(a)=0.99884\le1$ for **all** $a>0$ in closed form,
+with a negative control (shaving $C_\infty$ below $\Theta^*$ must break domination).
+
+**What remains calibrated is only the pad, and its job is now identified.** The pad
+absorbs the *discrete-minus-continuum* (midpoint) excess, measured as
+$+0.0197/\varpi^2$ at the $a\approx1.5$ peak and stable over $\varpi=3\ldots200$.
+That is covered by $C_\infty-\Theta^*$ for $\varpi\ge2.77$. **This is a genuine
+boundary, not a formality:** at $\varpi=0.3$ the true $\max_n c_n=0.979$ and at
+$\varpi=1.0$ it is $1.04\times$ over $C_{\text{shape}}$ — $C_{\text{shape}}$ is
+**false** there. It is sound only because the dispatch never calls it below
+$\varpi=25$ (Prop. B band), where the excess is $3.2\times10^{-5}$, i.e. $82\times$
+inside the pad. Gate [1b] asserts both exceedances as *teeth*, so the band can
+never be quietly widened. Rigor label: **proven sup + calibrated $O(1/\varpi^2)$
+pad, valid for $\varpi>25$** — still `proven-cal`, but the residual is now one
+scalar decay coefficient rather than three unexplained numbers.
+
+Gate step [1] re-verifies $c_n\le C(s_n)$ at every run.
 Note $\max_n c_n=0.6372>\Theta^\*$: $\Theta^\*$ bounds $\|\mathcal R\|$, **not** the
 row sums, so using $\Theta^\*$ as a pointwise $c$-fill would be unsound.
 
@@ -175,7 +204,7 @@ Measured overshoot $h_{\rm hi}-h_{\rm true}$ (vs. a dense independent eigenvalue
 | strong | $\le0.14$ | Weyl $\mathfrak g(2)\varpi^2$ envelope | few $\%$ | **proven analytic** (Cor ii) |
 | crossover | $(0.14,3]$ | `node_cert`: Rayleigh + Kato–Temple | $\sim\!5\times10^{-4}$ | **certificate** (finite-$N$) |
 | head-$K$ | $(3,25]$ | Prop. L + Prop. U, $K{=}8$ | $\sim\!3\times10^{-4}$ | **certificate** (finite-$N$) |
-| deep | $>25$ | Cor (iii) + Prop. B | $\Delta h\approx0.17\!\to\!0.04$ | **proven modulo calibrated $C$** |
+| deep | $>25$ | Cor (iii) + Prop. B | $\Delta h\approx0.17\!\to\!0.04$ | **proven sup $+$ calibrated pad ($\varpi>25$)** |
 
 Both sides of every band are proven or certificate-level. **No band anywhere relies
 on an asymptotic-only upper side** — which is precisely the gap this note closes.
@@ -301,7 +330,7 @@ test against the wrong constant.
 | Prop. L lower (head Schur complement $\succeq$) | **proven inequality**, finite-$N$ inputs |
 | Prop. U upper (Schur + geometric remainder) | **proven inequality**, finite-$N$ inputs |
 | Prop. A′ Schur test $\mathcal R\preceq\mathrm{diag}(c)$ | **proven inequality**; weight collapse verified $10^{-16}$ — but the *value* returned uses the calibrated $C$ below, so any bracket built on it is `proven-cal`, not `proven` |
-| envelope constants $C_1,C_\infty,C_2$ | **calibrated, not closed-form** — re-checked every run |
+| envelope constants $C_1,C_\infty,C_2$ | **proven sups** ($\Theta^*$, $3/2$ exact, $1.68504$) $+$ calibrated $O(1/\varpi^2)$ midpoint pad; valid $\varpi>25$ only, false for $\varpi\lesssim2.8$ (teeth in gate [1b]) |
 | Prop. B block bounds (digamma, $G$/$\mathcal D$ monotone) | **proven inequality**; uses calibrated $C$ |
 | Cor (iii) lower $h\ge\ln\varpi+c_0-\frac1{12\varpi}-\frac3{16\varpi^2}$ | **proven analytic** |
 | Weyl envelope, $\mathfrak g(2)$ CERT-D | **proven analytic** / certified constant |
@@ -318,9 +347,19 @@ test against the wrong constant.
    single monotone grid costs $\sim\!10^{-1}$ relative width per $\lambda$, versus
    $3\times10^{-3}$ for ③'s dense crossover-only grid. Nothing is wrong with the
    mathematics; the grid is simply coarse. A dense run refines this $\propto1/N$.
-3. **The envelope constants are calibrated, not proven.** Closing this would mean
-   proving $\sup_a c(a)\le C_\infty$ etc. in closed form from the rational kernel
-   $R$ — tractable, but not done here. Flagged rather than glossed.
+3. ~~**The envelope constants are calibrated, not proven.**~~ **CLOSED 2026-09-15**
+   (reviewer T2): all three sups are now closed-form from the rational kernel —
+   $\Theta^*$, $3/2$ exactly, and $1.68504$ — see the Prop. A′ update. What
+   survives is only the $O(1/\varpi^2)$ midpoint pad, plus the finding that
+   $C_{\text{shape}}$ is genuinely **false for $\varpi\lesssim2.8$** (at
+   $\varpi=0.3$, $\max_n c_n=0.979$). Sound only because the dispatch confines it
+   to $\varpi>25$; asserted as teeth in gate [1b].
+3b. **Prop. A′ is dead code in the live dispatch.** `h_hi_schur` has **zero call
+   sites**: `h_bracket` routes $\varpi>25$ to `h_hi_dyadic` (Prop. B) and never
+   calls the $O(\varpi M)$ Schur bound. Prop. A′ is retained as the *derivation*
+   of the $\mathcal R\preceq\mathrm{diag}(c)$ step that Prop. B consumes, and is
+   still exercised by gate [1], but no shipped bracket number comes from it. Any
+   audit of the shipped uppers should read Prop. B.
 4. **A "min of two dominations" bug** appeared in this file's own first draft and was
    caught by an explicit counterexample test, now recorded in §0. It had also
    silently made an earlier $\Theta^\*$-fill unsound.

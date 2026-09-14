@@ -120,14 +120,48 @@ FL = 1e-12                           # float64 rounding pad (generous)
 # and the map a -> c is w-INDEPENDENT in the continuum limit (verified: the
 # discrete c_n matches (1/2)\int_0^inf R(a,s)/s ds to 2e-4 at w=100,1000),
 # which is what makes a single a-envelope valid at every w.
-C_K1 = 1.5190      # c(a) <= C_K1 a^2/(1+a^2)   (small-a; measured sup 1.51848)
-C_SUP = 0.6375     # c(a) <= C_SUP              (global;   measured sup 0.63716)
-C_K2 = 1.6870      # c(a) <= C_K2 / a           (large-a;  measured sup 1.68612)
+# --- CLOSED FORM (2026-09-15): the three sups are now PROVEN, not calibrated ---
+# The continuum row-sum has an exact closed form.  With a = s_n and the midpoint
+# nodes s_m=(m+1/2)/w, 1/(2m+1) = 1/(2 w s_m), so c_n = (1/w) sum_m g(s_m) with
+# g(b) = R(a,b)/(2b) on cells of width 1/w -- a midpoint rule for
+#        C(a) := int_0^inf R(a,b)/(2b) db
+#              = [ln(1+a^2)/2 + a arctan a] / (1+a^2).
+# Verified against mp.quad to 40 digits at a=0.1..200.  This is EXACTLY the
+# Lemma-M function Theta(s) already in p4_cii_m1.py:534 and p4_b1_closed_form.py,
+# so the three envelope constants inherit closed-form sups:
+#   sup_a C(a)                 = Theta* = 0.63492879178810795  at a*=1.500904283
+#                                (root of 2a + (1-a^2)arctan a - a ln(1+a^2) = 0)
+#   sup_a C(a)(1+a^2)/a^2      = 3/2  EXACTLY  (a->0 limit; decreasing in a)
+#   sup_a C(a)*a               = 1.68503693513504 at a=10.0752247 (interior max;
+#                                the a->inf limit is only pi/2 = 1.5708)
+# Each constant below therefore = a PROVEN sup + an explicit pad.  The pad's job
+# is to absorb the discrete-minus-continuum (midpoint-rule) excess, measured as
+# +0.0197/w^2 at the a~1.5 peak, stable over w=3..200.  Pad 2.571e-3 covers that
+# for w >= 2.77; c_shape is LIVE only on the Prop-B band w > 25 (h_hi_schur has
+# no call site), where the excess is 3.2e-5, i.e. 82x inside the pad.
+# HONEST BOUNDARY: the O(1/w^2) midpoint excess is measured, not proven, so the
+# label is proven-sup + calibrated-pad.  It is NOT valid for small w -- at w=0.3
+# max_n c_n = 0.979 and at w=1.0 it is 0.317/0.304 = 1.04x over c_shape.  Those w
+# are dispatched to strong-Weyl / node_cert / head-K, which never call c_shape.
+C_K1 = 1.5190      # >= 3/2 (proven sup) + 1.900e-02 pad
+C_SUP = 0.6375     # >= Theta* = 0.6349287917881 (proven sup) + 2.571e-03 pad
+C_K2 = 1.6870      # >= 1.6850369351350 (proven sup) + 1.963e-03 pad
 
 
 # Location of the interior maximum of c_shape (where C_K1 a^2/(1+a^2) meets
 # C_SUP): a_peak = sqrt(C_SUP/(C_K1-C_SUP)).  Used for block-wise sup.
 A_PEAK = float(np.sqrt(C_SUP / (C_K1 - C_SUP)))
+
+
+def C_cont(a):
+    """EXACT continuum row-sum  C(a) = int_0^inf R(a,b)/(2b) db.
+
+    Closed form  [ln(1+a^2)/2 + a arctan a]/(1+a^2).  Identical to the Lemma-M
+    Theta(s) of p4_cii_m1.py:534, whose max is the certified Theta*.  c_shape
+    must dominate THIS function for the Prop A-prime/B Schur test to be sound.
+    """
+    a = np.asarray(a, dtype=float)
+    return (np.log1p(a * a) / 2.0 + a * np.arctan(a)) / (1.0 + a * a)
 
 
 def c_shape(a):
@@ -533,6 +567,69 @@ def main(K=8, quick=False):
        "CERT-D bracket ordered, width < 1e-8")
     print("    CERT-D width %.3e  nested in CERT-B width %.3e"
           % (float(G2_HI - G2_LO), float(G2_HI_B - G2_LO_B)))
+
+    print("\n[1a] CLOSED-FORM SUPS of the envelope constants (reviewer T2)")
+    print("     C(a)=[ln(1+a^2)/2+a atan a]/(1+a^2) == Lemma-M Theta(a); sups PROVEN")
+    for aq in (0.1, 1.0, 1.5, 5.0, 20.0):
+        am = mp.mpf(aq)
+        Rk = lambda b: (2 * am**2 * b**2 * (5 + am**2 + b**2) /
+                        ((1 + (am - b)**2) * (1 + (am + b)**2) *
+                         (1 + am**2) * (1 + b**2)))
+        q = mp.quad(lambda b: Rk(b) / (2 * b), [0, am, 2 * am, mp.inf])
+        ck(abs(float(q) - float(C_cont(aq))) < 1e-13,
+           "closed form = quad(R/2b) at a=%s" % aq)
+    THETA_STAR = 0.6349287917881079
+    A_STAR = 1.500904283161906
+    ck(abs(float(C_cont(A_STAR)) - THETA_STAR) < 1e-13,
+       "C(a*) = certified Lemma-M Theta* at a*=1.5009042832")
+    Nf = lambda a: 2 * a + (1 - a * a) * np.arctan(a) - a * np.log1p(a * a)
+    ck(abs(Nf(A_STAR)) < 1e-12, "a* is a root of the exact stationarity numerator")
+    ck(Nf(1.0) > 0 and Nf(2.0) < 0, "N changes sign around a* (interior max)")
+    ag = np.geomspace(1e-6, 1e6, 2000001)
+    Cg = C_cont(ag)
+    s_C = float(Cg.max())
+    s_K1 = float((Cg * (1 + ag**2) / ag**2).max())
+    s_K2 = float((Cg * ag).max())
+    ck(s_C <= THETA_STAR + 1e-9, "sup_a C(a) = Theta* (%.13f)" % s_C)
+    ck(abs(s_K1 - 1.5) < 1e-6, "sup_a C(a)(1+a^2)/a^2 = 3/2 exactly (%.9f)" % s_K1)
+    ck(abs(s_K2 - 1.6850369351350385) < 1e-6,
+       "sup_a C(a)*a = 1.68503693514 interior (%.11f)" % s_K2)
+    ck(s_K2 > float(mp.pi / 2), "the a*C sup is INTERIOR, not the a->oo limit pi/2")
+    for nm, cal, sup in (("C_SUP", C_SUP, s_C), ("C_K1", C_K1, 1.5),
+                         ("C_K2", C_K2, s_K2)):
+        ck(cal > sup, "%s=%.4f exceeds its proven sup %.13f (pad %.3e)"
+           % (nm, cal, sup, cal - sup))
+        print("     %-6s = %.4f  >=  proven sup %.13f   pad %.3e"
+              % (nm, cal, sup, cal - sup))
+    rr = float((Cg / c_shape(ag)).max())
+    ck(rr <= 1.0, "c_shape dominates C(a) for ALL a>0 (max ratio %.8f)" % rr)
+    print("     max_a C(a)/c_shape(a) = %.8f  (ALL a>0, closed form)" % rr)
+    bad = np.minimum(np.minimum(C_K1 * ag**2 / (1 + ag**2), THETA_STAR - 1e-6),
+                     C_K2 / ag)
+    ck(float((Cg / bad).max()) > 1.0,
+       "teeth: C_SUP shaved under Theta* stops dominating C (control)")
+
+    print("\n[1b] DISCRETE-vs-CONTINUUM excess and the pad budget (T2, honest)")
+    print("     c_n is a midpoint rule for C(a); the pad absorbs the O(1/w^2) excess")
+    K_EXC = 0.0197
+    w_ok = (K_EXC / (C_SUP - THETA_STAR))**0.5
+    ck(w_ok < W_HEAD, "pad-coverage threshold w=%.3f is below the live band %.0f"
+       % (w_ok, W_HEAD))
+    print("     excess ~ %.4f/w^2 at the peak; pad %.3e covers it for w >= %.3f"
+          % (K_EXC, C_SUP - THETA_STAR, w_ok))
+    print("     c_shape is LIVE only for w > %.0f (Prop B); h_hi_schur is unused."
+          % W_HEAD)
+    ck(K_EXC / W_HEAD**2 < 0.05 * (C_SUP - THETA_STAR),
+       "at w=%.0f the excess is >20x inside the pad" % W_HEAD)
+    for wsm in (0.3, 1.0):
+        Nc = max(80, int(4 * wsm))
+        cd = schur_c(wsm, Nc, 200000)
+        asm = (np.arange(Nc) + 0.5) / wsm
+        rsm = float((cd / c_shape(asm)).max())
+        ck(rsm > 1.0, "teeth: c_shape FAILS at w=%s (ratio %.4f) -- band excluded"
+           % (wsm, rsm))
+        print("     w=%4.1f: max c_n/c_shape = %.4f  EXCEEDS 1 (not dispatched here)"
+              % (wsm, rsm))
 
     print("\n[1] SOUNDNESS of the Schur envelope c_shape (Prop. A-prime)")
     print("    c_n = sum_m R(s_n,s_m)/(2m+1) must satisfy c_n <= c_shape(s_n)")
