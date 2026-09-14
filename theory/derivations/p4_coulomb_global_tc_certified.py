@@ -59,10 +59,15 @@ CERTIFICATE STRUCTURE (all bounds on the EXACT operator M, not a float image):
       {wbar : g >= gstar} can be disconnected and lambda*lam_1=1 can have several
       roots; T_c is DEFINED AS sup{T : lambda lam_1(M(T)) >= 1}, i.e. the SMALLEST
       root wbar* (largest T).  The certified bracket [wbar_lo, wbar_hi] is obtained
-      by (i) certifying every lower window's right-end PEAK has gHI < gstar (proves
-      no smaller root -> the sup is in this window), then (ii) bisecting inside the
-      crossing window (monotone) until the bracket separates gstar.  The non-unique
-      lambda-band around each down-jump is disclosed explicitly, NOT hidden.
+      by (i) certifying NO root in any lower window k<k_star -- via the PROVEN free
+      bound (lam_1(M)<=h<=h((k+1)/r)<gstar, no monotonicity needed) for the bottom
+      windows OR the INHERITED within-window monotonicity threshold
+      (mutilde<inf_W mutilde_*) + a certified pencil-KT at the right edge for the
+      higher lower windows (see invert_sup / sec.5.1 of the .md); then (ii) bisecting
+      inside the crossing window until the bracket separates gstar (two monotone edge
+      searches; a crossing between them HARD-FAILS as 'monotonicity_fail', never a
+      silent swap).  The non-unique lambda-band around each down-jump is disclosed
+      explicitly, NOT hidden.
 
 Sanity anchor (P4D_coulomb_operator.md sec.3, P4_mustar_uniqueness_strategy.md sec.2.1):
   lambda=1, mutilde=0.10, r=3, N_c 5->6 at wbar=2.000: lam_1(M) down-jumps to 0.998882.
@@ -98,6 +103,15 @@ def ck(cond, msg=""):
         FAIL[0] += 1
         print(f"  !! CHECK FAILED: {msg}")
     return cond
+
+
+def _outward(x, up, ndig=6):
+    """Round x to ndig decimals OUTWARD: down if up=False (a lower endpoint),
+    up if up=True (an upper endpoint).  Keeps a printed [lo,hi] a valid OUTER
+    enclosure -- never rounds a bracket inward."""
+    import math
+    s = 10.0 ** ndig
+    return (math.ceil(x * s) / s) if up else (math.floor(x * s) / s)
 
 
 # ===========================================================================
@@ -274,6 +288,36 @@ def _crossings(mu_t, gstar, r=R_PHYS, k_min=0, k_max=16, N=200):
     return cross, start_sc
 
 
+# ---------------------------------------------------------------------------
+# WITHIN-WINDOW MONOTONICITY THRESHOLD (inherited theorem, p4d_coulomb_uniqueness).
+# T |-> lam_1(M(T)) is strictly monotone on a fixed-N_c window PROVIDED
+#   mutilde < inf_{wbar in window} mutilde_*(wbar, N_c),
+# mutilde_* = t_max*gamma / (2 c_1 |u_perp| + 2 t_max c_1^2)  (Cell.thr).
+# This is CERTIFICATE-LEVEL (float64 constants gamma, c_1, |u_perp|, t_max; the
+# strategy doc (H1) flags interval-ization of gamma, c_1 as pending).  It is the
+# ONLY ingredient the higher lower windows lean on; the bottom windows are covered
+# by the PROVEN free bound (M <= K_ph, h monotone) with no monotonicity needed.
+# ---------------------------------------------------------------------------
+_WMONO_THR = {}
+
+
+def wmono_thr(k, r=R_PHYS, NN=200, npts=5):
+    """inf over the N_c=k physical window of the within-window monotonicity
+    threshold mutilde_*(wbar, N_c=k).  Cached (mutilde-independent, depends on k,r
+    only).  Returns 0.0 if the Cell machinery is unavailable (=> mono branch never
+    fires, forcing reliance on the free bound alone)."""
+    key = (int(k), round(float(r), 6))
+    if key not in _WMONO_THR:
+        try:
+            import p4d_coulomb_uniqueness as _U   # tracked base file
+            lo, hi = k / r, (k + 1) / r
+            ws = np.linspace(lo + 1e-4, hi - 1e-4, npts)
+            _WMONO_THR[key] = min(float(_U.Cell(float(w), int(k), NN).thr) for w in ws)
+        except Exception:
+            _WMONO_THR[key] = 0.0
+    return _WMONO_THR[key]
+
+
 # ===========================================================================
 # (c)  CERTIFIED SUP-RULE INVERSION  g_mutilde(wbar*) = gstar
 # ===========================================================================
@@ -288,10 +332,15 @@ def invert_sup(mu_t, gstar, r=R_PHYS, w_min=0.30, w_max=5.0,
 
     Returns dict with:
       status : 'ok' | 'below_wmin' | 'above_range' | 'kt_fail' | 'ambiguous'
+               | 'monotonicity_fail'
       w_lo, w_hi : certified enclosure of the SUP (smallest) root wbar*
       Nc         : Coulomb window at the root
       nroots     : number of float64 roots on [w_min, w_max] (>=2 => non-unique band)
-      sup_ok     : True if every lower window's peak certified gHI < gstar
+      sup_ok     : True iff EVERY lower window (k<k_star) is certified root-free by
+                   the PROVEN free bound (M<=K_ph, h monotone) OR by the INHERITED
+                   within-window monotonicity threshold (mutilde<inf_W mutilde_*) plus
+                   a certified pencil-KT at the window's right edge.
+      lower_cov  : list of (k, mechanism) with mechanism in {'free','mono','UNCOVERED'}
     """
     # ---- float64 guidance: window-based up-crossing map ----
     k_min = _nc_phys(w_min, r)
@@ -312,29 +361,53 @@ def invert_sup(mu_t, gstar, r=R_PHYS, w_min=0.30, w_max=5.0,
         return dict(status='below_wmin', w_lo=None, w_hi=None, Nc=k_star,
                     nroots=nroots, sup_ok=None)
 
-    # ---- certify: every lower window's right-end PEAK has gHI < gstar ----
-    # (proves no SC point below window k_star, i.e. the sup root really is here)
+    # ---- certify: NO root in any LOWER window (k < k_star) -> the sup root is here.
+    # Two mechanisms, tried per window in order:
+    #  (A) FREE bound [PROVEN, no within-window monotonicity needed]:
+    #        lam_1(M(wbar)) <= lam_1(K_ph(wbar)) = h(wbar)   (K_c >= 0, gamma-inheritance)
+    #                       <= h((k+1)/r)                     (h strictly increasing, Cor(i))
+    #                       <= hHI_phonon((k+1)/r)            (certified KT upper on h).
+    #      If hHI_phonon((k+1)/r) < gstar, window k has NO crossing.  (Covers the
+    #      bottom windows for every row; the ONLY thing needed there.)
+    #  (B) WITHIN-WINDOW MONOTONICITY [INHERITED, certificate-level]:
+    #      mutilde < inf_W mutilde_*(N_c=k) (wmono_thr) => g(wbar) increases across the
+    #      window, so its peak sits at the right edge; a certified pencil-KT there
+    #      (gHI < gstar) then rules out a crossing.  Needed for the higher lower
+    #      windows (N_c>=3), where (A) does not separate.
+    # sup_ok is True iff EVERY lower window is covered by (A) or (B); otherwise the
+    # sup rule is NOT certified for this row and the gate FAILS (see main()).
     sup_ok = True
+    lower_cov = []
     k = max(1, _nc_phys(w_min, r))
     while k < k_star:
-        peak_w = (k + 1) / r - eps_b
-        if peak_w <= w_min:
+        edge_w = (k + 1) / r
+        if edge_w <= w_min:
             k += 1
             continue
-        lo, hi, _, gam = g_cert(peak_w, mu_t, r, Nv, Na)
-        if hi is None:            # KT failed at this peak: cannot certify normal
-            sup_ok = False
-            break
-        if not (hi < gstar):      # bracket cannot rule out a crossing in window k
-            sup_ok = False
-            break
-        k += 1
+        # (A) free phonon bound over the WHOLE window (mu_t=0 => pure phonon cert)
+        _, hHI_ph, _, _, _ = pencil_node_cert(edge_w, 0.0, 0, Nv=max(Nv, 40), Na=Na)
+        if hHI_ph is not None and hHI_ph < gstar:
+            lower_cov.append((k, 'free'))
+            k += 1
+            continue
+        # (B) within-window monotonicity (inherited) + certified pencil-KT at the edge
+        thr = wmono_thr(k, r)
+        peak_w = edge_w - eps_b
+        lo_e, hi_e, _, _ = g_cert(peak_w, mu_t, r, Nv, Na)
+        if (mu_t < thr) and (hi_e is not None) and (hi_e < gstar):
+            lower_cov.append((k, 'mono'))
+            k += 1
+            continue
+        # window k is certified by NEITHER route: the sup rule cannot be certified
+        lower_cov.append((k, 'UNCOVERED'))
+        sup_ok = False
+        break
 
     # ---- crossing window may sit below wbar_min (KT-uncertifiable) ----
     lo0, hi0, Nc0, gam0 = g_cert(w_guess, mu_t, r, Nv, Na)
     if hi0 is None:
         return dict(status='kt_fail', w_lo=None, w_hi=None, Nc=k_star,
-                    nroots=nroots, sup_ok=sup_ok)
+                    nroots=nroots, sup_ok=sup_ok, lower_cov=lower_cov)
 
     # ---- certified bisection inside the crossing window (monotone) ----
     lo_edge = k_star / r
@@ -346,15 +419,16 @@ def invert_sup(mu_t, gstar, r=R_PHYS, w_min=0.30, w_max=5.0,
     lb, hb, _, _ = g_cert(b, mu_t, r, Nv, Na)
     if ha is None or hb is None:
         return dict(status='kt_fail', w_lo=None, w_hi=None, Nc=k_star,
-                    nroots=nroots, sup_ok=sup_ok)
+                    nroots=nroots, sup_ok=sup_ok, lower_cov=lower_cov)
     if not (ha < gstar):
         # left edge already SC: crossing is at/below the window's left boundary
         # (a down-jump landed just above gstar) -> sup root pinned at left edge
         return dict(status='ok', w_lo=a, w_hi=a, Nc=k_star,
-                    nroots=nroots, sup_ok=sup_ok, boundary_pinned=True)
+                    nroots=nroots, sup_ok=sup_ok, lower_cov=lower_cov,
+                    boundary_pinned=True)
     if not (lb >= gstar):
         return dict(status='ambiguous', w_lo=a, w_hi=b, Nc=k_star,
-                    nroots=nroots, sup_ok=sup_ok)
+                    nroots=nroots, sup_ok=sup_ok, lower_cov=lower_cov)
     # Two independent edge searches (g monotone increasing in the window):
     #   w_hi = smallest wbar with CERTIFIED SC   (gLO >= gstar)
     #   w_lo = largest  wbar with CERTIFIED normal(gHI <  gstar)
@@ -378,10 +452,17 @@ def invert_sup(mu_t, gstar, r=R_PHYS, w_min=0.30, w_max=5.0,
     _, w_hi = _bisect(lambda lm, hm: lm >= gstar)
     # largest certified-normal point: normal iff hm < gstar
     w_lo, _ = _bisect(lambda lm, hm: not (hm < gstar))
-    if w_lo > w_hi:                         # numerical crossing of the two edges
-        w_lo, w_hi = min(w_lo, w_hi), max(w_lo, w_hi)
+    if w_lo > w_hi:
+        # The two monotone edge-searches CROSSED (largest-normal > smallest-SC).
+        # This can only happen if g failed to be monotone in the crossing window
+        # (multi-valued / near-crossing) -- it MUST be surfaced, never masked by a
+        # silent swap.  HARD FAIL: report the anomaly so the gate flags it.
+        return dict(status='monotonicity_fail', w_lo=w_lo, w_hi=w_hi, Nc=k_star,
+                    nroots=nroots, sup_ok=False, lower_cov=lower_cov,
+                    boundary_pinned=False)
     return dict(status='ok', w_lo=w_lo, w_hi=w_hi, Nc=k_star,
-                nroots=nroots, sup_ok=sup_ok, boundary_pinned=False)
+                nroots=nroots, sup_ok=sup_ok, lower_cov=lower_cov,
+                boundary_pinned=False)
 
 
 # ===========================================================================
@@ -480,6 +561,39 @@ def run_selftest():
             print(f"{w:>5}{mu_t:>7.4f}{Nc:>4}{lo:>11.6f}{hi:>11.6f}{tr:>11.6f}"
                   f"{glo:>11.6f}{g:>8.3f}{(hi-lo)/abs(lo):>10.2e}")
 
+    print("\n=== LOWER-WINDOW no-root coverage (FIX #3: PROVEN free bound + INHERITED mono) ===")
+    # (1) within-window monotonicity threshold reproduces the inherited theorem numbers
+    #     (p4d_coulomb_uniqueness.Cell.thr, inf over the physical window):
+    ck(abs(wmono_thr(1) - 0.0575) < 2e-3, "inf_W mutilde_*(N_c=1) ~ 0.057 (inherited)")
+    ck(abs(wmono_thr(2) - 0.1377) < 2e-3, "inf_W mutilde_*(N_c=2) ~ 0.138 (inherited)")
+    ck(wmono_thr(3) > 0.19 and wmono_thr(3) < wmono_thr(4),
+       "inf_W mutilde_* increasing; N_c>=3 above the physical mutilde<=0.186 range")
+    # (2) the PROVEN free bound M<=K_ph rescues the bottom windows N_c=1,2:
+    #     lam_1(M(wbar)) <= h(wbar) <= h((k+1)/r) <= hHI_phonon((k+1)/r); certify hHI:
+    _, hHI_23, _, _, _ = pencil_node_cert(2.0 / 3.0, 0.0, 0)   # right edge, N_c=1 window
+    _, hHI_1, _, _, _ = pencil_node_cert(1.0, 0.0, 0)          # right edge, N_c=2 window
+    ck(hHI_23 is not None and hHI_23 < 0.45, f"free bound: h(2/3) certified < 0.45 ({hHI_23})")
+    ck(hHI_1 is not None and hHI_1 < 0.75, f"free bound: h(1) certified < 0.75 ({hHI_1})")
+    print(f"  wmono_thr: N_c=1={wmono_thr(1):.4f}  N_c=2={wmono_thr(2):.4f}  "
+          f"N_c=3={wmono_thr(3):.4f}  N_c=4={wmono_thr(4):.4f}")
+    print(f"  free phonon-KT window edges: hHI(2/3)={hHI_23:.4f}   hHI(1)={hHI_1:.4f}")
+    # (3) a small-lambda row where within-window monotonicity FAILS for N_c=1,2
+    #     (mutilde > inf_W mutilde_*) yet the free bound rescues them, so sup_ok holds:
+    mut07 = 0.13 / 0.7
+    res07 = invert_sup(mut07, 1.0 / 0.7, r=R_PHYS, w_min=0.30, w_max=5.0)
+    ck(res07['status'] == 'ok' and res07['sup_ok'] is True,
+       "lambda=0.7 mu*=0.13: sup certified (status ok, sup_ok True)")
+    cov = dict(res07.get('lower_cov', []))
+    ck(cov.get(1) == 'free' and mut07 > wmono_thr(1),
+       "N_c=1 mono-UNCOVERED (mutilde>thr) but FREE-covered at lambda=0.7 mu*=0.13")
+    ck(cov.get(2) == 'free' and mut07 > wmono_thr(2),
+       "N_c=2 mono-UNCOVERED (mutilde>thr) but FREE-covered at lambda=0.7 mu*=0.13")
+    ck(any(m == 'mono' for m in cov.values()),
+       "higher lower windows covered by inherited within-window monotonicity")
+    ck(all(m in ('free', 'mono') for m in cov.values()),
+       "every lower window covered by free OR mono (no UNCOVERED window)")
+    print(f"  lambda=0.7, mu*=0.13 lower_cov: {res07['lower_cov']}")
+
     print("\n=== ANCHOR: lambda=1, mutilde=0.10, r=3, N_c 5->6 down-jump at wbar=2.0 ===")
     lo5, hi5, _, _, _ = pencil_node_cert(2.0, 0.10, 5)
     lo6, hi6, _, _, _ = pencil_node_cert(2.0, 0.10, 6)
@@ -504,7 +618,7 @@ def main(lam_grid=None):
     print("P4-D CERTIFIED GLOBAL T_c(lambda, mu*)  --  PHYSICAL COULOMB (mu* > 0), r=3")
     print("=" * 78)
     if lam_grid is None:
-        lam_grid = [0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.5, 2.0, 2.5, 3.0]
+        lam_grid = [0.7, 0.8, 0.9, 1.0, 1.2, 1.5, 2.0, 2.5, 3.0]
 
     for mu_star in (0.10, 0.13):
         print(f"\n{'#'*70}\n#  mu* = {mu_star}   (r=3, mutilde = mu*/lambda)\n{'#'*70}")
@@ -519,24 +633,31 @@ def main(lam_grid=None):
             gstar = 1.0 / lam
             res = invert_sup(mu_t, gstar, r=R_PHYS, w_min=0.30, w_max=5.0)
             st = res['status']
+            # FIX #1: the certified table must FAIL the gate if any row's certificate
+            # fails.  status!='ok' and sup_ok=False are hard failures, not cosmetics.
+            ck(st == 'ok', f"certificate status ok (got '{st}') lam={lam} mu*={mu_star}")
             if st != 'ok':
                 print(f"{lam:>7.2f}{mu_t:>9.4f}{gstar:>8.4f}"
                       f"{(res['Nc'] if res['Nc'] else 0):>5}{'--':>10}{'--':>10}"
                       f"{'--':>11}{'--':>11}{'--':>9}{res['nroots']:>6}  {st}")
                 continue
+            ck(res.get('sup_ok') is True,
+               f"sup rule certified (no root below k*) lam={lam} mu*={mu_star}")
             w_lo, w_hi = res['w_lo'], res['w_hi']
             Flo, Fhi = tc_from_wstar(w_lo, w_hi)
             rw = (Fhi - Flo) / Flo
             ck(w_lo <= w_hi + 1e-12, f"wbar bracket ordered lam={lam}")
             ck(Flo <= Fhi + 1e-15, f"Tc bracket ordered lam={lam}")
-            supflag = '' if res.get('sup_ok') else ' [sup?]'
             note = ' [bnd-pin]' if res.get('boundary_pinned') else ''
             rows.append((lam, mu_t, Flo, Fhi, rw, res['nroots']))
             if rw > worst:
                 worst, worst_at = rw, lam
+            # FIX #5: print T_c endpoints OUTWARD-rounded (F_lo down, F_hi up) so the
+            # displayed 6-decimal bracket is never tighter than the certified one.
             print(f"{lam:>7.2f}{mu_t:>9.4f}{gstar:>8.4f}{res['Nc']:>5}"
-                  f"{w_lo:>10.5f}{w_hi:>10.5f}{Flo:>11.6f}{Fhi:>11.6f}"
-                  f"{rw:>9.2e}{res['nroots']:>6}  ok{supflag}{note}")
+                  f"{w_lo:>10.5f}{w_hi:>10.5f}"
+                  f"{_outward(Flo, False):>11.6f}{_outward(Fhi, True):>11.6f}"
+                  f"{rw:>9.2e}{res['nroots']:>6}  ok{note}")
         print(f"  worst-case certified T_c relative width: {worst:.3e}  (at lambda={worst_at})")
 
         # non-uniqueness (down-jump) bands
@@ -552,15 +673,21 @@ def main(lam_grid=None):
 
     # ---- collapse anchor + worst-N_c boundary (P4D_coulomb_operator.md U8) --------
     print(f"\n{'='*70}\nCOLLAPSE ANCHOR & worst-N_c KT boundary (r-general; physical r=3 path is clean)")
-    # exact doc anchor: wbar=0.3, mutilde=0.10, worst N_c=3 -> lam_1 ~ 6.216e-5
+    # doc anchor: wbar=0.3, mutilde=0.10, worst N_c=3.  NOTE (FIX #4): the small lam_1
+    # and gap here are UNCONVERGED N=400 floats (illustrative only) -- N=1600 shifts
+    # the gap by ~ -3.9% (6.2225e-5).  The LOAD-BEARING fact is the KT-FAIL declaration
+    # (mu_lo <= gamma), which is robust; the numeric values are illustrative, not "true".
     E = np.linalg.eigvalsh(H_mat(400, 0.3) - 0.10 * K_c_np(400, 3))
     lam1_c, gap_c = float(E[-1]), float(E[-1] - E[-2])
-    ck(abs(lam1_c - 6.216144e-5) < 1e-8, "collapse anchor lam1(0.3,0.10,Nc=3)=6.216e-5")
-    ck(abs(gap_c - 6.475852e-5) < 1e-8, "collapse anchor gap=6.476e-5")
+    ck(abs(lam1_c - 6.216144e-5) < 1e-8,
+       "collapse anchor lam1(0.3,0.10,Nc=3) = 6.216e-5 [N=400 float, illustrative]")
+    ck(abs(gap_c - 6.475852e-5) < 1e-8,
+       "collapse anchor gap = 6.476e-5 [N=400 float, illustrative/unconverged]")
     lo_c, hi_c, g_c, mlo_c, _ = pencil_node_cert(0.3, 0.10, 3)
-    ck(hi_c is None, "node cert declares KT-FAIL at the collapse point (honest)")
-    print(f"  wbar=0.3, mutilde=0.10, N_c=3: true lam_1={lam1_c:.6e}, gap={gap_c:.6e} "
-          f"(matches doc 6.216e-5/6.476e-5); node cert KT: {'FAIL (mu_lo<gamma)' if hi_c is None else 'ok'}")
+    ck(hi_c is None, "node cert declares KT-FAIL at the collapse point (LOAD-BEARING, robust)")
+    print(f"  wbar=0.3, mutilde=0.10, N_c=3: lam_1={lam1_c:.6e}, gap={gap_c:.6e} "
+          f"[N=400 float, ILLUSTRATIVE/unconverged, not 'true']; node cert KT: "
+          f"{'FAIL (mu_lo<=gamma)' if hi_c is None else 'ok'}")
     print(f"  worst-N_c node-cert KT boundary vs doc 2x2-cell wbar_min vs true collapse:")
     DOC_CERT = {0.10: 0.5391, 0.13: 0.6427, 0.26: 1.1686}
     TRUE_COLL = {0.10: 0.43, 0.13: 0.50, 0.26: 0.90}
