@@ -67,6 +67,7 @@ superconductivity/
 - `surveys/` 是 agent 原始产出，不手改；修正写到 `directions/Dn/README.md` 或 `notes/`。
 - 文献只存一份，在 `library/pdf/Dn/`；方向卡用相对路径引用。
 - 决策记录写清「选了什么、放弃了什么、为什么、什么条件下回头」。
+- 以上是**广度期**（D1–D7 调研）目录；真正的推导、证明、求解器都在 `theory/`，见 §5 与 `theory/derivations/INDEX.md`。
 
 ---
 
@@ -108,13 +109,21 @@ superconductivity/
 - [x] 2026-09-08 D1–D4 方向卡填入现状摘要与切入点（commit 15fd936）；D5–D7 保留为参考
 - [ ] 补核 16 条无 arXiv ID 的元数据（多为 Nature/PRL 正式版，无预印本）
 
-## 5. 工作区补充
+## 5. 深挖区（theory/）—— 严格 Tc 上界的主战场
+
+§1–§4 记录的是**广度期**（D1–D7 调研、选向）。真正的推导与证明都在 `theory/`，其中 **P4（KAY 严格 Tc 上界）是当前主攻方向**：
 
 ```
 theory/
-├── PROGRAM.md        ← 研究纲领：核心论题、P1–P6 候选问题、闭环结构、里程碑
-├── derivations/      ← sympy 脚本与推导稿
-├── solvers/          ← 各向同性 Eliashberg 求解器（含库仑核、能量依赖 DOS、质量缩放、模型顶角核）
-├── data/             ← 实验数据表 hydrides_experimental.csv、理论值表 hydrides_theory.csv
-└── notes/            ← 每轮闭环一篇，固定结构见 PROGRAM.md §3
+├── PROGRAM.md            ← 研究纲领叙事：核心论题、P1–P4 问题定义、闭环方法论（时间无关的那层）
+├── derivations/          ← 推导稿 + 数值门脚本（P1–P4 的证明所在）
+│   ├── INDEX.md          ← ★推导图谱：每篇证了什么 / 严格性等级 / 门 / 状态。先读这个
+│   └── P*_*.md / *.py    ← 各推导稿与同名数值门
+├── solvers/              ← 各向同性 Eliashberg 求解器（库仑核、能量依赖 DOS、质量缩放、模型顶角核）+ lambda_star.py
+├── data/                 ← 实验数据表 hydrides_experimental.csv、理论值表 hydrides_theory.csv（各带来源）
+├── paper/                ← 论文形态草稿（P4 §3 等）
+└── notes/                ← 每轮闭环记录 + 对抗核验审查（2026-09-*_*review.md），固定结构见 PROGRAM.md §3
 ```
+
+- **要理解目前证到哪一步、哪条结论多硬** → `theory/derivations/INDEX.md`（逐篇）+ `theory/PROGRAM.md`（叙事）+ 本机 auto-memory（演进中的当前状态）。
+- 严格性分三级（**解析 > 认证 > 数值证据**），每条结论显式标级——纪律见根目录 `CLAUDE.md` §1。
