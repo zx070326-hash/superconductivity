@@ -57,6 +57,7 @@
 
 - **`P4_uniqueness_strategy.md`**（v0.3，已证已审）—— **Conjecture 2 剩余半句（μ\*=0 唯一性）**：T↦𝔨(P,T) 严格单调递减，锥不变性 + Abel 分解把问题化为两条与 P、T 无关的组合不等式。引理 A/B 已初等证明，reviewer PROVED 无 CHALLENGED。严格性：**解析**。门：`p4_uniqueness_lemmas.py`（37）。
 - **`P4_concavity_q_route.md`**（102 检查）—— **引理 C 的 q-单调化路线**：(Q1)(Q2)(A) 解析证成；(B) 归约为两个明确解析缺口（ϖ∈[1.46,1.63] 谱隙下界 + 交换子 Frobenius 范数上界），真隙下 (B) 全程闭合、余量 4.4 倍。严格性：**部分解析 + 认证缺口**。门：`p4_concavity_q_route.py`（102 ck / 9.9s）。
+- **`P4_gap_via_variance.md`**（54 检查）—— **Gap 1 闭合（方差路线，绕开交换子 Frobenius 范数）**：定理 F（bound1≤bound2）+ 引理 V（Bhatia–Davis）+ 定理 G（|C|<E 判据）；B NOT ⪰ 0（β_min<0），全程闭合（worst 0.29）。严格性：定理 F/引理 V **analytic**，β_max/β_min/定理 G **numerical-evidence**。门：`p4_gap_via_variance.py`（54 ck / 1.4s）。
 - **`P4_concentration_bound.md`**（123 检查）—— **顶本征向量集中界**（引理 C 与 smooth-coulomb 的共享瓶颈）：结构恒等式 (★)(★★)、先验界全部解析；主廓线下界 v_n ≥ c·v₀·u_n 在 **ϖ≥5** 给显式正常数 c；小 ϖ 仅数值证据。严格性：**解析（ϖ≥5）+ 数值证据（小 ϖ）**。门：`p4_concentration_bound.py`（**123 ck**，2026-09-15 主会话在 318cfe2 复跑 0 fail）。
 
 ### 4.3 弱耦合 / 矩量塔展开
