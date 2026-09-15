@@ -25,7 +25,7 @@ overstated the two $C$-dependent bands):**
 So the honest headline, after the Prop. C upgrade (Track 2, 2026-09-15), is:
 *no band is asymptotic, every band is at least certificate-level, and the deep
 band's upper side is now fully analytic with zero calibrated constants* — the
-last calibration dependency is gone (gate 97/97, section [8]).
+last calibration dependency is gone (gate 101/101 full mode, section [8]).
 
 Deliverable script: `theory/derivations/p4_global_tc_allcoupling.py`
 (run `OMP_NUM_THREADS=1 python p4_global_tc_allcoupling.py [quick] [K=8]`).
@@ -334,7 +334,8 @@ Rayleigh/Kato–Temple route has no such restriction.
 
 ## 5. Results
 
-Gate: **`PASS 30  FAIL 0`** (quick mode, 42 s, single-thread). Checks cover:
+Gate: **`PASS 101  FAIL 0`** (full mode, ~147 s, single-thread; quick mode is a
+subset, `PASS 90  FAIL 0` in ~50 s). Checks cover:
 the envelope soundness $c_n\le C(s_n)$; enclosure of $h_{\rm true}$ at seven
 $\varpi$ against the **independent** `H_mat` builder (KAY entry formulas, *not* the
 (M1) decomposition — a genuinely different discretization, per the quadrature-bias
@@ -496,7 +497,7 @@ test against the wrong constant.
 
 ```
 cd theory/derivations
-OMP_NUM_THREADS=1 python p4_global_tc_allcoupling.py quick   # ~42 s, PASS 30 FAIL 0
-OMP_NUM_THREADS=1 python p4_global_tc_allcoupling.py         # dense grid, tighter widths
+OMP_NUM_THREADS=1 python p4_global_tc_allcoupling.py --quick  # ~50 s, PASS 90 FAIL 0
+OMP_NUM_THREADS=1 python p4_global_tc_allcoupling.py          # ~147 s, PASS 101 FAIL 0
 ```
 All soundness checks are counted by `ck(...)`; the run prints `PASS N  FAIL M`.
