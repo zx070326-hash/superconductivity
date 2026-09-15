@@ -1166,8 +1166,22 @@ def main(K=8, quick=False):
     # identity), sup_n c_n(w) vs Theta* = 0.6349287918:
     #     w=0.5 -> 0.769610503 (+1.35e-01)   w=1.0 -> 0.660434453 (+2.55e-02)
     #     w=1.5 -> 0.638525502 (+3.60e-03)   w=3.0 -> 0.637157183 (+2.23e-03)
-    # and it settles BELOW Theta* for w >~ 20 (w=26 -> 0.634896511, -3.2e-05;
-    # w=100 -> 0.634927676, -1.1e-06), approaching Theta* from below as w->oo.
+    # At large w the sign OSCILLATES about Theta* -- it does NOT settle below.
+    # sup_n c_n - Theta*:  w=26 -3.2e-05, w=100 -1.1e-06, w=165 +5.8e-07,
+    # w=200 +2.5e-08, w=300 +1.1e-07, w=600 +5.4e-08, w=900 +2.0e-09,
+    # w=1000 -1.0e-08, w=2000 +5.6e-10, w=5000 +7.9e-10 -- i.e. ABOVE at most
+    # of the large w tested, below only at 26/100/1000.  The sign is set by
+    # where the lattice a_n=(n+1/2)/w falls relative to the continuum argmax
+    # a* = 1.50090428, and C''(a*) = -0.3687 < 0 makes the miss a 2nd-order
+    # OSCILLATING deficit, not a one-sided approach.  So Theta* fails as a
+    # row-sum fill on the shipped band w>25 too -- by ~1e-7 rather than ~1e-1.
+    #
+    # CORRECTION 2 (2026-09-15): the first correction of this block over-shot,
+    # writing "settles BELOW Theta* for w >~ 20, approaching from below as
+    # w->oo".  Both halves are false, per the table above (verified two ways:
+    # c_exact via mpmath digamma, and a Richardson-in-M brute row sum with no
+    # digamma at all, agreeing to 1e-12 at w=200).  The w=26 and w=100 teeth
+    # below are individually TRUE and are kept; only the generalization is gone.
     #
     # CORRECTION: an earlier version of this block sup'd c_proven_upper (the
     # LOOSE envelope) and reported w=26 -> 0.64333 as a row-sum excess.  That
@@ -1195,14 +1209,25 @@ def main(K=8, quick=False):
            "TRUE row sum at w=%.3g exceeds Theta* by %.3e (Theta* is not a valid "
            "row-sum fill)" % (w_ex, s_ex - THETA))
 
-    # ... and the complementary honest half: for large w the true sup is BELOW
-    # Theta*, so the excess is a small-w phenomenon only.  This is the assertion
-    # the retired w=26 "excess" got backwards.
+    # ... and the two large-w points that DO sit below Theta*.  These are
+    # pointwise facts about w=26 and w=100 only -- NOT a statement about the
+    # large-w limit, which oscillates (see the note above).
     for w_bl in (26.0, 100.0):
         s_bl = _sup_rows_exact(w_bl)
         ck(s_bl < THETA,
-           "TRUE row sum at w=%.3g is BELOW Theta* (%.9f < %.9f) -- the excess is "
-           "a small-w effect" % (w_bl, s_bl, THETA))
+           "TRUE row sum at w=%.3g is BELOW Theta* (%.9f < %.9f) -- pointwise, "
+           "not a limit" % (w_bl, s_bl, THETA))
+
+    # counter-column: the sign oscillates, so there are large w ABOVE Theta* as
+    # well.  These teeth are what make "settles below as w->oo" unwritable-back-
+    # in: the claim would contradict them.
+    for w_ab in (165.0, 200.0, 300.0):
+        s_ab = _sup_rows_exact(w_ab)
+        print("      w=%-5.4g true sup_n c_n = %.12f  vs Theta*: %+.3e"
+              % (w_ab, s_ab, s_ab - THETA))
+        ck(s_ab > THETA,
+           "TRUE row sum at w=%.4g is ABOVE Theta* (%.12f > %.12f) -- no "
+           "one-sided large-w approach" % (w_ab, s_ab, THETA))
 
     # teeth: the quantity above must be the identity, not the envelope.  If a
     # future edit swaps c_exact back to c_proven_upper here, the envelope slack

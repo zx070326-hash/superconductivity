@@ -25,7 +25,7 @@ overstated the two $C$-dependent bands):**
 So the honest headline, after the Prop. C upgrade (Track 2, 2026-09-15), is:
 *no band is asymptotic, every band is at least certificate-level, and the deep
 band's upper side is now fully analytic with zero calibrated constants* — the
-last calibration dependency is gone (gate 101/101 full mode, section [8]).
+last calibration dependency is gone (gate 104/104 full mode, section [8]).
 
 Deliverable script: `theory/derivations/p4_global_tc_allcoupling.py`
 (run `OMP_NUM_THREADS=1 python p4_global_tc_allcoupling.py [quick] [K=8]`).
@@ -234,15 +234,22 @@ at Prop. B); shipped $T_c$ table byte-identical.
 **exceeds** it at small $\varpi$. Measured with `c_exact` (the (C1) identity),
 $\sup_n c_n(\varpi)$ vs $\Theta^\*=0.6349287918$:
 
-| $\varpi$ | $0.5$ | $1.0$ | $1.5$ | $3.0$ | $26$ | $100$ |
-|---|---|---|---|---|---|---|
-| $\sup_n c_n$ | $0.769611$ | $0.660434$ | $0.638526$ | $0.637157$ | $0.634897$ | $0.634928$ |
-| vs $\Theta^\*$ | $+1.35\!\times\!10^{-1}$ | $+2.55\!\times\!10^{-2}$ | $+3.60\!\times\!10^{-3}$ | $+2.23\!\times\!10^{-3}$ | $-3.2\!\times\!10^{-5}$ | $-1.1\!\times\!10^{-6}$ |
+| $\varpi$ | $0.5$ | $1.0$ | $3.0$ | $26$ | $100$ | $165$ | $200$ | $300$ |
+|---|---|---|---|---|---|---|---|---|
+| $\sup_n c_n$ | $0.769611$ | $0.660434$ | $0.637157$ | $0.634897$ | $0.634928$ | $0.6349294$ | $0.6349288$ | $0.6349289$ |
+| vs $\Theta^\*$ | $+1.35\!\times\!10^{-1}$ | $+2.55\!\times\!10^{-2}$ | $+2.23\!\times\!10^{-3}$ | $-3.2\!\times\!10^{-5}$ | $-1.1\!\times\!10^{-6}$ | $+5.8\!\times\!10^{-7}$ | $+2.5\!\times\!10^{-8}$ | $+1.1\!\times\!10^{-7}$ |
 
-So the excess is a **small-$\varpi$** phenomenon; for $\varpi\gtrsim20$ the true sup
-sits *below* $\Theta^\*$ and approaches it from below as $\varpi\to\infty$. An
-earlier gate assertion "sup $\le\Theta^\*$ on the dyadic band" was **false** and is
-removed.
+The excess is **largest** at small $\varpi$, but it does **not** disappear at large
+$\varpi$: the sign **oscillates**. Beyond the table, $\sup_n c_n-\Theta^\*$ is
+$+5.4\times10^{-8}$ at $\varpi{=}600$, $+2.0\times10^{-9}$ at $900$,
+$-1.0\times10^{-8}$ at $1000$, $+5.6\times10^{-10}$ at $2000$ — above at most of
+the large $\varpi$ tested, below only at $26/100/1000$. The sign is set by where the
+lattice $a_n=(n{+}\tfrac12)/\varpi$ lands relative to the continuum argmax
+$a^\*=1.50090428$; since $C''(a^\*)=-0.3687<0$, the lattice miss is a second-order
+**oscillating** deficit rather than a one-sided approach. So $\Theta^\*$ fails as a
+row-sum fill on the shipped band $\varpi>25$ as well — by $\sim\!10^{-7}$ rather
+than $\sim\!10^{-1}$. An earlier gate assertion "sup $\le\Theta^\*$ on the dyadic
+band" was **false** and is removed.
 
 > **Erratum (review, 2026-09-15).** The first version of this paragraph reported
 > $\varpi{=}26\to0.64333$ and $\varpi{=}200\to0.63600$ as row-sum values. Those
@@ -257,6 +264,20 @@ removed.
 > asserts the excess at $\varpi\in\{0.5,1,3\}$, asserts the true sup is *below*
 > $\Theta^\*$ at $\varpi\in\{26,100\}$, and carries teeth that fire if a future
 > edit swaps the identity back for the envelope.
+>
+> **Erratum 2 (review, 2026-09-15).** That first correction then *over*-corrected:
+> it asserted "for $\varpi\gtrsim20$ the true sup sits below $\Theta^\*$ and
+> approaches it from below as $\varpi\to\infty$." Both halves are **false** — the
+> sign oscillates and is *above* $\Theta^\*$ at most large $\varpi$ tested
+> ($165/200/300/600/900/2000/5000$), as the extended table now records. Verified
+> two independent ways: `c_exact` at `mpmath` $\mathrm{dps}{=}50$
+> ($\varpi{=}200,n{=}300\to0.6349288167303978$) and a Richardson-in-$M$ brute row
+> sum using **no** digamma at all, agreeing to $10^{-12}$. The $\varpi\in\{26,100\}$
+> teeth are individually true and are kept, now labelled pointwise; a
+> counter-column at $\varpi\in\{165,200,300\}$ asserts the *above*-$\Theta^\*$ sign
+> so the retracted limit claim cannot be written back in without failing the gate.
+> This **strengthens** the finding (the fill fails on the shipped band too) and
+> still touches no bracket.
 
 No bracket ever depended on any of this: $\Theta^\*$ bounds the *operator norm*
 $\|\mathcal R\|$ (Lemma M, head/analytic routes), not the row-sum functional, and
@@ -334,8 +355,8 @@ Rayleigh/Kato–Temple route has no such restriction.
 
 ## 5. Results
 
-Gate: **`PASS 101  FAIL 0`** (full mode, ~147 s, single-thread; quick mode is a
-subset, `PASS 90  FAIL 0` in ~50 s). Checks cover:
+Gate: **`PASS 104  FAIL 0`** (full mode, ~147 s, single-thread; quick mode is a
+subset, `PASS 93  FAIL 0` in ~50 s). Checks cover:
 the envelope soundness $c_n\le C(s_n)$; enclosure of $h_{\rm true}$ at seven
 $\varpi$ against the **independent** `H_mat` builder (KAY entry formulas, *not* the
 (M1) decomposition — a genuinely different discretization, per the quadrature-bias
@@ -497,7 +518,7 @@ test against the wrong constant.
 
 ```
 cd theory/derivations
-OMP_NUM_THREADS=1 python p4_global_tc_allcoupling.py --quick  # ~50 s, PASS 90 FAIL 0
-OMP_NUM_THREADS=1 python p4_global_tc_allcoupling.py          # ~147 s, PASS 101 FAIL 0
+OMP_NUM_THREADS=1 python p4_global_tc_allcoupling.py --quick  # ~50 s, PASS 93 FAIL 0
+OMP_NUM_THREADS=1 python p4_global_tc_allcoupling.py          # ~147 s, PASS 104 FAIL 0
 ```
 All soundness checks are counted by `ck(...)`; the run prints `PASS N  FAIL M`.
