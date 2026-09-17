@@ -66,13 +66,32 @@ $\sim$10–15% to $T_c$ for real materials, and essentially nothing beyond what 
 already captures.**
 
 **Honesty boundary on this section.** Theorem E itself is proved only for $\mu^*=0$. All
-entries in the table above have $\mu^*>0$ (0.10–0.16); extremality of the Einstein spectrum at
-$\mu^*>0$ is currently **[numerical-evidence]** only — direct 2-atom-vs-Einstein checks at
-$\tilde\mu:=\mu^*/\lambda\in\{0.05,0.10,0.15\}$ confirm $\eta<1$ with a wide margin, and the
-underlying convexity argument survives except in a window $\varpi\lesssim0.3$–$0.33$ (for
-$\tilde\mu\lesssim0.05$) that is not populated by real phonon spectra ($\varpi:=\omega/2\pi T\gg1$
-whenever $T_c\ll\omega_{\rm phonon}$, always true in practice). See §5–6 of
-`pairing_duality_theorem_2026-09-16.md`.
+entries in the table above have $\mu^*>0$ (0.10–0.16), and at $\mu^*>0$ extremality of the
+Einstein spectrum **is not a theorem — it is false in general**. Two separate statements must
+be kept apart:
+
+1. *Where it holds.* For the entries in the table ($\lambda=0.62$–$3.62$) direct
+   2-atom-vs-Einstein checks of the exact operator give $\eta<1$ at
+   $\tilde\mu:=\mu^*/\lambda\in\{0.05,0.10,0.15\}$ **[numerical-evidence]**, and the physical
+   filter of `mustar_extremality_failure_map_2026-09-17.md` §3 shows the small-$\varpi$
+   counterexamples require $\mu^*\gtrsim1.57$ ($\varpi\le5$) or $\gtrsim0.83$ ($\varpi\le20$),
+   hence cannot affect $T_c$ at any physical coupling.
+2. *Where it fails.* At fixed $(\lambda,\langle\omega^2\rangle)$ the Einstein spectrum ceases to
+   be extremal in the weak-coupling near-cancellation regime
+   $$\lambda \lesssim 2.3\,\mu^*_{\rm rms}\qquad\text{(boundary; leading-order criterion }\lambda<2\mu^*\text{)},$$
+   verified in the exact operator at $\mu^*_{\rm rms}=0.13$ and $0.15$ (failure for
+   $\lambda\le0.286$ resp. $\le0.330$, no failure above) **[numerical-evidence, $N$-converged
+   to $N\sim5\times10^5$]**; the leading-order criterion is **[analytic]**. The mechanism is
+   Anderson–Morel retardation: softer phonons receive more Coulomb screening, and near
+   $\lambda\approx\mu^*$ the exponent gain beats the prefactor loss. This regime is physically
+   occupied (very weak superconductors such as W, Be, Ir), it is simply disjoint from the
+   materials in the table above.
+
+The earlier claim in this file that the obstruction is "a window $\varpi\lesssim0.3$–$0.33$ not
+populated by real phonon spectra" is **retracted**: the small-$\varpi$ window is real but
+$T_c$-irrelevant, and the $T_c$-relevant failure lives at small $\lambda$, not small $\varpi$.
+See §5–6 of `pairing_duality_theorem_2026-09-16.md` and
+`mustar_extremality_failure_map_2026-09-17.md`.
 
 ---
 

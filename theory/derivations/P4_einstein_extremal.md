@@ -282,6 +282,11 @@ H″(x) < 0 在 ϖ = 10…20000 的全部 11 点无一例外；x²H″/(−a/2) 
 
 **推论 μ\***。K_c ⪰ 0 ⟹ 𝔎−μ̃K_c ⪯ 𝔎 ⟹ 定理 E 与 Conjecture 2 的界半句对任何 μ\*≥0 逐字成立（P4-D 的算子序 Layer 1）。
 
+> **[边界说明 2026-09-17]** 这条推论比它看上去弱：它断言的是 Q_μ(P) ≤ h(ϖ_rms) = **Q_0(E)**（用 μ\*=0 的 Einstein 值作上界），而不是 μ\*>0 下的极值性 Q_μ(P) ≤ **Q_μ(E)**。后者不是定理，而且是**假的**：固定 (λ, ⟨ω²⟩) 时精确算子在弱耦合近抵消区给出反例，边界经二分定位为
+> λ_c/μ\*_rms = 1.773 + 3.760 μ\*_rms（μ\*_rms ∈ [0.10, 0.20]，残差 ≤0.007），
+> 即 μ\*=0.10/0.13/0.15/0.18/0.20 处 λ_c = 0.216/0.293/0.350/0.441/0.513
+> [numerical-evidence，N 到 8×10⁵，Nfac=10/20 两侧符号一致]。领头阶判据 λ < 2μ\*（Anderson–Morel 延迟屏蔽）为 [analytic]。详见 `theory/notes/mustar_extremality_failure_map_2026-09-17.md`。
+
 ## 3. 分派（2026-09-11）
 
 - researcher `extremal-lit`：(a) 「固定 λ 与 ⟨ω²⟩（或固定 λ 与 ω_log / 固定面积 ∫α²F）时 Einstein 谱最优」在文献中的地位——Leavens–Carbotte 1974 optimum spectrum、Carbotte RMP 1990、Bergmann–Rainer 泛函导数、Allen–Dynes 形状因子、Semenok 2025 "optimal spectrum"；是否有人陈述/猜想/数值验证过定理 E；(b) 弱耦合/T→0 极限 h(ϖ) ~ ln ϖ 的一手来源与任何严格渐近（KAY III Thm 6 到底证了什么；Marsiglio–Carbotte 弱耦合 Tc 公式；Combescot）；(c) Matsubara 型矩阵顶本征值的大 ϖ 渐近或凹性的任何数学文献。

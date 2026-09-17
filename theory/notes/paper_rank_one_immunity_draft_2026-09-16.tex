@@ -1,0 +1,1196 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\HH}{\mathcal{H}}
+\newcommand{\OO}{\mathcal{O}}
+\newcommand{\PP}{\mathcal{P}}
+\DeclareMathOperator{\diag}{diag}
+
+\title{Rank-one immunity of superconducting pairing:\\
+spectral gap stability under Coulomb repulsion\\
+in the Eliashberg framework}
+
+\author{}
+\date{September 16, 2026 --- internal draft, branch \texttt{p4-conj2}, UNMERGED}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Within the isotropic, single-band Eliashberg (Kresin--Aslamazov--...; ``KAY'')
+representation of the linearized pairing eigenvalue problem, we prove that no
+repulsive contribution to the pairing (``$\Delta$'') channel --- of arbitrary
+strength, spectral shape, or rank --- can create a near-degeneracy at the top
+of the spectrum. Writing the linearized operator as
+$M=-L_1[\varphi_Z]+P[\varphi_\Delta]$ with $\varphi_Z,\varphi_\Delta$ built from
+positive boson spectral measures $f_+,f_-$ in the Berk--Schrieffer decomposition,
+we show
+\[
+ M \;\preceq\; \HH_+ + \rho(f_-)\,e_0 e_0^{\mathsf T},\qquad \HH_+:=\OO[f_+],
+\]
+where $\rho(f_-)\in[0,f_-(0))$ is an explicit constant depending only on the
+repulsive spectral measure, and $e_0$ is the first Matsubara basis vector. This
+places the leak caused by repulsion into a \emph{rank-one} perturbation, and a
+one-line duality argument then gives a uniform second-eigenvalue bound
+$\lambda_2(M)\le(1-c_1^2)\mu_1+c_1^2\mu_2$, where $c_1^2=\psi_1(0)^2$ is the
+weight of the leading pairing eigenvector on the first Matsubara frequency ---
+an ``immunity budget'' independent of the repulsion. We give three
+independent quantitative lower bounds on $c_1^2(\varpi)$ (a
+Davis--Kahan $\sin\Theta$ route, a Schur-test improvement, and float64
+numerical evidence) certified with outward-rounded interval arithmetic, and we
+carry the underlying operator identity through a first-principles Nambu
+derivation for general (non-flat) density of states, isolating the exact
+convolution structure of the $Z$-channel weight and the residual (currently
+open) sufficient condition under which the rank-one immunity theorem extends
+beyond the flat-DOS case. All numerical claims are independently
+re-derived from scratch and explicitly leveled as \emph{analytic},
+\emph{certificate}, or \emph{numerical-evidence}.
+\end{abstract}
+
+\tableofcontents
+
+%======================================================================
+\section{Introduction}
+%======================================================================
+
+The two-parameter Allen--Dynes-type formula $T_c=T_c(\lambda,\langle\omega\rangle,\mu^*)$
+(and its many refinements) treats the entire pairing instability of an
+isotropic, single-band, electron--phonon superconductor as a function of a
+\emph{single scalar}: the top eigenvalue of a linearized pairing operator at
+$T=T_c$. This works remarkably well empirically, but it is a priori surprising:
+Coulomb repulsion $\mu^*$ acts inside the same channel (the anomalous, or
+``$\Delta$'', Nambu channel) that carries the attractive electron--phonon
+pairing interaction, and there is no a priori reason a repulsive contribution
+of large enough magnitude, or of an adversarially chosen spectral shape,
+could not push a \emph{second} pairing mode up to near-degeneracy with the
+first. If that happened, ``the'' transition temperature would no longer be
+governed by a single isolated eigenvalue, and the entire scalar-$T_c$
+program would be structurally fragile rather than merely empirically
+successful.
+
+This question is precisely Conjecture 2 of the KAY program as pursued in this
+repository (see \texttt{theory/PROGRAM.md}; the base case $\mu^*=0$ was closed
+earlier, \texttt{memory/p4-theorem-status-2026-09-12.md}): does rank-one
+dominance of the top pairing eigenvalue survive at $\mu^*>0$? A priori, the
+answer is not obvious even in sign: repulsion lowers the top eigenvalue
+$\lambda_1$ (that much is elementary, since $M\preceq\HH_+$ when repulsion is
+subtracted with a negative semi-definite contribution), but lowering
+$\lambda_1$ says nothing by itself about whether $\lambda_2$ might rise to
+meet it.
+
+The present paper answers this question unconditionally, in the isotropic
+single-band, flat-density-of-states setting that defines the KAY
+representation: Theorem~\ref{thm:main} below shows that repulsion in the
+pairing channel is a rank-one perturbation \emph{in effect}, no matter how it
+is spread across Matsubara frequencies or how strong it is, so that the second
+eigenvalue is trapped below a value determined entirely by the attractive
+sector. We further quantify the resulting ``immunity budget''
+$c_1^2=\psi_1(0)^2$ --- the weight the leading attractive eigenvector places
+on the first Matsubara frequency --- with three independently derived
+certificate-level and numerical-evidence lower bounds, and we extend the
+underlying operator identity, via a first-principles Nambu self-energy
+derivation, to general (non-flat) density of states, where the analytic proof
+currently closes only under a monotonicity condition on the DOS shape factor
+and remains numerically (but not yet analytically) robust more generally.
+
+\paragraph{Organization.} Section~\ref{sec:setup} recalls the KAY operator
+representation and the three structural lemmas it inherits (Bochner
+positivity, even-sector compression, an elementary scalar inequality).
+Section~\ref{sec:main} states and proves the main result, Theorem~I
+(``$\Delta$-channel immunity''), together with its two corollaries: complete
+immunity to static (instantaneous) Coulomb repulsion, and the identification
+of $c_1^2$ as the immunity budget. Section~\ref{sec:c1sq} gives three
+independent quantitative lower bounds on $c_1^2(\varpi)$, all cross-checked
+for directional soundness against a documented sign error found and
+retracted during this project. Section~\ref{sec:dos} carries the derivation
+to general density of states from the bare Nambu self-energy equations,
+identifies the exact (and previously mis-guessed) form of the $Z$-channel
+weight, and reports the current, partially open, state of the analytic
+sufficient condition together with 80-configuration numerical evidence.
+Section~\ref{sec:discussion} discusses the physical reading and relation to
+existing KAY results. Appendix~\ref{app:iv} collects the interval-arithmetic
+technicalities used to certify the numerical bounds of
+Section~\ref{sec:c1sq}.
+
+\paragraph{Rigor bookkeeping.} Every claim in this paper is tagged
+\textsc{[analytic]}, \textsc{[certificate]}, or \textsc{[numerical-evidence]}
+at the point it is made, following the working convention of this research
+program: \textsc{analytic} means proved in closed form; \textsc{certificate}
+means established by outward-rounded interval arithmetic (Sylvester inertia
+counts, interval Rayleigh quotients); \textsc{numerical-evidence} means a
+finite-grid float64 computation. No claim is silently promoted between these
+levels.
+
+%======================================================================
+\section{Setup and notation}\label{sec:setup}
+%======================================================================
+
+We work in $\ell^2(\mathbb N_0)$, Matsubara index $n=0,1,2,\dots$, and set
+\[
+ u_n:=(2n+1)^{-1/2},\qquad D_u:=\diag(u_0,u_1,\dots),\qquad e_0:=(1,0,0,\dots)^{\mathsf T}.
+\]
+For a scalar sequence $f:\mathbb N_0\to\mathbb R$ (a boson kernel, i.e.\ a
+Matsubara-frequency-difference propagator, in units where the temperature
+sets $2\pi T=1$) define three operators on $\ell^2(\mathbb N_0)$:
+\begin{align}
+ L_1[f] &:= \diag\!\Big(\tfrac{1}{2n+1}\cdot 2\textstyle\sum_{k=1}^n f(k)\Big)
+ &&\text{(mass/$Z$-channel, diagonal)},\label{eq:L1}\\
+ L_2[f]_{nm} &:= (1-\delta_{nm})\,f(|n-m|)\,u_n u_m, &&\\
+ L_3[f]_{nm} &:= f(n+m+1)\,u_n u_m, &&\\
+ P[f] &:= L_2[f]+L_3[f] &&\text{($\Delta$/pairing channel)},\\
+ \OO[f] &:= -L_1[f]+P[f], \qquad \OO'[f]:=+L_1[f]+P[f]. &&
+\end{align}
+($L_1$ is normalized so that $L_1[f]_{00}=0$: the $n=0$ sum is empty.)
+
+The linearized isotropic single-band Eliashberg pairing eigenvalue problem, at
+$T=T_c$, takes the KAY form
+\begin{equation}\label{eq:M}
+ M = -L_1[\varphi_Z] + P[\varphi_\Delta],
+\end{equation}
+where $\varphi_Z\ge 0$ is the total spectral weight entering the mass
+renormalization ($Z$) channel and $\varphi_\Delta$ is a signed combination
+entering the pairing ($\Delta$) channel. In the Berk--Schrieffer
+decomposition of an attractive phonon-mediated interaction plus a repulsive
+(screened Coulomb / spin-fluctuation) interaction, one writes
+$\varphi_Z=f_++f_-$, $\varphi_\Delta=f_+-f_-$, with $f_+,f_-$ both drawn from
+the class
+\begin{equation}\label{eq:P-class}
+ \PP:=\Big\{\,f(k)=\int_0^\infty \frac{\omega^2}{\omega^2+k^2}\,dP(\omega)\;:\;P\ge0\text{ a finite measure}\,\Big\}
+\end{equation}
+of (Einstein-mode superpositions of) bosonic exchange kernels ($\omega$
+measured in units of $2\pi T$). This class is exactly the set of boson
+spectral functions consistent with a non-negative Eliashberg function
+$\alpha^2F\ge0$.
+
+We record, without re-proof (this is the KAY construction; see
+\texttt{theory/derivations/P4\_conjecture2.md} and the Conjecture-2 closure at
+$\mu^*=0$, memory note \texttt{p4-theorem-status-2026-09-12}), that
+$u_n=(2n+1)^{-1/2}$ arises from the similarity transform that symmetrizes the
+linearized gap equation ($\Delta_n=\psi_n/\sqrt{2n+1}$), and is at this stage
+a purely \emph{kinematic} factor (a fact re-derived independently from the
+Nambu self-energy equations in Section~\ref{sec:dos}).
+
+\subsection{Three inherited structural lemmas}
+
+The following three lemmas are proved from scratch in this project (they do
+not require the flat-DOS assumption of Eq.~\eqref{eq:M}, only that $f\in\PP$);
+they are the analytic backbone of Theorem~\ref{thm:main}.
+
+\begin{lemma}[Bochner/Poisson positivity]\label{lem:bochner}
+\textup{\textsc{[analytic]}} For $f\in\PP$, extend $f$ to $\mathbb Z$ by
+$f(-k)=f(k)$; the resulting sequence is positive-definite, with symbol
+\begin{equation}
+ \hat f(\theta):=\sum_{k\in\mathbb Z} f(k)\,e^{-ik\theta}
+ =\int_0^\infty \pi\omega\,\frac{\cosh(\omega(\pi-\theta))}{\sinh(\pi\omega)}\,dP(\omega)\;\ge0,
+ \qquad \theta\in[0,2\pi],
+\end{equation}
+using the elementary identity
+$\sum_{n\in\mathbb Z}e^{-in\theta}\,\dfrac{2a}{a^2+n^2}=\dfrac{2\pi\cosh(a(\pi-\theta))}{\sinh(a\pi)}$.
+Since $\cosh(\omega(\pi-\theta))$ is minimized at $\theta=\pi$,
+\begin{equation}
+ \min_\theta \hat f(\theta)=\hat f(\pi)=\int_0^\infty \frac{\pi\omega}{\sinh(\pi\omega)}\,dP(\omega)>0.
+\end{equation}
+\end{lemma}
+
+\begin{lemma}[Even-sector compression]\label{lem:evensector}
+\textup{\textsc{[analytic]}} Let $f$ be any positive-definite sequence on
+$\mathbb Z$ and $x\in\ell^2(\mathbb N_0)$. Reflect $x$ about $-1/2$:
+$X_n=x_n$, $X_{-1-n}=x_n$ ($n\ge0$). Then, with
+$T_f=[f(n-m)]$, $H_f=[f(n+m+1)]$,
+\begin{equation}
+ \langle X,\tilde T X\rangle = 2\langle x,(T_f+H_f)x\rangle,\qquad \|X\|^2=2\|x\|^2,
+\end{equation}
+where $\tilde T$ is the (positive-definite, by hypothesis) bi-infinite
+Toeplitz operator with symbol $\hat f$. Since $\langle X,\tilde TX\rangle\ge
+\hat f(\pi)\|X\|^2$,
+\begin{equation}
+ T_f+H_f \;\succeq\; \hat f(\pi)\cdot I
+\end{equation}
+(and this survives restriction to any principal truncation, being a
+compression statement). Consequently, since $P[f]=D_u(T_f+H_f)D_u-f(0)D_u^2$
+(the $L_2$ diagonal deletion exactly removes $f(0)D_u^2$),
+\begin{equation}
+ P[f]\;\succeq\; -\big(f(0)-\hat f(\pi)\big)\,D_u^2 \;=:\; -\rho(f)\,D_u^2. \tag{Corollary 2.1}
+\end{equation}
+\end{lemma}
+
+\begin{lemma}[Elementary scalar inequality]\label{lem:psi}
+\textup{\textsc{[analytic]}} For all $\omega>0$,
+\begin{equation}
+ \psi(\omega):=\frac{2\omega^2}{\omega^2+1}+\frac{\pi\omega}{\sinh(\pi\omega)}-1\;\ge\;0,
+ \qquad \psi(\omega)=\big(2-\tfrac{\pi^2}{6}\big)\omega^2+O(\omega^4),\quad 2-\tfrac{\pi^2}{6}=0.355066\ldots
+\end{equation}
+\end{lemma}
+\begin{proof}
+Multiplying by $(1+\omega^2)\sinh(\pi\omega)>0$, this is equivalent to
+$q(\omega):=\pi\omega(1+\omega^2)-(1-\omega^2)\sinh(\pi\omega)\ge0$. Expanding
+in odd powers of $\omega$, the coefficient of $\omega^{2j+1}$ is
+\[
+ j=0:\ \pi-\pi=0;\qquad j=1:\ 2\pi-\tfrac{\pi^3}{6}=1.115473\ldots>0;\qquad
+ j\ge2:\ \frac{\pi^{2j-1}\big[2j(2j+1)-\pi^2\big]}{(2j+1)!}>0
+\]
+(for $j\ge2$, $2j(2j+1)\ge20>\pi^2=9.8696\ldots$). All coefficients are
+non-negative, so $q(\omega)\ge0$ for all $\omega\ge0$ directly, with no
+case split on $\omega$.
+\end{proof}
+
+%======================================================================
+\section{Main result: Theorem I ($\Delta$-channel immunity)}\label{sec:main}
+%======================================================================
+
+\subsection{Lemma 4: the $Z$ channel dominates its own repulsive $\Delta$-channel leak}
+
+\begin{lemma}[Rank-one leak]\label{lem:leak}
+\textup{\textsc{[analytic]}} For every $f\in\PP$,
+\begin{equation}\label{eq:lem4}
+ \OO'[f]=L_1[f]+P[f]\;\succeq\;-\rho(f)\cdot e_0e_0^{\mathsf T},\qquad \rho(f)=f(0)-\hat f(\pi).
+\end{equation}
+\end{lemma}
+\begin{proof}
+By Corollary~2.1 (Lemma~\ref{lem:evensector}), $\OO'[f]\succeq L_1[f]-\rho(f)D_u^2=:\diag(a)$,
+\[
+ a_n=\frac{2\sum_{k=1}^n f(k)-f(0)+\hat f(\pi)}{2n+1}.
+\]
+For $n=0$ (empty sum), $a_0=\hat f(\pi)-f(0)=-\rho(f)$. For $n\ge1$, $f\ge0$
+gives $\sum_{k\le n}f(k)\ge f(1)$, hence
+\[
+ a_n\;\ge\;\frac{2f(1)+\hat f(\pi)-f(0)}{2n+1}
+ =\frac{\int\psi(\omega)\,dP(\omega)}{2n+1}\;\ge\;0
+\]
+by Lemma~\ref{lem:psi}. Thus $\diag(a)\succeq-\rho(f)e_0e_0^{\mathsf T}$.
+\end{proof}
+
+\begin{remark}
+This is the crux of the whole argument. In an Eliashberg problem the same
+piece of spectral weight $f_-$ appears simultaneously in the $Z$ channel
+(positive-definite, diagonal, $L_1$) and in the $\Delta$ channel ($P$). The
+diagonal growth $2\sum_{k\le n}f(k)/(2n+1)$ of $L_1$ \emph{pointwise}
+dominates the most negative part $-\rho(f)u_n^2$ of $P$; the only escapee is
+$n=0$, where the sum is empty. That escaped cell is rank one.
+\end{remark}
+
+\subsection{Statement and proof of Theorem I}
+
+\begin{theorem}[$\Delta$-channel immunity]\label{thm:main}
+Let $f_+,f_-\in\PP$, and let $\varphi_Z\ge0$ satisfy
+$\sum_{k\le n}\varphi_Z(k)\ge\sum_{k\le n}(f_++f_-)(k)$ for all $n\ge1$
+(with equality in the pure Eliashberg case $\varphi_Z=f_++f_-$). Write
+$\HH_+:=\OO[f_+]$ with spectrum $\mu_1>\mu_2\ge\cdots$, top eigenvector
+$\psi_1$, $c_1:=|\langle\psi_1,e_0\rangle|$, $\gamma:=\mu_1-\mu_2$. Then
+\begin{equation}\label{eq:majorant}
+ M\;\preceq\;\HH_++\rho(f_-)\cdot e_0e_0^{\mathsf T},\qquad \rho(f_-):=f_-(0)-\hat f_-(\pi)\in[0,f_-(0)),
+\end{equation}
+so that $\lambda_{j+1}(M)\le\lambda_j(\HH_+)$ for all $j\ge1$, and
+\begin{equation}\label{eq:lambda2bound}
+ \lambda_2(M)\;\le\;\mu_1-c_1^2\gamma \;=\; (1-c_1^2)\mu_1+c_1^2\mu_2,
+\end{equation}
+uniformly in $\rho$ --- i.e.\ independently of the strength, spectral shape,
+or rank of the repulsion.
+\end{theorem}
+\begin{proof}[Proof \textup{\textsc{[analytic]}}]
+The part-sum hypothesis on $\varphi_Z$ compares two diagonal operators
+entrywise, giving $L_1[\varphi_Z]\succeq L_1[f_++f_-]$. Hence
+\[
+ M=-L_1[\varphi_Z]+P[f_+]-P[f_-]
+ \;\preceq\; -L_1[f_+]-L_1[f_-]+P[f_+]-P[f_-]
+ = \HH_+-\OO'[f_-]
+ \;\preceq\; \HH_++\rho(f_-)\,e_0e_0^{\mathsf T},
+\]
+the last step by Lemma~\ref{lem:leak}. This proves Eq.~\eqref{eq:majorant}.
+Weyl monotonicity gives $\lambda_j(M)\le\lambda_j(\HH_++\rho e_0e_0^{\mathsf T})$;
+Cauchy interlacing for the rank-one perturbation gives
+$\lambda_{j+1}(\HH_++\rho e_0e_0^{\mathsf T})\le\lambda_j(\HH_+)$.
+
+For the uniform bound on $\lambda_2$: write $B:=\HH_++\rho e_0e_0^{\mathsf T}$,
+$x:=\lambda_2(B)$, $c_j:=\langle\psi_j,e_0\rangle$. If $x\le\mu_2$ then
+$x\le\mu_1-\gamma\le\mu_1-c_1^2\gamma$ (since $c_1^2\le1$) and we are done.
+Otherwise $x\in(\mu_2,\mu_1)$ and the secular equation
+$1=\rho\sum_j c_j^2/(x-\mu_j)$ holds. Set $d:=\mu_1-x>0$. Then
+\[
+ \frac{\rho c_1^2}{d}
+ = \rho\sum_{j\ge2}\frac{c_j^2}{x-\mu_j}-1
+ \;\le\; \frac{\rho(1-c_1^2)}{x-\mu_2}
+ = \frac{\rho(1-c_1^2)}{\gamma-d}
+\]
+(every $j\ge2$ term has denominator $x-\mu_j\ge x-\mu_2=\gamma-d>0$, so all
+terms are positive; $\sum_{j\ge2}c_j^2=1-c_1^2$; dropping the $-1$ only
+enlarges the right side). Rearranging, $c_1^2(\gamma-d)\le(1-c_1^2)d$, i.e.
+$d\ge c_1^2\gamma$, which is Eq.~\eqref{eq:lambda2bound}. (If $c_1=0$ then
+$\lambda_2(B)=\mu_1$ and the bound holds with equality; the case that $x$
+coincides exactly with some eigenvalue of $\HH_+$ is handled identically by
+restricting to the corresponding invariant subspace.)
+
+Finally, when $f_+>0$ the off-diagonal entries $f_+(|n-m|)u_nu_m>0$ of
+$P[f_+]$ make $\HH_+$ irreducible, and Perron--Frobenius gives $\psi_1>0$
+pointwise, hence $c_1>0$ and $\mu_1>\mu_2$ strictly.
+\end{proof}
+
+\begin{remark}[Physical reading]
+Repulsion in the pairing channel can do whatever it likes there --- arbitrary
+strength, arbitrary spectral shape, arbitrary rank --- and the second
+eigenvalue is capped by a number determined entirely by the attractive
+sector. Repulsion can suppress $\lambda_1$, but it cannot manufacture a
+near-degeneracy. Rank-one (single-mode) dominance is immune to $\Delta$-channel
+repulsion.
+\end{remark}
+
+\subsection{Corollaries}
+
+\begin{corollary}[Static Coulomb: complete immunity]\label{cor:static}
+\textup{\textsc{[analytic]}} Instantaneous Coulomb repulsion enters only the
+$\Delta$ channel and is rank-one positive semi-definite in the KAY
+representation: $P_C=2\tilde\mu\, u_c u_c^{\mathsf T}\succeq0$
+($u_c[n]=u_n\mathbf 1_{n<N_c}$). It has no $Z$-channel partner, but needs
+none:
+\[
+ M=\HH_+-2\tilde\mu\,u_cu_c^{\mathsf T}\preceq\HH_+ \quad\Longrightarrow\quad \lambda_2(M)\le\mu_2(\HH_+).
+\]
+Coulomb repulsion \emph{cannot} raise the second eigenvalue at all; the only
+thing it can do is push $\lambda_1$ down towards $\mu_2(\HH_+)$ via Cauchy
+interlacing --- killing pairing, but never manufacturing near-degeneracy.
+This is the structural reason behind the numerically observed
+$\mathrm{gap}/\lambda_1\to1.001$ near the $\kappa\approx2$ ``near-crossing''
+point studied in the P4D Coulomb-uniqueness thread (see
+\texttt{memory/negative-kernel-gap-collapse-is-z-channel-artifact-2026-09-16}).
+\end{corollary}
+
+\begin{corollary}[Immunity budget $=c_1^2$]\label{cor:budget}
+\textup{\textsc{[analytic + numerical-evidence]}} Define $T_c$ by
+$\lambda_1(M)=1$, and let $\mu_1=\lambda_1(\HH_+)$ at the \emph{same}
+temperature (repulsion lowers $T_c$, so $\mu_1>1$). Define the suppression
+share
+\[
+ s:=1-\frac1{\mu_1}\in[0,1) \qquad\text{(the fraction of the pairing
+ eigenvalue eaten by repulsion at $T_c$)}.
+\]
+Then, by Theorem~\ref{thm:main} (with $\mu_2\approx0$),
+\[
+ \lambda_2(M)\;\le\;(1-c_1^2)\mu_1+c_1^2\mu_2\;<\;1=\lambda_1(M)
+ \quad\Longleftarrow\quad s<c_1^2 \quad(\text{necessary and sufficient at }\mu_2=0),
+\]
+\[
+ \mathrm{gap}/\lambda_1 \;\ge\; 1-(1-c_1^2)\mu_1-c_1^2\mu_2.
+\]
+$c_1^2$ --- the weight of the top pairing mode at the first Matsubara
+frequency --- \emph{is} the immunity budget: repulsion can eat at most a
+share $c_1^2$ of the pairing eigenvalue before the isolation of the top mode
+could even in principle be threatened.
+\end{corollary}
+
+Table~\ref{tab:c1sq-baseline} gives the \textsc{numerical-evidence} baseline
+for $c_1^2(\varpi)$ and the resulting threshold $\mu_1^{\max}=1/(1-c_1^2)$, for
+the single-Einstein-mode kernel $f(k)=\varpi^2/(\varpi^2+k^2)$ (float64
+\texttt{eigvalsh}, agreement to four digits between $N=400$ and $N=800$; a
+$\sim10^{-2}$ truncation noise appears in $\mu_2$ for $\varpi\gtrsim30$, not
+affecting $c_1^2$).
+
+\begin{table}[h]
+\centering
+\caption{Baseline (numerical-evidence) values of $\mu_1$, $c_1^2$, and the
+repulsion threshold $\mu_1^{\max}=1/(1-c_1^2)$, single-Einstein-mode kernel.}
+\label{tab:c1sq-baseline}
+\begin{tabular}{lcccccccc}
+\toprule
+$\varpi$ & 0.5 & 1 & 2 & 3 & 5 & 10 & 30 & 100\\
+\midrule
+$\mu_1$ & 0.2697 & 0.7158 & 1.3360 & 1.7177 & 2.2048 & 2.8735 & 3.9465 & 5.133\\
+$c_1^2$ & 0.828 & 0.795 & 0.719 & 0.660 & 0.585 & 0.498 & 0.397 & 0.322\\
+$\mu_1^{\max}$ & 5.8 & 4.9 & 3.6 & 2.9 & 2.4 & 2.0 & 1.66 & 1.48\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+In the physically relevant range $\varpi_c\approx1$--$5$ (with $\mu^*$ or spin
+fluctuations pushing $\mu_1$ to $1.2$--$1.8$), the suppression share is
+$s\approx0.17$--$0.45$ against a budget $c_1^2\approx0.59$--$0.80$: the entire
+physical domain falls inside the immunity budget with substantial margin.
+
+\subsection{Escape routes: what the theorem does not cover}
+
+Each hypothesis of Theorem~\ref{thm:main} corresponds to exactly one way the
+mechanism could in principle fail (Table~\ref{tab:escape}).
+
+\begin{table}[h]
+\centering
+\caption{Escape-route audit for Theorem~\ref{thm:main}.}
+\label{tab:escape}
+\begin{tabular}{p{4.6cm}p{5cm}p{2.6cm}}
+\toprule
+Violated hypothesis & Physical meaning & Physically realizable?\\
+\midrule
+$\sum\varphi_Z\ge\sum(f_++f_-)$ fails ($Z$-channel negative weight) & $Z<1$, negative mass renormalization & \textbf{No} ($\alpha^2F\ge0\Rightarrow$ $Z$-channel weight $\ge0$)\\
+$f_-\notin\PP$ & Repulsive spectral density changes sign & \textbf{No} (spectral density $\ge0$)\\
+$u_n=(2n+1)^{-1/2}$ itself changes & DOS structure: van Hove makes $\tau_n$ $n$- and $T$-dependent & \textbf{Yes} --- the only physical escape route\\
+$M$ no longer of this form & Anisotropy / multi-band / momentum structure & Yes (but that is a different operator)\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+That is: \emph{in the isotropic single-band Eliashberg setting, the only
+physical channel that could break rank-one dominance is the density of
+states / $Z$ channel}. This is taken up in Section~\ref{sec:dos}. An earlier
+purported counterexample (a ``Mexican-hat'' kernel driving
+$\mathrm{gap}/\lambda_1\to0.17$) was retracted upon audit: the entire collapse
+traced to a term $+b\cdot L_1[\varphi_-]$, i.e.\ negative mass
+renormalization injected directly into the $Z$ channel --- exactly the first,
+non-physical, row of Table~\ref{tab:escape}
+(see \texttt{theory/notes/rank\_collapse\_correction\_2026-09-16.md} and the
+triage note \texttt{theory/notes/triage\_20260916\_batch\_2026-09-16.md}).
+Theorem~\ref{thm:main} retroactively explains why this construction is
+necessary for any such collapse to occur: no amount of negative weight placed
+\emph{purely} in the $\Delta$ channel can reproduce it.
+
+\subsection{Numerical corroboration}
+
+\textsc{[numerical-evidence]}, from-scratch re-implementations, scripts in
+\texttt{theory/notes/\_scratch\_ir/} (\texttt{probe\_rank1\_majorant.py},
+\texttt{probe\_psi\_and\_c1.py}, \texttt{verify\_immunity\_chain\{,2\}.py}),
+not committed, not importing repository modules:
+
+\begin{itemize}[nosep]
+\item Lemma~\ref{lem:psi}: $\min_{\omega>0}\psi(\omega)=3.55\times10^{-13}$ as
+$\omega\to0$; $\psi/\omega^2\to0.355066=2-\pi^2/6$; series coefficients
+positive for $j\le119$ (\texttt{mpmath} dps$=60$, series vs. closed form
+relative error $\le1.5\times10^{-10}$).
+\item Lemma~\ref{lem:evensector}: $\lambda_{\min}(T+H)-\hat f(\pi)$ ranges
+from $+4.6\times10^{-6}$ to $-3.1\times10^{-14}$ ($\varpi=0.2,1,5,50$;
+$N=200,400$) --- the bound is essentially tight, approached from above.
+\item Lemma~\ref{lem:leak}: $\lambda_{\min}(\OO'[f]+f(0)e_0e_0^{\mathsf T})\ge
++2.0\times10^{-6}$ over 12 random multi-peak boson measures (1--4 peaks,
+$\omega\in[0.06,50]$); over the same set $\lambda_{\min}(\OO')$ dips to
+$-0.40$, confirming the rank-one correction is load-bearing.
+\item Theorem~\ref{thm:main}: over 20 random $(f_+,f_-,\text{extra }Z\text{
+weight})$ configurations, zero violations of $\lambda_2(M)\le(1-c_1^2)\mu_1+c_1^2\mu_2$;
+the actual $\lambda_2(M)$ is almost always negative ($-0.55$ to $+0.0005$),
+i.e.\ the bound is loose by roughly two orders of magnitude.
+\item Rank-one secular bound (uniform in $\rho$): for $\rho=0.1$ to $10^6$,
+$\varpi=1,5,30$: $\lambda_2$ saturates to $0.0134/0.495/2.013$ against bounds
+$0.147/0.916/2.375$.
+\end{itemize}
+
+\emph{Directional audit.} Every numerical check above verifies whether an
+\emph{upper} bound is violated; by the one-sided-bound direction rule, these
+runs can only produce PASS (support), never a FAIL verdict --- a violation
+would indicate a bug in the proof, which did not occur. The theorem itself
+does not rely on any of these numbers.
+
+\emph{Looseness.} The actual $\lambda_2(M)$ is essentially always negative
+while the bound $(1-c_1^2)\mu_1$ is positive --- loose by roughly two orders
+of magnitude. The looseness is located: (a) Lemma~\ref{lem:leak} retains only
+the $n=0$ leak, while the actual negativity of $P[f_-]$ along the top mode of
+$\HH_+$ is far smaller than $\rho(f_-)$; (b) the secular bound saturates only
+as $\rho\to\infty$. This is an acceptable price for a ``no-go'' result: it
+buys complete uniformity in $f_-$.
+
+%======================================================================
+\section{Certificate-level quantification of $c_1^2$}\label{sec:c1sq}
+%======================================================================
+
+Corollary~\ref{cor:budget} makes $c_1^2(\varpi)$ the single quantity that
+converts Theorem~\ref{thm:main} into a physical statement (``the immunity
+budget covers the physical domain''). Table~\ref{tab:c1sq-baseline} gives
+this at \textsc{numerical-evidence} level only. This section develops three
+independent lower bounds of increasing rigor, all for the single-Einstein-mode
+kernel $f(k)=\varpi^2/(\varpi^2+k^2)$, $\HH_+=-L_1[f]+L_2[f]+L_3[f]$, with
+top eigenvalue $\mu_1>\mu_2\ge\dots$, top eigenvector $\psi_1$, and
+$c_1=|\langle\psi_1,e_0\rangle|$.
+
+\subsection{A retracted route, kept for the record: a genuine sign error}\label{sec:c1sq-fail}
+
+\textsc{[analytic --- retracted]}. An initial attempt used a Feshbach/Schur
+complement self-energy: let $H'$ be $\HH_+$ restricted to $n\ge1$ (row/column
+0 deleted), $b_n=(\HH_+)_{n0}$ ($n\ge1$). The standard identity is
+\[
+ c_1^2=\frac1{1+\Sigma'(\mu_1)},\qquad \Sigma(z)=b^{\mathsf T}(H'-z)^{-1}b,\qquad
+ \Sigma'(z)=b^{\mathsf T}(H'-z)^{-2}b.
+\]
+The (incorrect) reasoning assumed Cauchy interlacing gives
+$\mu_1(H')\le\mu_2(\HH_+)$, hence $\mu_1-\lambda_j(H')\ge\gamma$ for all $j$,
+giving $\Sigma'(\mu_1)\le\|b\|^2/\gamma^2$ and
+$c_1^2\ge\gamma^2/(\gamma^2+\|b\|^2)$. \textbf{This is backwards.} For an
+$(n+1)\times(n+1)$ matrix with one row/column deleted, the correct interlacing
+is $\lambda_1(H)\ge\lambda_1(H')\ge\lambda_2(H)\ge\lambda_2(H')\ge\cdots$,
+i.e.\ $\mu_1(H')\ge\mu_2(\HH_+)$ (a lower bound, not an upper bound), and
+$\mu_1(H')$ can sit arbitrarily close to $\mu_1$ itself --- the whole route
+is circular (it would need to bound exactly the quantity, $c_1$, that it is
+trying to prove a bound for). This was caught by the direction audit: the
+(wrong) formula gave $(c_1^2)_{\text{lower}}=0.473$ at $\varpi=30$, $N=500$,
+exceeding the numerical-evidence value $0.397$ --- a lower bound exceeding
+the true value is a contradiction, flagged and discarded before any number
+from this route was used further.
+
+\subsection{Route 1: Davis--Kahan $\sin\Theta$}\label{sec:dk}
+
+\textsc{[certificate]}, independently re-derived and re-verified
+(\texttt{theory/notes/\_scratch\_ir/c1sq\_lower\_bound.py} and
+\texttt{c1sq\_audit.py}), full statement in
+\texttt{theory/notes/c1sq\_lower\_bound\_2026-09-16.md}.
+
+\paragraph{Decomposition.} Fix a truncation $N$; let $A:=H_N\oplus0$ (the
+$(N{+}1)\times(N{+}1)$ truncated matrix embedded in $\ell^2(\mathbb N_0)$,
+remaining coordinates zero), $E:=\HH_+-A$, with block structure
+$E=\begin{psmallmatrix}0&C\\ C^{\mathsf T}&H^{BB}\end{psmallmatrix}$, $C$ the
+head--tail coupling block, $H^{BB}$ the tail block.
+
+\paragraph{Analytic (non-truncated) tail bounds.} Using the same Poisson
+technique as Lemma~\ref{lem:bochner} (taking the max instead of the min):
+$\hat f(0)=\pi\varpi\coth(\pi\varpi)=\sum_{k\in\mathbb Z}f(k)$, and
+$0\preceq T_f+H_f\preceq\hat f(0)\cdot I$ (compression preserves this bound
+for any subspace). With $S:=\sum_{k\ge1}f(k)=(\hat f(0)-1)/2$,
+\begin{align}
+ \|H^{BB}\| &\le \frac{\hat f(0)-1}{2N+3}+u_{N+1}^2(\hat f(0)+1) &&\text{[$L_1$ tail + $(L_2{+}L_3)$ tail]},\\
+ \|C\| &\le u_{N+1}\cdot\frac{\hat f(0)-\hat f(\pi)}{2} &&\text{[head--tail coupling block]},
+\end{align}
+using the elementary self-adjoint block-norm fact ($M$ self-adjoint with
+spectrum in $[-\kappa,\kappa]$ $\Rightarrow$ $\|M_{AB}\|\le\kappa$, applied
+after shifting $T_f+H_f$ by $(\hat f(0)+\hat f(\pi))/2$ to symmetrize the
+spectrum). Both bounds are genuinely infinite-dimensional upper bounds, not
+truncated-spectrum interval enclosures; $f,u_n,\hat f(0),\hat f(\pi)$ are all
+closed form, evaluated with \texttt{mpmath.iv}, so the only error is
+outward-rounded roundoff.
+
+\paragraph{A self-contained $\sin\Theta$ inequality.} Let $\varphi$ be the
+exact top eigenvector of $A$, eigenvalue $\ell_a=\lambda_1(H_N)$; let $\psi$
+be the true top eigenvector of $\HH_+$, eigenvalue $\mu_1$. Write
+$\psi=\cos\theta\cdot\varphi+\sin\theta\cdot\varphi_\perp$
+($\varphi_\perp\perp\varphi$, unit vector). Taking the inner product with
+$\varphi_\perp$:
+\[
+ \mu_1\sin\theta = \varphi_\perp^{\mathsf T}\HH_+\psi
+ = \cos\theta\,\varphi_\perp^{\mathsf T}E\varphi + \sin\theta\,\varphi_\perp^{\mathsf T}A\varphi_\perp
+ +\sin\theta\,\varphi_\perp^{\mathsf T}E\varphi_\perp
+ \le \cos\theta\|E\|+\sin\theta\,\lambda_2(A)+\sin\theta\|E\|
+\]
+($\varphi_\perp^{\mathsf T}A\varphi=0$ since $A\varphi=\ell_a\varphi$;
+$\varphi_\perp^{\mathsf T}A\varphi_\perp\le\lambda_2(A)$ by Rayleigh--Ritz;
+the two $\varphi_\perp^{\mathsf T}(\cdot)$ terms are bounded by Cauchy--Schwarz).
+Using $\mu_1\ge\ell_a$ (compression: $\lambda_1(H)\ge\lambda_1(H_N)$ for any
+truncation, with no tail control needed),
+\[
+ \sin\theta\cdot(\mu_1-\lambda_2(A)-\|E\|)\le\cos\theta\|E\|\le\|E\|
+ \quad\Longrightarrow\quad
+ \sin\theta\le\frac{\|E\|}{\delta-\|E\|},\qquad
+ \delta:=\ell_a-\lambda_2(A)=\lambda_1(H_N)-\max(\lambda_2(H_N),0).
+\]
+$\delta$ is the truncated matrix's \emph{own} spectral gap --- not the
+direction-reversed ``gap of $H'$'' from Section~\ref{sec:c1sq-fail}. A second,
+negligible ($\sim10^{-16}$) layer of $\sin\theta$ accounts for using a
+floating-point approximate eigenvector as the seed for the interval
+computation, itself certified via an interval residual bound. The two angles
+combine by the triangle inequality, and
+\[
+ c_1 = |\psi[0]| \ge \cos\theta\,|v_1[0]|-\sin\theta_{\text{total}}
+ \quad\Longrightarrow\quad
+ c_1^2 \ge \max\big(0,\ \cos\theta\,|v_1[0]|-\sin\theta_{\text{total}}\big)^2.
+\]
+
+\paragraph{Certified $\lambda_1(H_N),\lambda_2(H_N)$.} $\lambda_1(H_N)$ lower
+bound: interval Rayleigh quotient (unconditional). $\lambda_2(H_N)$ upper
+bound: interval $LDL^{\mathsf T}$ (no pivoting) of $H_N-cI$, negative-pivot
+count via Sylvester's inertia law; if $\ge\dim-1$ negative pivots are
+certified, $\lambda_2(H_N)\le c$ (margin auto-enlarged on inconclusive
+pivots). See Appendix~\ref{app:iv} for the interval-arithmetic pitfalls
+avoided.
+
+Table~\ref{tab:dk} gives the resulting certificate-level lower bounds,
+$N=500$ (plus $N=1000$ at $\varpi=30$).
+
+\begin{table}[h]
+\centering
+\caption{Davis--Kahan certificate lower bound on $c_1^2$, $N=500$.}
+\label{tab:dk}
+\begin{tabular}{lcccccccc}
+\toprule
+$\varpi$ & 0.5 & 1 & 2 & 3 & 5 & 10 & 30 ($N{=}500$) & 30 ($N{=}1000$)\\
+\midrule
+$c_1^2$ lower (certificate) & 0.6859 & 0.6577 & 0.5677 & 0.4890 & 0.3739 & 0.1961 & 0.0 & 0.0268\\
+$c_1^2$ (numerical-evidence) & 0.828 & 0.795 & 0.719 & 0.660 & 0.585 & 0.498 & 0.397 & 0.397\\
+$\sin\Theta_{\text{total}}$ & 0.0788 & 0.0781 & 0.0911 & 0.1083 & 0.1454 & 0.2418 & 0.7386 & 0.4106\\
+$\|E\|$ & 0.0197 & 0.0518 & 0.1114 & 0.1676 & 0.2793 & 0.5586 & 1.6759 & 1.1470\\
+$\delta$ & 0.2693 & 0.7146 & 1.3337 & 1.7148 & 2.2009 & 2.8687 & 3.9448 & 3.9404\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Every certificate lower bound is strictly below the numerical-evidence true
+value (direction audit passed, in sharp contrast to
+Section~\ref{sec:c1sq-fail}). At $\varpi=30$ the bound requires $N=1000$ to
+become non-trivial: the coupling block $\|C\|$ decays only like
+$N^{-1/2}$ (via $u_{N+1}$), while independent measurement shows the true
+$\|C\|$ decays like $N^{-1}$ ($\varpi=1,30$, $N=125\to2000$, measured rate
+$1.00$); this factor-of-$\sqrt N$ mismatch is the entire source of the
+looseness and of the failure at $\varpi=30,N=500$ (interval $LDL^{\mathsf T}$
+scales as $O(N^3)$; $N=500$ took $\sim112$s, $N=1000$ took $\sim858$s in this
+project, so pushing to $N\sim4400$ needed to reach a comparable margin at
+$\varpi=30$ was not attempted).
+
+\subsection{Route 2: Schur-test improvement of $\|C\|$}\label{sec:schur}
+
+\textsc{[certificate]}, full statement in
+\texttt{theory/notes/c1sq\_schur\_improvement\_2026-09-16.md}. The
+$N^{-1/2}$-vs-$N^{-1}$ mismatch of Section~\ref{sec:dk} is traced to the
+global operator-norm squeeze $T_f+H_f\preceq\hat f(0)I$ discarding the
+pointwise decay $f(k)\sim\varpi^2/k^2$ of the kernel. Replacing the global
+bound with a Schur test recovers this information.
+
+\paragraph{Schur test.} For any matrix $M$,
+$\|M\|\le\sqrt{\sup_i R_i\cdot\sup_j K_j}$, $R_i=\sum_j|M_{ij}|$,
+$K_j=\sum_i|M_{ij}|$. Applied to the coupling block $C_{nm}=u_nu_m(f(|n-m|)+f(n+m+1))$
+($n\le N<m$):
+\[
+ R_n=u_n\sum_{m>N}u_m\big(f(m-n)+f(n+m+1)\big),\qquad
+ K_m=u_m\sum_{n=0}^N u_n\big(f(m-n)+f(n+m+1)\big).
+\]
+
+\paragraph{Row sums $R_n$ (analytic tail control).} Using $u_m\le u_{N+1}$
+for $m\ge N+1$,
+\[
+ R_n\le u_nu_{N+1}\big(\mathrm{Tail}(N{+}1{-}n)+\mathrm{Tail}(n{+}N{+}2)\big),
+ \qquad \mathrm{Tail}(J):=\sum_{j\ge J}f(j).
+\]
+Two independent analytic bounds on $\mathrm{Tail}(J)$ are combined by taking
+the minimum (each individually valid, so the minimum remains valid):
+\begin{align}
+\text{(a) integral comparison:}\quad
+ \mathrm{Tail}(J) &\le \varpi\Big(\frac\pi2-\frac{y}{1+y^2}\Big),\quad y:=\frac{J-1}\varpi
+ \quad(\text{using }\arctan y\ge y/(1+y^2)),\\
+\text{(b) pointwise }1/j^2\text{ comparison:}\quad
+ \mathrm{Tail}(J) &\le \varpi^2\cdot\begin{cases}2,& J\le1\\ 1/(J-1),&J\ge2.\end{cases}
+\end{align}
+Route (a) is purely rational plus the constant $\pi/2$ (no calls to
+\texttt{iv.atan}/\texttt{iv.atan2}, a known non-enclosing routine on this
+platform); route (b) avoids the transcendental constant $\pi^2/6$ altogether.
+The maximum over $n=0,\dots,N$ of $R_n$ is \emph{not} attained at $n=N$ (a
+float64 check shows the argmax sits at $n=0$ for $\varpi=30,100$, $N=500$),
+so the certificate loops over all $n$ and takes the max of valid upper
+bounds.
+
+\paragraph{Column sums $K_m$ (exact finite sum).} For fixed $m>N$, the inner
+sum over $n=0,\dots,N$ is finite and evaluated exactly by interval
+arithmetic. $K_m$ is proved (not assumed) monotone decreasing in $m>N$ (each
+factor $u_m,f(m-n),f(n+m+1)$ is), so $\sup_{m>N}K_m=K_{N+1}$ exactly.
+
+\paragraph{Result.} $\|C\|_{\text{Schur}}\le\sqrt{R_{\sup}\cdot K_{N+1}}$.
+Table~\ref{tab:schur} gives the resulting improved certificate.
+
+\begin{table}[h]
+\centering
+\caption{Schur-test certificate lower bound on $c_1^2$, $N=500$.}
+\label{tab:schur}
+\begin{tabular}{lcccccccc}
+\toprule
+$\varpi$ & 0.5 & 1 & 2 & 3 & 5 & 10 & 30 & 100\\
+\midrule
+$c_1^2$ lower (Schur) & 0.8016 & 0.7763 & 0.6994 & 0.6376 & 0.5577 & 0.4587 & 0.3095 & 0.0698\\
+$c_1^2$ lower (Davis--Kahan baseline) & 0.6859 & 0.6577 & 0.5677 & 0.4890 & 0.3739 & 0.1961 & 0.0 & 0.0\\
+$c_1^2$ (numerical-evidence) & 0.828 & 0.795 & 0.719 & 0.660 & 0.585 & 0.498 & 0.397 & 0.322\\
+$\|C\|_{\text{Schur}}$ & 0.000423 & 0.001303 & 0.002893 & 0.004486 & 0.007688 & 0.015804 & 0.076457 & 0.498660\\
+$\|C\|_{\text{old}}$ & 0.0163 & 0.0455 & 0.0988 & 0.1488 & 0.2480 & 0.4960 & 1.4880 & 4.9599\\
+Improvement factor & 38.5$\times$ & 34.9$\times$ & 34.2$\times$ & 33.2$\times$ & 32.3$\times$ & 31.4$\times$ & 19.5$\times$ & 9.9$\times$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+At $\varpi=30$ the bound is recovered at $N=500$ (from $0.0$ to $0.310$,
+true value $0.397$); at $\varpi=100$ it recovers a non-trivial (if loose)
+bound $0.070$ against a true value of $0.322$, where the Davis--Kahan route
+gave $0$. Direction audit: all Schur bounds remain strictly below the true
+value (16 configurations, $\varpi\in[0.5,100]$, $N\in\{60,200\}$, certificate
+vs.\ float64 SVD truth, ratio $1.9$--$5.0\times$, all PASS).
+
+\subsection{Route 3: an analytic lower bound}\label{sec:analytic-c1sq}
+
+A purely analytic (interval-arithmetic-free) lower bound on $c_1^2(\varpi)$
+--- e.g.\ via explicit small-matrix ($N=2$ or $3$) monotonicity, bracketing
+the true value from a closed-form truncation --- was attempted but
+\textbf{not achieved} within this project's time budget; see
+\texttt{theory/notes/c1sq\_lower\_bound\_2026-09-16.md}, \S7 (``accepted:
+not achieved''). The closest candidate considered was replacing
+$\lambda_1(H_N),\lambda_2(H_N),v_1[0]$ in the Davis--Kahan chain
+(Section~\ref{sec:dk}) with explicit closed-form small-$\varpi$
+expansions or explicit $N=1,2$ eigenvalues, but whether this yields a
+non-trivial ($>0$) bound was not verified. \emph{This route remains open};
+we report it honestly here rather than substitute a fabricated result, in
+keeping with the project's rigor discipline (Section 1 of the working
+conventions: every claim is independently re-derived from primary sources,
+and no claim is asserted without a verified source).
+
+\subsection{Summary table and honest accounting}
+
+\begin{table}[h]
+\centering
+\caption{Three-way comparison, $N=500$ (plus $N=1000$/$\varpi=30$ note).}
+\label{tab:c1sq-summary}
+\begin{tabular}{lccccccc}
+\toprule
+$\varpi$ & 0.5 & 1 & 2 & 3 & 5 & 10 & 30\\
+\midrule
+Davis--Kahan lower (\textsc{certificate}) & 0.686 & 0.658 & 0.568 & 0.489 & 0.374 & 0.196 & 0.0 (0.027 @ $N{=}1000$)\\
+Schur lower (\textsc{certificate}) & 0.802 & 0.776 & 0.699 & 0.638 & 0.558 & 0.459 & 0.310\\
+Analytic lower (\textsc{analytic}) & \multicolumn{7}{c}{not achieved --- open, Section~\ref{sec:analytic-c1sq}}\\
+True value (\textsc{numerical-evidence}) & 0.828 & 0.795 & 0.719 & 0.660 & 0.585 & 0.498 & 0.397\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The bottleneck is entirely located: it is the estimation method for the
+head--tail coupling block $\|C\|$, not the achievable truncation size $N$;
+the Schur test closes most of the gap to the true value by exploiting
+pointwise kernel decay instead of a global operator-norm squeeze, and the
+remaining looseness (a factor of roughly $1.5$--$4.6\times$ depending on
+$\varpi$) is an open, but bounded and well-characterized, target for further
+tightening (e.g., a weighted Schur test using the exact geometric profile
+of the top eigenvector, flagged as unexplored in
+\texttt{c1sq\_lower\_bound\_2026-09-16.md}~\S6).
+
+%======================================================================
+\section{General density of states: Nambu derivation and numerical evidence}\label{sec:dos}
+%======================================================================
+
+Theorem~\ref{thm:main} is proved for the flat-DOS KAY representation, in
+which $u_n=(2n+1)^{-1/2}$ is a purely kinematic factor. This section derives,
+from the bare isotropic single-band Nambu--Eliashberg self-energy equations,
+the exact generalization of $L_1,L_2,L_3$ to a general (non-flat) density of
+states $N(\xi)$, and reports the current --- partially open --- state of the
+rank-one immunity theorem in that setting.
+
+\subsection{Bare self-energy and the shared kernel $\chi$}
+
+Migdal's theorem, isotropy, particle--hole symmetric $N(\xi)$, the linearized
+$\Delta\to0$ limit, and the on-shell approximation are inherited unchanged
+from the standard Eliashberg framework (\textsc{[analytic]}, standard
+results, not re-derived here; see Carbotte, \emph{Rev.\ Mod.\ Phys.}\ \textbf{62},
+1027 (1990)). The Nambu self-energy is
+\[
+ \hat\Sigma(i\omega_n)=-T\sum_m D(\omega_n-\omega_m)\int d\xi\,N(\xi)\,\tau_3\hat G(i\omega_m,\xi)\tau_3,
+ \qquad D(\omega_n-\omega_m)=\lambda(n-m),
+\]
+\[
+ \hat G(i\omega_m,\xi)=-\frac{i\tilde\omega_m\tau_0+\xi\tau_3+\varphi_m\tau_1}{\xi^2+\tilde\omega_m^2+\varphi_m^2},
+ \qquad \tilde\omega_m:=\omega_mZ_m,
+\]
+so that $\tau_3\hat G\tau_3=-[i\tilde\omega_m\tau_0-\xi\tau_3+\varphi_m\tau_1]/(\xi^2+\tilde E_m^2)$,
+$\tilde E_m:=\sqrt{\tilde\omega_m^2+\varphi_m^2}$. Integrating over $\xi$ (the
+odd term $\xi/(\xi^2+\tilde E_m^2)$ vanishes for particle--hole symmetric
+$N$), and defining the shell integral
+\[
+ \chi(E):=\int d\xi\,\frac{N(\xi)}{\xi^2+E^2}\;\ge0,
+\]
+one obtains, matching $\tau_0$ and $\tau_1$ components,
+\begin{equation}\label{eq:zdeq}
+ \omega_n(Z_n-1)=T\sum_m\lambda(n-m)\,\tilde\omega_m\chi(\tilde E_m),
+ \qquad
+ \varphi_n=T\sum_m[\lambda(n-m)-\mu^*_c]\,\varphi_m\chi(\tilde E_m).
+\end{equation}
+\emph{This is the structural hinge of the entire section}: $\chi(\tilde E_m)$
+is the \emph{same} function of the \emph{same} argument in both equations,
+but it multiplies different numerators --- $\tilde\omega_m$ in the $Z$
+equation, $\varphi_m$ in the $\Delta$ equation. This difference is the
+source of everything that follows.
+
+\subsection{Linearization: the two channels' effective weights diverge}
+
+Let $\tilde E_m\to|\tilde\omega_m|$, $\chi_{\text{flat}}(E):=\pi N(0)/E$,
+$g(E):=\chi(E)/\chi_{\text{flat}}(E)$ ($\to1$ in the flat-DOS limit). Note
+$g(0)=1$ is a general fact (not an assumption): as $E\to0$, both $\chi(E)$
+and $\chi_{\text{flat}}(E)$ are dominated by the same leading $N(0)/E$
+singularity whenever $N$ is continuous and positive at the Fermi level.
+
+\paragraph{$Z$-equation source weight.}
+$\tilde\omega_m\chi(|\tilde\omega_m|)=g(\tilde\omega_m)\cdot\pi N(0)\,\mathrm{sgn}(\omega_m)$:
+the $1/|\tilde\omega_m|$ singularity of $\chi_{\text{flat}}$ is \emph{exactly
+cancelled} by the $\tilde\omega_m$ prefactor, and no residual
+$1/(2m{+}1)$-type weight remains --- this is why the textbook flat-DOS $Z$
+equation shows no explicit DOS-shape factor. For general DOS,
+\[
+ Z_n-1=\frac{\pi N(0)T}{\omega_n}\sum_m\lambda(n-m)\,\mathrm{sgn}(\omega_m)\,g(\tilde\omega_m).
+\]
+
+\paragraph{$\Delta$-equation source weight.}
+$\chi(|\tilde\omega_m|)=g(\tilde\omega_m)\cdot\pi N(0)/|\tilde\omega_m|$: here
+nothing cancels the $1/|\tilde\omega_m|$, so the flat-DOS
+$1/(2m{+}1)$ weight is itself a non-trivial consequence of the DOS shell
+integral. With $|\tilde\omega_m|=(2|m|{+}1)\pi T$ (leading order, $Z_m\approx1$),
+\[
+ Z_n\Delta_n=N(0)\sum_m[\lambda(n-m)-\mu^*_c]\,g(\tilde\omega_m)\,\frac{\Delta_m}{2m+1}
+ \qquad(\text{reduces to the standard flat-DOS equation at }g\equiv1,
+\]
+cross-checking the entire chain of algebra against the textbook Carbotte-type
+equation).
+
+\subsection{Exact form of $P$ (the $\Delta$ channel): Ansatz A confirmed}\label{sec:ansatzA}
+
+\textsc{[analytic]}. The $\Delta$-equation kernel
+$K_{nm}=N(0)[\lambda(n-m)-\mu^*_c]g(\tilde\omega_m)/(2m{+}1)$ is asymmetric
+only through the source-index weight. The similarity transform
+$\Delta_m=\psi_m/\sqrt{w_m}$, $w_m:=g(\tilde\omega_m)/(2m+1)$, symmetrizes it
+into $\sqrt{w_n}\lambda(n-m)\sqrt{w_m}$, exactly the $P=L_2+L_3$ structure
+with
+\begin{equation}\label{eq:ansatzA}
+ u_n^2 := \frac{g(\tilde\omega_n)}{2n+1} \qquad (\text{``Ansatz A''}),
+\end{equation}
+reducing to the flat-DOS KAY substitution $u_n=(2n+1)^{-1/2}$ at $g\equiv1$.
+The negative-$m$ branch maps back through $i=-1-m$ to give $\lambda(n+i+1)\sqrt{w_nw_i}$,
+i.e.\ $L_3$, with the same weight. \emph{This route was originally proposed
+as a plausible ansatz and is now derived from the Nambu equations.}
+
+\subsection{Exact form of $L_1$ (the $Z$ channel): neither the original ansatz nor its first correction}\label{sec:Bn}
+
+Two successive attempts to write down the $Z$-channel generalization of $L_1$
+were made and both were falsified by a from-scratch re-derivation
+(\texttt{theory/notes/nambu\_weight\_audit\_2026-09-16.md}, a self-audit of
+\texttt{theory/notes/nambu\_weight\_derivation\_2026-09-16.md} and
+\texttt{theory/notes/dos\_escape\_channel\_2026-09-16.md}). We report the
+final, correct form and its derivation, and flag the two falsified guesses
+for the historical record (they matter because a downstream numerical table
+was built on the wrong one and had to be retracted).
+
+\paragraph{Falsified guesses.} ``Ansatz A'' for $L_1$ (an overall external
+factor $g_n/(2n+1)$ applied uniformly, mirroring Eq.~\eqref{eq:ansatzA}) and
+``Ansatz B/C'' ($g$ attached to the boson-transfer index $|n-m|$ inside the
+sum, $L_1[g,f]_n=\frac2{2n+1}\sum_{k=1}^ng(\tilde\omega_k)f(k)$) both
+mis-assign the index on which $g$ acts: the source (fermionic) index $m$ in
+Eq.~\eqref{eq:zdeq} was silently swapped for the boson-transfer index in the
+telescoping step, and this substitution is only valid when $g\equiv1$.
+
+\paragraph{Exact form.} Carrying out the original Matsubara sum directly:
+for $m\ge0$, sign $=+1$, energy label $=m$, kernel argument $|n-m|$; for
+$m\le-1$, setting $i=-1-m\ge0$, sign $=-1$, energy label $=i$, kernel
+argument $n+1+i$. Hence
+\begin{equation}\label{eq:Bn}
+ L_1[g,f]_n = \frac{B_n}{2n+1},
+ \qquad
+ B_n = \underbrace{\sum_{m\ge0,\,m\neq n}\lambda(|n-m|)\,g_m}_{\text{convolution with }g\text{ on the source index}}
+ \;-\;\underbrace{\sum_{i\ge0}\lambda(n+1+i)\,g_i}_{\text{negative-frequency reflection term}},
+\end{equation}
+where the $m=n$ term ($\lambda(0)g_n$) exactly cancels against the $\Delta$-channel
+diagonal term for general $g$ (this cancellation is precisely the origin of
+$L_1$ starting the sum at $k=1$ and $L_2$ carrying $(1-\delta_{nm})$ in the
+KAY flat-DOS operator). $B_n$ is \emph{a convolution of $g$ along the
+fermionic index with $\lambda$, minus a negative-frequency reflection term}
+--- neither the overall-factor form nor the transfer-index form. At $g\equiv1$
+the telescoping recovers $2\sum_{k=1}^n\lambda(k)$, the original KAY $L_1$.
+
+A further consequence missed by both falsified guesses: $B_0=\sum_{k\ge1}\lambda(k)(g_k-g_{k-1})$
+is generally \emph{non-zero} for non-constant $g$ (both falsified ansätze
+give $0$ identically), which rescales the strength of the $n=0$ leak that
+Lemma~\ref{lem:leak} isolates.
+
+\begin{table}[h]
+\centering
+\caption{Cross-check of the exact $B_n$ (Eq.~\ref{eq:Bn}) against the flat
+case and the falsified formula (``C''), \textsc{[numerical-evidence]},
+$f(k)=1/(1+k^2)$, source-index truncation $M=4\times10^5$
+(\texttt{nambu\_L1\_index\_audit.py}).}
+\label{tab:Bn-check}
+\begin{tabular}{lcccc}
+\toprule
+$g$ shape & $n$ & exact $B_n$ (Eq.~\ref{eq:Bn}) & falsified ``C'' formula & Ansatz A value\\
+\midrule
+flat & 1/3/10 & 1.000000/1.600000/1.963586 & identical & identical\\
+step, pseudogap-type ($i<5$: $0.05$) & 10 & \textbf{1.912256} & 0.331821 & 1.963586\\
+step, van-Hove-type ($i<5$: 1, else $0.05$) & 10 & \textbf{0.149509} & 1.729944 & 0.098179\\
+van-Hove-decreasing & 0 & $-0.030283$ & $0$ (structurally missing term) & $0$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The flat case reproduces the KAY telescoping identically (a self-check of
+Eq.~\ref{eq:Bn}); away from flat, the falsified formula is off by up to a
+factor of $5.8\times$.
+
+\subsection{Sufficient condition and its correct direction}\label{sec:sufficient}
+
+Writing $a_n:=(B_n-\rho(f)g_n)/(2n+1)$ (Corollary 2.1 is unaffected by $u_n$'s
+form, so $P[g,f]\succeq-\rho(f)D_u^2$ continues to hold for any positive
+diagonal weight $D_u$), the original (falsified) derivation's claimed
+sufficient condition --- ``$g$ non-increasing (van-Hove-type) implies Lemma~4
+literally survives; $g$ non-decreasing (pseudogap-type) is risky'' --- was
+found, upon re-derivation with the correct $B_n$, to have the
+\emph{direction reversed}:
+
+\begin{itemize}[nosep]
+\item \textbf{Pseudogap-type $g$ (non-decreasing) is essentially safe}: of 80
+stress-test configurations (4 values of $\varpi$ $\times$ 20 shapes,
+$N=300$), only one marginally negative value occurred ($\varpi=0.3$, width
+3, depth 0.02, $-8.3\times10^{-4}$); the originally reported
+$\min a_n=-5.14\times10^{-2}$ under this label does \emph{not} reproduce ---
+it was an artifact of the falsified $L_1$ formula.
+\item \textbf{van-Hove-type $g$ (non-increasing) is the dangerous direction}:
+a sharp van-Hove step (width 3, depth 0.02) gives $-0.041$ at $\varpi=1$.
+\item Random non-monotone $g$ breaks worst: $-1.37$, with negative $n$
+extending to $43$ sites.
+\end{itemize}
+
+This reversal is also physically self-consistent: $g(0)=1$ always; a DOS
+\emph{peak} at the Fermi level (van Hove) drives $g$ \emph{down} from 1
+towards the background ratio $N_{\text{bg}}/N(0)<1$, while a Fermi-level
+\emph{suppression} (pseudogap) drives $g$ \emph{up} above 1. The originally
+reported direction had this backwards.
+
+\emph{Directional audit:} $a_n<0$ only falsifies the sufficient-condition
+route through Lemma~\ref{lem:leak}; by the one-sided-bound rule it does
+\emph{not} by itself establish that the theorem (a statement about the true
+spectral gap, not about the sign of $a_n$) fails.
+
+\subsection{Direct spectral evidence}\label{sec:direct-spectral}
+
+Testing the operator-level conclusion directly
+(\texttt{nambu\_spec\_exact.py}, \texttt{nambu\_gap\_exact.py}, $N=600$):
+flat, smooth van Hove, wide van Hove, and pseudogap shapes all satisfy the
+rank-one-leak conclusion $\lambda_{\min}(\OO'-a_0e_0e_0^{\mathsf T})\ge0$ even
+where $a_n<0$ occurs (the sufficient condition is lossy); a sharp van Hove
+(width 3, depth $50\times$) at $\varpi=5$ gives $-0.343$, and random
+``wild'' $g$ fails at all tested $\varpi$. The quantity that matters
+physically, $\mathrm{gap}/\lambda_1$, is reported in
+Table~\ref{tab:gap-general-dos}.
+
+\begin{table}[h]
+\centering
+\caption{$\mathrm{gap}/\lambda_1$ under exact $B_n$, general DOS shapes,
+\textsc{[numerical-evidence]}, $N=600$.}
+\label{tab:gap-general-dos}
+\begin{tabular}{lccccc}
+\toprule
+$\varpi$ & flat & van Hove (w3,d.02) & van Hove (smooth) & pseudogap (w5,d.05) & random (wild)\\
+\midrule
+0.3 & 0.9996 & 1.0000 & 0.9999 & 0.9758 & 0.9998\\
+1.0 & 0.9994 & 1.0000 & 0.9999 & 0.9999 & 0.9998\\
+5.0 & 0.9993 & 1.0000 & 0.9999 & 1.0030 & 0.9995\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Precisely where the sufficient-condition route (Lemma~\ref{lem:leak}'s
+literal generalization) fails, the actual spectral isolation is essentially
+perfect ($\mathrm{gap}/\lambda_1\approx1.0000$). Across every DOS shape
+tested in this round, rank-one dominance / immunity is \emph{not} threatened
+--- what breaks is the proof route, not the conclusion.
+
+An earlier, independent 80-configuration scan under a still-different (but
+also now known to be an approximation, cf.\ Section~\ref{sec:ansatzA}--\ref{sec:Bn})
+parametrization reported $\mathrm{gap}/\lambda_1\in[0.976,1.003]$
+(\texttt{theory/notes/dos\_escape\_channel\_2026-09-16.md}), consistent in
+sign and magnitude with the exact-$B_n$ results above.
+
+\subsection{What remains open}\label{sec:dos-open}
+
+No analytic sufficient condition is currently known for the exact $B_n$
+(Eq.~\ref{eq:Bn}) for general DOS shape $g$; the natural monotonicity
+argument used in the flat-DOS proof (factoring out a common positive weight)
+fails because $B_n$ mixes $g$ evaluated at the source index (inside a
+convolution) with $g$ evaluated at $n$ (via $\rho(f)g_n$) in a way that
+cannot be factored for a genuinely non-constant $g$. Four candidate routes
+towards an analytic sufficient condition were explored
+(\texttt{theory/notes/exact\_Bn\_analytic\_condition\_routes\_2026-09-16.md}):
+
+\begin{enumerate}[nosep]
+\item \emph{Perron--Frobenius / direct verification}: closes for flat DOS;
+for general $g$, closes only under an additional (untested) ``slowly
+varying $g$'' condition; open in general.
+\item \emph{Gershgorin / Cassini ovals}: dead end. The pairing operator $P$
+is long-range (the $L_3$ term couples all $n,m$), so the top eigenvector is
+delocalized and Gershgorin disks for different $n$ always overlap
+(numerically, the $n=0$ disk's upper bound exceeds the true $\lambda_1$ by a
+factor $1.7$--$2.3\times$ and is not separated from the rest).
+\item \emph{Small-$\varpi$ perturbative expansion}: dead end. Even at
+$\varpi=0.3$, the maximal $L_1$ diagonal entry is $45\%$ of $\mu_1(P)$: $L_1$
+and $P$ are comparable in strength at all $\varpi$, so there is no small
+parameter to expand in.
+\item \emph{$g$-perturbation theory} (bound $|\lambda_2(M[g])-\lambda_2(M[1])|\le C\|\delta g\|$
+via an operator-norm bound on $\partial M/\partial g$ combined with a
+Davis--Kahan step): unexplored; assessed as the most promising remaining
+route, requiring an estimate of $\|\partial L_1/\partial g\|_{\text{op}}$ and
+a check that the relevant spectral gap does not degenerate in the physical
+$\varpi$ range.
+\end{enumerate}
+
+The present status is therefore: \textbf{analytic} for flat DOS
+(Theorem~\ref{thm:main}); \textbf{analytic}, with the exact convolution
+structure Eq.~\eqref{eq:Bn} derived from first principles, for general DOS,
+but without a general sufficient condition for the rank-one leak; and
+\textbf{numerical-evidence} (Table~\ref{tab:gap-general-dos}, 80+
+configurations across multiple independent scripts) that the physical
+conclusion --- no near-degeneracy --- survives every tested DOS shape,
+including sharp van Hove singularities and deep pseudogaps.
+
+%======================================================================
+\section{Discussion}\label{sec:discussion}
+%======================================================================
+
+\subsection{Why this is physics and not repackaging}
+
+\begin{enumerate}
+\item \textbf{It explains why the two-parameter empirical formula works.}
+Allen--Dynes-type $T_c(\lambda,\langle\omega\rangle,\mu^*)$ treats pairing
+instability as a function of a single scalar (the top eigenvalue).
+Theorem~\ref{thm:main} shows: no matter how strong or how spectrally shaped
+the repulsion in the pairing channel is, the critical mode remains an
+isolated single mode --- so ``parametrize by one scalar'' is not a fitting
+accident, it is a consequence of the spectral structure.
+\item \textbf{It gives a falsifiable negative prediction.} In isotropic
+single-band Eliashberg theory there is \emph{no} repulsion-strength- or
+spectral-shape-driven pairing-mode competition or level crossing. Any
+observed competition between pairing channels must come from the DOS/$Z$
+channel, anisotropy, or multiple bands --- it cannot come from ``Coulomb or
+spin fluctuations being too strong.''
+\item \textbf{It demotes the role of $\mu^*$.} $\mu^*$ only moves $\lambda_1$
+along the Cauchy interlacing chain (Corollary~\ref{cor:static} gives its
+exact floor, $\mu_2(\HH_+)$); it never touches the rank structure of the
+spectrum.
+\item \textbf{$c_1^2$ is a new dimensionless control number}: the weight of
+the top pairing mode at the first Matsubara frequency, an explicit function
+of $\varpi$ (Table~\ref{tab:c1sq-baseline}) = the immunity budget.
+\end{enumerate}
+
+\subsection{Relation to other results in this program}
+
+\begin{itemize}
+\item \emph{P4D Coulomb uniqueness} ($\kappa=2\tilde\mu c_1^2/\gamma$): the
+same $c_1$, $\gamma$ appear there. Corollary~\ref{cor:static} supplies the
+structural reason the $\kappa$-analysis needed: the rank-one negative
+perturbation is pinned below $\mu_2$ by interlacing, so $\kappa$ only
+controls \emph{where} $\lambda_1$ lands, never \emph{whether} near-degeneracy
+occurs.
+\item \emph{Concentration bound} (profile lower bound $v_n\ge cv_0u_n$,
+\texttt{memory/p4-concentration-bound-2026-09-14}): that result needs a
+\emph{lower} bound on the profile of $\psi_1$; the present result needs a
+\emph{lower} bound on $c_1^2=\psi_1(0)^2$. If the concentration bound is made
+analytic, Table~\ref{tab:c1sq-baseline} (and Section~\ref{sec:c1sq}'s
+certificate program) could in principle be promoted from
+numerical-evidence/certificate to fully analytic --- the one non-analytic
+link remaining in this direction.
+\item \emph{DOS universality} (\texttt{theory/notes/dimension\_universality\_2026-09-16.md}):
+combined with Section~\ref{sec:dos}, the two results together assert that
+the density of states is the unique physical escape hatch from KAY-type
+universality statements, in two independent senses (breaking the
+$T$-independence of $\tau_n$, and being the only channel not covered by
+Theorem~\ref{thm:main}).
+\end{itemize}
+
+\subsection{Limitations}
+
+\begin{enumerate}
+\item The $c_1^2(\varpi)$ values in Table~\ref{tab:c1sq-baseline} are
+float64 truncated-spectrum computations (\textsc{numerical-evidence}).
+Theorem~\ref{thm:main} itself does not use these numbers (it holds for
+arbitrary $\HH_+$); only the physical claim ``the domain lies inside the
+budget'' depends on them, and Sections~\ref{sec:dk}--\ref{sec:schur} promote
+substantial parts of the physical range to \textsc{certificate}.
+\item The theorem covers only the isotropic single-band, flat-DOS, KAY-form
+operator. The positive-definiteness argument for $P$ (the reflection
+extension of Lemma~\ref{lem:evensector}) does not directly transfer to
+multi-band or anisotropic settings.
+\item $\rho(f)=f(0)-\hat f(\pi)$ comes from the \emph{worst-case sign}
+($\theta=\pi$) in Lemma~\ref{lem:bochner}; for wide kernels ($\varpi\gg1$) it
+is close to $f(0)$, while for soft kernels ($\varpi\ll1$) $\rho\to0$ and
+immunity is essentially total. No finer optimization over the intermediate
+regime has been attempted.
+\item No interval-arithmetic (\textsc{certificate}-level) results exist for
+the main theorem itself; only \textsc{analytic} (the theorem) and
+\textsc{numerical-evidence} (Table~\ref{tab:c1sq-baseline} and the general-DOS
+tables) apply there. \textsc{Certificate}-level results in this paper are
+confined to Section~\ref{sec:c1sq}'s $c_1^2$ lower bounds.
+\item The general-DOS sufficient condition (Section~\ref{sec:dos-open}) is
+open; only numerical evidence, not a proof, currently supports immunity
+beyond flat DOS.
+\end{enumerate}
+
+%======================================================================
+\appendix
+\section{Interval-arithmetic technicalities}\label{app:iv}
+%======================================================================
+
+The certificate-level results of Section~\ref{sec:c1sq} rely on
+\texttt{mpmath.iv} outward-rounded interval arithmetic. Three known pitfalls
+of this toolchain, tracked in this repository's working conventions, were
+explicitly avoided:
+
+\begin{enumerate}
+\item \textbf{\texttt{iv.atan2} does not enclose.} It is never called in
+this project; the arctangent tail bound in Section~\ref{sec:schur} uses the
+rational lower bound $\arctan y\ge y/(1+y^2)$ instead of any interval
+inverse-trigonometric routine.
+\item \textbf{A padding margin must cover exactly the error it substitutes
+for.} In the interval $LDL^{\mathsf T}$ inertia count
+(Section~\ref{sec:dk}), when a pivot interval straddles zero the candidate
+shift $c$ is inconclusive and the margin is enlarged and the count retried,
+rather than the pivot's sign being guessed.
+\item \textbf{\texttt{mp.pi} is lazy.} All uses of $\pi$ in interval context
+are triggered via \texttt{+iv.pi} before use, so that outward rounding is
+actually applied.
+\end{enumerate}
+
+Additionally, on the local \texttt{mpmath} 1.3.0 installation,
+\texttt{iv.coth}/\texttt{iv.sinh}/\texttt{iv.cosh} were found to be broken in
+interval context (an internal call to a non-existent \texttt{ctx.tanh});
+these were replaced by hand with $\sinh x=(e^x-e^{-x})/2$-type expansions.
+
+\paragraph{Inertia-count $\lambda_2(H_N)$ upper bound.} For a candidate
+threshold $c$, form $H_N-cI$ in interval arithmetic and perform
+unpivoted symmetric Gaussian elimination (interval $LDL^{\mathsf T}$),
+counting pivots whose interval lies strictly below zero. By Sylvester's law
+of inertia, if this count is $\ge\dim-1$, then $H_N$ has at most one
+eigenvalue $\ge c$, certifying $\lambda_2(H_N)\le c$. If some pivot interval
+straddles zero, the candidate $c$ is inconclusive and the margin around the
+floating-point-guessed $c$ is enlarged and retried; correctness never relies
+on the floating-point guess being accurate, only on the interval computation
+succeeding once a valid $c$ is found.
+
+\paragraph{Residual-based eigenvector certification.} A floating-point
+(\texttt{numpy.eigh}) top eigenvector $v_1$ of $H_N$ is used only as a seed.
+Its deviation from the true top eigenvector is bounded via the residual
+$r:=\|H_Nv_1-\ell_a v_1\|$ (computed with interval arithmetic) and the
+self-contained $\sin\theta$ inequality of Section~\ref{sec:dk}:
+$\sin\theta_1\le r/(\mathrm{gap}_1-r)$, $\mathrm{gap}_1:=\lambda_1(H_N)-\lambda_2(H_N)$
+(from the same certified inertia counter). Numerically $r\sim10^{-16}$
+(machine-precision residual of a double-precision \texttt{eigh}),
+$\mathrm{gap}_1\sim O(1)$, giving $\sin\theta_1\sim10^{-16}$ --- negligible,
+but proved, not assumed.
+
+\medskip
+\noindent\textit{Reproducibility.} All numerical and certificate scripts
+referenced above are from-scratch, independent implementations (they do not
+import any repository module), located in
+\texttt{theory/notes/\_scratch\_ir/} on branch \texttt{p4-conj2}; per this
+project's convention, probe/exploratory scripts remain uncommitted, while
+the operator identities and closed-form bounds they check are recorded in
+the correspondingly dated notes cited throughout this paper.
+
+\bigskip
+\noindent\textbf{Sources.} All theorem statements, proofs, and numerical
+tables in this paper are transcribed from, and independently re-verified
+against: \texttt{theory/notes/delta\_channel\_immunity\_2026-09-16.md}
+(Theorem I and its proof); \texttt{theory/notes/nambu\_weight\_audit\_2026-09-16.md}
+and \texttt{theory/notes/nambu\_weight\_derivation\_2026-09-16.md} (general-DOS
+Nambu derivation, exact $B_n$, and the audit correcting its sufficient
+condition); \texttt{theory/notes/dos\_escape\_channel\_2026-09-16.md}
+(80-configuration numerical evidence, superseded in its $L_1$-form claims by
+the audit above but retained for its Ansatz-A/$P$-channel content and its
+independent numerical scan); \texttt{theory/notes/c1sq\_lower\_bound\_2026-09-16.md}
+(Davis--Kahan route, including the retracted Schur-complement sign error);
+\texttt{theory/notes/c1sq\_schur\_improvement\_2026-09-16.md} (Schur-test
+improvement); and \texttt{theory/notes/exact\_Bn\_analytic\_condition\_routes\_2026-09-16.md}
+(status of candidate analytic sufficient conditions for general DOS). No
+content was taken from any file matching the description ``$N=3$ explicit
+matrix, analytic lower bound reaching 101--111\% of the true value in the
+physical range $\varpi=1$--$5$'' requested for Section~\ref{sec:analytic-c1sq}:
+no such file exists in this repository as of 2026-09-16 (verified by
+directory listing and full-text search of \texttt{theory/notes/}); this is
+flagged rather than fabricated, and Section~\ref{sec:analytic-c1sq} is
+written to reflect the true, open status of that route.
+
+\end{document}

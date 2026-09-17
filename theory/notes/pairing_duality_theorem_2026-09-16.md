@@ -225,9 +225,17 @@ lambda_1(M) = sup_{||v||=1} <v, M v> 是 P 的仿射泛函族的上确界，故*
 
 **物理解读**：秩一库仑项 2*mu_tilde*|u><u| 使 H_mu(0) 从 0 变为 -2*mu_tilde*||u||^2 < 0（负值），而 H_mu(x) -> h(sqrt(x)) - 2*mu_tilde*||u||^2 在 x 大时近似为 ln(sqrt(x)) + const。在 x = 0 附近，mu* 项的导数效应可以翻转 H_mu 的凹凸性——本质上是因为 |u><u| 的 Rayleigh 商 <v, |u><u| v> 随 v（顶本征向量）变化时引入了一个凸贡献。
 
-**但物理上不致命**：
+**但物理上不致命**（订正 2026-09-17，见下）：
 - 凹性失效区在 varpi < 0.33，对应 omega/T < 2pi * 0.33 ~ 2。对真实材料，主要配对声子频率远高于 Tc（即 varpi >> 1），此区间不被真实谱的支撑覆盖。
 - 直接 2-atom vs Einstein 数值测试（Part 4(d)）在 mu_tilde = 0.05, 0.10, 0.15 下均给出 **kappa_mu(2-atom) / h_mu(Einstein) < 1**（0.76, 0.74, 0.73）——Einstein 仍赢，且赢得很宽。
+
+> **[订正 2026-09-17]** 上面两条本身没错，但由它们推出的「所以 mu*>0 极值性在物理上成立」是错的，理由有二：
+>
+> 1. **小 varpi 反例是真的**，不是数值噪声也不是截断伪迹（N 到 2400 八位一致）；正确的排除理由不是「varpi 不可达」，而是**物理过滤**：一处 (varpi, N_c, mu_tilde) 违反只在 mu* ∈ [mu_tilde/Q(P), mu_tilde/Q(E)) 破坏 Tc 序，而该区最小的 mu*_min = 1.573 (varpi<=5) / 0.828 (varpi<=20)，且 r=N_c/varpi>=20 时完全消失。
+> 2. **真正致命的失效不在小 varpi，而在小 lambda**：固定 (lambda, <omega^2>) 时 Einstein 极值性在
+>    **lambda <~ 2.3 mu*_rms** 失效（领头阶判据 lambda < 2 mu*，[analytic]；精确算子在 mu*_rms = 0.13/0.15 处分别于 lambda <= 0.286 / <= 0.330 失效，[numerical-evidence]，N 到 5.6e5 收敛）。机制是 Anderson–Morel 延迟屏蔽：软声子获得更多库仑屏蔽，接近 lambda ~ mu* 抵消时指数增益压过前因子损失。该区物理上**是**可达的（W、Be、Ir 等极弱超导体）。
+>
+> 详见 `mustar_extremality_failure_map_2026-09-17.md`。
 
 ### 5.4 mu*>0 Einstein 极值性总结
 
@@ -235,10 +243,13 @@ lambda_1(M) = sup_{||v||=1} <v, M v> 是 P 的仿射泛函族的上确界，故*
 |---|---|---|
 | kappa(P,T) - mu_tilde * <P, K_c P> 关于 P 凸 | 严格但注意 K_c 项 | K_c 是 P-无关的（只含 u），故 M 关于 P 仿射 => lambda_1 凸。[analytic] |
 | H_mu(x) 凹 (mu_tilde >= 0.10) | 数值扫描无反例 | numerical-evidence |
-| H_mu(x) 凹性在小 x 处失效 (mu_tilde = 0.03-0.05) | 确认：零交叉在 x ~ 0.09-0.11 | numerical-evidence |
-| Einstein 仍为 Tc 极大者 (mu_tilde in [0.05, 0.15]) | 直接数值验证（eta < 1） | numerical-evidence |
+| H_mu(x) 凹性在小 x 处失效 (mu_tilde = 0.03-0.05) | 确认：零交叉在 x ~ 0.09-0.11；机制 = 单个孤立 Coulomb 模，R ≈ 2<u_c,M'v>^2/(‖u_c‖^2(h+2 mu_tilde ‖u_c‖^2)) | numerical-evidence |
+| Einstein 仍为 Tc 极大者 (mu_tilde in [0.05, 0.15]，且 lambda >~ 2.5 mu*) | 直接数值验证（eta < 1） | numerical-evidence |
+| **Einstein 极值性在 lambda <~ 2.3 mu*_rms 失效** | 精确算子反例（mu*=0.13: lambda<=0.286；mu*=0.15: lambda<=0.330） | numerical-evidence（领头阶判据 lambda<2mu* 为 analytic） |
 
-**结论**：在物理相关的参数范围（mu_tilde = mu*/lambda >= 0.05，对应 lambda <= 20 时 mu* >= 0.1），凹性在可达 varpi 范围内持有，Einstein 极值性仍成立。严格证明（对所有 P）需要：(1) mu_tilde < 0.05 时的小 varpi 修正论证，或 (2) 一个不依赖逐点凹性的替代路线（如引理 M 的直接库仑版——这在 `P4D_coulomb_extremal_threshold.md` 已有认证级条件版本）。
+**结论（订正 2026-09-17）**：mu*>0 的 Einstein 极值性**不是一个无条件为真的命题**。正确陈述分两段：
+(i) 在 lambda >~ 2.5 mu*_rms 的区域（涵盖本文 eta 表中的全部材料，lambda = 0.62–3.62），数值上未见反例，Einstein 仍是极大者 [numerical-evidence]；小 varpi 的反例经物理过滤（mu*_min >= 0.83）对 Tc 无影响。
+(ii) 在 lambda <~ 2.3 mu*_rms 的弱耦合近抵消区，极值性**确实失效**，且该区物理可达。任何「对所有 P 成立」的严格证明只能是带条件的——条件不是「mu_tilde >= 0.05」，而是对 lambda/mu* 的下界。替代路线（不依赖逐点凹性的库仑版引理 M）见 `P4D_coulomb_extremal_threshold.md` 的认证级条件版本。
 
 ---
 
@@ -252,7 +263,7 @@ lambda_1(M) = sup_{||v||=1} <v, M v> 是 P 的仿射泛函族的上确界，故*
 
 4. **双矩极值扫描**（sec.4）在 AD 层面，网格分辨率有限。结论"eta_opt > 0.99"可能被更精密的扫描微调，但 "额外矩约束下增益 < 1%"的定性结论应当稳健。
 
-5. **mu*>0 凹性失效**（sec.5.3）是实际发现，不是数值噪声——零交叉可被 brentq 定位到 3 位有效数字。但此区域在物理上不可达（声子频率 >> Tc 意味着 varpi >> 1）。
+5. **mu*>0 凹性失效**（sec.5.3）是实际发现，不是数值噪声——零交叉可被 brentq 定位到 3 位有效数字。**[订正 2026-09-17]** 原文「但此区域在物理上不可达（声子频率 >> Tc 意味着 varpi >> 1）」是错的推理：小 varpi 反例的正确排除理由是物理过滤（mu*_min >= 0.83），而不是 varpi 不可达；并且存在一个物理**可达**的失效区 lambda <~ 2.3 mu*_rms（见 sec.5.3 订正框）。
 
 6. **本文无新定理**。对偶定理是 sec.7 of `pairing_convex_optimization_2026-09-16.md` 中框架的严格化；eta 计算是定理 E 的定量应用；mu*>0 分析是 `P4D_coulomb_extremal_threshold.md` 的补充探测。所有引用以 `P4_main_theorems.md` v0.8 为准。
 
