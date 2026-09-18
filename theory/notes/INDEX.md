@@ -34,7 +34,7 @@
 |---|---|---|
 | [`theoremI/`](theoremI/) | 8 | 定理 I（配对通道排斥/秩一主导性免疫）与 𝔤(2) 证书 |
 | [`lemmaC/`](lemmaC/) | 19 | 引理 C（H 凹性）与 λ₂ 上界的历次证书、路线尝试 |
-| [`coulomb/`](coulomb/) | 19 | μ*>0 库仑：极值性、窗内唯一性、CE/CE′ 阈值、谱隙塌缩机制、H_μ 的托尔马乔夫透镜、(E-env) 凹包络三明治核验 |
+| [`coulomb/`](coulomb/) | 20 | μ*>0 库仑：极值性、窗内唯一性、CE/CE′ 阈值、谱隙塌缩机制、H_μ 的托尔马乔夫透镜、(E-env) 凹包络三明治核验、消费点核查 |
 | [`gamma/`](gamma/) | 17 | γ-model + Coulomb：c₁²、Davis–Kahan/Schur 证书、渐近；非声子机制结构相容性侦察 |
 | [`materials/`](materials/) | 16 | 亏损预算证书化、材料数据核验、Eliashberg 交叉核验 |
 | [`isotope/`](isotope/) | 10 | 同位素指数（P1 系列）与 2Δ/kTc 第二观测量 |
@@ -42,8 +42,8 @@
 | [`literature/`](literature/) | 8 | 文献新颖性核查与致作者索取数据的邮件草稿 |
 | [`meta/`](meta/) | 4 | 跨文档一致性审查、闭合状态盘点、会话恢复/triage 记录 |
 | [`ceiling/`](ceiling/) | 10 | 多带/各向异性 Tc 天花板（引理 G、(G′) 路线、μ* 延拓，规范陈述见 `ceiling/multiband_ceiling_CANONICAL_2026-09-18.md`）；单带零参数一行公式见 `ceiling/oneliner_zero_parameter_2026-09-18.md` |
-| [`probes/`](probes/) | 16 | 其他体系（Hubbard、Kondo、CDW/SDW、量子算法、宇宙学等）的可行性/普适性探针，多为 NO-GO 或阻塞；非声子机制立项级侦察 |
-| [`misc/`](misc/) | 10 | 不便归入以上分组的杂项（P3 λ_* 系列、弱耦合级数审查、对偶定理、论文草稿节、λ-晶格联合天花板等） |
+| [`probes/`](probes/) | 17 | 其他体系（Hubbard、Kondo、CDW/SDW、量子算法、宇宙学等）的可行性/普适性探针，多为 NO-GO 或阻塞；非声子机制立项级侦察（含 FeSe 材料探针） |
+| [`misc/`](misc/) | 11 | 不便归入以上分组的杂项（P3 λ_* 系列、弱耦合级数审查、对偶定理、论文草稿节、λ-晶格联合天花板等） |
 
 ---
 
@@ -108,6 +108,7 @@
 | [hmu_tolmachev_lens_2026-09-18.md](coulomb/hmu_tolmachev_lens_2026-09-18.md) | 2026-09-18 | μ*>0 极值性 ⟺ H_μ 凹性（双向）；H_μ 的「托尔马乔夫透镜」（s=ϖ/N_c∈[0.07,0.55]、阈值 μ̃≳0.545）；凹包络替代定理 (E-env) | mixed（§1.2 必要性、§1.3 (SAND)、§2.6 领头阶、§4.1 (E-env)、§4.4 极点计数为 **analytic**（建立在仓库 (CVX) 与引理 C 之上）；**其余全部 numerical-evidence**，零 certificate / 零 rational-exact） | live（exploratory：Ĥ_μ 无证书，R1/R3 未做） | §2.4 订正「类 II = 谱隙塌缩」（实测 gap/λ₁=1.0039，不降反升）；§3.4(a) 把仓库两参数拟合 s_c 换坐标后塌成 μ̃_c=0.553–0.585（跨度 138%→5.7%）；§4.3 自陈物理点预算 = 0 |
 | [mustar_failure_common_mechanism_2026-09-18.md](coulomb/mustar_failure_common_mechanism_2026-09-18.md) | 2026-09-18 | μ*>0 五处失效是否共享同一控制量：统一坐标、共同祖先（锥）与四个互不相干阈值 | mixed（§1 久期恒等式 (U1)(U2)、§2.5 (★A)、§3 命题 P1/P2/P3、§5.2 对数导数为 analytic；**其余全部 numerical-evidence**，零 certificate / 零 rational-exact） | live（「大统一」假说被本文自己证伪：是四类互不相干阈值，不是一个控制量） | §4.1 直接证伪「锥 / η / tanΘ 是同一个量」；§6 诚实清单自承 N≲3400 与 §5.2 未达笔记 N 规模 |
 | [hmu_tolmachev_lens_review_2026-09-18.md](coulomb/hmu_tolmachev_lens_review_2026-09-18.md) | 2026-09-18 | 对抗核验：peer agent（未提交，另一 worktree）宣称的 (E-env) 凹包络三明治定理（𝔨≤Ĥ_μ≤h₀，对一切 μ*≥0 无条件） | analytic（(CVX)、Weyl 单调、三明治逻辑）+ numerical-evidence（旗舰数字 +5.751e-3、Tc(P)/Tc(E)=1.0286 独立复现） | live（核心链条全 CONFIRMED，2 项因预算未复核，未计入通过率） | 总评「无 CHALLENGED；净收益=覆盖范围（无条件性），非数值收紧，已独立核实」 |
+| [eenv_consumption_point_audit_2026-09-18.md](coulomb/eenv_consumption_point_audit_2026-09-18.md) | 2026-09-18 | (E-env) 消费点核查：grep `theory/notes`+`theory/derivations` 全仓，零引用（`P4D_coulomb_operator.md` 建议的 Layer 2.5 未写入） | 检索型判定（非计算分级），预算复核基于原文件 §4.2 数字读取 | live（判定：无消费点，关闭数学投入线，只建议半天量级文档挂靠） | §2.2 三条 grep 全仓零命中；§4「双重预算为 0：接入成本=0 收益、不接入成本=0 损失」 |
 
 ## γ-model
 
@@ -230,6 +231,7 @@
 | [P3_numerics_2026-09-09.md](misc/P3_numerics_2026-09-09.md) | 2026-09-09 | P3 任务 A/B/C 数值实现独立验证 | numerical-evidence | live（一处方法论歧义待澄清） | 摘要「mostly matches, one methodology-ambiguity flag」 |
 | [weak_coupling_series_review_2026-09-14.md](misc/weak_coupling_series_review_2026-09-14.md) | 2026-09-14 | 弱耦合久期级数（定理 W/W′）对抗审查 | analytic（W）/ numerical-evidence（W′，证明有缺口） | live（W′ 待补证） | 「定理 W：CONFIRMED；定理 W′：CHALLENGED—证明不完整」 |
 | [lambda_stability_tc_joint_ceiling_2026-09-18.md](misc/lambda_stability_tc_joint_ceiling_2026-09-18.md) | 2026-09-18 | λ 稳定性上界与 KAY Tc 上界能否合并为一条联合约束：可行性评估，N=1 玩具自洽求解 dlnTc/dσ²=+1.88 | mixed（κ₁(϶̄) analytic 继承 + 玩具联合自洽解 numerical-evidence，双路独立复核）| exploratory（局部/微扰结果，非全局定理；γ₃ 项未核） | §4/§5：两条独立路径（直接数值解 vs 隐函数定理闭式组合）4 位吻合；§6 列 5 条未解决点 |
+| [lambda_lattice_width_real_material_check_2026-09-18.md](misc/lambda_lattice_width_real_material_check_2026-09-18.md) | 2026-09-18 | σ² 澄清为谱形状展宽（非晶格位置无序）+ 用 Cerqueira 真实 DFT α²F 谱独立检验 κ_S>0 方向（r vs λ_* 相关 0.92, n=215, p~1e-88） | numerical-evidence（DFT 计算谱 + mpmath 点算，非区间外包） | live（方向性支持，未测联合天花板整体陈述） | §4/§5：Pearson/Spearman 相关系数 + 5 条明确未证边界 |
 | [bcs_cold_atom_feasibility_2026-09-16.md](probes/bcs_cold_atom_feasibility_2026-09-16.md) | 2026-09-16 | BCS 冷原子 Tc/T_F 严格界方向可行性调研 | 调研/判定 | live（NO-GO，方向终止） | 状态行「完成，NO-GO 判定」 |
 | [cdw_universality_probe_2026-09-16.md](probes/cdw_universality_probe_2026-09-16.md) | 2026-09-16 | CDW/Peierls 是否展现 BCS 式谱不敏感性 | heuristic + numerical-evidence（部分待核） | exploratory | 自述「探索性/机制性排查」，§6 列 4 条未解决点 |
 | [dimension_universality_2026-09-16.md](probes/dimension_universality_2026-09-16.md) | 2026-09-16 | 维度普适性：d=2 van Hove 对数 vs Tc 不敏感性 | analytic（结构）+ numerical-evidence（8 核族） | live | 「共振点问题无定义；非共振点 η 不变」 |
@@ -249,6 +251,7 @@
 | [probe_tc_cosmology_2026-09-16.md](probes/probe_tc_cosmology_2026-09-16.md) | 2026-09-16 | Tc 上界与宇宙学常数四个子方向完整性探针 | 多为 no-evidence | exploratory（负结果） | 「没有找到任何非平凡联系」 |
 | [root_fermi_universality_2026-09-16.md](probes/root_fermi_universality_2026-09-16.md) | 2026-09-16 | 追溯 Tc 普适性到费米统计的机制链，与假想玻色统计类比 | mixed（各步骤自表标注） | live | 「本分析不改变 P4 主线任何定理」 |
 | [sdw_universality_probe_2026-09-16.md](probes/sdw_universality_probe_2026-09-16.md) | 2026-09-16 | SDW 探针：Cooper-log 不敏感性推广到 nesting-log，但结论不推广 | mixed（结构恒等式 analytic + χ₀ numerical-evidence） | live（不触及主线） | 「本探索不改变 P4 主线任何定理」 |
+| [spin_fluctuation_fese_material_probe_2026-09-19.md](probes/spin_fluctuation_fese_material_probe_2026-09-19.md) | 2026-09-19 | FeSe 自旋涨落五区数据代入 spm_gap PF/Metzler 前提与 λ_min(V) 二部图机制的材料级数值探针 | numerical-evidence（L1 转录输入 + 从零脚本计算） | live（明确标注对缺失 5/10 条边数据敏感，非鲁棒结论） | 本文 §3：Metzler 前提 1 在 Γ1-Γ2/M1-M2 边违反；二分 `{Γ1,Γ3,M2}\|{Γ2,M1}` 非教科书分裂 |
 | [spin_fluctuation_rigorous_tc_scoping_2026-09-18.md](probes/spin_fluctuation_rigorous_tc_scoping_2026-09-18.md) | 2026-09-18 | 立项级侦察：非声子（自旋涨落/量子临界）严格 Tc 界该不该做、撞什么、先例盘点；四层模型阶梯 + 六层推进候选 + 推荐 L-C | **文献侦察 + 概念性论证**为主；两处自算为 numerical-evidence（EA 竞品定位、局域矩探针）；**零 analytic / 零 certificate 新结论** | live（立项建议，待用户决策；不改动主线任何定理） | §0 判决表；§2.3 记录一条**被自己拦下的方向越级**（把 `𝔤^{(N)}` 单边下界当双边值去宣布生态位开放）；§3.2(ii) 承重限定「算的是 `T_p` 不是 `T_c`，`T_c→0 at γ→2`」；§3.3 的 `ρ→1` 说明该界在 QCP 极限渐近取等；§6 列 5 条未做项（含与并行会话 `spinfluc-compat-sonnet` 尚未对照） |
 | [lambda_stability_tc_joint_ceiling_review_2026-09-18.md](misc/lambda_stability_tc_joint_ceiling_review_2026-09-18.md) | 2026-09-18 | 独立复核另一 agent 的 λ_* 稳定性界 + KAY N=1/2 联合 Tc 天花板主张：dlnTc/dσ²\|₀=+1.88（谱展宽提升联合上限）+ 偏度项测试 | analytic（"记号同构"前提）+ numerical-evidence（σ²/γ₃ 系数、N=1→2 稳健性） | live（CONFIRMED，局部 σ→0 结果，非全局变分定理） | 两条独立法（直接解+外推 / IFT 闭式）5–6 位一致；偏度扫描 σ=0.05/0.20、γ₃∈[−4,4] 无符号翻转 |
 
