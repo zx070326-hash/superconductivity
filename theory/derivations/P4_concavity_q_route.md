@@ -56,7 +56,7 @@ Gate 3、Gate 5 复核（误差 ≤ 4.9e-17）。注意 (1.1) 只是**恒等式*
     v 唯一（至多差符号）的来源。单重性由 **隙 > 0** 保证，而隙 > 0 有
     **独立来源**，不依赖本节任何结论：
       - ϖ ∈ (0, 2]：重排恒等式的二阶 trace 界给 λ₂ ≤ 0.58·h
-        （`theory/notes/2026-09-13_gap_lorentz_probe.md`）；
+        （`theory/notes/lemmaC/gap_lorentz_probe_2026-09-13.md`）；
       - ϖ ≥ 2：秩一路线给 λ₂ ≤ Θ\* = 0.6349 < h(2) = 1.336，
         故 h − λ₂ ≥ h − Θ\* > 0。
     两段在 ϖ = 2 处重叠，无缝隙。**这一独立性很重要**：若单重性依赖
@@ -181,7 +181,7 @@ N=300/600 一致（Gate 10，相对漂移 ≤ 6.5e-5）。
 
 ### 4.4 用逐点隙界，缺口闭合（但依赖插值）
 
-0.42h 来自把 `2026-09-13_gap_lorentz_probe.md` §4.2 的 λ₂_hi/h **取全段最坏值
+0.42h 来自把 `gap_lorentz_probe_2026-09-13.md` §4.2 的 λ₂_hi/h **取全段最坏值
 0.582**——而 0.582 是 **ϖ=2 处**的值。该表是逐点的，在缺口内显著更好：
 
 | ϖ | 0.5 | 0.7 | 1.0 | **1.5** | 2.0 |
@@ -208,8 +208,8 @@ N=300/600 一致（Gate 10，相对漂移 ≤ 6.5e-5）。
    R ≈ 2⟨u_c, M′v⟩² / (‖u_c‖²(h + 2μ̃‖u_c‖²))（准到 ~10%，[numerical-evidence]，
    N=300/600/1200 一致）。由此 R/(2Ψ) ∝ 1/μ̃，凹性在小 μ̃ 处失效——所以
    **不能把 μ\*=0 的 (A)/(B) 结论移用到 μ\*>0**。μ\*>0 的路线应走秩一精确预解式，
-   不走 Davis–Kahan；细节见 `theory/notes/concavity_failure_mechanism_2026-09-17.md`
-   与 `theory/notes/mustar_extremality_failure_map_2026-09-17.md` §5。
+   不走 Davis–Kahan；细节见 `theory/notes/lemmaC/concavity_failure_mechanism_2026-09-17.md`
+   与 `theory/notes/coulomb/mustar_extremality_failure_map_2026-09-17.md` §5。
    （**旁证**：同一条「精确预解式取代 Davis–Kahan」的替换在定理 CE 上已独立走通——
    引理 2 整段可去，物理锚点认证从 13/14 变 14/14、最劣余量 1.002→1.377，
    见 `P4D_coulomb_extremal_threshold.md` §6。这支持把同一手法用于此处的 R 项。）
@@ -222,7 +222,7 @@ N=300/600 一致（Gate 10，相对漂移 ≤ 6.5e-5）。
    把 N_c 与 ϖ 物理绑定（N_c=⌊rϖ⌋）后，凹性失效区收缩到 ϖ < ϖ_c(r)：
    r=20 → ≤0.6、r=10 → 0.8、r=5 → 1.2；r=3 在 ϖ≥0.7 时 μ̃_c ≥ 0.16 > 物理 μ̃。
    [numerical-evidence]，独立五点 FD 交叉验证 1.2e-6、N=400/800/1600 四位不变。
-   详见 `theory/notes/concavity_exact_resolvent_2026-09-17.md`。
+   详见 `theory/notes/lemmaC/concavity_exact_resolvent_2026-09-17.md`。
 
 1. **(B) 未完全解析闭合**。用全段最坏隙 0.42h 时，ϖ ∈ [1.46,1.63] 上
    (4.5) 超过 E 最多 **1.096 倍**（ϖ=1.54）。我**没有**调参掩盖：
@@ -260,7 +260,7 @@ N=300/600 一致（Gate 10，相对漂移 ≤ 6.5e-5）。
 
 ## 6. 与既有结果的接口
 
-- (Q2) 的单重性前提取自 `2026-09-13_gap_lorentz_probe.md` 的隙界，
+- (Q2) 的单重性前提取自 `gap_lorentz_probe_2026-09-13.md` 的隙界，
   该界独立于凹性，无循环。
 - 定理 A 用 `P4_uniqueness_strategy.md` §2.A 推论 A′，
   与 `P4_main_theorems.md` §3 的锥不变性。

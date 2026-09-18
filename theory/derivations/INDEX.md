@@ -3,7 +3,7 @@
 > **这是什么**：`theory/derivations/` 下每篇推导稿的一句话地图 —— 证了什么 / 严格性等级 / 数值门 / 版本状态。
 > 目的是让任何一个新的 Claude Code 会话（或人）在不通读全部文件的情况下，快速定位「哪条结论硬、硬到什么程度、门在哪、下一步在哪」。
 > **本索引只记录已入库（tracked，在 `p4-conj2` 分支上）稿件的 committed 状态**；六方向深挖轮的更深版本**部分已并入 `p4-conj2` 集成分支、部分仍 held 在各自 `deep-*` 分支**，逐分支合并状态见文末 §5 与 auto-memory。（`p4-conj2` 本身仍**未合并到 `main`**。）
-> 维护：改动某稿的严格性/门/结论时，同步改这里对应行。最后更新 2026-09-15。
+> 维护：改动某稿的严格性/门/结论时，同步改这里对应行。最后更新 2026-09-17。
 
 ## 图例
 
@@ -22,7 +22,7 @@
 ## §0. 从哪读起
 
 - **`P4_main_theorems.md`（v0.8，349 行）** —— **P4 的骨架与总账**。逐条列出每个陈述是「解析证明 / 计算机辅助证书 / 数值常数」，并记录合并沿革、被推翻的路线、记账缺陷的标注。**要理解 P4 全貌，先读这一篇。** 它本身无独立数值门（是整理稿）。
-  - 主脊：KAY **Conjecture 2**（= 定理 1，全 λ 严格 Tc 上界）与 **Einstein 极值**（= 定理 2 / 定理 E）经**引理 M**（核单调性，已证无 CHALLENGED）双双降为**三行解析推论**；**𝔤(2) 解析化**（见 §4.1）消掉定理 1、2 里最后的计算机成分 ⟹ 定理 1、2 全链无计算机辅助。**唯一仍靠证书的是引理 C**（H 凹性）。
+  - 主脊：KAY **Conjecture 2**（= 定理 1，全 λ 严格 Tc 上界）与 **Einstein 极值**（= 定理 2 / 定理 E）经**引理 M**（核单调性，已证无 CHALLENGED）双双降为**三行解析推论**；**𝔤(2) 解析化**（见 §4.1）消掉定理 1、2 里最后的计算机成分 ⟹ 定理 1、2 全链无计算机辅助。**[2026-09-18 标级订正，保留原句]**：定理 1、2 的陈述与证明是 `analytic`；𝔤(2) 的具体数值区间（CERT-A/B/D）是 `rational-exact`（CLAUDE.md §1 新档位，解析定理 + 有限次精确有理算术求值，须标格数与有理数个数），不应简称「解析」——「全链无计算机辅助」在「无浮点/无区间/无数值包围」的意义上仍成立。**唯一仍靠证书的是引理 C**（H 凹性）。⚠ **定理 1、2 的陈述均限于 μ\*=0**；μ\*>0 的推广**不是无条件成立的**——Einstein 极值性在弱耦合近抵消区 λ ≲ 2.5μ\*_rms 真实失效（§4.5，物理结果非证明缺口）。
 
 ---
 
@@ -79,12 +79,23 @@
 
 - **`P4D_coulomb_operator.md`**（v0.6）—— 攻 U4：库仑赝势的严格算子形式 **𝔎_c = 2|u⟩⟨u|（秩一、半正定）**，首版 −D 项已证伪并订正；换序区间定理据 μ̃=μ\*/λ 单参族认证。严格性：**解析算子形式 + 认证轮**。门：`p4d_coulomb_falsify.py`（134）+ `verify_coulomb_fold.py`（30）。
 - **`P4D_coulomb_uniqueness.md`**（v0.2）—— **μ\*>0 唯一性（Conjecture 2 库仑推广）**：秩一预解式阈值策略；**窗内定理已给解析论证**（常数 float64、有限 N 为高估），跨窗全局唯一性在 r=3 处真实失效、已量化。严格性：**窗内解析 + 数值证据边界**。门：`p4d_coulomb_uniqueness.py`（**432 检查 / 371s**，PN=400，覆盖 11 物理锚点）。
-- **`P4D_coulomb_extremal_threshold.md`**（v0.2）—— **库仑阈值定理（Einstein 极值版）** Q(P)≤Q(E) 的显式条件（六常数全在 A_P 上求值，可证形式）。严格性：**认证**。门：`p4d_coulomb_extremal_threshold.py`（G1–G4，PN=300，≤10min）。
+- **`P4D_coulomb_extremal_threshold.md`**（v0.2）—— **库仑阈值定理（Einstein 极值版）** Q(P)≤Q(E) 的显式条件（六常数全在 A_P 上求值，可证形式）。严格性：定理陈述 **analytic**；阈值数值 **numerical-evidence**（float64、N 有限、六常数未区间化）。**§6 定理 CE′（久期精确根）**：Davis–Kahan 整段可去，14/14 锚点认证（旧 13/14），最劣余量 1.377（旧 1.002），κ<1 前提解除。门：`p4d_coulomb_extremal_threshold.py`（G1–G4，PN=300，≤10min）。
 - **`P4_coulomb_global_tc_certified.md`**（v0.2）—— **【方向 B 库仑】** 物理库仑（μ\*>0）**首个严格认证全局 Tc(λ) 双侧包围**。严格性：**认证**。门：`p4_coulomb_global_tc_certified.py`（自检 44 / 主管线 78）。
+- **μ\*>0 Einstein 极值性失效边界**（笔记 `mustar_extremality_failure_map_2026-09-17.md`）—— 固定 (λ, ⟨ω²⟩) 下极值性失效分两类：**I（小 ϖ）**需 μ\*≥1.57、对 Tc 无影响；**II（弱耦合近抵消）λ ≲ (1.773+3.760μ\*)μ\*_rms** 确实失效。机制：Anderson–Morel 延迟屏蔽。严格性：领头阶判据 λ<2μ\* **analytic**；精确边界 **numerical-evidence**（N 收敛）。
+- **μ\*>0 凹性秩一精确预解式**（笔记 `concavity_exact_resolvent_2026-09-17.md`）—— H″=−2Ψ+R，恒等式 R=2⟨y_⊥,(h−A)^{−1}y_⊥⟩ **analytic**；j=1 负项可保留（抵消 1–97%）。N_c=⌊rϖ⌋ 绑定后失效区 ϖ<ϖ_c(r)：r=20→≤0.6、r=10→0.8、r=3 在 ϖ≥0.7 时 μ̃_c≥0.16>物理 μ̃。严格性：恒等式 **analytic**；区域边界 **numerical-evidence**（FD 1.2e-6 验证、N=400/800/1600 四位不变）。
 
 ### 4.6 物理应用与负结果
 
 - **`P4_vhs_dtc_dp_sign.md`**（v0.3）—— van Hove 峰到 E_F 的距离 δ 如何定 dTc/dP 符号：**符号判据 sign(∂E/∂δ)=−sign(δ) 严格成立（28 区间零违反）是唯一无条件可交付结论**；单洛伦兹拟合失效、δ 在 H3S 区间**非主旋钮** ⟹ 用 δ(P) 解释 H3S 圆顶的路线被**证伪**（干净负结果）。严格性：符号判据数值严格 + 负结果。门：`p4_vhs_enhancement.py`（25 测试）。
+- **亏损预算（deficit budget）：无拟合氢化物 Tc 预测**（笔记 `deficit_budget_h3s_2026-09-17.md`）—— 定义填充因子 𝔣:=Tc/(C_∞√(λ⟨ω²⟩))，C_∞=0.1827262477 [analytic]。用真实 α²F（EPW anharmonic）+ μ\*=0.13 给出 **H3S-200: 199.0 K / D3S-200: 155.4 K**（实验 203/150 K，残差 −2.0%/+3.6%）。三项亏损分解（乘性）：δ_FIN（有限 λ）~20%、δ_BRD（谱展宽，定理 E 的不等式变成数）~13%、**δ_COU（库仑）27–30%，最大项**。反解 μ\*∈[0.12, 0.15]。严格性：C_∞ **analytic**；全部 Tc **numerical-evidence**（float64、N 有限、α²F 来自外部）。
+- **负结果 NO-GO**（笔记多篇 2026-09-16）—— (a) **Haldane 量子自旋谱隙**：LTI-SDP 硬性要求 frustration-free，Heisenberg 链不满足。(b) **BCS 冷原子普适比**：接触势无算子谱结构，FHS 已占领，无声子无 P4 技术栈可迁移性。(c) **γ>2 核不在定理 E 类内**：𝒫 类尾部恰为 k⁻² 或更慢（二阶矩有限/无穷），γ>2 要求更快衰减 ⟹ γ>2 ∩ 𝒫 = ∅ [analytic]。
+
+### 4.7 γ-model 量子临界配对 + Coulomb（新方向 2026-09-16）
+
+- **方向选择与可行性**（笔记 `gamma_model_direction_selection_2026-09-16.md`）—— KAY/Elezaby–Abanov 明确放弃 μ\*；P4-D Coulomb 机器直接可搬。Phase 0 通过：𝔤(1)≈1.6075（KAY 浮点下界），c₁²=0.723（float64）。
+- **定理 I（Δ 通道免疫）**（笔记 `delta_channel_immunity_2026-09-16.md`）—— **配对通道排斥无法摧毁秩一主导性**：M ⪯ ℌ₊ + ρ(f₋)·e₀e₀ᵀ，λ₂(M) ≤ (1−c₁²)μ₁ + c₁²μ₂，对排斥强度/谱形/秩一致。严格性：引理 1–4、定理 I、推论全 **analytic**；c₁²(ϖ) 数值为 **numerical-evidence**。
+- **c₁² certificate 下界**（笔记 `gamma_phase2_multi_gamma_scan_2026-09-16.md` + `gamma_tail_bound_audit_v2_2026-09-16.md`）—— γ=1, N=400, μ\*=0: **c₁²_lo = 0.704** [certificate v3, 块对角 Davis–Kahan]（float64 真值 0.723，gap 2.6%）；γ=0.67: 0.543（从空真 0.028 恢复）。Phase 2 全扫描 5γ × 4μ\*：𝔤_lo 全行 [certificate]；γ≤0.5 非紧（尾部发散）。生产脚本 `gamma_dk_coulomb_schur_v2.py` + `gamma_tail_bound_v2.py`（未提交，Phase 1 v1 有三处单边缺陷、数字事后成立）。
+- **Anderson–Morel 屏蔽**（笔记 `am_plateau_2026-09-17.md`；另见 `deficit_budget_h3s_2026-09-17.md` §5(b)）—— Δ𝔤 对 N_c **非单调**，μ_eff=μ/(1+μ ln N_c/(2𝔤))；H3S-200 anharmonic 在 r=10/20/40/80/160 上 Tc = 199.0/198.4/198.3/198.4/198.4 K（0.1% 变化跨 8 倍截断），落在平台。严格性：恒等式 **analytic**；全部数值 **numerical-evidence**（N=400）。独立 claim 候选（但 (1+0.62λ) 归属为 McMillan 1968 非 AD，且与 f₁ 简并分不开）。
 
 ---
 
@@ -112,6 +123,7 @@
 - **数值门脚本**：与各 `.md` 同名的 `.py`（如 `p4_g2_analytic_bounds.py`）；运行前 `export OMP_NUM_THREADS=1`。
 - **求解器**：`theory/solvers/`（`eliashberg_iso.py` 全非线性求解器、`lambda_star.py` λ\_\* 泛函）。见该目录 README。
 - **过程脚本 / 探针**：`theory/notes/_scratch_ir/`（git-ignored，非承重、含 rebuild 源）。
-- **审查记录**：`theory/notes/2026-09-*_*review.md`（对抗核验审计轨迹）。
+- **审查记录**：`theory/notes/*/*_review_*.md`（对抗核验审计轨迹；2026-09-18 起 notes 已按主题分子目录，路由见 `theory/notes/INDEX.md`）。
+- **笔记语料**：`theory/notes/`（69 篇 2026-09-16/17 新增）—— 证据轨迹、探索过程、订正记录。**权威状态在 auto-memory**（`MEMORY.md` + `memory/*.md`），笔记是原始材料不是结论。
 - **文献 / 一手数据**：`library/`、`theory/data/`（各有 README/MANIFEST）。
 - **总纲**：`theory/PROGRAM.md`（研究纲领叙事）；`README.md`（工作区总览）。

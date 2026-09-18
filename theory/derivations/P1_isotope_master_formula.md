@@ -214,7 +214,7 @@ Mishra et al. 的 Figshare 数据集（CC BY 4.0，`data/external/mishra_h3s_d3s
 | fbw_adia（+DOS） | 0.436 | 0.343 |
 | fbw_na（+顶角+DOS） | 0.419 | **0.313** |
 
-由此（非谐、200 GPa；**误差**：Tc 由能隙消失温度读取，网格 1–2 K，reviewer 用 √(Tc−T) 拟合 39 个文件外推得 RMS 0.54 K；下表 ± 取保守 σ_Tc = 1 K，见 `notes/2026-09-08_P1v06_P2v0_review_report.md`）：
+由此（非谐、200 GPa；**误差**：Tc 由能隙消失温度读取，网格 1–2 K，reviewer 用 √(Tc−T) 拟合 39 个文件外推得 RMS 0.54 K；下表 ± 取保守 σ_Tc = 1 K，见 `notes/P1v06_P2v0_review_report_2026-09-08.md`）：
 
 | 项 | 值 | 来源 |
 |---|---|---|

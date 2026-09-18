@@ -2,7 +2,7 @@
 
 建立：2026-09-12　修订：2026-09-12　状态：v0.2（**三处 CHALLENGED 已订正、五处 DOWNGRADE 已如实记账（reviewer 2026-09-12）**；窗内定理已给出解析论证，常数为 float64 且为有限 N **高估**；跨窗全局唯一性在 r=3 处真实失效，已量化）
 上游：`P4_uniqueness_strategy.md`（μ\*=0 完整证明：引理 A/B、推论 A′/B′，已证已审）、`P4D_coulomb_operator.md`（§1 算子形式 𝔎_c=2|u⟩⟨u|、§3 Layer 1/2 证书与物理锚点）、`P4_conjecture2.md` §6.2（核-通用算子 𝒪[f]）。
-审查：`theory/notes/2026-09-12_coulomb_uniqueness_review.md`（对抗核验，19 靶：3 CHALLENGED / 5 DOWNGRADE / 11 CONFIRMED；致命测试 357 格 × 25 μ̃ **0 违反**，min q = 5.23e−3；建议「修订后 CONFIRMED」）。本版逐条落实其修法：**结论未变**（11 个锚点按更强的窗内 inf 假设逐一复算仍全部通过），三处 CHALLENGED 的修补都不需要新的数值输入（引理 1 补 κ<1 是免费的，因为 μ̃<μ̃\_\* 已蕴含它），变的是量词、假设、记账，以及新增的窗内 inf 列、弹性/翻转预算表与 N-收敛表；§3 阈值表同时由 N=200 统一到 N=400，末位有微小变动。
+审查：`theory/notes/coulomb/coulomb_uniqueness_review_2026-09-12.md`（对抗核验，19 靶：3 CHALLENGED / 5 DOWNGRADE / 11 CONFIRMED；致命测试 357 格 × 25 μ̃ **0 违反**，min q = 5.23e−3；建议「修订后 CONFIRMED」）。本版逐条落实其修法：**结论未变**（11 个锚点按更强的窗内 inf 假设逐一复算仍全部通过），三处 CHALLENGED 的修补都不需要新的数值输入（引理 1 补 κ<1 是免费的，因为 μ̃<μ̃\_\* 已蕴含它），变的是量词、假设、记账，以及新增的窗内 inf 列、弹性/翻转预算表与 N-收敛表；§3 阈值表同时由 N=200 统一到 N=400，末位有微小变动。
 脚本：`theory/derivations/p4d_coulomb_uniqueness.py`（S0–S8；`PN=400` 全跑 **432 检查 / 371 s**（同机负载下曾测 491 s），覆盖全部 11 个物理锚点；`PN=200` 会跳过 N_c>100 的两个锚点，S3/S8 相应减少断言）。
 
 ---

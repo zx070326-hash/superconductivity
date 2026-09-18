@@ -10,7 +10,7 @@
 >    `theory/notes/` 多个文件顶部打了订正横幅，本文不反映那些订正。
 > 2. **§一.可发表性 / §七.论文写作 / §结语 中的期刊接受率、IF、"首次/首个"等表述是编辑性推测
 >    与优先权主张，不是研究结论**，未做穷尽性文献核查（同类主张已在
->    `theory/notes/two_parameter_eliashberg_operator_2026-09-16.md` 中被撤下，理由见该文件订正横幅）。
+>    `theory/notes/gamma/two_parameter_eliashberg_operator_2026-09-16.md` 中被撤下，理由见该文件订正横幅）。
 > 3. **已修的实质错误（2026-09-16）**：§2.4 把 b₁ 与 c₀ 的**数值拟合值**当作**闭式值**抄录，
 >    构成 numerical-evidence 冒充 analytic 的越级。原文 `b₁=0.3584246`、`c₀=0.4635332`；
 >    闭式真值 `b₁ = 49π²/144 − 3 = 0.3584070531…`、`c₀ = γ + ln4 − 3/2 = 0.4635100…`
@@ -165,8 +165,8 @@ C_∞ ∈ [0.182726247771, 0.182726287025]
 
 **文件**：
 - `theory/derivations/P4_interchange_uniformity.md`（v0.6）
-- `theory/notes/2026-09-10_interval_extension_review.md`（reviewer 对抗审核）
-- `theory/notes/2026-09-11_interval_extension_hi_review.md`（第二轮审核）
+- `theory/notes/lemmaC/interval_extension_review_2026-09-10.md`（reviewer 对抗审核）
+- `theory/notes/lemmaC/interval_extension_hi_review_2026-09-11.md`（第二轮审核）
 
 ---
 
@@ -219,7 +219,7 @@ c₃ = −x³_max g‴/(6g_max) = 0.8959（纯数）
 
 **文件**：
 - `theory/derivations/P1_isotope_master_formula.md`（v0.7）
-- `theory/notes/2026-09-08_P1_round1.md`（闭环记录）
+- `theory/notes/isotope/P1_round1_2026-09-08.md`（闭环记录）
 
 ---
 
@@ -241,7 +241,7 @@ c₃ = −x³_max g‴/(6g_max) = 0.8959（纯数）
 
 **文件**：
 - `theory/derivations/P2_vertex_sign_criterion.md`（v0.7）
-- `theory/notes/2026-09-08_P2_round2.md`（符号问题解决记录）
+- `theory/notes/vertex/P2_round2_2026-09-08.md`（符号问题解决记录）
 
 ---
 
@@ -480,7 +480,7 @@ python p4d_coulomb_certify.py        # 8420 检查 / 609s
 
 ### 7.3 数据请求（可选）
 
-**邮件草稿**已准备（`theory/notes/draft_email_mishra_margine.md`）：
+**邮件草稿**已准备（`theory/notes/literature/draft_email_mishra_margine.md`）：
 - 收件人：Hari Paudyal, Mitsuaki Kawamura（Mishra/Margine 组）
 - 内容：请求 H3S/D3S 双频 λ^V 数据（非 factorized 核）
 - 理由：定量化顶角符号判据
@@ -634,10 +634,10 @@ python p4d_coulomb_certify.py        # 8420 检查 / 609s
    严格性纪律、机械约定、交付规则
 
 ### 审查记录（对抗审核轨迹）
-- `theory/notes/2026-09-10_interchange_review.md`
-- `theory/notes/2026-09-11_conjecture2_review.md`
-- `theory/notes/2026-09-12_uniqueness_review.md`
-- `theory/notes/2026-09-12_cii_m2_review.md`
+- `theory/notes/lemmaC/interchange_review_2026-09-10.md`
+- `theory/notes/theoremI/conjecture2_review_2026-09-11.md`
+- `theory/notes/coulomb/uniqueness_review_2026-09-12.md`
+- `theory/notes/lemmaC/cii_m2_review_2026-09-12.md`
 
 ### Auto-memory（演进状态）
 - `C:\Users\charles\.claude-apexin\projects\D--physics-superconductivity\memory\MEMORY.md`

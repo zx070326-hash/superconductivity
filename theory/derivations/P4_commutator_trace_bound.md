@@ -61,7 +61,7 @@
 ≤2× 的 ‖[A,B]‖_F 上界。任务建议的「显式 Hankel/Toeplitz 核结构 + 符号分组 +
 闭式级数（ζ、digamma）」路线（即从 (4.4) 的纯迹形式 tr(A²B²)−tr(ABAB) 出发，
 逐项展开四重求和）**本稿未能在给定时间内推进到可判定阶段**——四重求和的
-符号分组比 §2.3（`2026-09-13_gap_lorentz_probe.md`）里双重求和 tr B_ϖ² 的
+符号分组比 §2.3（`gap_lorentz_probe_2026-09-13.md`）里双重求和 tr B_ϖ² 的
 显式级数复杂得多，且 tr(A²B²)、tr(ABAB) 的差值本身正负号不由单项决定
 （这正是 CLAUDE.md 强调的「截断迹之差时符号方向不自动确定」的具体实例）。
 这一路线**未证伪、也未证实**，留作诚实边界（§4 条目 3）。
@@ -141,7 +141,7 @@ numerical-evidence）：
   三个显式初等函数试探向量的 Rayleigh 商之最大值，**解析**下界（对任意固定
   截断维数 M，每个 Rayleigh 商都是 x 的初等有理函数，取 max 保持下界性质）。
 - λ₂_hi(x) := min(√(tr Gdom(x)² − Gdom(x)₀₀²), Θ*) —— Gdom 是 §2.3
-  （`2026-09-13_gap_lorentz_probe.md`）一般核重排恒等式给出的
+  （`gap_lorentz_probe_2026-09-13.md`）一般核重排恒等式给出的
   「重排支配算子」，满足 𝓗⪯Gdom（对任意非负核成立，见该文档 §1 定理），
   故 λ₂(𝓗)≤λ₂(Gdom)≤‖Gdom off-diag part‖ 型的二阶迹界。
 
@@ -239,7 +239,7 @@ worst |C|/E=**0.3128**（ϖ=20，余量 3.2 倍）。原缺口区间 [1.46,1.63]
 - 本稿引用但**未修改** `P4_concavity_q_route.md`（(4.1)-(4.5) 的推导）、
   `p4_concavity_q_route.py`（基线门禁脚本，含 THETA_STAR=0.6349 精度较低的
   历史遗留常量、Gate 9 的 0.42 系数——均未改动，仅在本稿独立复核其数字）、
-  `2026-09-13_gap_lorentz_probe.md`（§2.3 tr B_ϖ² 显式级数、§9 主会话订正）、
+  `gap_lorentz_probe_2026-09-13.md`（§2.3 tr B_ϖ² 显式级数、§9 主会话订正）、
   `p4_concentration_bound.py`（只读复用 `u_vec/O_of/f_lor/top_eig`）。
 - 本稿**独立重新实现**（未 import）`worktree-agent-a8932ec4c14045b28:
   theory/derivations/p4_concavity_gap2_gates.py` 与

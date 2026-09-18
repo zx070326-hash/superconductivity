@@ -81,9 +81,9 @@ superconductivity/
 - [x] 2026-09-08 启动氢化物实验数据表 + 同位素公式核对（researcher agent）→ `theory/data/hydrides_experimental.csv`、`surveys/P1_isotope_data_formulas_2026-09-08.md`、`library/index/P1.json`（17 PDF）
 - [x] 2026-09-08 P1 推导 v0 → reviewer 发现 3 个致命问题（McMillan 饱和伪象、主公式结构、部分同位素缺推导）→ **v0.2** 修正并新增"谱重分布通道"（Errea 2015 表 I）与 H3S 第一轮账
 - [x] 2026-09-08 求解器 v0 到位（32 测试全绿）；P1 v0.3（二轮审稿 N1–N4）→ v0.4（数值：闭式高估库仑项 2–4×）
-- [x] 2026-09-08 **第一篇闭环记录** `theory/notes/2026-09-08_P1_round1.md`
-- [x] 2026-09-08 二轮/三轮原文抽取：H3S α_exp=0.3（非 0.44）、LaH10 α_exp=0.57/0.62（文献 0.46 无一手来源）、YH9 无数据、LaD10 结构未确认 → `notes/2026-09-08_P1_round2_data.md`
-- [x] 2026-09-08 **Mishra Figshare 数据集**（H3S/D3S × 谐波/非谐 × fsr/fbw × adia/na）→ H3S 四因子数值分解闭合；DOS×顶角交叉项不可忽略 → `notes/2026-09-08_P1_round3_mishra_dataset.md`；推导稿 v0.6
+- [x] 2026-09-08 **第一篇闭环记录** `theory/notes/isotope/P1_round1_2026-09-08.md`
+- [x] 2026-09-08 二轮/三轮原文抽取：H3S α_exp=0.3（非 0.44）、LaH10 α_exp=0.57/0.62（文献 0.46 无一手来源）、YH9 无数据、LaD10 结构未确认 → `notes/isotope/P1_round2_data_2026-09-08.md`
+- [x] 2026-09-08 **Mishra Figshare 数据集**（H3S/D3S × 谐波/非谐 × fsr/fbw × adia/na）→ H3S 四因子数值分解闭合；DOS×顶角交叉项不可忽略 → `notes/isotope/P1_round3_mishra_dataset_2026-09-08.md`；推导稿 v0.6
 - [x] 2026-09-08 P2 公式抄录到位（PGS 原始论文不在 arXiv；EPL 42,667 = cond-mat/9710159 等替代源；Schrödi 2020 挑战 Q_c 图像）→ `surveys/P2_vertex_formulas_2026-09-08.md`
 - [x] 2026-09-08 **P2 启动稿** `theory/derivations/P2_vertex_sign_criterion.md`：从 Mishra 数据反推顶角修正的同位素标度 δ_D/δ_H ≈ 0.66–0.72 ≈ M^{-1/2}；顶角效应 160→200 GPa 增强 3×；LaH10 顶角路径基本关闭
 - [x] 2026-09-08 reviewer 核验 P1 v0.6 §4.1 + P2 v0：无致命；s_λ 更正（0.95→1.27）、交叉项加误差棒（四点同号为主证据）、160 GPa 论证改绝对量、数据集身份（Figshare = 2510.25902）→ P2 v0.1
@@ -94,16 +94,16 @@ superconductivity/
 - [x] 2026-09-08 researcher：2608.14949 无氘化体系顶角数据；第二家族 H/D 顶角需向作者索取（用户决定）
 - [x] 2026-09-08 reviewer 核验 P2 §5：推导正确；压力比吻合依赖 EPW 窗口、高能空带贡献 15–30%、判据降级为静态区部分答案 → P2 v0.4
 - [x] 2026-09-08 LaH10 DOS 形状（文献）：与 H3S 同在 vHs 下坡但更平坦 → 顶角压制约 H3S 一半、同号；LaH10 α>½ 顶角路径关闭
-- [x] 2026-09-08 **P2 第一轮闭环记录** `theory/notes/2026-09-08_P2_round1.md`
+- [x] 2026-09-08 **P2 第一轮闭环记录** `theory/notes/vertex/P2_round1_2026-09-08.md`
 - [x] 2026-09-08 其他材料 adia/vertex Tc 数据：Mishra 2507 Table I 确认我们的 FSR 提取；MgB2 σ 带（Cappelluti 2002）为动态区增强的反例；H3S/D3S 圆顶错开（一度记为"结构侧第五因子"）
-- [x] 2026-09-08 **"第五因子"闭环为负结果**（`derivations/P1b_structural_fifth_factor.md` v0.1 + `notes/2026-09-08_P1b_fifth_factor_closeout.md`，researcher 一手核验 `surveys/h3s_d3s_dome_offset_fifth_factor_2026-09-08.md`）：结构相变压力同位素移动 ΔP_c 真实（12–16 GPa，纯量子核效应），但立稿的"低压 α≈0.44"是自算量且用了污染 D3S 样品；Tc 峰在结构相变上方 40+ GPa（Cherubini 2026）；剩余 α 压力依赖被纯配对+Lifshitz 简并 → **不构成对报道 α（P>170, ≈0.30）的可测污染，P1 四因子无需第五因子**。P2 §6 相应降级
+- [x] 2026-09-08 **"第五因子"闭环为负结果**（`derivations/P1b_structural_fifth_factor.md` v0.1 + `notes/isotope/P1b_fifth_factor_closeout_2026-09-08.md`，researcher 一手核验 `surveys/h3s_d3s_dome_offset_fifth_factor_2026-09-08.md`）：结构相变压力同位素移动 ΔP_c 真实（12–16 GPa，纯量子核效应），但立稿的"低压 α≈0.44"是自算量且用了污染 D3S 样品；Tc 峰在结构相变上方 40+ GPa（Cherubini 2026）；剩余 α 压力依赖被纯配对+Lifshitz 简并 → **不构成对报道 α（P>170, ≈0.30）的可测污染，P1 四因子无需第五因子**。P2 §6 相应降级
 - [x] 2026-09-08 求解器 muchem 方向核查：约定与 EPW 一致，Tc 修正符号随能量截止翻转（EPW 用 ±1 eV 窗）——无 bug
 - [x] 2026-09-08 **P2 v0.5 动态版检验**：各向同性一阶顶角按 Eliashberg 核加权为小正数，式 (5.1) 的吻合无机制支持；动量结构扫描（9 种 g²(Q)、vHs 慢电子）也给不出负号
 - [x] 2026-09-08 Mishra 2507 顶角实现抄录：λ^V 为正，压制来自两通道矩阵结构；Schrödi Eq. 23–24 逐字转录并线性化 → 正的 P 削弱配对核、各向同性 FSR 恒压低 Tc（§5.6）
-- [x] 2026-09-08 **P2 v0.7：符号问题解决（`p2_schrodi_fsr.py`，12 测试）**。Schrödi Eq.(24) 转录更正（第 3、4 项 Δ/ω，reviewer+implementer 6× 放大双核对）后，两通道数值裁决：Z 升 Tc(+2333 δ/P)、Δ 压 Tc(−4847) 且约 2× 主导、净负(−2506)，符号与 EPW FSR(−0.21/−0.15) 一致，同位素比 δ_D/δ_H≈0.67 vs 0.71。**负号在两通道结构、不在顶角函数**；量级因 factorized 核过估 3–4× 不作定论 → `theory/notes/2026-09-08_P2_round2.md`
+- [x] 2026-09-08 **P2 v0.7：符号问题解决（`p2_schrodi_fsr.py`，12 测试）**。Schrödi Eq.(24) 转录更正（第 3、4 项 Δ/ω，reviewer+implementer 6× 放大双核对）后，两通道数值裁决：Z 升 Tc(+2333 δ/P)、Δ 压 Tc(−4847) 且约 2× 主导、净负(−2506)，符号与 EPW FSR(−0.21/−0.15) 一致，同位素比 δ_D/δ_H≈0.67 vs 0.71。**负号在两通道结构、不在顶角函数**；量级因 factorized 核过估 3–4× 不作定论 → `theory/notes/vertex/P2_round2_2026-09-08.md`
 - [x] 2026-09-08 H3S q 分布（Errea 2015）：耦合"fairly uniform" in q，非大 q 主导 → 各向同性路线给不出负号，佐证机制在通道结构 → `surveys/h3s_q_distribution_2026-09-08.md`
 - [ ] P2 下一步：精确双频 λ^V（非 factorized）定量级——需 Mishra/Margine 数据；跨材料检验（数据缺）；LaH10 自身顶角 DFT（判据层面已关闭）
-- [ ] 用户决定：是否向 Mishra/Margine 发数据请求（`theory/notes/draft_email_mishra_margine.md`）
+- [ ] 用户决定：是否向 Mishra/Margine 发数据请求（`theory/notes/literature/draft_email_mishra_margine.md`）
 - [x] 用 Mishra 的 H3S.dos 标定求解器 DOS 实现（非谐 <1 K，谐波 5–7 K）
 - [ ] 用求解器扫 DOS×顶角交叉项
 - [x] 2026-09-08 D1–D4 方向卡填入现状摘要与切入点（commit 15fd936）；D5–D7 保留为参考
@@ -122,8 +122,9 @@ theory/
 ├── solvers/              ← 各向同性 Eliashberg 求解器（库仑核、能量依赖 DOS、质量缩放、模型顶角核）+ lambda_star.py
 ├── data/                 ← 实验数据表 hydrides_experimental.csv、理论值表 hydrides_theory.csv（各带来源）
 ├── paper/                ← 论文形态草稿（P4 §3 等）
-└── notes/                ← 每轮闭环记录 + 对抗核验审查（2026-09-*_*review.md），固定结构见 PROGRAM.md §3
+└── notes/                ← 每轮闭环记录 + 对抗核验审查（`*_review_*.md`），**按主题分 12 个子目录**；
+                             ★ 路由规则与逐篇判定见 `theory/notes/INDEX.md`，固定结构见 PROGRAM.md §3
 ```
 
 - **要理解目前证到哪一步、哪条结论多硬** → `theory/derivations/INDEX.md`（逐篇）+ `theory/PROGRAM.md`（叙事）+ 本机 auto-memory（演进中的当前状态）。
-- 严格性分三级（**解析 > 认证 > 数值证据**），每条结论显式标级——纪律见根目录 `CLAUDE.md` §1。
+- 严格性分**四**级（**analytic > rational-exact > certificate > numerical-evidence**），每条结论显式标级——纪律见根目录 `CLAUDE.md` §1。

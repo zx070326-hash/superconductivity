@@ -284,7 +284,7 @@ non-negative). 4. Telescoping: $F(k)=\sum_{K\ge k}\bigl(F(K)-F(K+1)\bigr)$ for $
 > $x=\bigl(M\mathbf 1_{[0,n_0)}\bigr)-\bigl(M\mathbf 1_{[0,n_0)}-x\bigr)$ fails: the second
 > term need not be non-increasing (take $x=(1,0,1,0)$, $M=10$). The Abel splitting above is
 > the correct one.
-> <!-- src: notes/2026-09-12_uniqueness_review.md §4.1（reviewer 订正，已并入 P4_uniqueness_strategy.md §3.A 步骤2） -->
+> <!-- src: notes/uniqueness_review_2026-09-12.md §4.1（reviewer 订正，已并入 P4_uniqueness_strategy.md §3.A 步骤2） -->
 
 ---
 
@@ -385,7 +385,7 @@ S(a,b):=\sum_{m=a}^{b-1}u_m\quad(\,=0\text{ if }b\le a).
 $$
 
 <!-- src: P4_uniqueness_strategy.md §2, §2.A（引理 A、B 的初等证明）；
-     审查：notes/2026-09-12_uniqueness_review.md §1–§2（CONFIRMED） -->
+     审查：notes/uniqueness_review_2026-09-12.md §1–§2（CONFIRMED） -->
 
 **Lemma 3.6 (elementary properties of $u$ and $d$).**
 
@@ -500,7 +500,7 @@ so $f\in\ell^1$; by linearity $\mathcal O[f]=\mathfrak H(\varpi')-\mathfrak H(\v
 > finite truncation (3.1) as above. A direct rearrangement justified by Tonelli is *not*
 > available: $\mathcal O[f]$ has negative entries ($-L_1[f]$), so finiteness of
 > $\langle v,\mathcal O[f]v\rangle$ does not imply absolute convergence of the double series.
-> <!-- src: notes/2026-09-12_uniqueness_review.md §4.2（reviewer 订正）；P4_uniqueness_strategy.md §3.A 步骤3 括号 -->
+> <!-- src: notes/uniqueness_review_2026-09-12.md §4.2（reviewer 订正）；P4_uniqueness_strategy.md §3.A 步骤3 括号 -->
 
 ### 3.2.2 Lemma B: the ladder basis is Metzler
 
@@ -644,7 +644,7 @@ the statement are finite sums of entries, so the same expansion applies to them,
 is $\ge0$ by Lemma 3.11. $\square$
 
 <!-- src: P4_uniqueness_strategy.md §2 推论 B′、§3.A 步骤1；
-     审查：notes/2026-09-12_uniqueness_review.md §3（Abel 逐元合法性 CONFIRMED） -->
+     审查：notes/uniqueness_review_2026-09-12.md §3（Abel 逐元合法性 CONFIRMED） -->
 
 ---
 
@@ -742,7 +742,7 @@ $$
 $$
 and $e^{t\mathfrak K_T}v\in\mathcal C$ because $\mathcal C$ is closed. $\square$
 
-<!-- src: P4_uniqueness_strategy.md §3.A 步骤 1；审查 notes/2026-09-12_uniqueness_review.md §3（CONFIRMED，含末行系数由情形 I 给出） -->
+<!-- src: P4_uniqueness_strategy.md §3.A 步骤 1；审查 notes/uniqueness_review_2026-09-12.md §3（CONFIRMED，含末行系数由情形 I 给出） -->
 
 ---
 
@@ -1231,7 +1231,7 @@ them; 19 and 21 are genuine discrepancies found in the sources and need main-ses
 10. **[ruled] Do we cite the numerical companion?** `p4_uniqueness_lemmas.py` (37 checks,
     $N=500$) is a regression gate for the closed forms (3.4), (3.6), (3.8) and pins down the
     equality sets exactly; the independent reviewer reproduction is in
-    `notes/2026-09-12_uniqueness_review.md`. Since §3 is fully analytic, the script is *not*
+    `notes/uniqueness_review_2026-09-12.md`. Since §3 is fully analytic, the script is *not*
     evidence for anything here. Options: (i) no mention; (ii) a footnote in the
     reproducibility section (§7) saying the closed forms were cross-checked numerically.
     I wrote §3 with no mention; recommend (ii).
@@ -1240,7 +1240,7 @@ them; 19 and 21 are genuine discrepancies found in the sources and need main-ses
     here. **Action for §7 (reproducibility):** add a footnote recording that the closed forms
     (3.4), (3.6), (3.8) and their equality sets were cross-checked numerically
     (`p4_uniqueness_lemmas.py`, 37 checks, $N=500$; reviewer reproduction in
-    `notes/2026-09-12_uniqueness_review.md`), with the explicit caveat that **§3 is purely
+    `notes/uniqueness_review_2026-09-12.md`), with the explicit caveat that **§3 is purely
     analytic and the script constitutes no part of the evidence** — it is a regression gate
     against transcription error in the closed forms, nothing more. The footnote must not be
     attached to §3 itself.
