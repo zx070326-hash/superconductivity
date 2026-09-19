@@ -212,7 +212,14 @@ N=300/600 一致（Gate 10，相对漂移 ≤ 6.5e-5）。
    与 `theory/notes/coulomb/mustar_extremality_failure_map_2026-09-17.md` §5。
    （**旁证**：同一条「精确预解式取代 Davis–Kahan」的替换在定理 CE 上已独立走通——
    引理 2 整段可去，物理锚点认证从 13/14 变 14/14、最劣余量 1.002→1.377，
-   见 `P4D_coulomb_extremal_threshold.md` §6。这支持把同一手法用于此处的 R 项。）
+   见 `P4D_coulomb_extremal_threshold.md` §6。这支持把同一手法用于此处的 R 项。
+   **★ 局限性补注（2026-09-19）**：那条「14/14」只覆盖每个锚点的**一个**近简并两原子
+   形状，放开到两原子族全体（定理 TA 证明该族就是极值问题的全体）后，14 行里 12 行的
+   Rayleigh 步骤本身为假（详见 `P4D_coulomb_extremal_threshold.md` §7、
+   `theory/notes/coulomb/mustar_strong_coupling_extremality_2026-09-19.md` §4.4）；
+   「精确预解式取代 Davis–Kahan」这一**手法**仍然成立且有价值，但它在定理 CE 一侧买到的
+   「14/14 全过」不能再读作对该手法在此处 R 项上同样会给出全覆盖的旁证——只能读作
+   「该手法把认证行数从 13 提到了 14」，覆盖范围本身另需重新评估。）
 
    **后续（2026-09-17，秩一精确预解式）**：上面的一模公式已被恒等式取代——
    R = 2⟨y_⊥,(h−A)⁻¹y_⊥⟩，y_⊥ := (I−vvᵀ)M′v，[analytic]，证明用久期方程
