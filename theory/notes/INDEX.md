@@ -35,7 +35,7 @@
 |---|---|---|
 | [`theoremI/`](theoremI/) | 9 | 定理 I（配对通道排斥/秩一主导性免疫）与 𝔤(2) 证书 |
 | [`lemmaC/`](lemmaC/) | 19 | 引理 C（H 凹性）与 λ₂ 上界的历次证书、路线尝试 |
-| [`coulomb/`](coulomb/) | 21 | μ*>0 库仑：极值性、窗内唯一性、CE/CE′ 阈值、谱隙塌缩机制、H_μ 的托尔马乔夫透镜、(E-env) 凹包络三明治核验、消费点核查；两原子约化定理 + 强耦合端闭合 + Rayleigh 路线物理锚点证伪 |
+| [`coulomb/`](coulomb/) | 22 | μ*>0 库仑：极值性、窗内唯一性、CE/CE′ 阈值、谱隙塌缩机制、H_μ 的托尔马乔夫透镜、(E-env) 凹包络三明治核验、消费点核查；两原子约化定理 + 强耦合端闭合 + Rayleigh 路线物理锚点证伪；Rayleigh 两段式路线 Stage B 预算探针 |
 | [`gamma/`](gamma/) | 17 | γ-model + Coulomb：c₁²、Davis–Kahan/Schur 证书、渐近；非声子机制结构相容性侦察 |
 | [`materials/`](materials/) | 16 | 亏损预算证书化、材料数据核验、Eliashberg 交叉核验 |
 | [`isotope/`](isotope/) | 10 | 同位素指数（P1 系列）与 2Δ/kTc 第二观测量 |
@@ -111,6 +111,7 @@
 | [hmu_tolmachev_lens_review_2026-09-18.md](coulomb/hmu_tolmachev_lens_review_2026-09-18.md) | 2026-09-18 | 对抗核验：peer agent（未提交，另一 worktree）宣称的 (E-env) 凹包络三明治定理（𝔨≤Ĥ_μ≤h₀，对一切 μ*≥0 无条件） | analytic（(CVX)、Weyl 单调、三明治逻辑）+ numerical-evidence（旗舰数字 +5.751e-3、Tc(P)/Tc(E)=1.0286 独立复现） | live（核心链条全 CONFIRMED，2 项因预算未复核，未计入通过率） | 总评「无 CHALLENGED；净收益=覆盖范围（无条件性），非数值收紧，已独立核实」 |
 | [eenv_consumption_point_audit_2026-09-18.md](coulomb/eenv_consumption_point_audit_2026-09-18.md) | 2026-09-18 | (E-env) 消费点核查：grep `theory/notes`+`theory/derivations` 全仓，零引用（`P4D_coulomb_operator.md` 建议的 Layer 2.5 未写入） | 检索型判定（非计算分级），预算复核基于原文件 §4.2 数字读取 | live（判定：无消费点，关闭数学投入线，只建议半天量级文档挂靠） | §2.2 三条 grep 全仓零命中；§4「双重预算为 0：接入成本=0 收益、不接入成本=0 损失」 |
 | [mustar_strong_coupling_extremality_2026-09-19.md](coulomb/mustar_strong_coupling_extremality_2026-09-19.md) | 2026-09-19 | 定理 TA（两原子约化，关掉 hmu_tolmachev §4.4 的紧性缺口）+ 定理 SC（λ>1+r² 时强耦合端无条件闭合）+ Abel 记账恒等式 (AB) + **Rayleigh 路线在 14 个锚点行的 12 行上为假** | mixed（定理 TA、定理 SC、(AB) 与三个符号事实为 **analytic**；**其余全部 numerical-evidence**，零 certificate / 零 rational-exact） | live | §2.2 三步初等证明（不用紧性/Bauer/Winkler）；§3.3 λ\*(r)=1/h(1/r) 表与 1+r² 的 1.32–1.35× 松；§4.4 N 收敛 6–8 位的 ⟨v_P,𝒪[d]v_P⟩<0；§5 本会话内一次自我订正（形状网格未触边界 + 自编 λ 挂材料名，已作废） |
+| [mustar_stageB_budget_probe_2026-09-19.md](coulomb/mustar_stageB_budget_probe_2026-09-19.md) | 2026-09-19 | 预算探针：§4.5 未做的 `sup_{margin<0.5} ϱ` 首次测出 ≈0.687–0.689（14 锚点行 × 触边界两原子网格，N 收敛×8 到 8 位）——严格 <1，Stage B 值得升级；段 A 本身未碰 | numerical-evidence（探针性质，零 certificate / 零 rational-exact） | live | §2「全部 14 行的 sup ϱ [0,0.5) ≤ 0.689337」；§2.2 margin=0.5 处连续无跳变；§3「预算有限且 <1 ⟹ 不满足『预算为 ∞ 不要派活』的否决条件」 |
 
 ## γ-model
 
