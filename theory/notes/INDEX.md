@@ -43,7 +43,7 @@
 | [`meta/`](meta/) | 4 | 跨文档一致性审查、闭合状态盘点、会话恢复/triage 记录 |
 | [`ceiling/`](ceiling/) | 11 | 多带/各向异性 Tc 天花板（引理 G、(G′) 路线、μ* 延拓，规范陈述见 `ceiling/multiband_ceiling_CANONICAL_2026-09-18.md`）；单带零参数一行公式见 `ceiling/oneliner_zero_parameter_2026-09-18.md`；λ_ij 判据违反案例的生成过程核查 |
 | [`probes/`](probes/) | 18 | 其他体系（Hubbard、Kondo、CDW/SDW、量子算法、宇宙学等）的可行性/普适性探针，多为 NO-GO 或阻塞；非声子机制立项级侦察（含 FeSe 材料探针、耦合矩阵开源数据普查） |
-| [`misc/`](misc/) | 12 | 不便归入以上分组的杂项（P3 λ_* 系列、弱耦合级数审查、对偶定理、论文草稿节、λ-晶格联合天花板等） |
+| [`misc/`](misc/) | 13 | 不便归入以上分组的杂项（P3 λ_* 系列、弱耦合级数审查、对偶定理、论文草稿节、λ-晶格联合天花板、margin=1 参数点等） |
 
 ---
 
@@ -235,6 +235,7 @@
 | [lambda_stability_tc_joint_ceiling_2026-09-18.md](misc/lambda_stability_tc_joint_ceiling_2026-09-18.md) | 2026-09-18 | λ 稳定性上界与 KAY Tc 上界能否合并为一条联合约束：可行性评估，N=1 玩具自洽求解 dlnTc/dσ²=+1.88 | mixed（κ₁(϶̄) analytic 继承 + 玩具联合自洽解 numerical-evidence，双路独立复核）| exploratory（局部/微扰结果，非全局定理；γ₃ 项未核） | §4/§5：两条独立路径（直接数值解 vs 隐函数定理闭式组合）4 位吻合；§6 列 5 条未解决点 |
 | [lambda_lattice_width_real_material_check_2026-09-18.md](misc/lambda_lattice_width_real_material_check_2026-09-18.md) | 2026-09-18 | σ² 澄清为谱形状展宽（非晶格位置无序）+ 用 Cerqueira 真实 DFT α²F 谱独立检验 κ_S>0 方向（r vs λ_* 相关 0.92, n=215, p~1e-88） | numerical-evidence（DFT 计算谱 + mpmath 点算，非区间外包） | live（方向性支持，未测联合天花板整体陈述） | §4/§5：Pearson/Spearman 相关系数 + 5 条明确未证边界 |
 | [hydride_lambda_star_joint_ceiling_2026-09-19.md](misc/hydride_lambda_star_joint_ceiling_2026-09-19.md) | 2026-09-19 | Mishra H3S/D3S（200/160GPa，谐波/非谐）6 个真实 α²F 谱：headroom=λ_*/λ 压到 2.1–3.4×（vs 常规材料 20–70×）；**直接**求解 Tc_ceiling(λ_*[P],P)，4/4 配对（谐波↔非谐、200↔160GPa）方向与 +1.88 一致 | numerical-evidence（DFT 谱 + mpmath/brentq 点算，非区间外包，n=6 不做统计显著性声称） | live（方向性支持，仍未找到 headroom<2 的"卡边界"材料） | §3/§4：4/4 配对同号；§4 列 7 条未证边界 |
+| [hydride_margin_one_parameter_point_2026-09-19.md](misc/hydride_margin_one_parameter_point_2026-09-19.md) | 2026-09-19 | margin=1 的参数点：**命题 1 [analytic] λ_*[P] ≥ λ_*[Einstein]=1/g_max=3.6915 ⟹ 光改谱形永远关不上**；命题 2/3 [analytic] 𝔰⁽¹⁾≤1 且 λ→∞ 时→1 ⟹ m_1L⁽¹⁾≥√𝔤(2)=1.1481（**但方向审计禁止据此推"物理不可达"**）；稳定性边界上真 margin ∈[1,1.346]；2× 余量三因子分解 1.148(尺子)×1.172(稳定性)×1.25–1.81(离边界距离)；附 λ⟨ω²⟩ 在 har→anh 下不变 1.3e−6（定理 2 真实数据确认） | mixed：命题 1/2/3 与 m_true≤m⁽¹⁾ 为 **analytic**（常数 1/g_max、全部材料数值为 numerical-evidence；√𝔤(2) 继承 CERT-D rational-exact） | live | §4/§5 两条一行证明；§5.1 方向审计专节；§7 自我证伪"1.345 普适常数"（90/10 双峰给 3.178）；§10 标级表含 3 条"不作此陈述"；§11 列 7 条未证边界 |
 | [bcs_cold_atom_feasibility_2026-09-16.md](probes/bcs_cold_atom_feasibility_2026-09-16.md) | 2026-09-16 | BCS 冷原子 Tc/T_F 严格界方向可行性调研 | 调研/判定 | live（NO-GO，方向终止） | 状态行「完成，NO-GO 判定」 |
 | [cdw_universality_probe_2026-09-16.md](probes/cdw_universality_probe_2026-09-16.md) | 2026-09-16 | CDW/Peierls 是否展现 BCS 式谱不敏感性 | heuristic + numerical-evidence（部分待核） | exploratory | 自述「探索性/机制性排查」，§6 列 4 条未解决点 |
 | [dimension_universality_2026-09-16.md](probes/dimension_universality_2026-09-16.md) | 2026-09-16 | 维度普适性：d=2 van Hove 对数 vs Tc 不敏感性 | analytic（结构）+ numerical-evidence（8 核族） | live | 「共振点问题无定义；非共振点 η 不变」 |
