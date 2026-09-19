@@ -111,7 +111,7 @@
 |---|---|---|---|---|---|
 | **A** 普适速度极限 | 已并入主线 @318cfe2 | **已并入** | Tc < C_∞√(λ⟨ω²⟩)，C_∞=(1/2π)√𝔤(2)=0.18273，**所有 P、所有 μ\*≥0**（天花板**不依赖**包络门） | **解析**（单边） | 承重 `p4_g2_analytic_bounds.py` **389/0** + `p4_universal_tc_envelope.py` **66/0**〔memory 旧记的 `..._coulomb.py` 159/159 为已删 worktree 里的**未提交探针**、非承重、不可复现〕 |
 | **B** 全局双侧 Tc(λ) | `deep-global-tc-allcoupling` @6a5572a | 未合并（+11） | 所有 λ>0 双侧 bracket；**深带经 Prop.C 闭式 (C1) 变为完全解析、零标定常数** | 深带**解析** / 其余认证 | `p4_global_tc_allcoupling.py` **104/104**（全，150.2s）已 team-lead 权威复跑 |
-| **C** η/M「为何是氢」 | `etaM-corrected` @ed6de52 | 未合并（+2） | 定理 A：Tc < 0.18273·√(η/M)，η=N(0)⟨I²⟩ Hopfield，**μ\* 无关** | 定理 A **解析** | `P4_eta_over_M.py` 261/261（116.3s） |
+| **C** η/M「为何是氢」 | 已并入主线（`etaM-corrected` @ed6de52，经 9e1c83d 合并） | **已并入** | 定理 A：Tc < 0.18273·√(η/M)，η=N(0)⟨I²⟩ Hopfield，**μ\* 无关** | 定理 A **解析** | `P4_eta_over_M.py` 261/261（116.3s） |
 | **D4** μ\*>0 唯一性/极值 | `deep-mustar-completion` @36ba77a | 未合并（+1） | 多原子唯一性 + Einstein 极值机制逐字推广；L\*\*（数值探测）；L\*（κ≥1 近交叉）诚实 **OPEN** | **数值证据**（自标非定理） | `probe_Lstarstar_uniqueness_multiatom.py` 7/7 |
 | **D5** 引理 C 凹性 | `deep-lemmaC-analytic` @2ff4d54 | 未合并（+2） | E(x)>0、C≤0、q′=E−|C| 解析；残余 **|C|<E 仅数值证据**（诚实边界，廓线上界为已识别缺失件，四条路线已排除） | 结构**解析** + 边界**数值证据** | 见 `P4_concentration_bound.py` |
 | **D6** 各向异性增强 | `deep-anisotropy-enhancement` @5e5653d | 未合并（+1） | 定理 A：finite-N Bhatia–Davis λ_max 下界；定理 B：Tc 转换 | finite-N **解析** / N→∞ 数值 | 门 1280/1280（2.8s） |

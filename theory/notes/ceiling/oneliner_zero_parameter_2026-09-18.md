@@ -16,10 +16,10 @@ $$
 它上游依赖已合并主线的 `theory/derivations/P4_main_theorems.md` 定理 1(c) + 定理 2 +
 `theory/derivations/P4_g2_analytic.md`（𝔤(2) 的解析包围）。
 
-⚠ **分支状态**：`P4_eta_over_M.md` 本身在**未合并**分支 `etaM-corrected`（HEAD `ed6de52`）上，
-当前 `p4-conj2` 分支的工作树里**没有这个文件**（`git log --all` 找到它，工作树 `ls` 找不到）。
-`theory/derivations/INDEX.md:114` 把它列为「方向 C」并标「未合并（+2）」——这与本任务收到的派活描述一致，
-但意味着**这份规范来源尚未进入本分支**，读者要看它必须切到那个分支或用 `git show ed6de52:...`。
+**分支状态（2026-09-19 更新）**：`P4_eta_over_M.md` 所在分支 `etaM-corrected`（HEAD `ed6de52`）
+已于 `9e1c83d` 合并进 `p4-conj2`（无冲突、纯增量），当前工作树 `theory/derivations/P4_eta_over_M.md`
+可直接读取，不再需要 `git show`。`theory/derivations/INDEX.md:114`「方向 C」已同步改为「已并入」。
+（下文 §「一处流程问题」保留为历史记录，读作已解决。）
 
 符号定义：
 
@@ -236,6 +236,7 @@ Born–Oppenheimer 解耦下 $\eta$ 与 $M$ 无关（(A2)），所以天花板 $
 - **0/48 独立复核**：$\mathfrak f\in[0.1334,0.4384]$，均值 0.2475，违反 0/48，与仓库记载逐位一致（脚本见 §4）。
 - **来源间矛盾**：**没有发现真矛盾**，但发现一处高危混淆点（承重 2）——"上界对 μ*≥0 成立"与"Einstein 是
   μ*>0 下的极值谱"是两句不同范围的话，仓库措辞容易把它们并成一句假话，已在 §3 承重 2 拆开写清。
-- **一处流程问题**：规范来源 `P4_eta_over_M.md` 所在分支 `etaM-corrected`（`ed6de52`）**未合并进 p4-conj2**，
-  当前工作树没有这个文件，只能通过 `git show` 读取——建议 team-lead 决定是否需要先合并该分支，
-  否则这份一行公式笔记引用的"定理 A"在本分支不可直接复核。
+- **一处流程问题（已解决，2026-09-19）**：规范来源 `P4_eta_over_M.md` 所在分支 `etaM-corrected`（`ed6de52`）
+  当时**未合并进 p4-conj2**，工作树没有这个文件，只能通过 `git show` 读取。该分支已于 `9e1c83d` 合并（纯增量、
+  零冲突、与源分支逐字一致），本分支工作树现可直接读取 `theory/derivations/P4_eta_over_M.md`，
+  这份一行公式笔记引用的"定理 A"已可在本分支直接复核。
