@@ -42,7 +42,7 @@
 | [`literature/`](literature/) | 9 | 文献新颖性核查与致作者索取数据的邮件草稿；LAD 1979 原文追索 |
 | [`meta/`](meta/) | 4 | 跨文档一致性审查、闭合状态盘点、会话恢复/triage 记录 |
 | [`ceiling/`](ceiling/) | 11 | 多带/各向异性 Tc 天花板（引理 G、(G′) 路线、μ* 延拓，规范陈述见 `ceiling/multiband_ceiling_CANONICAL_2026-09-18.md`）；单带零参数一行公式见 `ceiling/oneliner_zero_parameter_2026-09-18.md`；λ_ij 判据违反案例的生成过程核查 |
-| [`probes/`](probes/) | 18 | 其他体系（Hubbard、Kondo、CDW/SDW、量子算法、宇宙学等）的可行性/普适性探针，多为 NO-GO 或阻塞；非声子机制立项级侦察（含 FeSe 材料探针、耦合矩阵开源数据普查） |
+| [`probes/`](probes/) | 19 | 其他体系（Hubbard、Kondo、CDW/SDW、量子算法、宇宙学等）的可行性/普适性探针，多为 NO-GO 或阻塞；非声子机制立项级侦察（含 FeSe 材料探针、耦合矩阵开源数据普查） |
 | [`misc/`](misc/) | 13 | 不便归入以上分组的杂项（P3 λ_* 系列、弱耦合级数审查、对偶定理、论文草稿节、λ-晶格联合天花板、margin=1 参数点等） |
 
 ---
@@ -258,6 +258,7 @@
 | [sdw_universality_probe_2026-09-16.md](probes/sdw_universality_probe_2026-09-16.md) | 2026-09-16 | SDW 探针：Cooper-log 不敏感性推广到 nesting-log，但结论不推广 | mixed（结构恒等式 analytic + χ₀ numerical-evidence） | live（不触及主线） | 「本探索不改变 P4 主线任何定理」 |
 | [spin_fluctuation_fese_material_probe_2026-09-19.md](probes/spin_fluctuation_fese_material_probe_2026-09-19.md) | 2026-09-19 | FeSe 自旋涨落五区数据代入 spm_gap PF/Metzler 前提与 λ_min(V) 二部图机制的材料级数值探针 | numerical-evidence（L1 转录输入 + 从零脚本计算） | live（明确标注对缺失 5/10 条边数据敏感，非鲁棒结论） | 本文 §3：Metzler 前提 1 在 Γ1-Γ2/M1-M2 边违反；二分 `{Γ1,Γ3,M2}\|{Γ2,M1}` 非教科书分裂 |
 | [spinfluc_coupling_matrix_open_data_census_2026-09-19.md](probes/spinfluc_coupling_matrix_open_data_census_2026-09-19.md) | 2026-09-19 | 自旋涨落媒介耦合矩阵开源数据普查（替代 Essenberger FeSe 缺失 5/10 边）——文献侦察，无代入计算 | 文献/仓库检索事实（不设 analytic/certificate 分级） | live（明确标注检索缺口，非穷尽普查） | §0：无现成数据集；§3 三条开源代码工具链（RPA_SrCo2As2/FLEX_IR/flex-general）均「可生成非现成」；§5 列出未核实项 |
+| [spinfluc_lambda_ij_literature_search_negative_2026-09-19.md](probes/spinfluc_lambda_ij_literature_search_negative_2026-09-19.md) | 2026-09-19 | 换路径找「已发表紧束缚+RPA 自旋涨落配对矩阵」仍是负结果；给出结构性原因（配对顶角是费米面连续函数，非天然离散矩阵） | 文献检索事实（不设 analytic/certificate 分级） | live（负结果 + 结构性解释，非穷尽） | §0：Kreisel/Andersen/Hirschfeld（(a)满足/(b)不满足）、Graser et al. NJP 2009（同）、fRG patch 学派（(b)未核实降维表）三条路线全负；§4 给出机制解释 |
 | [spin_fluctuation_rigorous_tc_scoping_2026-09-18.md](probes/spin_fluctuation_rigorous_tc_scoping_2026-09-18.md) | 2026-09-18 | 立项级侦察：非声子（自旋涨落/量子临界）严格 Tc 界该不该做、撞什么、先例盘点；四层模型阶梯 + 六层推进候选 + 推荐 L-C | **文献侦察 + 概念性论证**为主；两处自算为 numerical-evidence（EA 竞品定位、局域矩探针）；**零 analytic / 零 certificate 新结论** | live（立项建议，待用户决策；不改动主线任何定理） | §0 判决表；§2.3 记录一条**被自己拦下的方向越级**（把 `𝔤^{(N)}` 单边下界当双边值去宣布生态位开放）；§3.2(ii) 承重限定「算的是 `T_p` 不是 `T_c`，`T_c→0 at γ→2`」；§3.3 的 `ρ→1` 说明该界在 QCP 极限渐近取等；§6 列 5 条未做项（含与并行会话 `spinfluc-compat-sonnet` 尚未对照） |
 | [lambda_stability_tc_joint_ceiling_review_2026-09-18.md](misc/lambda_stability_tc_joint_ceiling_review_2026-09-18.md) | 2026-09-18 | 独立复核另一 agent 的 λ_* 稳定性界 + KAY N=1/2 联合 Tc 天花板主张：dlnTc/dσ²\|₀=+1.88（谱展宽提升联合上限）+ 偏度项测试 | analytic（"记号同构"前提）+ numerical-evidence（σ²/γ₃ 系数、N=1→2 稳健性） | live（CONFIRMED，局部 σ→0 结果，非全局变分定理） | 两条独立法（直接解+外推 / IFT 闭式）5–6 位一致；偏度扫描 σ=0.05/0.20、γ₃∈[−4,4] 无符号翻转 |
 
