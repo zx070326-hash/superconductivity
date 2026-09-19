@@ -26,13 +26,14 @@
 
 ## 目录结构（2026-09-18 重组）
 
-> 下表按本索引原有的分组（外加 10 篇本索引生成之后新增、未覆盖的 2026-09-18 笔记）把 126 个文件分到 12 个子目录，
+> 下表按本索引原有的分组（外加 10 篇本索引生成之后新增、未覆盖的 2026-09-18 笔记）把文件分到 12 个子目录；
+> 计数已于 2026-09-19 按 `ls theory/notes/<dir>/*.md | wc -l` 核对刷新（原 126，此后陆续新增至 159；`_scratch_ir/` 下的非笔记 `.md` 不计入)，
 > 文件名统一改为**日期后缀**（旧 `2026-09-08` + `_P1_round1.md` 前缀式 → 新 `P1_round1_2026-09-08.md`）；无日期的文件名保持不变；
 > 本文件（`INDEX.md`）不移动，仍在 `theory/notes/` 根目录，下方表格中的相对链接已同步改写。
 
 | 子目录 | 文件数 | 含义 |
 |---|---|---|
-| [`theoremI/`](theoremI/) | 8 | 定理 I（配对通道排斥/秩一主导性免疫）与 𝔤(2) 证书 |
+| [`theoremI/`](theoremI/) | 9 | 定理 I（配对通道排斥/秩一主导性免疫）与 𝔤(2) 证书 |
 | [`lemmaC/`](lemmaC/) | 19 | 引理 C（H 凹性）与 λ₂ 上界的历次证书、路线尝试 |
 | [`coulomb/`](coulomb/) | 21 | μ*>0 库仑：极值性、窗内唯一性、CE/CE′ 阈值、谱隙塌缩机制、H_μ 的托尔马乔夫透镜、(E-env) 凹包络三明治核验、消费点核查；两原子约化定理 + 强耦合端闭合 + Rayleigh 路线物理锚点证伪 |
 | [`gamma/`](gamma/) | 17 | γ-model + Coulomb：c₁²、Davis–Kahan/Schur 证书、渐近；非声子机制结构相容性侦察 |
@@ -43,7 +44,7 @@
 | [`meta/`](meta/) | 4 | 跨文档一致性审查、闭合状态盘点、会话恢复/triage 记录 |
 | [`ceiling/`](ceiling/) | 11 | 多带/各向异性 Tc 天花板（引理 G、(G′) 路线、μ* 延拓，规范陈述见 `ceiling/multiband_ceiling_CANONICAL_2026-09-18.md`）；单带零参数一行公式见 `ceiling/oneliner_zero_parameter_2026-09-18.md`；λ_ij 判据违反案例的生成过程核查 |
 | [`probes/`](probes/) | 19 | 其他体系（Hubbard、Kondo、CDW/SDW、量子算法、宇宙学等）的可行性/普适性探针，多为 NO-GO 或阻塞；非声子机制立项级侦察（含 FeSe 材料探针、耦合矩阵开源数据普查） |
-| [`misc/`](misc/) | 13 | 不便归入以上分组的杂项（P3 λ_* 系列、弱耦合级数审查、对偶定理、论文草稿节、λ-晶格联合天花板、margin=1 参数点等） |
+| [`misc/`](misc/) | 14 | 不便归入以上分组的杂项（P3 λ_* 系列、弱耦合级数审查、对偶定理、论文草稿节、λ-晶格联合天花板、margin=1 参数点、定理 TA 套用机会排查等） |
 
 ---
 
@@ -237,6 +238,7 @@
 | [lambda_lattice_width_real_material_check_2026-09-18.md](misc/lambda_lattice_width_real_material_check_2026-09-18.md) | 2026-09-18 | σ² 澄清为谱形状展宽（非晶格位置无序）+ 用 Cerqueira 真实 DFT α²F 谱独立检验 κ_S>0 方向（r vs λ_* 相关 0.92, n=215, p~1e-88） | numerical-evidence（DFT 计算谱 + mpmath 点算，非区间外包） | live（方向性支持，未测联合天花板整体陈述） | §4/§5：Pearson/Spearman 相关系数 + 5 条明确未证边界 |
 | [hydride_lambda_star_joint_ceiling_2026-09-19.md](misc/hydride_lambda_star_joint_ceiling_2026-09-19.md) | 2026-09-19 | Mishra H3S/D3S（200/160GPa，谐波/非谐）6 个真实 α²F 谱：headroom=λ_*/λ 压到 2.1–3.4×（vs 常规材料 20–70×）；**直接**求解 Tc_ceiling(λ_*[P],P)，4/4 配对（谐波↔非谐、200↔160GPa）方向与 +1.88 一致 | numerical-evidence（DFT 谱 + mpmath/brentq 点算，非区间外包，n=6 不做统计显著性声称） | live（方向性支持，仍未找到 headroom<2 的"卡边界"材料） | §3/§4：4/4 配对同号；§4 列 7 条未证边界 |
 | [hydride_margin_one_parameter_point_2026-09-19.md](misc/hydride_margin_one_parameter_point_2026-09-19.md) | 2026-09-19 | margin=1 的参数点：**命题 1 [analytic] λ_*[P] ≥ λ_*[Einstein]=1/g_max=3.6915 ⟹ 光改谱形永远关不上**；命题 2/3 [analytic] 𝔰⁽¹⁾≤1 且 λ→∞ 时→1 ⟹ m_1L⁽¹⁾≥√𝔤(2)=1.1481（**但方向审计禁止据此推"物理不可达"**）；稳定性边界上真 margin ∈[1,1.346]；2× 余量三因子分解 1.148(尺子)×1.172(稳定性)×1.25–1.81(离边界距离)；附 λ⟨ω²⟩ 在 har→anh 下不变 1.3e−6（定理 2 真实数据确认） | mixed：命题 1/2/3 与 m_true≤m⁽¹⁾ 为 **analytic**（常数 1/g_max、全部材料数值为 numerical-evidence；√𝔤(2) 继承 CERT-D rational-exact） | live | §4/§5 两条一行证明；§5.1 方向审计专节；§7 自我证伪"1.345 普适常数"（90/10 双峰给 3.178）；§10 标级表含 3 条"不作此陈述"；§11 列 7 条未证边界 |
+| [theorem_TA_reduction_opportunities_2026-09-19.md](misc/theorem_TA_reduction_opportunities_2026-09-19.md) | 2026-09-19 | 排查定理 TA（两原子约化模板）在仓库其他"猜测最坏谱形状但未证"处能否套用：找到 3 个候选并排序 | 调研/判定（无新计算；转引数字标出处，不越级） | live | §6 排序表：`P4_extremal_constraints.md` 命题2/3 可直接套用；`lambda_stability_tc_joint_ceiling` 全局联合天花板需改造；`multiband_ceiling_lift` (ML4) 不适用（矩阵非测度） |
 | [bcs_cold_atom_feasibility_2026-09-16.md](probes/bcs_cold_atom_feasibility_2026-09-16.md) | 2026-09-16 | BCS 冷原子 Tc/T_F 严格界方向可行性调研 | 调研/判定 | live（NO-GO，方向终止） | 状态行「完成，NO-GO 判定」 |
 | [cdw_universality_probe_2026-09-16.md](probes/cdw_universality_probe_2026-09-16.md) | 2026-09-16 | CDW/Peierls 是否展现 BCS 式谱不敏感性 | heuristic + numerical-evidence（部分待核） | exploratory | 自述「探索性/机制性排查」，§6 列 4 条未解决点 |
 | [dimension_universality_2026-09-16.md](probes/dimension_universality_2026-09-16.md) | 2026-09-16 | 维度普适性：d=2 van Hove 对数 vs Tc 不敏感性 | analytic（结构）+ numerical-evidence（8 核族） | live | 「共振点问题无定义；非共振点 η 不变」 |
@@ -257,10 +259,29 @@
 | [root_fermi_universality_2026-09-16.md](probes/root_fermi_universality_2026-09-16.md) | 2026-09-16 | 追溯 Tc 普适性到费米统计的机制链，与假想玻色统计类比 | mixed（各步骤自表标注） | live | 「本分析不改变 P4 主线任何定理」 |
 | [sdw_universality_probe_2026-09-16.md](probes/sdw_universality_probe_2026-09-16.md) | 2026-09-16 | SDW 探针：Cooper-log 不敏感性推广到 nesting-log，但结论不推广 | mixed（结构恒等式 analytic + χ₀ numerical-evidence） | live（不触及主线） | 「本探索不改变 P4 主线任何定理」 |
 | [spin_fluctuation_fese_material_probe_2026-09-19.md](probes/spin_fluctuation_fese_material_probe_2026-09-19.md) | 2026-09-19 | FeSe 自旋涨落五区数据代入 spm_gap PF/Metzler 前提与 λ_min(V) 二部图机制的材料级数值探针 | numerical-evidence（L1 转录输入 + 从零脚本计算） | live（明确标注对缺失 5/10 条边数据敏感，非鲁棒结论） | 本文 §3：Metzler 前提 1 在 Γ1-Γ2/M1-M2 边违反；二分 `{Γ1,Γ3,M2}\|{Γ2,M1}` 非教科书分裂 |
-| [spinfluc_coupling_matrix_open_data_census_2026-09-19.md](probes/spinfluc_coupling_matrix_open_data_census_2026-09-19.md) | 2026-09-19 | 自旋涨落媒介耦合矩阵开源数据普查（替代 Essenberger FeSe 缺失 5/10 边）——文献侦察，无代入计算 | 文献/仓库检索事实（不设 analytic/certificate 分级） | live（明确标注检索缺口，非穷尽普查） | §0：无现成数据集；§3 三条开源代码工具链（RPA_SrCo2As2/FLEX_IR/flex-general）均「可生成非现成」；§5 列出未核实项 |
-| [spinfluc_lambda_ij_literature_search_negative_2026-09-19.md](probes/spinfluc_lambda_ij_literature_search_negative_2026-09-19.md) | 2026-09-19 | 换路径找「已发表紧束缚+RPA 自旋涨落配对矩阵」仍是负结果；给出结构性原因（配对顶角是费米面连续函数，非天然离散矩阵） | 文献检索事实（不设 analytic/certificate 分级） | live（负结果 + 结构性解释，非穷尽） | §0：Kreisel/Andersen/Hirschfeld（(a)满足/(b)不满足）、Graser et al. NJP 2009（同）、fRG patch 学派（(b)未核实降维表）三条路线全负；§4 给出机制解释 |
+| [spinfluc_coupling_matrix_open_data_census_2026-09-19.md](probes/spinfluc_coupling_matrix_open_data_census_2026-09-19.md) | 2026-09-19 | 自旋涨落媒介耦合矩阵开源数据普查（替代 Essenberger FeSe 缺失 5/10 边）——文献侦察，无代入计算 | 文献/仓库检索事实（不设 analytic/certificate 分级） | **结构性冻结**（见本表后「非声子耦合矩阵数据线：结构性冻结」说明；原状态 live，明确标注检索缺口，非穷尽普查） | §0：无现成数据集；§3 三条开源代码工具链（RPA_SrCo2As2/FLEX_IR/flex-general）均「可生成非现成」；§5 列出未核实项 |
+| [spinfluc_lambda_ij_literature_search_negative_2026-09-19.md](probes/spinfluc_lambda_ij_literature_search_negative_2026-09-19.md) | 2026-09-19 | 换路径找「已发表紧束缚+RPA 自旋涨落配对矩阵」仍是负结果；给出结构性原因（配对顶角是费米面连续函数，非天然离散矩阵） | 文献检索事实（不设 analytic/certificate 分级） | **结构性冻结**（见本表后「非声子耦合矩阵数据线：结构性冻结」说明；原状态 live，负结果 + 结构性解释，非穷尽） | §0：Kreisel/Andersen/Hirschfeld（(a)满足/(b)不满足）、Graser et al. NJP 2009（同）、fRG patch 学派（(b)未核实降维表）三条路线全负；§4 给出机制解释 |
 | [spin_fluctuation_rigorous_tc_scoping_2026-09-18.md](probes/spin_fluctuation_rigorous_tc_scoping_2026-09-18.md) | 2026-09-18 | 立项级侦察：非声子（自旋涨落/量子临界）严格 Tc 界该不该做、撞什么、先例盘点；四层模型阶梯 + 六层推进候选 + 推荐 L-C | **文献侦察 + 概念性论证**为主；两处自算为 numerical-evidence（EA 竞品定位、局域矩探针）；**零 analytic / 零 certificate 新结论** | live（立项建议，待用户决策；不改动主线任何定理） | §0 判决表；§2.3 记录一条**被自己拦下的方向越级**（把 `𝔤^{(N)}` 单边下界当双边值去宣布生态位开放）；§3.2(ii) 承重限定「算的是 `T_p` 不是 `T_c`，`T_c→0 at γ→2`」；§3.3 的 `ρ→1` 说明该界在 QCP 极限渐近取等；§6 列 5 条未做项（含与并行会话 `spinfluc-compat-sonnet` 尚未对照） |
 | [lambda_stability_tc_joint_ceiling_review_2026-09-18.md](misc/lambda_stability_tc_joint_ceiling_review_2026-09-18.md) | 2026-09-18 | 独立复核另一 agent 的 λ_* 稳定性界 + KAY N=1/2 联合 Tc 天花板主张：dlnTc/dσ²\|₀=+1.88（谱展宽提升联合上限）+ 偏度项测试 | analytic（"记号同构"前提）+ numerical-evidence（σ²/γ₃ 系数、N=1→2 稳健性） | live（CONFIRMED，局部 σ→0 结果，非全局变分定理） | 两条独立法（直接解+外推 / IFT 闭式）5–6 位一致；偏度扫描 σ=0.05/0.20、γ₃∈[−4,4] 无符号翻转 |
+
+### 非声子（自旋涨落）耦合矩阵数据线：结构性冻结（2026-09-19）
+
+> 涉及两篇：[spinfluc_coupling_matrix_open_data_census_2026-09-19.md](probes/spinfluc_coupling_matrix_open_data_census_2026-09-19.md)（第一轮：通用开放数据库 Materials Project/AFLOW/NOMAD/Zenodo + GitHub 开源 RPA/FLEX 代码仓库普查）与
+> [spinfluc_lambda_ij_literature_search_negative_2026-09-19.md](probes/spinfluc_lambda_ij_literature_search_negative_2026-09-19.md)（第二轮：Kreisel/Andersen/Hirschfeld、Graser–Maier–Hirschfeld–Scalapino、fRG patch 三条具体理论文献路线）。
+
+**目标（回顾）**：给仓库 `lambda_ij_criterion` / `_chk_spm_*.py` 判据喂一组**已发表、非拟合**的自旋涨落媒介配对矩阵（λ_ij / Γ_ij 型），作为声子侧 α²F_ij 之外的第二类判据输入源。
+
+**为什么冻结（不是数据没找全，是结构性的）**：两轮检索方向完全独立（第一轮查数据托管方式，第二轮查具体理论文献的呈现范式），结论一致收敛到同一个物理原因——
+声子 Eliashberg 函数 `α²F_ij(ω)` 的 (i,j) 指标来自对费米面 sheet 的双重限制求和，天然坍缩成一张 N_sheet×N_sheet 的离散矩阵；
+而自旋涨落配对顶角 `Γ(k,k')` 是费米面上 k,k' 各自独立的**连续函数**——这正是自旋涨落配对（节点结构、s±/d 波符号依赖 k,k' 精细变化）区别于声子配对的物理核心——
+所以该子领域的论文范式选择保留连续表示（色图）或投影到对称性谐波（标量 λ_α），两者都不是判据要的离散矩阵。Essenberger/Sanna 系列能给出判据可用的 patch 矩阵，靠的是他们**额外做了一次「投影到少数 patch 取平均」**的降维，这在已检索的主流文献里是例外而非常规。详见 `spinfluc_lambda_ij_literature_search_negative_2026-09-19.md` §4。
+
+**解冻条件（任一满足才重开，缺省保持冻结）**：
+1. 有人专门做「投影到 patch/pocket 分组平均」这一步**新计算**（自己跑 RPA/FLEX + 降维），这已不是文献/数据普查，是需要 team-lead 重新评估投入的新研究任务（该笔记 §6 第 2 条）；
+2. 联系 Essenberger/Sanna 系列作者索取完整数据成功（该笔记 §6 第 1 条，成本最低的备选）；
+3. 出现新发表文献采用了这种投影降维、并公开印出数值矩阵表。
+
+**对后续会话的明确指示**：**不要**再派"开放数据搜索"或"文献检索找已发表 λ_ij/Γ_ij 矩阵"类型的活——两轮独立检索已分别排除"托管方式"与"理论文献呈现范式"两个维度，结构性原因已经清楚，继续同类检索的边际收益预算为 0。若要推进这条线，只能走上面解冻条件 1/2，且需先经 team-lead 评估。
 
 ---
 
