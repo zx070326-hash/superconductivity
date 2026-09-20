@@ -14,3 +14,6 @@ theory/data/external/*
 theory/notes/_scratch_ir/
 # Claude 本地约定（个人 / 本机，不共享）
 CLAUDE.local.md
+# Claude Code harness local settings and hook probe logs
+.claude/settings.local.json
+.claude/hook_probe.log

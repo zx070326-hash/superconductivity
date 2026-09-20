@@ -1,0 +1,15 @@
+# theory/notes/ 目录约定
+
+> 本文件是该目录的单一真源；`INDEX.md` 头部只保留一行指针。CLAUDE.md §2 指向此处。
+
+## 新文件路由规则（写新笔记前必读）
+
+1. **命名：日期后缀**，`<topic>_YYYY-MM-DD.md`。**不再用日期前缀**（`YYYY-MM-DD_<topic>.md` 是 2026-09-18 之前的旧约定，已全仓改完）。
+2. **位置：必须落在下表 12 个子目录之一**，不放 `theory/notes/` 根目录（根目录只有 `INDEX.md`）。
+   选不出目录时放 `misc/`，并在 `INDEX.md` 留一行——**不要新开子目录**。
+3. **落盘后立刻在 `INDEX.md` 加一行**（同一次编辑里做完），六列齐全。
+   严格性/状态若自己判不准，填 `待主会话补判定` 并在依据列写原因，**不要猜**。
+4. **引用脚本 ⟹ 脚本必须入库**：笔记里点名某个 `_scratch_ir/*.py` 作为证据，就得 `git add -f` 它
+   （毕业规则，CLAUDE.md §2）。自查：`sh tools/check_cited_scripts_tracked.sh`。
+5. **引用其他笔记用带子目录的相对路径**（`../ceiling/foo_2026-09-18.md`），不写裸文件名、不写 `theory/notes/foo.md`。
+6. `ceiling/` 的任何结论**以 `ceiling/multiband_ceiling_CANONICAL_2026-09-18.md` 为准**，另两篇长笔记是证明存档。

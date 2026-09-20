@@ -1,7 +1,7 @@
 # 工作约定 — 高压超导强耦合修正理论仓库
 
 > 本文件只管**「怎么做」**（稳定的方法/机械/协作约定）。
-> **仓库导航**：`README.md`（广度——D1–D7 调研、选向）· `theory/PROGRAM.md`（叙事——问题定义 P1–P4、闭环方法论）· `theory/derivations/INDEX.md`（★逐篇推导图谱——证了什么/严格性/门/状态）· `theory/notes/INDEX.md`（★笔记分诊 + **新文件路由规则**——命名/落位/索引/引用）。
+> **仓库导航**：`README.md`（广度——D1–D7 调研、选向）· `theory/PROGRAM.md`（叙事——问题定义 P1–P4、闭环方法论）· `theory/derivations/INDEX.md`（★逐篇推导图谱——证了什么/严格性/门/状态）· `theory/notes/INDEX.md`（★笔记分诊；**新文件路由规则**在 `theory/notes/CLAUDE.md`——命名/落位/索引/引用）。
 > **演进中的当前状态**（证到哪一步、谁审的、深挖轮分支）在本机 auto-memory（`MEMORY.md` + `memory/*.md`），不在此处、也不在上述文档里重复。
 
 ## 1. 严格性纪律（承重，最高优先）
@@ -125,7 +125,7 @@
 ## 2. 机械约定
 
 - scratch 脚本放 `theory/notes/_scratch_ir/`，**绝不放 `/tmp`**（`/tmp/struct.py` 会影子标准库、污染 import）、**也绝不放仓库根**。
-- **新笔记的命名与落位：一律按 `theory/notes/INDEX.md` 文首的「★ 新文件路由规则」**——
+- **新笔记的命名与落位：一律按 `theory/notes/CLAUDE.md`（该目录自动加载）的「新文件路由规则」**——
   日期**后缀** `<topic>_YYYY-MM-DD.md`、必落 12 个子目录之一（选不出放 `misc/`，不新开目录）、
   落盘同一次编辑里补索引行、引用其他笔记走带子目录的相对路径。
   那份规则是单一真源；本文件只指过去，**不在此处复述**（避免两处漂移）。
