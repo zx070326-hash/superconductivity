@@ -157,7 +157,9 @@
 
 ## 5. 数值门路径
 
-1. **唯一性推广**：`D:\physics\superconductivity\.claude\worktrees\mustar-completion\theory\notes\_scratch_ir\probe_Lstarstar_uniqueness_multiatom.py`
+1. **唯一性推广**：`theory/notes/_scratch_ir/probe_Lstarstar_uniqueness_multiatom.py`
+   （2026-09-20 合并进 `p4-conj2` 时订正：原文写的是 worktree 绝对路径 `D:\...\.claude\worktrees\mustar-completion\...`，
+   在任何 clone 里都不存在 ⟹ 按脚本毕业规则，三个探针已 `git add -f` 入库，此处改为仓库相对路径。）
    - 运行：`OMP_NUM_THREADS=1 python probe_Lstarstar_uniqueness_multiatom.py`
    - 输出：7 非单调系列、7 正确排除、0 假阴性
    - 运行时间：~60s（N=600）

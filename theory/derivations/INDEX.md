@@ -9,7 +9,12 @@
 
 > 严格性等级定义与维护规则已搬至本目录的 [`CLAUDE.md`](CLAUDE.md)（单一真源，自动加载）。下方标注的是各稿「承重结论」的等级。
 
-**状态**：全部 29 篇均在 `p4-conj2` 分支（**未合并到 `master`**，按用户指令 hold）。版本号取自各稿头部。
+**状态**：全部 **37 篇**（= 目录内 `.md` 39 个减去 `INDEX.md`/`CLAUDE.md`）均在 `p4-conj2` 分支（**未合并到 `master`**，按用户指令 hold）。版本号取自各稿头部。
+
+> **2026-09-20 记账订正**：此处原写「29 篇」，但**逐文件核对发现 7 篇从未入索引**
+> （`P4_commutator_trace_bound` / `P4_profile_upper_bound` / `P4_eta_over_M` 三篇是**旧欠账**，
+> 另四篇是本日并入的 `deep-*` 交付）。七篇已全部补行，计数改为**逐文件实测值 37**，
+> 不再手工维护。自查：`cd theory/derivations && for f in *.md; do grep -q "\`$f\`" INDEX.md || echo "MISSING: $f"; done`。
 
 **深挖轮方向记号**：A=普适速度极限 · B=全局双侧 Tc(λ) · C=η/M「为何是氢」 · D4=μ\*>0 唯一性/极值 · D5=引理 C 凹性 · D6=各向异性。权威状态见 auto-memory `p4-six-direction-round-2026-09-15.md`。
 
@@ -55,6 +60,9 @@
 - **`P4_concavity_q_route.md`**（102 检查）—— **引理 C 的 q-单调化路线**：(Q1)(Q2)(A) 解析证成；(B) 归约为两个明确解析缺口（ϖ∈[1.46,1.63] 谱隙下界 + 交换子 Frobenius 范数上界），真隙下 (B) 全程闭合、余量 4.4 倍。严格性：**部分解析 + 认证缺口**。门：`p4_concavity_q_route.py`（102 ck / 9.9s）。
 - **`P4_gap_via_variance.md`**（54 检查）—— **Gap 1 闭合（方差路线，绕开交换子 Frobenius 范数）**：定理 F（bound1≤bound2）+ 引理 V（Bhatia–Davis）+ 定理 G（|C|<E 判据）；B NOT ⪰ 0（β_min<0），全程闭合（worst 0.29）。严格性：定理 F/引理 V **analytic**，β_max/β_min/定理 G **numerical-evidence**。门：`p4_gap_via_variance.py`（54 ck / 1.4s）。
 - **`P4_concentration_bound.md`**（123 检查）—— **顶本征向量集中界**（引理 C 与 smooth-coulomb 的共享瓶颈）：结构恒等式 (★)(★★)、先验界全部解析；主廓线下界 v_n ≥ c·v₀·u_n 在 **ϖ≥5** 给显式正常数 c；小 ϖ 仅数值证据。严格性：**解析（ϖ≥5）+ 数值证据（小 ϖ）**。门：`p4_concentration_bound.py`（**123 ck**，2026-09-15 主会话在 318cfe2 复跑 0 fail）。
+- **`P4_lemmaC_final_status.md`**（235 行，2026-09-20 由 `deep-lemmaC-analytic` 并入）—— **引理 C 的终局盘点：答案是「证书级，不是完全解析」**。链条 `引理 C ⟸ H″<0 ⟺ q′>0 ⟸ E>0 且 |C|<E` 中 `E>0` 已解析；`|C|<E` 归约到单一标量不等式 `(★) Var_v(B) < γ(q−m₃)`，证书级恒真（余量 ≥4×），但换成已知解析下界（cone-coercivity）只捕获真值 **0.58–0.73**，需 ≳0.90。本稿新做**三条**闭合尝试**全部失败**。严格性：结构 **analytic** + 残差边界 **numerical-evidence**。门：`p4_lemmaC_residual_gate.py`（**8 ck**，2026-09-20 主会话合并后从零复跑 0 fail）。
+- **`P4_commutator_trace_bound.md`**（255 行）—— 交换子 Frobenius 范数上界的**死路记录** + Gap 1 闭合：(i) `‖[A,B]‖_F ≤2×` 的六条直接路线全部 ≥3.2× 松，判定**已排除**；(ii) 命题 4（`bound1≤bound2`，解析恒等式）使 (i) 对引理 C 的闭合**不是必需的**。严格性：命题 4 **analytic**；系数 0.4462 那条 **numerical-evidence**（自标脆弱）。
+- **`P4_profile_upper_bound.md`**（271 行）—— 秩一预解式廓线上界：**结构性死路**（诚实负结果）。构造本身比 Cauchy–Schwarz 路线质变更优（比值随 ϖ、n **改善** 1.79×→1.12×，与 Attempt #4 的发散方向相反），但接入 L1+L2 朴素恢复判据后 `max_n c_needed` 超过任何合法浓度常数的理论上限 `c_best`，**即便代入真值仍在 ϖ≥8 不闭合**。对捕获率目标的贡献：**0**。严格性：**numerical-evidence**（负结果）。
 
 ### 4.3 弱耦合 / 矩量塔展开
 
@@ -70,6 +78,9 @@
 - **`P4_strong_coupling_expansion.md`**（v0.2）—— **定理 S（强耦合展开含谱形修正）**（整理稿，a₂/a₃ 已订正）。门：小数值门。
 - **`P4_universal_tc_envelope.md`**（定理，单边）—— **【方向 A 基版】** 对所有 λ、所有谱 P 的单一标量上界 Tc < C·√(λ⟨ω²⟩)；Einstein bracket 在 λ∈[0.345,34.4] finite-N 认证、外部解析渐近。门：`p4_universal_tc_envelope.py`（**PASS 66**）。深挖版见 §5-A。
 - **`P4_global_tc_certified.md`**（定理级）—— **【方向 B 基版，μ\*=0】** 把示意性全局 Tc(λ) 曲线升为**严格双侧 bracket** F_lo≤Tc/ω_E≤F_hi（Einstein 谱）。门：`p4_global_tc_certified.py`（N=2000）。深挖版（全 λ 深带、零标定常数）见 §5-B。
+- **`P4_global_tc_allcoupling.md`**（524 行，2026-09-20 由 `deep-global-tc-allcoupling` 并入）—— **【方向 B 深挖版】弱耦合上侧 bracket 已闭合**：基版在 λ≲0.582 的上界是带经验 pad（REM=0.75）的**渐近式**、不是证书；本稿用命题 B（经命题 C 升级后**行和有精确闭式、零标定常数、完全证明**）+ 命题 U（finite-N **certificate**）取代它 ⟹ **每个 λ>0 都有两侧皆非渐近的 bracket**。逐带严格性分档见稿内表（ϖ≤0.14 一档为 **fully analytic**，Weyl 𝔤(2) 包络）。门：`p4_global_tc_allcoupling.py`（**104/104**，2026-09-20 主会话合并后从零复跑 146.1s，0 fail）。
+- **`P4_eta_over_M.md`**（v0.2，505 行）—— **定理 A：Tc ≤ 0.1827262478·√(η/M)**，η=N(0)⟨I²⟩ 为 Hopfield 纯电子量 ⟹ **μ\*-无关、声子频率无关、谱形无关**，且对该界同位素指数恰为 ½（「为什么是氢」的一行回答）。⚠ **优先权**：公式形式与常数 **0.1827 都是 Leavens–Allen–Dynes SSC 30, 595 (1979) Eq.(10) 的**；本稿增量仅三点——**不等号方向（上界，LAD 给的是下界）/ 全 λ 全谱 / 常数被认证包围**。严格性：定理 A **analytic**（定理 B 不是新结果，严格性以 `P4_universal_tc_envelope.md` 为准）。门：`p4_eta_over_M.py`（261/261，116.3s）。
+- **`P4_anisotropy_quantitative.md`**（v0.1，217 行，2026-09-20 由 `deep-anisotropy-enhancement` 并入）—— **命题 5 的定量化**：各向异性 Tc 增强的**显式下界** λ₁(𝒜) ≥ λ̄h + h²·Var_w(z)/(λ̄h−μ)，分子是**纯纤维量**（与 Matsubara 结构无关）、各向同性时恒为零；Z 通道经恒等式 `Mu=0` **精确**消失（非近似）。严格性：定理 A/B + 引理 1 **全解析**；N→∞ 数值。门：`p4_anisotropy_quantitative.py`（**1280/1280**，2026-09-20 主会话合并后从零复跑 3.1s，0 fail）。
 
 ### 4.5 库仑 μ\*>0（把 μ\* 引入 KAY 严格算子）
 
@@ -77,6 +88,7 @@
 - **`P4D_coulomb_uniqueness.md`**（v0.2）—— **μ\*>0 唯一性（Conjecture 2 库仑推广）**：秩一预解式阈值策略；**窗内定理已给解析论证**（常数 float64、有限 N 为高估），跨窗全局唯一性在 r=3 处真实失效、已量化。严格性：**窗内解析 + 数值证据边界**。门：`p4d_coulomb_uniqueness.py`（**432 检查 / 371s**，PN=400，覆盖 11 物理锚点）。
 - **`P4D_coulomb_extremal_threshold.md`**（v0.2）—— **库仑阈值定理（Einstein 极值版）** Q(P)≤Q(E) 的显式条件（六常数全在 A_P 上求值，可证形式）。严格性：定理陈述 **analytic**；阈值数值 **numerical-evidence**（float64、N 有限、六常数未区间化）。**§6 定理 CE′（久期精确根）**：Davis–Kahan 整段可去，14/14 锚点认证（旧 13/14），最劣余量 1.377（旧 1.002），κ<1 前提解除。门：`p4d_coulomb_extremal_threshold.py`（G1–G4，PN=300，≤10min）。
 - **`P4_coulomb_global_tc_certified.md`**（v0.2）—— **【方向 B 库仑】** 物理库仑（μ\*>0）**首个严格认证全局 Tc(λ) 双侧包围**。严格性：**认证**。门：`p4_coulomb_global_tc_certified.py`（自检 44 / 主管线 78）。
+- **`P4D_coulomb_multiatom_status.md`**（v0.1，177 行，2026-09-20 由 `deep-mustar-completion` 并入）—— **开放引理 L\*\* 的多原子数值探测（自标：探测报告，非定理）**：在姊妹探针找到的危险谱 `P=0.8δ(0.3s)+0.2δ(4.0s)` 上重算六常数，(a) 唯一性机制**逐字推广**、阈值 μ̃\*^{CE} 正确排除全部 7 个窗内非单调系列（**7/7**）；(b) 多原子极值刚性 Q(P)≤Q(E) 在 μ̃<μ̃\*^{CE} 时 233/233 成立、μ̃≥阈值时 24/24 正确排除。L\*（κ≥1 近交叉）诚实 **OPEN**。严格性：**numerical-evidence**。门：`probe_Lstarstar_uniqueness_multiatom.py`（**7/7**，2026-09-20 主会话合并后从零复跑 45.2s）+ `probe_Lstarstar_extremal_multiatom.py` + `probe_Lstarstar_extremal_search.py`（三个探针按毕业规则已 `git add -f` 入 `theory/notes/_scratch_ir/`；原稿写的 worktree 绝对路径已订正为仓库相对路径）。
 - **μ\*>0 Einstein 极值性失效边界**（笔记 `mustar_extremality_failure_map_2026-09-17.md`）—— 固定 (λ, ⟨ω²⟩) 下极值性失效分两类：**I（小 ϖ）**需 μ\*≥1.57、对 Tc 无影响；**II（弱耦合近抵消）λ ≲ (1.773+3.760μ\*)μ\*_rms** 确实失效。机制：Anderson–Morel 延迟屏蔽。严格性：领头阶判据 λ<2μ\* **analytic**；精确边界 **numerical-evidence**（N 收敛）。
 - **μ\*>0 凹性秩一精确预解式**（笔记 `concavity_exact_resolvent_2026-09-17.md`）—— H″=−2Ψ+R，恒等式 R=2⟨y_⊥,(h−A)^{−1}y_⊥⟩ **analytic**；j=1 负项可保留（抵消 1–97%）。N_c=⌊rϖ⌋ 绑定后失效区 ϖ<ϖ_c(r)：r=20→≤0.6、r=10→0.8、r=3 在 ϖ≥0.7 时 μ̃_c≥0.16>物理 μ̃。严格性：恒等式 **analytic**；区域边界 **numerical-evidence**（FD 1.2e-6 验证、N=400/800/1600 四位不变）。
 
@@ -280,15 +292,24 @@
 > **2026-09-19 复核**：逐行重跑 `git merge-base --is-ancestor <branch> p4-conj2`——**C**（`etaM-corrected`）现为真，
 > 已改标「已并入」（见下表，合并 commit `9e1c83d`）；**B**（`deep-global-tc-allcoupling`）、**D4**（`deep-mustar-completion`）、
 > **D5**（`deep-lemmaC-analytic`）、**D6**（`deep-anisotropy-enhancement`）四支复核结果均为 NOT-ancestor，表中「未合并」状态维持不变。
+>
+> **★ 2026-09-20：B / D4 / D5 / D6 四支经用户放行，已全部并入 `p4-conj2`**
+> （合并 commit 依次 `a3ebb5d` / `0e75b0f` / `d8d716d` / `c4ac93a`，四次 `--no-ff` 全部纯增量、零冲突）。
+> ⟹ **六方向深挖轮的分支 held 状态至此清零**；`p4-conj2` **本身仍未合并到 `master`**（按用户指令继续 hold）。
+> **四个门由主会话在合并后的工作树上从零复跑**（`OMP_NUM_THREADS=1`，**不采信表内记录的计数**）：
+> `p4_global_tc_allcoupling.py` **104/0**（146.1s）· `probe_Lstarstar_uniqueness_multiatom.py` **7 非单调 / 7 正确排除 / 0 假阴性**（45.2s）·
+> `p4_lemmaC_residual_gate.py` **8 ck / 0 fail** · `p4_anisotropy_quantitative.py` **1280/0**（3.1s）。四项均与源分支记录一致。
+> 连带两处记账修补：`P4D_coulomb_multiatom_status.md` 的三个被引探针原以 **worktree 绝对路径**引用（任何 clone 里都不存在），
+> 已按脚本毕业规则 `git add -f` 入 `theory/notes/_scratch_ir/` 并改为相对路径；四篇新并入的稿件已补 §4 索引行。
 
 | 方向 | 分支 @tip | 合并 | 头条结论 | 严格性 | 门 |
 |---|---|---|---|---|---|
 | **A** 普适速度极限 | 已并入主线 @318cfe2 | **已并入** | Tc < C_∞√(λ⟨ω²⟩)，C_∞=(1/2π)√𝔤(2)=0.18273，**所有 P、所有 μ\*≥0**（天花板**不依赖**包络门） | **解析**（单边） | 承重 `p4_g2_analytic_bounds.py` **389/0** + `p4_universal_tc_envelope.py` **66/0**〔memory 旧记的 `..._coulomb.py` 159/159 为已删 worktree 里的**未提交探针**、非承重、不可复现〕 |
-| **B** 全局双侧 Tc(λ) | `deep-global-tc-allcoupling` @6a5572a | 未合并（+11） | 所有 λ>0 双侧 bracket；**深带经 Prop.C 闭式 (C1) 变为完全解析、零标定常数** | 深带**解析** / 其余认证 | `p4_global_tc_allcoupling.py` **104/104**（全，150.2s）已 team-lead 权威复跑 |
+| **B** 全局双侧 Tc(λ) | `deep-global-tc-allcoupling` @6a5572a | **已并入**（`a3ebb5d`，2026-09-20；门 104/0 已从零复跑） | 所有 λ>0 双侧 bracket；**深带经 Prop.C 闭式 (C1) 变为完全解析、零标定常数** | 深带**解析** / 其余认证 | `p4_global_tc_allcoupling.py` **104/104**（全，150.2s）已 team-lead 权威复跑 |
 | **C** η/M「为何是氢」 | `etaM-corrected` @ed6de52 | **已并入**（commit `9e1c83d`，2026-09-19 用 `git merge-base --is-ancestor etaM-corrected p4-conj2` 复核确认为真；§4.9 已按合并态更新引用方式） | 定理 A：Tc < 0.18273·√(η/M)，η=N(0)⟨I²⟩ Hopfield，**μ\* 无关** | 定理 A **解析** | `P4_eta_over_M.py` 261/261（116.3s） |
-| **D4** μ\*>0 唯一性/极值 | `deep-mustar-completion` @36ba77a | 未合并（+1） | 多原子唯一性 + Einstein 极值机制逐字推广；L\*\*（数值探测）；L\*（κ≥1 近交叉）诚实 **OPEN** | **数值证据**（自标非定理） | `probe_Lstarstar_uniqueness_multiatom.py` 7/7 |
-| **D5** 引理 C 凹性 | `deep-lemmaC-analytic` @2ff4d54 | 未合并（+2） | E(x)>0、C≤0、q′=E−|C| 解析；残余 **|C|<E 仅数值证据**（诚实边界，廓线上界为已识别缺失件，四条路线已排除） | 结构**解析** + 边界**数值证据** | 见 `P4_concentration_bound.py` |
-| **D6** 各向异性增强 | `deep-anisotropy-enhancement` @5e5653d | 未合并（+1） | 定理 A：finite-N Bhatia–Davis λ_max 下界；定理 B：Tc 转换 | finite-N **解析** / N→∞ 数值 | 门 1280/1280（2.8s） |
+| **D4** μ\*>0 唯一性/极值 | `deep-mustar-completion` @36ba77a | **已并入**（`0e75b0f`，2026-09-20；门 7/7 已从零复跑） | 多原子唯一性 + Einstein 极值机制逐字推广；L\*\*（数值探测）；L\*（κ≥1 近交叉）诚实 **OPEN** | **数值证据**（自标非定理） | `probe_Lstarstar_uniqueness_multiatom.py` 7/7 |
+| **D5** 引理 C 凹性 | `deep-lemmaC-analytic` @2ff4d54 | **已并入**（`d8d716d`，2026-09-20；门 8/0 已从零复跑） | E(x)>0、C≤0、q′=E−|C| 解析；残余 **|C|<E 仅数值证据**（诚实边界，廓线上界为已识别缺失件，四条路线已排除） | 结构**解析** + 边界**数值证据** | 见 `P4_concentration_bound.py` |
+| **D6** 各向异性增强 | `deep-anisotropy-enhancement` @5e5653d | **已并入**（`c4ac93a`，2026-09-20；门 1280/0 已从零复跑） | 定理 A：finite-N Bhatia–Davis λ_max 下界；定理 B：Tc 转换 | finite-N **解析** / N→∞ 数值 | 门 1280/1280（2.8s） |
 
 ---
 
