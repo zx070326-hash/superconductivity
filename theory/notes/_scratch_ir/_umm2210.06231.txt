@@ -1,0 +1,445 @@
+arXiv:2210.06231v2 [cond-mat.supr-con] 26 Oct 2022  s± + d wave multiband Eliashberg theory for the iron
+                                                    pnictides
+
+                                                                      G.A. Ummarino
+
+                                                                         E-mail: giovanni.ummarino@polito.it
+                                                                         Istituto di Ingegneria e Fisica dei Materiali, Dipartimento di Scienza Applicata e
+                                                                         Tecnologia, Politecnico di Torino, Corso Duca degli Abruzzi 24, 10129 Torino, Italy;
+                                                                         Department of Semiconductor Quantum Electronics / N.G.Basov High School of
+                                                                         Physicists / Institute of Engineering Physics for Biomedicine, National Research
+                                                                         Nuclear University MEPhI, Moscow Engineering Physics Institute, Kashira Hwy 31,
+                                                                         Moskva 115409, Russia
+
+                                                                      D. Torsello
+
+                                                                         E-mail: daniele.torsello@polito.it
+                                                                         Dipartimento di Scienza Applicata e Tecnologia, Politecnico di Torino, Corso Duca
+                                                                         degli Abruzzi 24, 10129 Torino, Italy; Istituto Nazionale di Fisica Nucleare, Sezione
+                                                                         di Torino, Torino 10125, Italy
+
+                                                                         Abstract. We calculated the critical temperature in the framework of s± + d-wave
+                                                                         multiband Eliashberg theory. We have solved these equations numerically to see
+                                                                         at what values of the input parameters there is a solution with a non-zero critical
+                                                                         temperature and what is the symmetry of the order parameter of this solution. For
+                                                                         our model we consider the pnictide case with simpliﬁcations that allow us to obtain
+                                                                         the most general possible information. For selected and representative cases in which
+                                                                         the order parameter has s± + d symmetry, we calculated the superconducting density
+                                                                         of states, the temperature dependence of the gaps, and the superﬂuid density so that
+                                                                         comparison with experimental data can be made. Finally, we show that such a system
+                                                                         has only a twofold in-plane symmetry and undergoes a transition from nodal to fully
+                                                                         gapped with increasing temperature.
+s± + d wave multiband Eliashberg theory for the iron pnictides  2
+
+1. INTRODUCTION
+
+In the last thirty years, the study of superconducting materials had an astounding
+development. The starting point was ordinary low-temperature superconductors with a
+electron-phonon mechanism, a conducting band and isotropic order parameter (s wave).
+Then, high-temperature cuprate superconductors [1] with a non-phonon mechanism
+and a non-isotropic order parameter (d-wave)[2, 3] were ﬁrst discovered followed by
+multiband phononic materials such as fullerenes [4, 5] and magnesium diboride [6, 7, 8].
+Finally, iron-based compounds [9, 10, 11] appeared on the scene: multiband non-
+phononic materials with s± wave symmetry of the order parameter. The minimal model
+for the latter class of materials consists of only 2 conductivity bands (but even 5 bands
+were found to contribute to superconductivity, as in LiF eAs [12]) with an isotropic
+order parameter with a phase diﬀerence of π between each other [13]. In recent years,
+observations of possible mixed s and d − wave behaviour was proposed for non-phononic
+multiband superconductors [14, 15, 16, 17], therefore we thought to develop, through
+Eliashberg theory, a possible general case considering in each band an order parameter
+with two components: one isotropic (s wave) and one anisotropic (d wave), realizing
+therefore a multiband s + d wave where the two isotropic components (s wave) are
+out of phase by π, called s± + d. We consider the speciﬁc case of iron-based pnictide
+compounds, but our conclusions can be directly generalized to all systems in which the
+electron-boson coupling can be described in a similar way. In the following, we will write
+the Eliashberg equations for this new situation and we will see if there is a plausible
+range of physical input parameters (essentialy the electron-boson intra and inter band
+coupling constant λsjk,d) where it is actually possible to have one or two order parameters
+with the two components (s± and d) at the same time. Then we will try to calculate
+physical observables that in the case (s± + d) clearly diﬀer from the pure s± and pure d
+cases in order to propose experimental veriﬁcations for this model, and discuss situations
+in which they could occur.
+
+2. MODEL: TWO-BAND ELIASHBERG EQUATIONS
+
+We study a superconducting material with two conductivity parabolic bands (the
+simplest multiband case): we consider band one to be a hole band and band two an
+electron band. The cases with more than two bands can be reduced to eﬀective two bands
+systems where the values of the coupling constant loose their physical meaning [18, 19],
+therefore this can be considered as a general scheme for multiband superconductors.
+Our investigation starts from the consideration that, at the moment, the most studied
+multiband superconductors are the iron-pnictides where the mediation for the Cooper
+pairs is provided by antiferromagnetic spin ﬂuctuactions, so this is the speciﬁc system
+we consider. Their lattice is described by the tetragonal symmetry at high temperature
+and by the orthorhombic symmetry in cryogenic conditions, which we study. In this
+case the isotropic part is repulsive (in the iron pnictides the contribution of phonons
+s± + d wave multiband Eliashberg theory for the iron pnictides                                                        3
+
+is very small [20] so we will put, in ﬁrst approximation, this contribution equal to
+zero). The electron-boson spectral functions (one for each band) have two components:
+one isotropic (s wave) and one anisotropic (d wave), yielding an overall anisotropic
+s + d electron-boson interaction that is allowed only in the orthorhombic state. This
+happens because both the s- and d-wave states in the orthorhombic case belong to the
+same irreducible representation (A1g) [21]. Solving the Eliashberg equations yields the
+superconducting gaps, and the more general solution has a two s and two d components
+(one for each band for each symmetry) where the two s components are opposite in
+sign (s± wave), so the general solution for the order parameter is an s± + d wave. Both
+the s and d wave states are also compatible with a tetragonal symmetry of the system,
+whereas the mixed order can exist only in the orthorhombic phase. It is important to
+note that the k-dependent Eliashberg equations are nonlinear, for this reason the gaps
+can deviate from the symmetry of the interaction. Therefore, despite the symmetry of
+the interaction being ﬁxed, that of the superconducting state is not. However the result
+must still be compatible with the orthorhombic state. We calculated the experimental
+critical temperatures and the superconducting gaps by solving the s± +d-wave two-band
+Eliashberg equations [22, 23, 24, 25, 26, 27]. In this case, four coupled equations for the
+gaps ∆sk,d(iωn) and four for the renormalization functions Zks,d(iωn) have to be solved
+self consistently (ωn denotes the Matsubara frequencies and k = 1, 2 the band index).
+The s± + d-wave two-band Eliashberg equations (assuming that the Migdal theorem
+works [28]) in the imaginary axis representation, and in the compact shape (where the
+s and d components are not separated) read:
+
+ωnZk(ωn, φ) = ωn + πT                                    2π  dφ  Λkj (ωn ,  ωm,  φ,  φ  )NjZ (ωm,  φ  )               (1)
+                                                       0     2π
+                                              j,m
+
+Zk(ωn, φ)∆k(ωn, φ) = πT                                  2π  dφ  [Λkj (ωn ,  ωm,     φ,  φ  )  −  µk∗j (φ,  φ  )]  ×
+                                                       0     2π
+                                                  j,m
+                                                                                                                      (2)
+× Θ(ωc − |ωm|)Nk∆j(ωm, φ )
+
+where Θ(ωc − ωm) is the Heaviside function, ωc is a cut-oﬀ energy and
+
+                           +∞
+
+Λkj(ωn, ωm, φ, φ ) = 2                             ΩdΩα2Fkj(Ω, φ, φ )/[(ωn − ωm)2 + Ω2] (3)
+
+                        0
+
+NjZ(ωm, φ) =         ωm                                                                                               (4)
+              ωm2 + ∆j(ωm, φ)2
+
+Nj∆(ωm, φ) =    ∆j(ωm, φ)                                                                                             (5)
+              ωm2 + ∆j(ωm, φ)2
+
+We assume [22, 23, 24, 25, 26] that the electron-boson spectral functions
+
+α2(Ω)Fkj(Ω, φ, φ ) and the Coulomb pseudopotential µ∗kj(φ, φ ) at the lowest order to
+contain separated s and d-wave contributions,
+
+α2Fjk(Ω, φ, φ ) = λjskα2Fjsk(Ω) + λdjkα2Fd(Ω)cos(2φ)cos(2φ )                                                          (6)
+s± + d wave multiband Eliashberg theory for the iron pnictides                              4
+
+µ∗jk(φ, φ ) = µj∗ks + µ∗jkdcos(2φ)cos(2φ )                                               (7)
+
+as well as the self energy functions:
+
+Zk(ωn, φ) = Zks(ωn) + Zkd(ωn)cos(2φ)                                                     (8)
+
+∆k(ωn, φ) = ∆ks (ωn) + ∆dk(ωn)cos(2φ)                                                    (9)
+
+The spectral functions α2Fjsk,d(Ω) are normalized in the way that 2  +∞  dΩ α2Fjsk,d(Ω)  =  1
+                                                                     0         Ω
+
+In the more general case ∆k(ω, φ ) has s and d components while the renormalization
+
+function Zk(ω, φ ) = Zks(ω) has just the s component because the equation for Zkd(ω)
+
+is a homogeneous integral equation whose only solution in the weak-coupling regime
+
+is Zkd(ω) = 0 [29]. For simplicity we also assume that α2Fs(Ω) = α2Fd(Ω) and that
+the spectral functions is the diﬀerence of two Lorentzian, i.e. α2Fksj,d(Ω) = Cksj,d[L(Ω +
+
+Ωs0,,dkj, Υsk,jd) − L(Ω − Ω0s,kdj, Υsk,jd)] where L(Ω ± Ωs0,,dkj, Υks,jd) = [(Ω ± Ωs0,,dkj)2 + (Υks,jd)2]−1,
+
+Cksj,d are the normalization constant necessary to obtain the proper values of λsjk,d, Ω0s,jdk
+
+and Υsjk,d are the peak energies and half-width, respectively. This choice of the shape of
+
+spectral function is a good approximation of the true spectral function connected with
+
+antiferromagnetic spin ﬂuctuations [27]. In all the calculations we set Ωs0,,dkj = Ω0, i.e.
+
+we assume that the characteristic energy of spin ﬂuctuations is a single quantity for
+
+all the coupling channels, and Υks,jd = Ω0/2, based on the results of inelastic neutron
+
+scattering measurements [30]. The peak energy of the Eliashberg functions, Ω0, can be
+
+directly associated to the experimental critical temperature, Tc, by using the empirical
+
+law Ω0 = 2Tc/5 that has been demonstrated to hold, at least approximately, for all
+
+iron pnictides [31]. We have chosen a critical temperature Tc = 32 K which is a typical
+
+value for iron pnictides [14, 15]. It is important to note that the choice of these spectral
+
+functions is what makes this model speciﬁc for the iron pnictides, and that these results
+
+are valid for any system for which the electron-boson interaction can be described in
+this way. In the ﬁrst approximation we put µj∗k(φ, φ ) = 0 [32] and we do not include
+disorder induced scattering that is negligible for high quality materials without artiﬁcally
+
+introduced defects [33, 34, 35, 36].
+
+     We solve the imaginary axis s± + d-wave two-band Eliashberg equations for
+diﬀerent values of λsij,d and calculate the critical temperature and the symmetry of
+
+superconducting gaps. Then, via Pad`e approximants [37], we calculate the low-
+
+temperature value (T < Tc/10) of the gaps because, in presence of a strong
+coupling interaction, the value of ∆ks,d(iωn=0) obtained by solving the imaginary-
+axis Eliashberg equations can be very diﬀerent from the value of ∆ks,d obtained
+
+from the real-axis Eliashberg equations. After determining the gaps as a function
+
+of energy, we will be able to calculate the densities of the superconducting states
+
+(DOS) which is directly comparable with tunneling measurements at very low
+
+temperatures. We calculate also the temperature dependence of the order parameters
+
+in the s± + d case and the corresponding superﬂuid density. We use the following
+model for the values of the coupling constant (the input parameters) λkij =
+s± + d wave multiband Eliashberg theory for the iron pnictides  5
+
+λ1s,1d = 0.1 + n|λ1s,2d|  λs1,2d                       with i, j = 1, 2,n ≥ 0, λ1s2 < 0 and
+
+λs2,1d = λs1,2d           λs2,2d = 0.1 + 0.5n|λ1s,2d|
+
+λ1d2 > 0. Of course, λ1s2 > 0 is not possible without phonons (standard s + d case) so
+
+we neglect it. We solve the Eliashberg equations in three diﬀerent cases: n = 0 (pure
+
+interband case), n = 1 (all λij are comparable in size among them) and n = 10 (weak
+interband coupling λij << λii). At the moment we study just the situation where the
+value of n is the same for the two groups of λsij and λdij.
+
+3. RESULTS AND DISCUSSION
+
+Figure 1. Phase diagram of the order parameter symmetry with varying total coupling
+constants λdtot and λtsot, n = 0 case (pure interband).
+
+Figure 2. Phase diagram of the order parameter symmetry with varying total coupling
+constants λdtot and λstot, n = 1 case (balanced).
+s± + d wave multiband Eliashberg theory for the iron pnictides                                        6
+
+                  Figure 3. Phase diagram of the order parameter symmetry with varying total coupling
+                  constants λtdot and λstot, n = 10 case (pure intraband).
+
+Figures 1, 2 and 3 show the phase diagrams of this model with the symmetries of
+
+the order parameters as functions of the two total coupling parameters (λtsot and λdtot)
+
+(where λtso,dt =  2      Ni(0)λisj,d/  2    Ni(0),  and  Ni(0)  is  the  normal  density  of  states  at
+                  i,j=1                i=1
+
+the Fermi level for the i band) for the three n values discussed above. We see that in all
+
+cases there are only a couple of values of λtso,dtmax at which the s± +d symmetry is realized.
+
+This occurs at the intersection of the stability regions of s− and d− superconductivity.
+
+It should be noted that, as visible from the phase diagrams, only a narrow subset of
+
+parameters gives a self-consistent solution of the Eliashberg equations. Outside of these
+
+regions the calculations yield a critical temperature diﬀerent from the one that was set
+
+(and that determines Ω0): lower for smaller coupling parameters and higher for larger
+ones. Therefore, such results need to be discarded because are not consistent with the
+
+model assumptions. Full calculations for systems with diﬀerent Tc result in equal curves.
+The reason for this lies in the fact that we have imposed a further constraint (deduced
+
+from the experimental data) between Ω0 and Tc.
+
+     The three cases normalized to the maximum values of λtso,dt are shown together in
+ﬁgure 4. The behaviour is similar, but not quite the same. This shows that such s± + d
+symmetry of order parameter can be realized in diﬀerent systems (with predominant
+interband, intraband or balanced character), but in a very narrow parameter space in
+which the two symmetry contributions balance each other. It is important to remind
+here that the admixture of the s- and d- states is allowed in the orthorhombic state,
+as well as the pure cases, because both states belong to the same irreducible represen-
+tation (A1g). However, when one of the contributions (s or d) is suppressed a sort of
+”symmetry elevation” with respect to the interaction seems to take place, as observed
+in other ﬁelds [38, 39].
+s± + d wave multiband Eliashberg theory for the iron pnictides  7
+
+Figure 4. Phase diagram of the order parameter symmetry with varying normalized
+total coupling constants: n = 0 black squares, n = 1 red circles and n = 10 dark blue
+up triangles
+
+                     Figure 5. Densities of states (DOS) at very low temperatures (T = 1.5K) for the
+                     order parameter of the s± + d symmetry as functions of energy in the three diﬀerent
+                     cases: n = 0 red solid line, n = 1 black solid line and n = 10 dark blue solid line.
+
+     The low temperature densities of states as a function of energy for the s± + d
+symmetry are shown in ﬁgure 5. We show three diﬀerent situations: n = 0, n = 1
+and n = 10 (correspondent to intraband, balanced and interband cases, respectively).
+The energy dependences of the DOS in the cases n = 0 and n = 10 are similar and
+unusual, whereas the case n = 1 is diﬀerent and more standard. It is clearly seen that
+the form of the energy dependence of the DOS in the case when the order parameter
+has s± + d symmetry (n = 0 and n = 10) has rather unusual characteristics that diﬀer
+profoundly from the s- and d-cases, and can be easily identiﬁed in tunneling experiments.
+
+     The temperature dependences of the order parameter of the s± + d symmetry, cal-
+s± + d wave multiband Eliashberg theory for the iron pnictides  8
+
+                     Figure 6. Temperature dependences of the order parameters of the s± + d symmetry
+                     calculated by solution of Eliashberg equations on imaginary axis for the three diﬀerent
+                     cases: n = 0 panel (a), n = 1 panel (b) and n = 10 panel (c) The dark blue symbols
+                     are the s-wave component, the red symbols are the d-wave components.
+
+culated by solving the Eliashberg equations on the imaginary axis for three diﬀerent
+cases, are shown in ﬁgure 6 (panels a, b, c). It can be seen that there is a jump in the
+behavior of the d-component of the order parameter around T ∗ ∼ 24 K. This happens
+when the largest d-wave gap becomes smaller than the smallest s-wave one. Moreover,
+the values of 2∆si,d/kBTc are much larger than the BCS value.
+
+                     Figure 7. Temperature dependence of the superﬂuid density in the system with s± +d
+                     symmetry of the order parameter, calculated by solution of Eliashberg equations on
+                     imaginary axis for the three diﬀerent cases: n = 0 dark blue up triangles, n = 1 red
+                     circles and n = 10 black squares.
+
+     The temperature dependence of the superﬂuid density in a system with s± + d
+symmetry of the order parameter, calculated by solving the Eliashberg equations on the
+imaginary axis for three diﬀerent cases, is shown in Figure 7. There is a jump in the
+temperature dependences of the superﬂuid density at the same temperatures as for gaps
+of pure d-wave symmetry. The cases n = 1 and n = 10 are similar, while the case n = 0
+is completely diﬀerent.
+s± + d wave multiband Eliashberg theory for the iron pnictides  9
+
+At last, we discuss what such a gap structure would look like on the Fermi surface (F S)
+of a real material. In Figure 8, the magnitude of the gap (shown by the colormap) is
+represented on a generic Fermi surface consisting of two tubular Fermi sheets in the
+ﬁrst Brillouin zone for two cases: when the d-wave gap value exceeds the s-wave gap
+(panel a, below T ∗) and for the opposite situation (panel b, above T ∗). It is clear the
+tetragonal symmetry is lost that in both cases and only twofold symmetry is retained,
+as occurs in the nematic state [40]. Moreover, the order parameter is nodal only at low
+temperature, and the system shows a transition to a fully gapped order parameter at
+T ∗. This pecularity should be visible in tunneling measurements and with spectroscopic
+techniques.
+
+                     Figure 8. Schematic view of the gap values over a typical two band tubular Fermi
+                     surface (FS) folded in the Brillouin zone. Panel (a) shows the FS of the system where
+                     ∆d > ∆s while panel (b) shows the FS of the system where ∆s > ∆d.
+
+4. CONCLUSIONS
+
+We have solved the two band Eliashberg equations spanning the coupling constants
+parameter space in order to understand which pairing symmetries are possible if both
+s± and d wave coupling are considered. We considered the speciﬁc case of iron-based
+pnictide compounds, but our conclusions can be directly generalized to all orthorhombic
+systems in which the electron-boson coupling can be described in a similar way. For
+a ﬁxed critical temperature value and balanced bands, only a pair of λstot and λtdot
+input parameters yields the s± + d mixed symmetry. All other stable solutions lose one
+of the two contributions (s or d), showing a sort of symmetry elevation with respect
+to the electron-boson interaction, a fact allowed by the nonlinearity of the problem
+and by the compatibility with the orthorhombic state. For the s± + d cases, we
+calculated observables such as the density of superconducting states at low temperature
+and the temperature dependence of the superﬂuid density in order to make theoretical
+predictions that can be compared with experiments. In this way it will be possible
+to determine if this symmetry is really present in some of the systems where it has
+been proposed. Finally, we discussed the properties of the order parameter in terms of
+symmetry and nodality, highlighting a transition from a nodal to a fully gapped order
+parameter at a ﬁnite temperature T ∗.
+s± + d wave multiband Eliashberg theory for the iron pnictides  10
+
+Acknowledgment
+
+This work was supported by the MEPhI Academic Excellence Project (contract No.
+02.a03.21.0005) for the contribution of prof. G.A. Ummarino. D. Torsello acknowl-
+edges the partial support by the Italian Ministry of Education, University, and Re-
+search (Project PRIN HIBiSCUS, Grant No. 201785KWLE) and “Programma Oper-
+ativo Nazionale (PON) Ricerca e Innovazione 2014–2020”. The authors are extremely
+thankful to D. Daghero for fruitful discussion.
+
+ [1] J.G. Bednorz, and K.A. Mu¨ller, Zeitschrift fu¨r Physik B Condensed Matter 64, 189 (1986);
+ [2] C.C. Tsuei, and J.R. Kirtley, Rev. Mod. Phys. 72, 969 (2000);
+ [3] R.S. Gonnelli, A. Calzolari, D. Daghero, L. Natale, G.A. Ummarino, V.A. Stepanov, and
+
+        M. Ferretti, European Physical Journal B 22, 411 (2001);
+ [4] A.F. Hebard, M.J. Rosseinky, R.C. Haddon, D.W. Murphy, S.H. Glarum, T.T.M. Palstra,
+
+        A.P. Ramirez, and A.R. KartonNature 350, 600 (1991);
+ [5] A. Sanna, S. Pittalis, J.K. Dewhurst, M. Monni, S. Sharma, G.A. Ummarino, S. Massidda,
+
+        and E.K.U. Gross1, Physical Review B 85, 184514 (2012).
+ [6] J. Nagamatsu, N. Nakagawa, T. Muranaka, Y. Zenitani, and J. Akimitsu, nature 410 63
+
+        (2001)
+ [7] D. Daghero, R.S. Gonnelli, G.A. Ummarino, V.A. Stepanov, J. Jun, S.M. Kazakov, J.
+
+        Karpinski, Physica C 385, 255 (2003);
+ [8] D. Daghero, A. Calzolari, G.A. Ummarino, M. Tortello, and R.S. Gonnelli, V.A. Stepanov,
+
+        C. Tarantini, P. Manfrinetti, E. Lehmann, Phys. Rev. B 74, 174519 (2006).
+ [9] Y. Kamihara, H. Hiramatsu, M. Hirano, R. Kawamura, H. Yanagi, T. Kamiya, and H.
+
+        Hosono Journal of the American Chemical Society 31 10012 (2006);
+[10] D. Torsello, G.A.Ummarino, L. Gozzelino, T. Tamegai, G. Ghigo, Phys. Rev. B 99,
+
+        134518 (2019);
+[11] G. Ghigo, G.A. Ummarino, L. Gozzelino, and T. Tamegai,Phys. Rev. B 96, 014501 (2017);
+[12] G.A. Ummarino, S. Galasso, A. Sanna, Journal of Physics Condensed Matter 25, 205701
+
+        (2013).
+[13] P.J. Hirschfeld, M.M. Korshunov, and I.I. Mazin, Reports on Progress in Physics 74,
+
+        124508 (2011).
+[14] M. Smidman, F.K.K. Kirschner, D.T. Adroja, A.D. Hillier, F. Lang, Z.C. Wang, G.H.
+
+        Cao, and S.J. Blundell, Phys. Rev. B 97, 060509 (2018);
+[15] F.K.K. Kirschner, D.T. Adroja, Z-C. Wang, F. Lang, M. Smidman, P.J. Baker, G.-H.
+
+        Cao, S. J. Blundell, Phys. Rev. B 97, 060506 (2018);
+[16] T. Wang, J. Chu, J. Feng, L. Wang, X. Xu, W. Li, H.H. Wen, X.S. Liu, and G. Mu,
+
+        SCIENCE CHINA Physics, Mechanics & Astronomy, 63, 1, (2020);
+[17] G. Pang, M. Smidman, J. Zhang, L. Jiao, Z. Weng, E. M. Nica, Y. Chen, W. Jiang, Y.
+
+        Zhang, W. Xie, H. S. Jeevan, H. Lee, P. Gegenwart, F. Steglich, Q. Si, and H. Yuan,
+        Proc. Natl. Acad. Sci. 115, 5343 (2018);
+[18] A. Charnukha, O.V. Dolgov, A.A. Golubov, Y. Matiks, D.L. Sun, C.T. Lin, B. Keimer,
+        and A.V. Boris, Phys. Rev. B 84, 174511 (2011)
+[19] D. Torsello, K. Cho, K. R Joshi, S. Ghimire, G.A. Ummarino, N.M. Nusran, M.A. Tanatar,
+        W.R. Meier, M. Xu, S.L. Bud’ko, P.C. Canﬁeld, G. Ghigo, and R. Prozorov, Phys. Rev.
+        B 100, 094513 (2019);
+[20] L. Boeri, M. Calandra, I.I. Mazin, O.V. Dolgov, F. Mauri, Phys. Rev. B 82, 020506
+s± + d wave multiband Eliashberg theory for the iron pnictides  11
+
+        (2010).
+[21] C.C. Tsuei and J.R. Kirtley, Rev. Mod. Phys., 72, 969 (2000)
+[22] G.A. Ummarino, Eliashberg Theory. In: Emergent Phenomena in Correlated Matter,
+
+        edited by E. Pavarini, E. Koch, and U. Schollwo¨ck, Forschungszentrum Ju¨lich GmbH
+        and Institute for Advanced Simulations, pp.13.1-13.36 (2013) ISBN 978-3-89336-884-6.
+[23] C.T. Rieck, D. Fay, L. Tewordt, Phys. Rev. B 41, 7289 (1989).
+[24] G.A.Ummarino and R.S. Gonnelli, Physica C 328, 189 (1999).
+[25] E. Cappelluti, G.A. Ummarino, Phys. Rev. B 76, 104522 (2007).
+[26] F. Jutier, G.A. Ummarino, J.C. Griveau, F. Wastin, E. Colineau, J. Rebizant, N. Magnani,
+        and R. Caciuﬀo, Phys. Rev. B 77, 024521 (2008).
+[27] G.A. Ummarino, Phys. Rev. B 83, 092508 (2011).
+[28] G.A. Ummarino and R.S. Gonnelli, Phys. Rev. B 56, 14279 (1997).
+[29] K. A. Musaelian, J. Betouras, A. V. Chubukov, and R. Joynt, Phys. Rev. B 53, 3598
+        (1996).
+[30] D.S. Inosov, J.T. Park, P. Bourges, D.L. Sun, Y. Sidis, A. Schneidewind, K. Hradil, D.
+        Haug, C.T. Lin, B. Keimer and V. Hinkov, Nature Physics 6, 178 (2010).
+[31] J. Paglione and R.L. Greene, Nature Physics 6, 645 (2010).
+[32] P.J. Hirschfeld, M.M. Korshunov, and I.I. Mazin, Rep. Prog. Phys. 74, 124508, (2011).
+[33] D. Torsello, G. Ummarino, J. Bekaert, L. Gozzelino, R. Gerbaldo, M. Tanatar, P. Canﬁeld,
+        R. Prozorov, and G. Ghigo, Phys. Rev. Applied 13, 064046 (2020);
+[34] D. Torsello, L. Gozzelino, R. Gerbaldo, T. Tamegai, and G. Ghigo, Sci. Rep. 11, 5818
+        (2021);
+[35] D. Torsello, R. Gerbaldo, L. Gozzelino, F. Laviano, A. Takahashi, A. Park, S. Pyon, A.
+        Ichinose, T. Tamegai, and G. Ghigo, Supercond. Sci. Technol. 33, 094012 (2020);
+[36] G. Ghigo and D. Torsello, Microwave Analysis of Unconventional Superconductors with
+        Coplanar-Resonator Techniques (Springer, Cham, 2022);
+[37] H. Vidberg and J. Serene, J. Low Temp. Phys. 29 179 (1977);
+[38] K.F. Karlsson, M.A. Dupertuis, D.Y. Oberli, E. Pelucchi, A. Rudra, P.O. Holtz, and E.
+        Kapon Phys. Rev. B 81, 161307(R) (2010)
+[39] M.A. Dupertuis, K.F. Karlsson, D.Y. Oberli, E. Pelucchi, A. Rudra, P.O. Holtz, and E.
+        Kapon Phys. Rev. Lett. 107, 127403 (2011)
+[40] P. Carretta, G. Prando, Riv. Nuovo Cim. 43, 1 (2020).
+

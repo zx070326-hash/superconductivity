@@ -1372,7 +1372,10 @@ them; 19 and 21 are genuine discrepancies found in the sources and need main-ses
     > $C_\infty=\frac1{2\pi}\sqrt{\mathfrak g(2)}$, the certified enclosure of $\mathfrak g(2)$
     > (Appendix A) gives $C_\infty=0.1827262477\ldots$. Allen and Dynes [AD, eq. (22)] showed
     > that $T_c\to(\lambda\langle\omega^2\rangle)^{1/2}f(\mu^*)$ as $\lambda\to\infty$ and gave
-    > the numerical value $f(0)\approx0.182$ [AD, eq. (25)]; the sharp value
+    > the numerical value $f(0)\approx0.182$ [AD, eq. (25)]; Leavens, Allen and Dynes [LAD, eq.
+    > (1)] subsequently gave $f(0)\approx0.1827$, obtained by numerical solution of the gap
+    > equations, together with a criterion delimiting the range in which that asymptotic
+    > relation is accurate; the sharp value
     > $f(0)=\frac1{2\pi}\sqrt{\mathfrak g(2)}=0.1827262477\ldots$ was identified in [KAY I] (see
     > also [KAY II, Remark 3]), and $C_\infty$ reproduces it. Granted that
     > asymptotics, which we do not reprove, Theorem 1(c) is therefore a *sharp* bound: no
@@ -1406,8 +1409,25 @@ them; 19 and 21 are genuine discrepancies found in the sources and need main-ses
     numerical constant**; $0.182$ ($\mu^*=0$) is eq. (25) (64-frequency computation), $0.180$ is
     eq. (24) (2×2 lower bound); the string "0.1827" appears nowhere in [AD]. The ten-digit
     $0.1827262477\ldots=\frac1{2\pi}\sqrt{\mathfrak g(2)}$ is KAY's, printed in [KAY I] and at
-    [KAY III, p. 28]. The wording above and the [AD] reference entry have been corrected
-    accordingly. [KAY II, Remark 3] is confirmed verbatim (p.14) as attributing the asymptotic
+    [KAY III, p. 28].
+    **(iii) *Amended 2026-09-20 — the four-digit $0.1827$ is not [AD]'s, but it is not new
+    either: it is [LAD]'s, from 1979.*** The statement "the string 0.1827 appears nowhere in
+    [AD]" stands and is unchanged; what was missing is the intermediate reference. Leavens,
+    Allen & Dynes, *Solid State Commun.* **30**, 595 (1979), eq. (1), prints
+    $k_BT_c\approx0.1827[\lambda\langle\omega^2\rangle]^{1/2}$, with p. 596 stating verbatim
+    "Numerical solution of the gap equations gives $c(0)=0.1827$" — four digits, agreeing with
+    $C_\infty$ to $+0.0144\%$. Full text obtained 2026-09-20 and read as page images; record in
+    `theory/notes/literature/leavens_allen_dynes_1979_priority_check_2026-09-18.md` §8. The
+    paragraph at item 18 has been amended accordingly. Two consequences for wording, both
+    mandatory: **(a)** the novelty of §3 is the *inequality* (valid for every $\lambda$ and
+    every $P$) and the *certified* constant, never the four-digit numerical value; [LAD] had
+    the latter, and had it as an asymptotic *limit*, not a bound. **(b)** [LAD]'s only rigorous
+    inequality, eq. (8), is $\lambda\langle\omega^2\rangle/\omega_{\max}^2\le
+    1+(2\pi k_BT_c/\omega_{\max})^2$, which solves to $k_BT_c\ge
+    (1/2\pi)\sqrt{\lambda\langle\omega^2\rangle-\omega_{\max}^2}$ — a *lower* bound on $T_c$,
+    i.e. the opposite direction from Theorem 1(c). It is therefore no competitor, and may be
+    cited as a complementary floor. The wording above and the [AD] reference entry have been
+    corrected accordingly. [KAY II, Remark 3] is confirmed verbatim (p.14) as attributing the asymptotic
     *form* to [AD, eq. (22)]; the elementwise $P$-average pointer belongs at [KAY II, p. 10,
     Remark 2], not Remark 3. A further citable point closed by this check: [AD] Appendix A
     proves the elementwise Einstein inequality but only *asserts* the eigenvalue consequence

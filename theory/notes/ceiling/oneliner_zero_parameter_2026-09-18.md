@@ -16,10 +16,11 @@ $$
 它上游依赖已合并主线的 `theory/derivations/P4_main_theorems.md` 定理 1(c) + 定理 2 +
 `theory/derivations/P4_g2_analytic.md`（𝔤(2) 的解析包围）。
 
-⚠ **分支状态**：`P4_eta_over_M.md` 本身在**未合并**分支 `etaM-corrected`（HEAD `ed6de52`）上，
-当前 `p4-conj2` 分支的工作树里**没有这个文件**（`git log --all` 找到它，工作树 `ls` 找不到）。
-`theory/derivations/INDEX.md:114` 把它列为「方向 C」并标「未合并（+2）」——这与本任务收到的派活描述一致，
-但意味着**这份规范来源尚未进入本分支**，读者要看它必须切到那个分支或用 `git show ed6de52:...`。
+**分支状态（2026-09-19 订正，原⚠已过期）**：`P4_eta_over_M.md` 所在分支 `etaM-corrected`（HEAD `ed6de52`）
+已于 commit `9e1c83d`（「合并 etaM-corrected：η/M 定理（一行公式的规范来源）进入 p4-conj2」）**合并进 `p4-conj2`**；
+`git merge-base --is-ancestor etaM-corrected p4-conj2` 核实为真，文件当前**就在本分支工作树里**
+（`theory/derivations/P4_eta_over_M.md`），可直接 `Read` 复核，不再需要切分支或 `git show`。
+下方引用「规范来源」处均按此更新状态理解；§7 末尾的流程问题（原「建议先合并该分支」）已解决，不再适用。
 
 符号定义：
 
