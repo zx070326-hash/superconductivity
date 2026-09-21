@@ -1,6 +1,6 @@
 # P4 · 唯一性（Conjecture 2 剩余半句）—— 锥不变性策略（v0.3，已证、已审）
 
-建立：2026-09-12　状态：v0.3（**reviewer `uniq-review` 对抗核：PROVED、无 CHALLENGED**（`notes/2026-09-12_uniqueness_review.md`；两处证明文字订正已并入 §3.A：C−C 稠密构造、Tonelli 句改有限截断；补 λ₁>0 一句）；**引理 A、B 已初等证明**（implementer `uniq-lemmas`，§2.A，主会话复核三组分解/关键恒等式/凸性 + 复跑 37 检查）；§3 主论证严格写法见 §3.A；未审）
+建立：2026-09-12　状态：v0.3（**reviewer `uniq-review` 对抗核：PROVED、无 CHALLENGED**（`notes/uniqueness_review_2026-09-12.md`；两处证明文字订正已并入 §3.A：C−C 稠密构造、Tonelli 句改有限截断；补 λ₁>0 一句）；**引理 A、B 已初等证明**（implementer `uniq-lemmas`，§2.A，主会话复核三组分解/关键恒等式/凸性 + 复跑 37 检查）；§3 主论证严格写法见 §3.A；未审）
 上游：`P4_conjecture2.md`（§1 界半句、§8 存在性引理 X）、`P4_einstein_extremal.md`（§1.C 常核恒等式 𝒪[1]=2uuᵀ−I、§0 已排除的 Loewner 路线）。
 
 ## 0. 目标

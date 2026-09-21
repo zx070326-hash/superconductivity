@@ -7,5 +7,13 @@ theory/data/external/*
 !theory/data/external/MANIFEST.md
 # agent worktrees (git metadata lives in .git/worktrees; these are checkouts)
 .claude/worktrees/
-# scratch / probe scripts: uncommitted by convention, use `git add -f` to override
+# scratch / probe scripts: uncommitted by convention.
+# 例外（毕业规则，2026-09-18）：脚本一旦被任何 notes/ 或 derivations/ 的 .md 点名引用为证据，
+# 它就不再是探针，必须 `git add -f` 入库。已跟踪的文件不再受本行影响。
+# 自查：见 tools/check_cited_scripts_tracked.sh
 theory/notes/_scratch_ir/
+# Claude 本地约定（个人 / 本机，不共享）
+CLAUDE.local.md
+# Claude Code harness local settings and hook probe logs
+.claude/settings.local.json
+.claude/hook_probe.log

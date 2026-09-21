@@ -1,0 +1,232 @@
+arXiv:0904.1808v2 [cond-mat.supr-con] 28 Apr 2009  Three-band s± Eliashberg theory and the superconducting gaps of iron pnictides
+
+                                                                                G.A. Ummarino,∗ M. Tortello, D. Daghero, and R.S. Gonnelli
+                                                                                          Dipartimento di Fisica and CNISM, Politecnico di Torino,
+                                                                                                Corso Duca degli Abruzzi 24, 10129 Torino, Italy
+
+                                                                   The experimental critical temperatures and gap values of the superconducting pnictides of both
+                                                                the 1111 and 122 families can be simultaneously reproduced within the Eliashberg theory by using
+                                                                a three-band model where the dominant role is played by interband interactions and the order
+                                                                parameter undergoes a sign reversal between hole and electron bands (s±-wave symmetry). High
+                                                                values of the electron-boson coupling constants and small typical boson energies (in agreement with
+                                                                experiments) are necessary to obtain the values of all the gaps and to correctly reproduce their
+                                                                temperature dependence.
+
+                                                                 PACS numbers: 74.70.Dd, 74.20.Fg, 74.20.Mn
+
+                                                      The recently discovered Fe-based pnictide supercon-        niques such as ARPES, point-contact spectroscopy, STM
+                                                   ductors [1, 2, 3] have aroused great interest in the scien-   etc., have been carried out to study the superconducting
+                                                   tiﬁc community. They have indeed shown that high Tc           gaps in pnictides (for a review see [7]). Although results
+                                                   superconductivity does not uniquely belong to cuprates        are sometimes in disagreement with each other, a multi-
+                                                   but can take place in Cu-free systems as well. Never-         gap scenario is emerging with evidence for rather high
+                                                   theless, as in cuprates, superconductivity occurs upon        gap ratios, ∆1/∆2 ≈ 2 − 3 [7]. A two-band BCS model
+                                                   charge doping of a magnetic parent compound above a           cannot account either for the amplitude of the experi-
+                                                   certain critical value. However, important diﬀerences ex-     mental gaps and for their ratio. Three-band BCS models
+                                                   ist: the parent compound in cuprates is a Mott insulator      have been investigated [8, 9, 10] which can reproduce the
+                                                   with localized charge carriers and a strong Coulomb re-       experimental gap ratio but not the exact experimental
+                                                   pulsion between electrons; in the pnictides, on the other     gap values. In this regard a reliable study has to be car-
+                                                   hand, it is a bad metal and shows a tetragonal to or-         ried out within the framework of the Eliashberg theory
+                                                   thorhombic structural transition below ≈ 140 K, followed      for strong coupling superconductors [11], due to the pos-
+                                                   by an antiferromagnetic (AF) spin-density-wave (SDW)          sible high values of the coupling constants necessary to
+                                                   order [4]. Charge doping gives rise to superconductiv-        explain the experimental data.
+                                                   ity and, at the same time, inhibits the occurrence of
+                                                   both the static magnetic order and the structural transi-        By using this strong-coupling approach, we show here
+                                                   tion. The Fermi surface consists of two or three hole-like    that the superconducting iron pnictides represent a case
+                                                   sheets around Γ and two electron-like sheets around M .       of dominant negative interband-channel superconductiv-
+                                                   Up to now, the most intensively studied systems are the       ity (s±-wave symmetry) with high values of the electron-
+                                                   1111 compounds, ReFeAsO1−xFx (Re = La, Sm, Nd, Pr,            boson coupling constants and small typical boson ener-
+                                                   etc.) and especially the 122 ones, hole- or electron-doped    gies. Furthermore we prove that a small contribution of
+                                                   AFe2As2 (A = Ba, Sr, Ca). The huge amount of exper-           intraband coupling does not aﬀect signiﬁcantly the ob-
+                                                   imental work already done in 122 compounds is due to          tained results. The model is compared with the results
+                                                   the availability of rather big high-quality single crystals.  of two representative experiments in 122 [12] and 1111
+                                                                                                                 [13] compounds proving to be able to reproduce fairly
+                                                      Most of the present research eﬀort is spent clarifying     well the values and the whole temperature dependence
+                                                   the microscopic pairing mechanism responsible for super-      of the superconducting energy gaps.
+                                                   conductivity. The conventional phonon-mediated cou-
+                                                   pling mechanism cannot explain the observed high Tc           FIG. 1: Schematic drawing of the multiband model used in
+                                                   within standard Migdal-Eliashberg theory and the inclu-       this work. The two hole bands (1 and 2) are centered around
+                                                   sion of multiband eﬀects increases Tc only marginally [5].    the Γ point, while the equivalent electron band (3) around
+                                                   On the other hand, the magnetic nature of the parent          the M point of the reduced Brillouin zone.
+                                                   compound seems to favor a magnetic origin of supercon-
+                                                   ductivity and a coupling mechanism based on nesting-
+                                                   related AF spin ﬂuctuations has been proposed [6]. It
+                                                   predicts an interband sign reversal of the order parameter
+                                                   between diﬀerent sheets of the Fermi surface (s± symme-
+                                                   try). The number, amplitude and symmetry of the super-
+                                                   conducting energy gaps are indeed fundamental physical
+                                                   quantities that any microscopic model of superconductiv-
+                                                   ity has to account for. Experiments with powerful tech-
+                                                                                                   2
+
+   As a starting point we can model the electronic struc-   nine elements of the Coulomb pseudopotential matrix,
+ture of pnictides by using a three-band model (Fig.1)
+with two hole bands (1 and 2) and one equivalent elec-      µi∗j(ωc); iv) nine non-magnetic (ΓiNj ) and nine paramag-
+tron band (3) [8]. The s-wave order parameters of the       netic (ΓM ij ) impurity scattering rates.
+hole bands have opposite sign with respect to that of the   It is obvious that a practical solution of these equations
+electron one [6]. Intraband coupling could be provided by
+phonons while interband coupling by antiferromagnetic       requires a drastic reduction in the number of free param-
+spin ﬂuctuations. In a one-band system spin ﬂuctuations
+(SF) are always pair breaking but in a multiband one        eters of the model. On the other hand, from the work
+the interband term can contribute to increase the critical
+temperature. Indeed, in the multiband Eliashberg equa-      of Mazin et al. [8] we know that: i) λipih >> λipjh ≈ 0
+tions (EE) the SF term in the intraband channel has
+positive sign for the renormalization functions Zi and      i.e. phonons mainly provide intraband coupling but the
+negative sign for the superconducting order parameters
+∆i thus leading to a strong reduction of Tc. However, if    total electron-phonon coupling constant Σiλpiih should be
+we consider negative interband contributions in the ∆i      very small [5], ii) λisjp >> λisip ≈ 0, i.e. SF mainly pro-
+equations, the ﬁnal result can be an increase of the crit-
+ical temperature [14].                                      vide interband coupling. We include these features in the
+
+   Let us consider the generalization of the Eliashberg     most simple three-band    model by     posing: λpiih = λpijh = 0,
+theory [11] for multiband systems, that has already been    λisip = 0 and µi∗i(ωc) =  µi∗j (ωc) =  0. In addition, we set
+used with success to study the MgB2 superconductor [15].
+To obtain the gaps and the critical temperature within      ΓiNj = ΓM ij = 0 in eqs. (1) and (2).
+the s-wave, three-band Eliashberg equations one has to
+solve six coupled integral equations for the gaps ∆i(iωn)   Under these approximations, the electron-boson
+and the renormalization functions Zi(iωn), where i is a
+band index that ranges between 1 and 3 (see Fig.1) and      coupling-constant matrix is then [8]:
+ωn are the Matsubara frequencies. For completeness we
+included in the equations the non-magnetic and magnetic      0 0 λ31ν1 
+impurity scattering rates in the Born approximation, ΓNij    0 0 λ32ν2 
+and ΓM ij :
+                                                               λ31 λ32 0
+     ωnZi(iωn) = ωn + (ΓNij + ΓM ij )NjZ (iωn) + (1)
+                                                               where ν1 = N1(0)/N3(0), ν2 = N2(0)/N3(0) and Ni(0)
+                                              j             is the normal density of states at the Fermi level for the
+                                                            i-band (i = 1, 2, 3 according to Fig.1).
+                         πT ΛiZj (iωn, iωm)NjZ (iωm)
+                                                               We initially solved the EE on the imaginary axis to
+                                           m,j              calculate the critical temperature and, by means of the
+                                                            technique of the Pad`e approximants, to obtain the low-
+           Zi(iωn)∆i(iωn) = (ΓiNj − ΓM ij )Nj∆(iωn) + (2)   temperature value of the gaps. In presence of a strong
+                                                            coupling interaction or of impurities, however, the value
+                                                     j      of ∆i(iωn=0) obtained by solving the imaginary-axis EE
+                                                            can be very diﬀerent from the value of ∆i obtained from
+πT [Λi∆j (iωn, iωm) − µ∗ij (ωc)]θ(ωc − |ωm|)Nj∆(iωm)        the real-axis EE [16]. Therefore, in order to determine
+                                                            the exact temperature dependence of the gaps, we then
+      m,j                                                   solved the three-band EE in the real-axis formulation.
+
+where ΛZij (iωn, iωm) = Λipjh(iωn, iωm) + Λsijp(iωn, iωm),     We tried to reproduce the critical temperature and the
+                                                            gap values in two representative cases: i) the 122 com-
+Λi∆j (iωn, iωm) = Λipjh(iωn, iωm) − Λisjp(iωn, iωm).        pound Ba0.6K0.4Fe2As2 with Tc = 37 K where ARPES
+                                                            measurements gave ∆1(0) ≈ 12.1 meV, ∆2(0) ≈ 5.5
+θ is the Heaviside function and ωc is a cut-                meV and ∆3(0) ≈ 12.8 meV [12]; ii) the 1111 com-
+               In particular, Λipjh,sp(iωn, iωm) =          pound SmFeAsO0.8F0.2 with Tc = 52 K where from
+oﬀ energy.                                                  point-contact spectroscopy measurements we obtained
+                                                            ∆1(0) = 18 ± 3 meV and ∆2(0) = 6.15 ± 0.45 meV [13].
++∞  dΩαi2j  F  ph,sp(Ω)/[(ωn  −  ωm)2  +  Ω2],  where  ph
+0                                                              Inelastic neutron-scattering experiments suggest that
+                                                            the typical boson energy possibly responsible for super-
+means “phonon” and sp “spin ﬂuctuations”. Fi-               conductivity ranges roughly between 10 and 30 meV
+                                                            [17]. In our numerical simulations we used spectral func-
+nally, Nj∆(iωm) = ∆j(iωm)/ ωm2 + ∆2j (iωm) and              tions with Lorentzian shape, i.e. αi2jF (Ω) = Cij[L(Ω +
+                                                            Ωij, Yij) − L(Ω − Ωij, Yij)] where L(Ω ± Ωij, Yij) = [(Ω ±
+NjZ (iωm) = ωm/ ωm2 + ∆2j (iωm).                            Ωij)2+(Yij)2]−1, Cij are the normalization constants nec-
+                                                            essary to obtain the proper values of λij, while Ωij and
+   In principle the solution of the three-band EE shown in  Yij are the peak energies and half-widths, respectively.
+                                                            In all our calculations we always set Ωij = Ω0, with Ω0
+eqs.1 and 2 requires a huge number of input parameters:     ranging between 5 and 35 meV and Yij = 2 meV. The
+i) nine electron-phonon spectral functions, αi2jF ph(Ω);    cut-oﬀ energy is ωc = 12 · Ω0 and the maximum quasi-
+ii) nine electron-SF spectral functions, αi2jF sp(Ω); iii)  particle energy is ωmax = 16 · Ω0.
+
+                                                               In the 122 case (Tc = 37 K) we know that ν1 = 1 and
+                                                            ν2 = 2 [8] while in the 1111 case (Tc = 52 K) we have
+                                                                                                               3
+
+FIG. 2: Full symbols, left axis: Calculated gap values at T =2  FIG. 3: Calculated temperature dependence of the gaps
+K for Ba0.6K0.4Fe2As2 (upper panel) and SmFeAsO0.8F0.2          for Ba0.6K0.4Fe2As2 (Tc = 37 K, upper panel) and for
+(lower panel) as function of typical boson energy Ω0. Open      SmFeAsO0.8F0.2 (Tc = 52 K, lower panel): ∆1(T ) (red solid
+symbols, right axis: Electron-boson coupling constants, λ31     line), ∆2(T ) (blue dashed line) and ∆3(T ) (green dash-dot
+and λ32 as function of Ω0. The inset shows the spectral func-   line). Symbols are experimental data from ref. [12] (upper
+tion used in this model in the case Ωij = 10 meV.               panel) and ref. [13] (lower panel).
+
+ν1 = 0.4 and ν2 = 0.5 [18]. Once the energy of the boson        close to the experimental one [9, 10].
+peak, Ω0 is set, only two free parameters are left in the
+model: λ31 and λ32.                                                Another important result of the model is the temper-
+                                                                ature dependence of the gaps. Figure 3 shows this de-
+   By properly selecting the values of these parameters         pendence for the experimental gaps (symbols) together
+it is relatively easy to obtain the experimental values of      with the theoretical ∆i(T ) curves obtained by the three-
+the critical temperature and of the small gap. It is more       band Eliashberg model (lines) for Ba0.6K0.4Fe2As2 (up-
+diﬃcult to reproduce the values of the large gaps of band       per panel) and SmFeAsO0.8F0.2 (lower panel). The pa-
+1 and 3 since, due to the high 2∆1,3/kBTc ratio (of the         rameters used for the 122 compound are Ω0 = 10 meV,
+order of 8-9), high values of the coupling constants and        λ31 = 4.267 and λ32 = 0.569; for the 1111 compound we
+small boson energies are required. Fig.2 shows the values       used Ω0 = 10 mev, λ31 = 14.520 and λ32 = 1.708. The
+of the calculated gaps (full symbols, left axis) as function    experimental temperature dependence of the gaps shown
+of the boson peak energy, Ω0. The corresponding values          in the upper panel is rather unusual with the gaps slightly
+of λ31 and λ32, chosen in order to reproduce the values of      decreasing with increasing temperature until they sud-
+Tc and of the small gap, ∆2, are also shown in the ﬁgure        denly drop close to Tc. The theory reproduces very well
+(open symbols, right axis). In both materials, only when        this behavior, which is possible only in a very strong cou-
+Ω0 ≤ 10 meV the value of the large gaps correspond to           pling regime [16]. The diﬀerent temperature dependence
+the experimental data. Indeed, when Ω0 increases, the           observed in the lower panel of Fig. 3 results from a com-
+values of ∆1 and ∆3 strongly decrease. As a consequence,        plex non-linear dependence of ∆i vs. T curves on λ31.
+a rather small energy of the boson peak together with a         Further details will be given in a forthcoming paper.
+very strong coupling (particularly in the 3-1 channel) is
+needed in order to obtain the experimental Tc and the           λ31 = 3.866  λ32 = 0.471 µi∗j = 0, λii = 0.4
+correct gap values. In this regard, it is worth noticing
+that the absolute values of the large gaps cannot be re-        ∆1 = 10.30 meV ∆2 = 5.62 meV |∆3| = 10.24 meV
+produced in a interband-only, two-band Eliashberg model
+[19] as well as within a three-band BCS model. In the           TABLE I: The eﬀect of a small contribution of intraband cou-
+latter case it is only possible to obtain a ratio of the gaps   pling, λii = 0.4 for the case of Ba0.6K0.4Fe2As2 at T = 2 K.
+                                                              4
+
+λ31 = 2.730   λ32 = 0.758 µ∗ij = 0.1, λii = 0.4
+
+∆1 = 7.49 meV ∆2 = 5.72 meV |∆3| = 7.98 meV
+
+TABLE II: The eﬀect of the Coulomb interaction, µ∗ij for the
+case shown in Table I.
+
+   We also tested the eﬀect into the model of a small         FIG. 4: The calculated gaps and electron-boson coupling con-
+intraband coupling (possibly of phonon origin). In the        stants λ31 and λ32 in the 1111 case as function of the weight
+case of Ba0.6K0.4Fe2As2 we used λii = 0.4 since we know       wp of the low-energy peak Ω1. Ω2 = 20 meV (upper panel)
+indeed that this coupling cannot be very high [5]. It         and 30 meV (lower panel).
+might be thought that this term can sensibly contribute
+to increase the gap values but, as can be seen in Table        [1] Y. Kamihara, et al., J. Am. Chem. Soc. 130, 3296-3297
+I, this is not the case: the gap values only show a slight          (2008).
+increase (of the order of 1%).
+                                                               [2] Z.A. Ren, et al., Chin. Phys. Lett. 25, 2215 (2008).
+   The eﬀect of Coulomb interaction was also investigated      [3] M.Rotter, et al., Phys.Rev.Lett. 101, 107006 (2008).
+for the case shown in Table I where a weak intraband           [4] Clarina de la Cruz, et al., Nature, 453, 899 (2008).
+coupling is included. We chose µ∗ij = 0.1 and, as ex-          [5] L. Boeri, O.V. Dolgov and A.A. Golubov, Phys. Rev.
+pected, we found that the intraband Coulomb pseudopo-
+tential has a negligible eﬀect while the interband one [14]         Lett. 101, 026403 (2008); L. Boeri et al., to appear in
+strongly contributes to raise Tc and reduces in a consid-           Physica C Special Issue on Pnictides, arXiv:0902.0288
+erable way the value of λ31: in this case, as shown in              (2009).
+Table II, it is only possible to obtain the correct value      [6] I.I. Mazin et al., Phys. Rev. Lett. 101, 057003 (2008).
+of the small gap. As a consequence, this result seems to       [7] Physica C, Special Issue on Pnictides (2009), in press.
+exclude a strong interband Coulomb interaction in these        [8] I.I. Mazin and J. Schmalian, to appear in Physica C Spe-
+compounds.                                                          cial Issue on Pnictides, arXiv:0901.4790 (2009).
+                                                               [9] L. Benfatto et al., Phys. Rev. B 78, 140502(R) (2008).
+   Finally we have also examined, for SmFeAsO0.8F0.2,         [10] E.Z. Kuchinskii and M.V. Sadovskii, arXiv:0901.0164
+the case of a spectral function with two peaks at energies          (2009).
+Ω1 and Ω2. In the upper panel of Fig. 4 the two boson         [11] G.M. Eliashberg, Sov. Phys. JETP 3, 696 (1963).
+energies are Ω1 = 10 meV and Ω2 = 20 meV, while in the        [12] H. Ding et al., Europhys. Lett., 83, 47001 (2008).
+lower panel we have Ω1 = 10 meV and Ω2 = 30 meV. The          [13] D. Daghero et al., arXiv:0812.1141v1 (2008); R.S.
+gap values (left axis) and the coupling constants, λ31 and          Gonnelli et al., to appear in Physica C Special Issue on
+λ32 (right axis) are plotted as a function of the weight            Pnictides, arXiv:0902.3441 (2009).
+of the low-energy peak, wp. As somehow expected, when         [14] G.A. Ummarino, J. Supercond. Nov. Magn. 20, 639
+the weight of this peak is larger, (wp = 0.75) the gaps ∆1          (2007).
+and ∆3 are larger and close to the experimental ones but      [15] E.J. Nicol, J.P. Carbotte, Phys. Rev. B 71, 054501
+the coupling constants, λ31 and λ32 strongly increase.              (2005); G.A.Ummarino, et al., Physica C 407, 121
+                                                                    (2004).
+   In conclusion, we have shown that the newly discov-        [16] G.A.Ummarino and R.S. Gonnelli, Physica C 328, 189
+ered iron pnictides very likely represent a case of dom-            (1999).
+inant negative interband-channel pairing superconduc-         [17] A. D. Christianson et al., Nature 456, 930 (2008); R.
+tivity where an electron-boson coupling, such as the                Osborn, et al., to appear in Physica C Special Issue on
+electron-SF one, can became a fundamental ingredient                Pnictides, arXiv:0902.3760, (2009).
+to increase Tc in a multiband strong-coupling picture. In     [18] I.I. Mazin, private communication.
+particular, the present results prove that a simple three-    [19] O.V. Dolgov, et al., Phys. Rev. B 79, 060502(R) (2009);
+band model in strong-coupling regime can reproduce in               G.A. Ummarino, to be published in J. Supercond. Nov.
+a quantitative way the experimental Tc and the energy               Magn.
+gaps of the pnictide superconductors with only two free
+parameters, λ31 and λ32, provided that the typical ener-
+gies of the spectral functions are of the order of 10 meV
+and the coupling constants are very high (λ31 > 4).
+
+   We thank I.I. Mazin and E. Cappelluti for useful dis-
+cussions.
+
+∗ Electronic  address:                           E-
+
+mail:giovanni.ummarino@infm.polito.it
+

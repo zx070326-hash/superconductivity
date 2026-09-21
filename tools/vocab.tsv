@@ -1,0 +1,58 @@
+# 承重量词表（prior_art.sh 的受控词表）
+#
+# 用途：派子 agent 时，hook 用本表把 prompt 里出现的承重量逼出来，
+#       再去仓库检索「这个量是不是已经算过 / 是不是已被撤回」。
+# 格式：<slug>\t<显示名>\t<匹配串1|匹配串2|...>       匹配走 grep -F（固定串，非正则）
+#
+# 纪律：
+#  · 匹配串可直接写数学符号——实测 grep -F 对 UTF-8 固定串可靠（𝔣/𝔤(2)/δ_BRD/Θ̃/ϖ/λ₂/c₁²/ω̄₂ 8/8 命中）。
+#    但**不要**把多字节字符放进正则字符类 `[...]`，那会按字节拆开、截成乱码。
+#  · 新增一行的时机：某个量第一次被某个判决直接消费时。不要预先填满。
+#  · 本表只有键、没有值 —— 值永远在笔记里，避免两处真源漂移。
+
+# ---- 天花板 / 一行公式 ----
+C_inf	C_∞ 一行公式常数	C_∞|C_inf|0.1827262477|0.1827
+g2	𝔤(2)	𝔤(2)|g2_analytic|1.3181402121
+oneliner	一行公式 Tc ≤ C_∞√(η/M)	η/M|eta/M|一行公式|oneliner
+ceiling	多带天花板	天花板|ceiling|M2''_Z|M2_Z
+Zdom	(Z-dom) 判据	Z-dom|Zdom|(Z-dom)
+
+# ---- 亏损分解 ----
+f_deficit	𝔣 亏损因子	𝔣|f_deficit|亏损因子|deficit factor|deficit_factor
+delta_FIN	δ_FIN 有限带宽亏损	δ_FIN|delta_FIN|d_FIN
+delta_BRD	δ_BRD 谱展宽亏损	δ_BRD|delta_BRD|d_BRD
+delta_COU	δ_COU 库仑亏损	δ_COU|delta_COU|d_COU
+q_exponent	q（𝔣 的 λ 曲率系数）	q=-0.5|q = -0.5|-0.5565|-0.525|λ 曲率|lambda 曲率
+
+# ---- 引理 C / λ₂ ----
+lam2	λ₂ 上界	λ₂|lam2|lambda2|λ_2
+theta_tilde	Θ̃* 保留 𝒟	Θ̃|theta_tilde|0.0737378
+lemmaC	引理 C（H 凹性）	引理 C|lemma C|lemmaC|凹性
+
+# ---- γ-model / 定理 I ----
+c1sq	c₁²（免疫预算）	c₁²|c1sq|c1_sq|0.723|0.704
+theoremI	定理 I 秩一主导免疫	定理 I|theorem I|秩一主导|rank-one dominance
+
+# ---- 矩 / 核类 ----
+M2	M2（二阶矩，注意两种不等价读法）	M2|⟨ω²⟩|<omega^2>|二阶矩
+P_class	类 𝒫（正 Einstein 混合）	𝒫|类 P|Einstein 混合|positive Einstein
+
+# ---- 同位素 / 第二观测量 ----
+alpha_iso	α 同位素指数	同位素指数|isotope exponent|α_iso|alpha_iso
+gapratio	2Δ/kTc	2Δ/kTc|2D/kTc|gapratio|gap ratio|能隙比
+detJ	Jacobian 判决 det J	det J|detJ|det(J_A)|det(J_B)
+
+# ---- 材料锚点 ----
+H3S	H3S	H3S|H₃S
+D3S	D3S	D3S|D₃S
+MgB2	MgB₂	MgB2|MgB₂
+CaC6	CaC₆	CaC6|CaC₆
+PdH	PdH	PdH
+LaH10	LaH10	LaH10|LaH₁₀
+AD75	AD75 Table I（29 行样本）	AD75|Allen-Dynes 1975|Table I|29 行
+LAD79	LAD 1979	LAD79|LAD 1979|Leavens|leavens1979
+
+# ---- 求解器约定（最常出错的地方）----
+w_cut	库仑截断约定 ω_c / w_cut	w_cut|ω_c|omega_c|截断约定
+kB_units	meV/K 单位换算	k_B|0.0861733|meV/K|单位换算
+mustar	μ*	μ*|mu*|mustar|mu_star

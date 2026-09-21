@@ -27,7 +27,7 @@ RESULT (this file):
 and therefore
 
     T_c = (w_E/2pi) e^{c_0} e^{-1/lam} [1 + b_1 lam + O(lam^2)],
-    c_0 = gamma + ln 4 - 3/2,   (1/2pi) e^{c_0} = (2/pi) e^{gamma-3/2} = 0.2529746...
+    c_0 = gamma + ln 4 - 3/2,   (1/2pi) e^{c_0} = (2/pi) e^{gamma-3/2} = 0.2529997...
 
 PART B -- three-way cross-check of T_c(lam) for the Einstein spectrum, mu*=0,
 constant DOS:
@@ -340,13 +340,13 @@ hdr("A.6  Lemma B1 -- explicit remainder constants (existence of the limit)")
 print("""  Lemma B1.  With D := 1/wbar, for every wbar >= 1
 
    (a) 2<tau,(I-D)tau> = J  -  (D^2/6) sum_n w_n G(s_n)^4  +  rho_a(wbar),
-       |rho_a| <= (D^2/8) V2[phi] + C_a D^3,     phi(s) := G(s)^2 d(s)/(2s),
+       |rho_a| <= (D^2/4) V2[phi] + C_a D^3,     phi(s) := G(s)^2 d(s)/(2s),
        d(s) := 1 - arctan(s)/s,   J = 3 pi^2/16 - 7/4.
        Since 0 <= sum_n w_n G(s_n)^4 <= (ln wbar + gamma + ln4 + 1)/2, the whole
        remainder is O(ln wbar / wbar^2).   NO LATTICE CONSTANT: the w_n inside
        D_nn = w_n + ell_G(n) cancels IDENTICALLY (see A.4), so C_lattice = 0.
 
-   (b) 2<tau,calR tau> = I_R + rho_b(wbar),  |rho_b| <= (D^2/4) V2x[psi],
+   (b) 2<tau,calR tau> = I_R + rho_b(wbar),  |rho_b| <= (D^2/2) V2x[psi],
        psi(s,sg) := G(s)G(sg) R(s,sg)/(4 s sg),  I_R = 11 pi^2/72 - 5/4,
        V2x[psi] := int int |d^2 psi/ds^2| ds dsg  (finite; computed below).
 
@@ -359,9 +359,13 @@ print("""  Lemma B1.  With D := 1/wbar, for every wbar >= 1
           after the half-shift nD = s_n - D/2 the D^1 AND D^2 terms collapse to
           the single term -(D/24) f'(s_n), giving
           Delta_n = d(s_n) - (D^2/12) G(s_n)^2 + O(D^4/s_n);
-    (iii) composite midpoint rule with the PROVABLE Peano constant D^2/8 paired
-          with int|u''| (NOT D^2/24 -- that pairs with per-cell sup, see the
-          M2 correction in P4_einstein_extremal.md 1.G).""")
+    (iii) composite midpoint rule with the PROVABLE per-sum Peano constant D^2/8
+          paired with int|u''| (NOT D^2/24 -- that pairs with per-cell sup, see the
+          M2 correction in P4_einstein_extremal.md 1.G).  NOTE the outer factor 2:
+          2<tau,(I-D)tau> = 2 sum_n D phi(s_n) - ... and 2<tau,calR tau> =
+          2 sum_{n,m} D^2 psi both carry an explicit 2 that multiplies the midpoint
+          error, so the PROVABLE remainder bounds are 2*(D^2/8)=D^2/4 for rho_a and
+          2*(D^2/4)=D^2/2 for rho_b -- as stated in (a),(b) above.""")
 
 import sympy as _sp  # noqa: E402
 
@@ -374,7 +378,7 @@ V2_phi, _e = integrate.quad(lambda x: abs(_phi2(np.tan(x))) / np.cos(x) ** 2,
                             1e-12, np.pi / 2 - 1e-12, epsabs=1e-12, epsrel=1e-10,
                             limit=600)
 _chk("V2[phi] = int_0^oo |phi''| ds is finite", np.isfinite(V2_phi) and V2_phi > 0,
-     "V2[phi] = %.8f   (=> (D^2/8) V2[phi] = %.4f/wbar^2)" % (V2_phi, V2_phi / 8))
+     "V2[phi] = %.8f   (=> (D^2/4) V2[phi] = %.4f/wbar^2)" % (V2_phi, V2_phi / 4))
 
 _Rsym = (2 * _s ** 2 * _sg ** 2 * (5 + _s ** 2 + _sg ** 2)
          / ((1 + (_s - _sg) ** 2) * (1 + (_s + _sg) ** 2) * (1 + _s ** 2) * (1 + _sg ** 2)))
@@ -398,7 +402,7 @@ def V2x_psi(M):
 v_lo, v_hi = V2x_psi(1200), V2x_psi(2400)
 _chk("V2x[psi] = int int |d^2psi/ds^2| is finite (two resolutions agree to 1%)",
      np.isfinite(v_hi) and abs(v_hi / v_lo - 1) < 0.01,
-     "M=1200: %.6f   M=2400: %.6f  => (D^2/4)V2x = %.3f/wbar^2" % (v_lo, v_hi, v_hi / 4))
+     "M=1200: %.6f   M=2400: %.6f  => (D^2/2)V2x = %.3f/wbar^2" % (v_lo, v_hi, v_hi / 2))
 
 print("\n  Lemma B1 bounds evaluated against the measured finite-wbar errors:")
 print("  %7s %16s %16s %14s %14s" %
@@ -409,16 +413,16 @@ for w0, N0, d1, r1 in rows_A:
     S4 = float(np.sum(G4 / (2 * n + 1.0)))
     main = -(1.0 / (6.0 * w0 ** 2)) * S4
     resid = (d1 - J_CLOSED) - main
-    bnd = V2_phi / (8.0 * w0 ** 2)
+    bnd = V2_phi / (4.0 * w0 ** 2)
     print("  %7d %16.3e %16.3e %14.3e %14.4f" % (w0, d1 - J_CLOSED, resid, bnd, abs(resid) / bnd))
     _chk("Lemma B1(a) bound holds at wbar=%d" % w0, abs(resid) < bnd,
-         "|residual|=%.3e <= (D^2/8)V2[phi]=%.3e" % (abs(resid), bnd))
+         "|residual|=%.3e <= (D^2/4)V2[phi]=%.3e" % (abs(resid), bnd))
 print("  %7s %16s %30s %14s" % ("wbar", "meas err (R)", "", "bound b"))
 for w0, N0, d1, r1 in rows_A:
-    bnd = v_hi / (4.0 * w0 ** 2)
+    bnd = v_hi / (2.0 * w0 ** 2)
     print("  %7d %16.3e %30s %14.3e" % (w0, r1 - IR_CLOSED, "", bnd))
     _chk("Lemma B1(b) bound holds at wbar=%d" % w0, abs(r1 - IR_CLOSED) < bnd,
-         "|err|=%.3e <= (D^2/4)V2x[psi]=%.3e" % (abs(r1 - IR_CLOSED), bnd))
+         "|err|=%.3e <= (D^2/2)V2x[psi]=%.3e" % (abs(r1 - IR_CLOSED), bnd))
 
 # ===========================================================================
 # A.7  b_1 and its identification
