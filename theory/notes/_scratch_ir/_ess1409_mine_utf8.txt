@@ -1,0 +1,1001 @@
+arXiv:1409.7968v1 [cond-mat.supr-con] 28 Sep 2014          Superconducting pairing mediated by spin-ﬂuctuations from ﬁrst principles
+
+                                                         F. Essenberger,1 A. Sanna,1 A. Linscheid,1 F. Tandetzky,1 G. Profeta,2 P. Cudazzo,3, 4 and E.K.U. Gross1
+                                                                           1Max Planck Institute of Microstructure Physics, Weinberg 2, D-06120 Halle, Germany.
+
+                                                   2Consiglio Nazionale delle Ricerche - Superconducting and Innovative Materials and Devices (CNR-SPIN), 67100 L’Aquila, Italy
+                                                                           3Nano-Bio Spectroscopy group, Dpto. Física de Materiales, Universidad del País Vasco,
+
+                                                           Centro de Física de Materiales CSIC-UPV/EHU-MPC and DIPC, Av. Tolosa 72, E-20018 San Sebastián, Spain
+                                                                                                    4European Theoretical Spectroscopy Facility (ETSF)
+                                                                                                                      (Dated: October 30, 2021)
+
+                                                                        We present the derivation of an ab-initio and parameter free eﬀective electron-electron inter-
+                                                                     action that goes beyond the screened RPA and accounts for superconducting pairing driven by
+                                                                     spin-ﬂuctuations. The construction is based on many body perturbation theory and relies on the
+                                                                     approximation of the exchange-correlation part of the electronic self-energy within time dependent
+                                                                     density functional theory. This eﬀective interaction is included in an exchange correlation kernel for
+                                                                     superconducting density functional theory, in order to achieve a completely parameter free super-
+                                                                     conducting gap equation. First results from applying the new functional to a simpliﬁed two-band
+                                                                     electron gas model are consistent with experiments.
+
+                                                                          I. INTRODUCTION                       contribution10 in a functional that can be used within
+                                                                                                                the ab-initio SCDFT framework.
+                                                      In the last 30 years the ﬁeld of superconductivity has
+                                                   been revolutionized by the discovery of high-temperature        The paper has the following outline: In the next sec-
+                                                   (hi-Tc) superconductivity (SC). First the Cuprates were      tion (Sec. II) we discuss brieﬂy the existing functionals
+                                                   found in the 80s1,2 and then iron based compounds in         of SCDFT. Then we propose the set of relevant diagrams
+                                                   the 2000s3–5. Numerous empirical/semi-empirical theo-        for representing the spin-ﬂuctuations (Sec. III A) and the
+                                                   retical models have been developed in order to grasp the     corresponding self-energy contribution are constructed
+                                                   essential physics of these materials6–8 and still the com-   in the Nambu formalism (Sec. III B). After some addi-
+                                                   munity is far from a general consensus on the origin of the  tional approximation (Sec. III C) the ﬁnal form of the
+                                                   pairing mechanism. In our opinion consensus can only be      self-energy taking the spin-ﬂuctuations into account is
+                                                   achieved in one single way: By developing a universal pre-   presented in Sec. IV. This self-energy may be used also
+                                                   dictive theory of (hi-Tc) SC that is fully parameter free    in many-body theory but the focus of this work lies on
+                                                   and is able to reproduce the essential properties of the SC  SCDFT and hence in Sec. V a functional is derived us-
+                                                   (including its critical temperature, complex gap function    ing the Sham-Schlüter connection. In the last part of
+                                                   and excitation spectrum), under the only knowledge of        the present work (Sec. VI) the functional is applied to a
+                                                   the atomic constituents and chemical structure.              two band model system and the trends with respect to
+                                                                                                                the Coulomb, phonon and spin-ﬂuctuations (SF) contri-
+                                                      Within the class of conventional (meaning phonon          butions are investigated.
+                                                   driven) SC, density functional theory for the SC state
+                                                   (SCDFT)9, within the available functional10,11, proved to               II. A BRIEF REVIEW OF SCDFT
+                                                   be predictive and reliable12–21. However, since the pair-
+                                                   ing in the pnictides and cuprates is non-phononic22,23,         Before engaging in the task of constructing the eﬀective
+                                                   this SCDFT approach is not directly applicable, due to       interaction and the corresponding functional, we brieﬂy
+                                                   the limitations of the functional.                           review the SCDFT framework and the available function-
+                                                                                                                als. SCDFT is based on a theorem of Oliveira, Gross and
+                                                      In this work we carefully reconsider this functional and  Kohn9, that extends the Hohenberg-Kohn proof25 of the
+                                                   it’s construction, in particular the treatment of the elec-  1-1 correspondence between density and external poten-
+                                                   tronic component of the pairing. We aim to reach two         tial to the SC density
+                                                   goals in this work: The ﬁrst is very general and not
+                                                   bound to SCDFT applications. We want to formulate a                               χ (r,r ) = Ψˆ↓(r)Ψˆ↑(r )
+                                                   screened eﬀective electron-electron interaction that goes
+                                                   beyond the GW form and includes additional physical          where Ψˆ σ (r) are the usual electronic ﬁeld operators and
+                                                   eﬀects not present in the random phase approximation            is the thermal average. The modern version of the
+                                                   (RPA) type of screening. In particular we aim to include
+                                                   the eﬀect of low energy spin-ﬂuctuations, in a computa-      theory has been re-formulated by Lüders, Marques and
+                                                   tionally feasible way and completely ab-initio (i.e. with-   coworkers10,18. This formulation includes an explicit
+                                                   out the use of parameters - like a Stoner exchange split-    ionic density and a further extension of the Hohenberg-
+                                                   ting). We focus on the spin-ﬂuctuations because they are     Kohn proof in the spirit of the multicomponent DFT in-
+                                                   one of the prime candidates responsible for SC pairing in    troduced by Kreibich and Gross26.
+                                                   iron SC24; The second goal we aim for is to cast this eﬀec-
+                                                   tive interaction along the standard Coulomb and phonon          In their work, Lüders, Marques and coworkers10,18 pro-
+                                                                                                                posed an exchange-correlation functional derived from
+                                                                                                                                        2
+
+many-body perturbation theory and presented solutions                   Σ≈                                     W             ΛPh
+of the SC Kohn-Sham (KS) system for real SC. The start-                                                                G¯ KS
+ing point is an approximation for the self-energy. In their                                                         +
+work they use:
+
+Σ¯k (ωn) ≈            Wkk (ωn − ωm) G¯kKS (ωm) (1)                          Exact expresion :
+
+             mk
+
+       +              ΛPkkh (ωn − ωm) G¯kKS (ωm) , (2)                  =                                      +             +               ...
+
+             mk                                                                G¯ Γ¯
+                                                                           Once an approximation for the self-energy is ﬁxed,
+where G¯K k S (ωn) is the Green’s function of the SC Kohn-              it is possible to construct the corresponding exchange-
+Sham system, in Nambu notation27, Wkk (ωn) is the                       correlation (xc) potential using the Sham-Schlüter con-
+screened Coulomb interaction and ΛkPkh is the interaction               nection (see Sec. V for details). A key approximation in
+mediated by phonons. We will indicate objects in Nambu                  order to reduce the numerical complexity of SCDFT is
+notation with a bar (for example G¯). The components of                 the so-called decoupling approximation29 i.e.
+
+the Green’s function read:                                                  ∆xkck ≈ δkk ∆kxc
+
+G¯k (ωn) = τz             Gk (ωn) Fk (ωn)                 .        (3)  that can be interpreted as the exclusion of hybridiza-
+                          Fk† (ωn) Gk† (ωn)                             tion eﬀects between the non SC Kohn-Sham orbitals by
+                                                                        the eﬀect of the SC condensation. In this approximation
+The ωn are the fermionic Matsubara frequencies, k is                    the electronic KS system can be diagonalized analytically
+a combined index k = {nk} containing the band index                     leading to a self-consistent expression for the pairing po-
+and the momentum of the KS electron and τz is the third                 tential ∆xkc known as the SCDFT gap equation:
+
+Pauli matrix. The normal (Gk) and anomalous (Fk) part                                                                  tanh  βEk
+                                                                                                                               2
+of the Nambu Green’s function are given by:
+
+                    β               Tˆ aˆk (τ ) aˆ†k (0)                ∆kxc = −∆xkcZkD −                      KkCk    2Ek        ∆kxc  (6)
+                                    Tˆ [aˆk (τ ) aˆk (0)]
+Gk (ωn) = −           dτ eiωnτ                                                                              k
+Fk (ωn) = −
+                   0                                                    that has the BCS form30. The kernels ZkD and KkCk
+                                                                        depend on the temperature, the interaction matrix el-
+                    β                                                   ements (wk1k2 , ΛPkkh ), the single particle KS energies k
+
+                      dτ eiωnτ                                          and Ek := |∆k|2 + ( k − µ)2. The critical tempera-
+
+                   0                                                    tures predicted within this equation agree extremely well
+                                                                        with the experimentally observed ones within the class of
+where aˆk (τ ) and aˆ†k are the usual creation and annihila-            phononic SC12–15,18,21,31,32. However, Eq. 6 fails to de-
+tion operators in the Heisenberg picture, Tˆ is the time or-            scribe high temperature SC5,33, where the SC mechanism
+dering operator and denotes the thermal average. The                    is believed to be related to magnetic interactions.
+
+electronic part of the interaction, in the work of Marques                 In the next sections we will see that this fact is actu-
+                                                                        ally not surprising. One assumption in using a dielec-
+and Lüders, is assumed to be given by the classical (test-              tric type of electron-electron interaction is that all ver-
+charge to test-charge) screened Coulomb interaction28,                  tex corrections in the Coulomb part of the self-energy
+                                                                        are completely neglected. As one can see in Eq. II, by
+therefore it can be expressed in terms of the dielectric                comparing the approximation with its exact counterpart
+function −1:                                                            obtained from Hedin’s equations34. Vertex corrections
+                                                                        can be safely disregarded in the phonon related part of
+       Wk1k2 (ωn) =             −1    (ωn) vk k2                   (4)  the self-energy (at least within the domain of validity of
+                                k1 k                                    Migdal’s theorem35), but are crucial to account for mag-
+                                                                        netic ﬂuctuation eﬀects which will be discussed in the
+                          k                                             next sections.
+
+where vk1k2 is the bare Coulomb interaction. The in-
+teraction mediate by phonons ΛPkkh (ωn) depends on the
+electron-phonon coupling matrix elements gλkqk and the
+phonon frequencies Ωλq:
+
+ΛPkkh  (ωn)  =  −  1      ∞    ωn2  2ω  ω  2  Im  [ΛkPkh     (ω)]  (5)
+                   π                +
+                           dω
+
+                      0
+
+Im [ΛPkkh (ω)] = −π               2                                          III. EXTENSION OF THE SELF-ENERGY
+
+                          gλkqk δ (ω − Ωλq) .                              In this section we will construct a form of the self-
+                                                                        energy containing the relevant processes involved in a
+                      λq                                                spin-ﬂuctuation-mediated pairing. The eﬀective inter-
+                                                                        action will be evaluated in the parent metallic system
+A Feynman diagram schematic form for this approxima-
+tion is shown in Eq. II. For the two terms we use the
+names Σ¯GW and Σ¯Ph, respectively.
+                                                                                                                     3
+
+in which SC takes place (i.e. we will ignore the feed-      ogy with Σ¯T (see Eq. III A), to formulate the self-energy
+back eﬀect of the SC condensation). This approxima-
+tion may not be valid at low temperature where the          containing magnetic ﬂuctuations as:
+condensation strongly aﬀects the screening of magnetic
+ﬂuctuations6,36,37. However this assumption is exact near              Σ¯ GW                    Σ¯ SF        Σ¯ Ph
+the critical point since the SC phase transition is of the
+continuous, second order type. Therefore the approxima-          Σ¯ ≈         + ΛP +
+tion will not aﬀect the estimation of a critical tempera-
+ture.                                                          In Eq. III A we only show a simple diagrammatic form,
+                                                            details will be derived explicitly in the next section. Note
+   Note, that the same approximation was applied to the     that this form of the self-energy contains both Hartree
+phononic part of the interaction, entering the gap equa-    and xc contributions while only the xc parts enter the
+tion (Eq. 6). In this case the eﬀect of the condensation    functional derivative appearing in the vertex part of
+on the pairing strength is most likely negligible even at   Hedin’s equations. The Hartree contribution will be im-
+low temperature38,39.                                       plicitly removed in Sec. III C when we deﬁne the approx-
+                                                            imation for ΛP. Also double counting problems related
+          A. Inclusion of the Relevant Diagrams             to this choice of the self-energy are adressed in Sec. III C.
+                                                            As a general convention in this work we will always refer
+   To go beyond the GW approximation we consider40 the      to the xc (Hartree free) part of the self-energy.
+T -matrix41,42, that is given by a Bethe-Salpeter equation
+(BSE)43:
+
+T (1 ,2 ,3 ,4 ) = w (1 ,3 ) δ13 δ24              (7)
+
+      + w (1 ,2 ) G (1 ,5 ) G (2 ,6 ) T (5 ,6 ,3 ,4 ) .          B. Properties of the Particle-Hole Propagator
+
+The coordinate 1 is a compact notation: 1 = {r1 ,τ1 ,σ1 },       In this section we will investigate the properties of
+where r1 is the real space vector, τ1 the Matsubara time
+and σ1 the spin index. The diagrammatic form of this        the particle-hole propagator, which is the key object of
+BSE and the self-energy contribution Σ¯T = G¯T corre-
+sponding to the T −matrix are shown in Eq. III A.           our derivation. For simplicity we will restrict ourselves
+
+1     3     1 δ13 1                  5     3                to collinear magnetic systems, i.e. we assume a spin-
+                                                            diagonal Green function G (1 ,2 ) = δσ1σ2 G (1 ,2 ). One
+                                                            of Hedin’s equations is a Dyson equation for the vertex
+                                                            Γ (1 ,2 ,3 ):
+
+   T=       +                           T                        1     3      + δ12 δ23         Λ0
+                                                                 2        =
+
+2     4     2 δ24 2                  6     4
+
+   1                                                             where the kernel of the Dyson equation is given by
+
+   ΣT = T               =               +     +             ...        Λ0    (1 ,2 ,3 ,4 )  :=  δΣV (1 ,2 )          (8)
+                                                                                                δG (3 ,4 )
+
+   2     2           1
+
+Empirically it is well known, that the response func-       and is called irreducible particle-hole propagator50. The
+                                                            Λ0 contains all connected diagrams which are irreducible
+tion in the T -matrix approximation leads to reasonable     with respect to a bare Coulomb interaction and the
+results for the magnetic response function41,42. Σ¯T has    particle-hole propagator. The coordinates 1 and 4 are
+                                                            connected to outgoing Green’s functions and 2 and 3 to
+been used in various studies to account for magnetic ﬂuc-   incoming ones. (Eq. III B). The self-energy used in the
+tuations in non-SC systems44–47.                            construction of the kernel will be indicated by ΣV. The
+                                                            kernel Λ0 also plays the central role in the BSE equation
+However, for reasons that we will discuss in Sec. III C,    for ΛP which we shall derive now. However, before this
+                                                            can be done it is necessary to classify the two possible
+we will not make direct use of the T -matrix and the cor-   contribution present in Λ0. The distinction between the
+                                                            two sets is made using the concept of a path. A path is a
+responding self-energy for constructing the eﬀective in-    chain of Green’s function lines connecting to coordinates.
+                                                            For example in Eq. III B, we have a path connecting the
+teraction. Instead we will consider a larger set of di-     coordinates 1 and 4:
+
+agrams, by starting from the particle-hole propagator
+ΛP48–50. This object contains all proper particle-hole
+
+contributions. These are all diagrams which are irre-
+
+ducible with respect to a bare Coulomb interaction and
+
+have two incoming and two outgoing open coordinates.
+
+The T −matrix is fully contained in ΛP. We use the anal-
+                                                                                                                                                         4
+
+                                                  4                                   Due to Eqs. 8,11 and 12, the total irreducible particle-
+                                                                                   hole propagator is given by the diﬀerence between the
+                   5                     3                                         crossed and direct contributions:
+
+                         2                                                         Λ0  (1 ,2 ,3 ,4 )       =  δΣV (1 ,2 )  =    Λ0c  −  Λd0  =:  Λc0−d.  (13)
+                                                                                                              δG (3 ,4 )
+
+             1                           6                                         With these preliminary considerations we can start to
+
+After this deﬁnition we can introduce the two possible                             derive a BSE for ΛP. Note that also within the set ΛP
+
+contribution present in Λ0:                                                        all contributions are either direct or crossed, i.e. ΛP =
+                                                                                   Λc + Λd. If for example two crossed contribution are
+   1) The crossed contribution Λc0, which has a path con-
+necting the coordinates 1 ↔ 3 and 2 ↔ 4 . The spin                                 linked, the resulting one stays crossed.
+contributions in this set are
+                                                                                               1 crossed + crossed → crossed 3
+
+Λ0c (1 ,2 ,3 ,4 ) ≡ δσ1 σ3 δσ2 σ4 Λ0c (1 ,2 ,3 ,4 ) .                      (9)                                Λ0c                        Λ0c
+
+Note, that the contributions to the T -matrix (Eq. III A)                                    2                                                        4
+are all of this type41.
+
+   2) The direct contribution Λd0, which has a path con-                           Any other combination leads to a direct contribution.
+necting the coordinates 1 ↔ 2 and 3 ↔ 4 . The spin
+contributions in this set are                                                      A special case is the connection of two direct contribu-
+
+Λd0 (1 ,2 ,3 ,4 ) ≡ δσ1 σ2 δσ3 σ4 Λ0d (1 ,2 ,3 ,4 ) .                      (10)    tion, in which a loop is created:
+
+                                                                                               1 direct + crossed → direct 3
+
+The kernels Λ0c and Λd0 are created by the functional                                                         Λ0c                        Λ0d
+derivative of the self-energy with respect to G. By the
+
+functional   derivative       δ     one  Green’s  function                 within
+                         δG(3 ,4 )
+
+the self-energy is removed and the open connections get                                      2                                                        4
+
+the indices 3 and 4 resulting in the four-point function
+
+Λ0 (1 ,2 ,3 ,4 ).                                                                            1 direct + direct → direct 3
+
+crossed :          ΣV(1 ,2 ) 1           σ1 = σ3                 3                                            Λ0d                        Λ0d
+        1                                                             =
+                                          Λc0
+    δ                    =                                       4                 + ...                                                              4
+δG(3 ,4 )                                σ2 = σ4
+                                                                                                   2
+
+          2                 2                                                      Considering these cases, the BSEs for the direct and
+
+                                                                                   crossed contribution of the particle-hole propagator read:
+
+direct :  1 ΣV(1 ,2 ) 1                                          3                                    ∞             ∞
+
+                                                                                       ΛP =                Λc(n) +       Λd(n)
+
+    δ                               σ1 = σ2                                                           n=0           n=0
+δG(3 ,4 )                                               σ3 = σ4
+                         =               Λ0d                         =             + . . . Λc(n+1) = Λ0c GGΛ(cn)                                         (14)
+
+          2                 2                                    4                 Λd(n+1) = Λd0 GGΛ(cn) + Λ0c GGΛd(n) − Λ0dGGΛd(n). (15)
+
+   If the removed function was part of a loop, the resulting                       where (n) labels the order in the irreducible particle-hole
+contribution is direct. It is crossed otherwise (Eq. III B).                       propagator and the zero order Λ(c0,d) is given by the irre-
+Since a loop was destroyed in the derivative, an extra
+                                                                                   ducible part Λc0,d. By subtracting Eqs. 14 and 15 we ﬁnd
+minus sign is necessary to compensate for this:
+
+                                                                                   a combined BSE for Λc-d containing crossed and direct
+
+                      δΣV (1 ,2 )                                                  terms:
+                      δG (3 ,4 )
+Λc0 (1 ,2 ,3 ,4 )  =                with    G     not            in  loop  (11)                                                              δΣV
+                                                                                                                                                   .
+                      − δΣV (1 ,2 )                                                    Λc−d  =        Λ0   +  Λ0GGΛc−d     with      Λ0  =               (16)
+                         δG (3 ,4 )                                                                                                          δG
+Λ0d (1 ,2 ,3 ,4 )  =                 with     G   in             loop.     (12)
+
+                                                                                   Not only in the BSE, also for the expression for Σ¯SF given
+
+It is important to keep track for these signs since, while in Eq. III A the separation in direct and crossed contribu-
+
+Feynman diagrams have an explicit sign convention, sym- tion is crucial. Up to now only the normal state Green’s
+
+bolic expressions (like the ones written in terms of the function appeared in the equations, because we neglected
+
+particle hole propagator Eq. III A) do not.                                        the feedback eﬀects of SC to the magnetic ﬂuctuations.
+                                                                                                                                            5
+
+However, in the expression for the self-energy (Eq. III A)       Under the assumption of singlet SC pair-
+
+the normal and anomalous parts appear and double ar-             ing and magnetic collinearity, the normal part
+
+row lines         1                   1                  1       of the Green’s function conserves spin i.e.
+                                         F KS(1 ,2 )†
+   GKS(1 ,2 )            F KS(1 ,2 )                             G (1 ,2 ) = δσ1σ2 Gσ1 (r1,τ1,r2,τ2)while the anoma-
+
+           2                 2                      2            lous  part ﬂips spin  cFon(s1e,q2u)en=cesδσf1o−rσt2hFeσ1Σ¯(rGW 1,τ1a,nrd2  ,τ2) .
+                                                                 This  aspect has no                                                        Σ¯ Ph
+
+                                                                 parts of the self-energy Eqs. (1) and (2), since the
+
+are used to distinguish the diﬀerent functions. Since            interactions have no spin dependence. However, for the
+
+in the anomalous terms no extra loops are created                spin-ﬂuctuation part in Eq. 18 the restriction lead to the
+
+              crossed : 1                direct :          1     result that:
+
+                                                                       Σ¯11 and Σ¯22      depend  only         on  Λc−d        σ
+                                                                       Σ¯12 and Σ¯21
+                                                                                                                      σ1 σ σ2
+
+       Λc                                  Λd                                             depend only on Λσc+1σd−σσ2 .
+
+   2                                  2                               Furthermore, by comparing with Eq. III B it is clear
+                                                                   that Λc has no (σ,σ,−σ,−σ) component. While Λd has
+crossed and direct contributions enter both with the             thneo component in the channel (σ,−σ,σ,−σ). Therefore the
+same sign in the equation for the self-energy:
+                                                                   following identities hold:
+
+              Σ¯FSF :=   τz     0        F Λc+d  .         (17)        Λcσ+σd−σ−σ =Λdσσ−σ−σ = −Λcσ−σd−σ−σ                                   (19)
+                                                                       Λcσ+−dσσ−σ =Λcσ−σσ−σ = Λcσ−−dσσ−σ                                    (20)
+                             F †Λc+d 0
+
+For the normal contribution (diagonal component in               These relations lead to a self-energy containing only Λc-d
+                                                                 and not Λc±d:
+Nambu space) the situation is a bit more complicated
+
+because the loop rule has to be taken into account: If
+
+a crossed contribution is inserted inside the self-energy        Σ¯1S1F = −δσ1σ2 Gσ1            Λc−d
+
+form in Eq. III A, then a loop is created (Fig. III B) lead-                                       σ1 σ σ1  σ                               (21)
+                                                                                                                                            (22)
+ing to a minus sign. While the direct terms do not lead                                   σ                                                 (23)
+                                                                                                                                            (24)
+to any additional loop and no sign change. This can be           Σ¯2S2F = δσ1σ2 Gσ† 1        Λcσ−σd1 σ σ1
+
+seen in the following graph:                                                           σ
+
+              crossed :                  direct :                Σ¯1S2F = δσ1−σ2 Fσ1         (1 − 2δσσ1 ) Λσc−1σd−σ−σ1
+
+                                                                                          σ
+
+               Λc                        Λd                      Σ¯2S1F = −δσ1−σ2 Fσ†1          (1 − 2δσσ1 ) Λcσ−σd1−σ1−σ
+
+                                                                                             σ
+
+   2                     1            2                    1     This is a convenient result, because we have to solve only
+                                                                 one BSE for Λc−d (Eq. 16) and not the two separate
+   In the short hand notation given in Eq. III A this was        equations for the direct and crossed part. In the pre-
+not, strictly speaking, taken into account. The rigorous         vious expression we use a concise notation in which the
+form of this equation instead reads:                             integrals are not written out (compare with Eq. 18) . We
+                                                                 will use this notation in the next section when it does
+Σ¯ SF :=      d34 τz     −G (3 ,4 ) Λc−d (1 ,3 ,2 ,4 ) 0   (18)  not lead to any ambiguity in the formulae. Unless stated
+                         F † (3 ,4 ) Λc+d (3 ,1 ,2 ,4 ) 0        otherwise the coordinates are contracted analogous to a
+                                                                 matrix product.
+
++         d34 τz  0 F (3 ,4 ) Λc+d (1 ,3 ,4 ,2 )    .
+                  0 −G† (3 ,4 ) Λc−d (3 ,1 ,4 ,2 )
+                                                                                     C. Local Approximation
+Here it appears explicitly how the direct contribution en-
+ters with diﬀerent sign on the diagonal and oﬀ diagonal             In the last sections we have constructed an approxi-
+Nambu component due to the loop rule. The way the                mate form of the electronic Nambu self-energy that we
+four point object is connected to the Green’s function is        believe contains the relevant contributions to account for
+shown in Eq. III B and III B for the 21 and 22 element of        a spin-ﬂuctuation mediated pairing. However, even this
+the self-energy. In the solution of the gap equation (see        approximate form is too complex to be used directly in
+Sec. V), this sign diﬀerence will turn out to be crucial         simulations on real materials. The dimensionality of the
+in order to have a nontrivial solution of the gap equa-          four-point object Λc−d in Eqs. 21 to 24 and the resulting
+tion. Note, that the self-energy derived from the Berk-          integrals are simply too complex to handle. What would
+Schrieﬀer interaction51 satisﬁes the same sign convention        make a signiﬁcant simpliﬁcation, and bring the compu-
+as derived here.                                                 tational cost of the method to an aﬀordable level, would
+                                                                                                                                                               6
+
+be a two-point form of the interaction; meaning an ap-                                     The proper part P is related to the full response function
+proximate form that can be written as                                                      χ via the Dyson equation:
+
+Σ¯SF (1 ,2 )ab =! G¯ (1 ,2 )ab w¯SF (1 ,2 )ab ,                                      (25)  χσ1σ2σ3σ4 = Pσ1σ2σ3σ4 +
+
+where w¯SF is to be understood as an eﬀective interaction                                                  δσ1σ2 δσ3σ4           Pσ1σ2σσ vχσ σ σ3σ4 .          (29)
+between electrons that accounts for the spin ﬂuctuation
+(SF) pairing and a, b is the index with respect to the                                                                       σσ
+Nambu matrix. Of course such a form can be obtained
+by a formal inversion of the above equation:                                               The response function χσ1σ2σ3σ4 in the spin basis deter-
+                                                                                           mines the change in the spin resolved charge density in-
+
+                                                                                           duced by external ﬁelds and is deﬁned as:
+
+w¯SF (1 ,2 )ab =                       −GΛc−d F Λc+d                                       χσ1 σ2 σ3 σ4         (r1,τ1,r2,τ2)        :=  δρσ1σ2 (r1,τ1)
+                                       −F †Λc+d G†Λc−d                                                                                   δϕeσx3tσ4 (r2,τ2)
+
+                                                                            ab
+
+                                           G¯ (1 ,2 )ab
+
+but this is of no use in practice, because one would need                                  The equations for Λc-d will become more transparent if
+the four-point object Λc±d in the ﬁrst place.                                              we rewrite the response quantities on the right hand side
+                                                                                           of Eqs. (27) and (28) in components of the Pauli matrix
+   To obtain a two-point form we make use of an addi-                                      i.e.:
+
+tional approximation, already common in the context of                                           χij       (r1,τ1,r2,τ2)         :=   δρi (r1,τ1)
+band structure calculations47,52,53, to use the Kohn-Sham                                                                            δϕejxt (r2,τ2)
+potential as a local approximation for ΣV, namely
+
+ΣV (1 ,2 ) ≈ δτ1τ2 δr1r2 vσxc1σ2 (r1τ1) .                                            (26)  In this form χ represents the change of the
+
+The functional derivative (Eq. 16) leads to the xc-kernel                                  electronic charge ρ or magnetic moment m
+f xc, which is a two-point function in space-time but still                                (ρi = {ρ, mx, my,mz}) with respect to physical ﬁelds
+a four-point object in spin (x1 = {r1τ1}):                                                  ϕejxt = ϕe0xt, Bxext, Byext, Bzext . In this work we will
+                                                                                           label the Pauli index with i and j and it should not be
+δvσxc1σ2 (x1) =                   dx5  δvσxc1σ2 (x1)            δρσ5σ6 (x5)
+ δG(3 ,4 )                             δρσ5σ6 (x5)               δG(3 ,4 )                 confused with the Nambu index indicated by a and b
+
+                           σ5 σ6                                                           (used in Eq. 25). The basis transformations between the
+
+                                                                                           two representations are simply:
+
+                                               f xc                                                                       1         σαi β Aij σjγδ
+                                                                                                                          4
+                                      fσx1cσ2                      δG(5  ,6)                               Aαβγδ      =
+                                                                   δG(3  ,4 )
+                =   d5            d6           σ5  σ6  (x1  x5  )               δx5  x6                                      ij
+
+                =  f xc                (x1x3)          δx3x4 .                                                  Aij =            σβi αAαβγδσδjγ
+
+                     σ1 σ2 σ3 σ4                                                                                          αβγδ
+
+   If Eq. 16 is solved with the xc-kernel and the full G                                   where σi is the four component vector containing the
+is approximated by the KS one, the well known Dyson                                        Pauli matrices:
+equation from linear response density functional theory
+appears54:                                                                                                 10         01             0 −i           10
+                                                                                                           01         10             i0             0 −1
+Λc−d = 4f xc + 16f xc G G KS KS f xc                                                       σi =                    ,             ,         ,                .
+
+                                                =χKS                                       Note that the response function is a sparse matrix for the
+                                                                                           considered collinear system
+                + 64f xcGKSGKSf xcGKSGKSf xc + . . .
+
+                =  4f xc  +       16f xc         χKS            f  xc                                              χxx χxy 0 0 
+                                               − f xcχKS
+                                          1                                                                        χyx      χyy      0     0
+                                                                                                                   0         0      χzz       
+leading to the proper part of the response function                                                        χij  =
+Pσ1σ1σ2σ2 . Since the Green’s function is diagonal with                                                                                    χz0 
+respect to spin the longitudinal and transverse parts of
+the response decouple:                                                                                                   0 0 χ0z χ00
+
+Λc−d            =4fσx1cσ1σ2σ2 +                                                            and the proper and full response are equal χij = Pij if
+                                                                                           i, j ∈ {x, y} (Eq. 29). As mentioned above we change the
+   σ1 σ1 σ2 σ2                                                                             representation of the response function from spin to the
+
+                16                f P f xc                         xc                (27)  Pauli basis in order to achieve a more transparent form
+                                  σ1σ1σ6σ6 σ6σ6σ7σ7 σ7σ7σ2σ2
+                                                                                           of the eﬀective interaction:
+                    σ6 σ7
+
+                                                                                           Λc−d            =              fiTσ1 Pij (1 − δi0δj0) fjσ2          (30)
+                                                                                                                                                               (31)
+Λcσ−−dσσ−σ = 4fσx−c σ−σσ+                                                                     σ1 σ1 σ2 σ2
+           16fσx−c σ−σσPσ−σ−σσfσx−c σ−σσ.
+                                                                                                                ij∈{0,z}
+
+                                                                                     (28)  Λσc−−dσσ−σ = 2fσFχFσfσF.
+                                                                                                                                        7
+
+where the two point functions fiσ and fσF are given by                   of a non-magnetic system. This means that, by con-
+(z↑ = +1, z↓ = −1):                                                      struction, we will not consider the possibility of atomic
+                                                                         scale coexistence between magnetism and SC. We believe
+           fzTσ := zσfzxzc + f0xzc fzσ := zσfzxzc + fzx0c                that this assumption is justiﬁed for a large set of high-
+                                                                         temperature SC (cuprates and pnictides) where usually
+         f0Tσ := f0x0c + zσfzx0c f0σ := f0x0c + zσf0xzc                  (although exceptions have been observed) the antiferro-
+                                                                         magnetic (AFM) order is completely suppressed in the
+         fσF := fxxxc + zσifxxyc χFσ := χxx + zσiχxy.                    SC regime8,55.
+
+In  Eq.  30  we  have  dropped  f xc           + f0Tσ1 P00f0σ2  in  or-     In a non magnetic system the response functions and
+                                                                         xc-kernel are diagonal with respect to the Pauli index and
+                                  σ1 σ1 σ2 σ2                            the three directions with respect to the magnetic ﬁeld
+                                                                         are degenerate. In this case the eﬀective interaction in
+der to avoid any double counting: This term is in fact                   Eqs. 30 and 31 reduces to the a simple form (we use here
+                                                                         x is a combined variable of space and time x = {rτ }):
+already accounted for by the screened Coulomb inter-
+
+action w in the GW term, that contains an analogous
+
+contribution in the form v + vP00v + . . . . In addition                 Λc−d                 (x1,x2)  =  zσ1 zσ2  1 ΛSF  (x1,x2)
+we neglect the linear order fσx−c σ−σσ, because in a sys-                                                          2
+                                                                            σ1 σ1 σ2 σ2
+tem featuring magnetic ﬂuctuations it is supposed to be
+
+small as compared to the dominant fσFχσF fσF term. This                  Λσc−−dσσ−σ (x1,x2) = ΛSF (x1,x2)
+is because the spin-ﬂuctuations should appear as a large
+
+value of the magnetic susceptibility.
+
+    The form of Λc−d in Eq. 31 has now obtained an imme-                 ΛSF (x1,x2) := 2 dxdx ×
+
+diate physical interpretation: The exchange-correlation
+
+kernels f xc act as a vertex for the electronic interaction                                fzxzc (x1,x2) χzz (xx ) fzxzc (x1,x2) (32)
+
+mediated by spin-ﬂuctuations, which are expressed by
+
+the magnetic susceptibility χ.                                           and we insert this form in Eqs. (21) to (24):
+
+    The transverse part allows for a ﬂip of the electronic                                 3
+                                                                                           2
+spin, which can be understood in the following way:                      Σ¯aSFb (x1,x2) =     (−1)b+1  ΛSF  (x1,x2)  G¯ ab  (x1,x2)  .  (33)
+
+    1. The spin-ﬂip of electron 1 corresponds to a local                 The prefactor represents the fact, that the diagonal part
+       ﬂuctuation in the magnetic moment δm1.                            enters with the opposite sign due to the eﬀect of the loop
+                                                                         rule discussed in Sec. III B. By construction the equation
+    2. This in turn creates a magnetic ﬁeld via the kernel:              has the GW form, however with an interaction originat-
+       δB1 = f xcδm1.                                                    ing from spin-ﬂuctuation and denoted as ΛSF. Note that
+                                                                         this eﬀective interaction, in the limit of an homogeneous
+    3. If the system features magnetic ﬂuctuations the                   electron gas, reduces to the form derived by Vignale and
+       δB1 leads to ﬂuctuations in the system: δm2 =                     Singwi in Ref. 48. ΛSF contains the xc-kernel and the
+       χδB1.                                                             magnetic response function, which can be calculated us-
+                                                                         ing TD-DFT54. The total self-energy is given by the sum
+    4. The ﬂuctuation (magnons) couple via the second                    of Σ¯GW , Σ¯SF and Σ¯Ph given in Eqs. 1, 33 and 2, respec-
+       kernel to another electron δB2 = f xcδm2, whose                   tively.
+       spin is ﬂipped in the absorption process.
+
+This interpretation is analogous to the one given by                     V. THE FUNCTIONAL
+Kukkonen and Overhauser for the charge ﬂuctuations28
+and shows that the term Λc−d in the local form repre-                       So far we have derived the contribution from the spin-
+sents an eﬀective interaction between electrons mediated                 ﬂuctuations to the self-energy, and correspondingly a
+by magnetic ﬂuctuations.                                                 spin-ﬂuctuation pairing that can be used in any theory
+                                                                         of SC. In this section we will specialize this result to be
+   The ﬁnal Σ¯SF is constructed by inserting the two-point               used within the framework of SCDFT. To do this we will
+particle-hole propagators given in Eqs. 30 and 31 in the                 make use of the Sham-Schlüter connection56 between a
+equation for the self-energy Eqs. 21 to 24. We do this                   KS and an interacting system, generalized to the SC case
+in the next section. Note that by doing so, a separa-                    by Marques57. We will assume that vxc and the diagonal
+tion in direct and crossed contribution is implied for the               part of Σ¯GW act in a similar way as a mass operator on
+xc-kernel (see Eqs. 19 and 20). This is an assumption                    the Hartree states and cancel each other. Then the non-
+because the xc-kernel is in general not based on a dia-                  interacting SC-KS is mapped to the interacting system
+grammatic expansion.                                                     by the following self-energy form:
+
+    IV. FINAL FORM OF THE SELF-ENERGY                                    Σ¯ SS = Σ¯ GW + Σ¯ SF + Σ¯ Ph −    GW ∆xc∗         .           (34)
+                                                                                                            ∆xc −G†w
+   So far our formalism has been derived for collinear
+magnetic systems. We will now simplify it for the case
+                                                                                                                                                               8
+
+The Sham-Schlüter connection follows by imposing that                                    The Matsubara summation may be evaluated analyt-
+                                                                                         ically because the frequency dependence of the KS
+the  total  density   ρ (r1)   =   limr1→r2    2  ωn G (r1,r2,ωn)                        Green’s function is known and for the response functions
+                                               β                                         and phonons a frequency representation with respect to
+                                                                                         the anti-Hermitian part of the retarded quantities holds
+and the anomalous density χ (r1,r2) = ωn F (r1,r2,ωn)                                    (Eq. 5). The evaluation is done with the help of the
+are identical in the KS and interacting system:                                          residue theorem, which, for the Matsubara summation of
+                                                                                         an analytic function A (z), leads to:
+     0      =  δab   lim    2      eiωn 0+     G¯KSΣ¯ SSG¯ ab
+                            β
+                    r1 →r2     ωn
+
+     0      =  (1  −  δab)  1      eiωn0+ G¯KSΣ¯ SSG¯ ab .
+                            β
+                               ωn
+
+The connection becomes a closed equation for the super-                                         1    ∞                  Poles∈γ
+conducting gap by approximating the full Green’s func-                                          β
+tion on the right hand side and the one in Σ¯ with the                                                    A (iωn) =                 res [fβ (z) A (z) , zm] ,  (35)
+KS one. In addition we neglect all contributions that
+are explicitly higher than linear in the pairing potential.                                          n                       m
+Since, as discussed in Sec. III, we are mostly concerned
+with computing an accurate critical temperature, rather                                  where the contour γ are two inﬁnite half-circle excluding
+than the full temperature dependence of the supercon-
+ducting gap. In this approximation, the 12 element of                                    the imaginary axis and fβ is the Fermi distribution func-
+the Sham-Schlüter equation simpliﬁes to:                                                 tion. At this point an adiabatic approximation for the xc-
+                                                                                         kernel is assumed. This reduces the order of poles in ΛSF
+               0= 1       eiωn0+ GKSGKS†∆xc∗
+                    β                                                                    and the same residue are found for the Coulomb, Phonon
+                       n
+                 +1                                                                      and spin-ﬂuctuation contribution. After the evaluation of
+                    β     eiωn0+ GKSΣ¯11F KS                                             the Matsubara sum10, the equation is inverted for ∆xkc,
+                                                                                         leading to a gap equation very similar to the conventional
+                 −1    n
+                    β                                                                    one in Eq. 6.
+                          eiωn0+ GKSΣ¯12GKS†.
+
+                       n
+
+                                               ∆kxc = −∆kxcZkD −                                tanh      βEk  ∆kxc
+                                                                                                            2
+                                                                                   k  KkCk                                                                     (36)
+                                                                                                     2Ek
+
+                                   ZkD  =   1      ∞ Im        3  ΛkSFk               (ω)  − ΛkPkh      (ω)   d   J  +  (ζk  ,  ζk  ω)
+                                            π         dω       2                                             dζk
+
+                                               k  0                  2 tanh                βζk
+                                                                                            2
+
+                               KkCk  =  2       ∞ Im   wkk     (ω)   +                3  ΛkSFk  (ω)   + ΛPkkh  (ω) J − (ζk, ζk ω)
+                                        π          dω                                 2
+
+                                               0               tanh  βζk                 tanh        βζk
+                                                                      2                                2
+
+                      Iβ (Ek,Ek ,ω) := −fβ (Ek) fβ (Ek ) bβ (ω)                          eβEk   − eβ(Ek +ω)       −     eβEk    − eβ(Ek+ω)
+                                                                                           Ek   − Ek − ω                  Ek    − Ek + ω
+
+                      Jβ± (ζk,ζk ,ω) := Iβ (ζk, ζk ω) ± Iβ (ζk, −ζk ω) .
+
+   bβ (ω) is the Bose distribution function and ζk are the                                      1. The ΛkPkh (ω) term describes pairing between elec-
+single particle KS energies of the non-SC system relative                                          trons due to phonons. The interaction is attractive:
+to the chemical potential ζk = k − µ. The kernels in this                                          ΛPkkh (ω) < 0.
+integral equation represent diﬀerent physical processes
+                                                                                                2. The wkk (ω) term is the scattering of electrons due
+introduced by the corresponding self-energy contribution.
+                                                                                                                                               9
+
+       to Coulomb interaction. The bare Coulomb inter-       portions (bands) of the Fermi surface nested by qc will
+       action is reduced by intermediate scattering pro-     be labeled as n = + and n = −.
+       cesses (screening) w = v −1 (Eq. 4). Plasmonic
+       eﬀects may also enter via this term.                     The usual TDDFT kernels like the adiabatic local den-
+                                                             sity approximation have no dependence on (ω,q) and the
+    3. The last term ΛSkFk (ω) contains the magnetic re-     form of ΛSF in frequency and q is determined by χzz.
+       sponse function χzz and hence becomes important
+       if the system is close to a transition to a magnetic     In such a situation the isotropic eﬀective interaction is
+       phase. In such a case the response function features  expected to be small for intra-band scattering ΛS±F± ≈ 0
+       sharp excitations, which represent paramagnons.       and peaked for inter-band scattering Λ±SF∓ .
+
+The two last terms originate both from the Coulomb in-          This situation is modeled by a simple parabola cen-
+teraction and are therefore intrinsically repulsive:         tered around a characteristic frequency ω¯ (see Fig. 2 top
+                                                             right - we have also tested a Gaussian and a Lorentzian
+           Im [ΛkSFk (ω)] > 0 and Im [wkk (ω)] > 0. (37)
+                                                             form and we ﬁnd that the shape has little eﬀect on the
+If these are the strongest terms in the gap equation 36, in
+order to have a non-trivial solution, a sign change must     properties of the model):
+occur in the gap function. We will show how this mech-
+anism works in the following section where we apply the                                                                 ω−ω¯ −  c2  2
+formalism to a model system and investigate the general                               c1NJ (E ) 1 −                            2
+structure of the theory.                                                              
+                                                                                                                             c2
+
+                                                                                      
+
+                                                             ΛSF     (E  ,E                  |ω − ω¯| ≤        c2    and    I   =J            (38)
+                                                                 IJ            ,ω) = if                         2
+
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      
+                                                                                      0 elsewhere.
+
+VI. APPLICATION TO A TWO BAND MODEL                             We ﬁx the width c2 to a value of 0.01 Ryd and the den-
+                                SYSTEM                       sity of states times the peak height c1 is determined by
+                                                             requiring a value for the eﬀective coupling strength λSF.
+
+                                                             The eﬀective coupling strength is given by the integral of
+
+A. Isotropic approximation and the two band                  ΛSF     with    respect  to  ω:
+                 model with a SF pairing                         IJ
+
+                                                                                          3         ∞      2ΛSF       (  F,  F,ω) .
+                                                                                          2π                      IJ
+                                                                               λSF    :=               dω
+                                                                                  IJ                                     ω
+
+   The function ∆nk is known to have a strong depen-                                             0
+dence on the nk18. The remaining k-space structure
+however is often of little importance, especially within     Within this simple multiband isotropic model the struc-
+topologically connected Fermi surface portions15. There-     ture of our spin-ﬂuctuation theory of SC can be made
+                                                             more transparent.
+fore it is convenient to deﬁne an isotropic (or multi-band-
+                                                                         B. Discussion of the SF Contribution
+isotropic) approximation, by means of the following av-
+
+eraging operation:
+
+∆nk    ≈  ∆n  (E)  :=     1        δ ( nk − E) ∆nk           Here and in the next section, we will assume a two-
+                       Nn (E)
+                               k                             band isotropic approximation discussed in the previous
+
+Nn (E) := δ ( nk − E) .                                      section. In this way we try to investigate the general
+
+          k                                                  solution of the SCDFT gap equation for a SF mediated
+
+                                                             pairing. As a ﬁrst step we neglect completely Coulomb
+
+where Nn (E) is the density of states of band n. This        and phonon contributions, considering only the SF inter-
+simpliﬁcation leads to an isotropic gap equation, where
+all interactions are replaced by energy and band depen-      action given in Eq. 38.
+dent quantities. As an example of how this averaging
+works, we consider the spin-ﬂuctuation term:                 We modify the SF by acting on the parameters ω¯ and
+
+                                                             λ . SF  In  Fig.  1  we  show       the   critical  temperature            as  a  func-
+                                                                IJ
+
+                                                             tion    of  ω¯  and  λ . SF  From Eliashberg theory for phonon
+                                                                                     IJ
+
+                          1                                  driven superconductors we have knowledge of the follow-
+                       Nn (E)
+ΛSnFn  (E,E   ,ω)  ≈               ΛnSFkn k  (ω) ×           ing relations between characteristic frequency and aver-
+
+                               kk                            age coupling strength59,60:
+
+              δ ( nk − E) δ ( n k − E ) .
+
+We assume the system to be close to an AFM instability                                Tc  ∝  ω¯  e−α/λ     for  small        λ                 (39)
+                                                                                                 √
+with the ordering and nesting vector qc. Then the prox-                               Tc ∝ ω¯ λ for large λ.                                   (40)
+imity to the magnetic phase leads to strong ﬂuctuations
+                                                             On the right hand side of Fig. 1 we can recognize the
+(paramagnons) at low frequencies and the vector qc in        exponential and square root behavior with respect to λSF.
+the magnetic response function χzz (ω,q)58. These ﬂuc-       The transition between small and large coupling takes
+tuations are expected to be weak for other vectors. The
+                                                                                                                           10
+
+                                                                      scattering from the Fermi level to high-energy states, the
+                                                                      scattering should become momentum independent61. We
+
+                                                                      model this picture in the following way:
+
+                                                                                                     U0 + U1e−κ(E12+E22)
+
+                                                                                         NJ (E2)                         (41)
+                                                                                         
+                                                                                         if I = J
+                                                                                         
+
+                                                                      wIJ (E1,E2) =
+
+                                                                                        
+                                                                                        NJ (E2) U0
+                                                                                        
+                                                                                        if I = J.
+
+                                                                      The diagonal part wII (E1,E1) of this interaction is shown
+
+                                                                      in Fig. 2. For the parameters of the Coulomb interaction
+
+                                                                      we  choose  NJ (  F) U0  = 0.2,  U1  =  U0  .  The parameter  κ
+                                                                                                               2
+                                                                      is used to control the Coulomb interaction: If κ is large
+
+Figure 1. (left) Tc for diﬀerent λSF as a function of the average     the Coulomb interaction decays very quickly in energy.
+ω¯. (right) Analogous plot, here for several ω¯ as a function of
+λSF .                                                                 Due to the choice of an electron hole symmetric DOS
+
+place at λSF ∼ 1.5 for ω¯ = 0.15 Ryd. For the dependence              (N+ (E) = N− (E)) and interaction, the gap function is
+of Tc with respect to ω¯, we ﬁnd a linear behavior.                   also totally symmetric: ∆I (E) = ∆I (−E) and ∆+ (E) =
+                                                                      −∆− (E) and hence only the positive branch ∆+ (E) is
+   This result is not accidental, because the sign change
+of the gap leads eﬀectively to an attractive interaction              shown in Fig. 2. Note that within this symmetry a con-
+between the two bands, therefore within this simpli-
+ﬁed model there is no formal diﬀerence between spin-                  stant coulomb interaction (κ → ∞) cancels out com-
+ﬂuctuation repulsive pairing and conventional phononic
+attraction.                                                           pletely from the gap equation 36.
+
+   Within such a model calculation we can estimate the
+coupling strength in the iron based superconductors, sim-
+ply by the experimental knowledge that the character-
+istic energy of the magnetic ﬂuctuations are of about
+20 meV5. This implies a coupling λSF of about 1 (neglect-
+ing phononic and Coulomb eﬀects) to reach the critical
+temperatures of ∼ 10 K found in these compounds.
+
+C. Interplay between Coulomb, Spin-Fluctuation                        Figure 2. (top-left) Form of the Coulomb interaction for vari-
+                   and Phonon Contribution                            ous κ determining the decay of the Coulomb interaction (Eq.
+                                                                      41). (top-right) Form of the SF interaction Eq. 38. (bottom)
+In the previous section we have observed that the fea-                Gap function ∆+ as a function of energy and κ.
+
+tures of the SCDFT gap equation with a SF interaction is                 In general the gap function shows a typical form, be-
+                                                                      ing constant close to the Fermi level, followed by an ex-
+relatively simple and similar to the conventional phononic            tremum and a decay for larger energies18,62. By decreas-
+                                                                      ing the value of κ the Coulomb contribution starts to
+case. Here we add the eﬀect of phonon and Coulomb in-                 inﬂuence the results. The critical temperature decreases,
+                                                                      due to repulsion within one band and the gap starts
+teractions. This will create a frustration on the SC po-              to show dips. The dips indicate the regime, where the
+                                                                      Coulomb interaction competes with the spin-ﬂuctuation.
+tential because the three interaction will compete against            For κ < 1 the Coulomb contribution are strong enough
+                                                                      to ﬂip the sign of the gap function for certain energies.
+each other.                                                           The sign change of the gap function at higher energies
+                                                                      reduces the eﬀect related to the repulsive Coulomb term
+We use the same spin-ﬂuctuation spectrum in Eq. (38)                  in the gap equation 36.
+
+and ﬁx λSF = 1.2 and ω¯ = 0.01 Ryd. The Coulomb                          Eﬀectively, the Coulomb contribution on the full en-
+                                                                      ergy scale may be mapped to a reduced eﬀective Coulomb
+interaction is very diﬀerent in nature, compared to the               term on a smaller energy scale due to the sign change
+
+SF. In particular its frequency dependence develops in
+
+the plasmonic energy scale (eV). We therefore ignore it,
+
+and assume a ﬂat interaction with respect to ω.
+
+It  is  expected,  that  this  interaction  decays  like     , 1
+
+                                                          q 2 +q 2TF
+
+where qTF is the Thomas-Fermi screening vector. There-
+
+fore the contribution for small momentum transfer (intra-
+
+band) should be much larger than the inter-band con-
+
+tribution corresponding to qc ≈ k − k . Similarly for
+                                                                                                                                                       11
+
+of the gap function. Hence, the sign change of the gap
+function is the way Coulomb renormalization happens in
+SCDFT18,61. Note that the sign change of the gap hap-
+pens far away from the Fermi level.
+
+   However, for κ = 4 the Coulomb contribution still          Figure 3. Gap ∆± for diﬀerent asymmetric density of states.
+decays faster in energy than the spin-ﬂuctuation term,
+which leads to one more sign change in the large energy
+regime (dash-dotted blue line in Fig. 2). If we decrease
+the κ further the Coulomb contribution dominate also
+in the large energy range and the gap changes sign only
+once.
+
+   Note, that the critical temperature converges quickly         Last we consider the inclusion of the purely attractive
+with respect to κ. This indicates, that the Coulomb inter-    phonon contribution. It’s behavior is rather straightfor-
+action inﬂuences the critical temperature only in a small     ward. If a single phonon peak is included ( Eq. 38 )
+energy window for the symmetric two band system and           providing the same coupling between all bands, the crit-
+the renormalization of the gap is not eﬀecting the critical   ical temperature reduces by increasing λPh. Until a the
+temperature strongly.                                         phononic coupling strength reaches the value of λSF. The
+                                                              phonons dominate the gap equation and the symmetry
+                                                              of the gap changes. The s± state favored by the repul-
+                                                              sive interactions is suppressed and an s++ state is found.
+                                                              From this point the Tc starts to rise again with increasing
+                                                              λPh.
+
+                                                              VII. SUMMARY AND OUTLOOK
+
+   To verify this observation, we test diﬀerent densities of     In this work we have derived a fully ab-initio eﬀec-
+states instead of the constant one used so far: The dif-      tive electron-electron interaction containing the eﬀect of
+ferent functions are step and square root functions which     a pairing mediated by spin-ﬂuctuation. The derivation
+represent a two and three dimensional system, respec-         starts from many-body perturbation theory and the in-
+tively and a Gaussian peak. The diﬀerent functions are        troduction of a self-energy function, containing the rele-
+shown in Fig. 3. The non ﬂat functions cut away the long      vant diagrams originating from its vertex part, therefore
+energy tails of the gap function. However, the eﬀect on       going beyond the GW approximation. The vertex correc-
+the critical temperature is rather small.                     tion enter the expression in the form of the particle-hole
+                                                              propagator, which is a highly non-local object determined
+What has a strong eﬀect on Tc is a change of the ratio        by a BSE. The solution of the BSE would be computa-
+                                                              tionally not feasible for realistic systems instead, in Sec.
+N+( F)  = 1 (magenta line in Fig. 2).  This veriﬁes that      III C, we propose a local approximation for the particle-
+N−( F)                                                        hole propagator. In this limit the equation for the self-
+                                                              energy becomes very transparent: spin-ﬂuctuations enter
+in the two band system with a sign changing gap, only         via the magnetic response functions, that can be calcu-
+                                                              lated eﬀectively58,63 within linear response TD-DFT, and
+a small energy region around the Fermi level matters for      the coupling to the electrons is mediated by the exchange-
+                                                              correlation kernel.
+the Coulomb repulsion. This is very diﬀerent from the
+                                                                 This eﬀective interaction is in principle applicable to
+one band case, where the Coulomb renormalization at           any theory of SC, however in this work we cast it into
+                                                              the framework of SCDFT by the construction of an ex-
+large energies is an essential eﬀect.                         plicit xc kernel (Sec. V). In this way the full gap equation
+                                                              remains completely parameter free.
+
+                                                                 We show a ﬁrst application of the new functional
+                                                              (Sec. VI) to a two band electron gas model. Applica-
+                                                              tion to real materials will follow, however this further
+                                                              step needs the calculation of the magnetic response func-
+                                                              tion for the real system and will be the subject to further
+                                                              investigation.
+                                                                12
+
+ 1 J. Bednorz and K. Müller, Zeitschrift für Physik B Con-      27 Y. Nambu, Phys. Rev. 117, 648 (1960).
+                                                                28 C. A. Kukkonen and A. W. Overhauser, Phys. Rev. B 20,
+   densed Matter 64, 189 (1986).
+ 2 J. G. Bednorz and K. A. Müller, Rev. Mod. Phys. 60, 585         550 (1979).
+                                                                29 E. K. U. Gross and S. Kurth, International Journal of
+   (1988).
+ 3 Y. Kamihara, H. Hiramatsu, M. Hirano, R. Kawamura,              Quantum Chemistry 40, 289 (1991).
+                                                                30 J. Bardeen, L. N. Cooper, and J. R. Schrieﬀer, Phys. Rev.
+   H. Yanagi, T. Kamiya, and H. Hosono, Journal of the
+                                                                   108, 1175 (1957).
+   American Chemical Society 128, 10012 (2006).                 31 R. S. Gonnelli, D. Daghero, D. Delaude, M. Tortello, G. A.
+ 4 P. Hirschfeld, M. Korshunov, and I. Mazin, Rep. Prog.
+                                                                   Ummarino, V. A. Stepanov, J. S. Kim, R. K. Kremer,
+   Phys. 74, 124508 (2011).
+ 5 G. R. Stewart, Rev. Mod. Phys. 83, 1589 (2011).                 A. Sanna, G. Profeta, and S. Massidda, Phys. Rev. Lett.
+ 6 D. Manske, Theory of Unconventional Superconductors,
+                                                                   100, 207004 (2008).
+   Cooper-Pairing Mediated by Spin Excitations (Springer-       32 C. Bersier, A. Floris, P. Cudazzo, G. Profeta, A. Sanna,
+
+   Verlag Berlin Heidelberg, 2004).                                F. Bernardini, M. Monni, S. Pittalis, S. Sharma, H. Glawe,
+ 7 T. Saito, S. Onari, and H. Kontani, Phys. Rev. B 82,
+                                                                   A. Continenza, S. Massidda, and E. K. U. Gross, Journal
+   144510 (2010).
+ 8 P. A. Lee, N. Nagaosa, and X.-G. Wen, Rev. Mod. Phys.           of Physics: Condensed Matter 21, 164209 (2009).
+                                                                33 C. C. Tsuei and J. R. Kirtley, Rev. Mod. Phys. 72, 969
+   78, 17 (2006).
+ 9 L. N. Oliveira, E. K. U. Gross, and W. Kohn, Phys. Rev.         (2000).
+                                                                34 L. Hedin, Phys. Rev. 139, A796 (1965).
+   Lett. 60, 2430 (1988).                                       35 A. Migdal, J. Exptl. Theoret. Phys (U.S.S.R.) 34, 996
+10 M. Lüders, M. A. L. Marques, N. N. Lathiotakis, A. Floris,
+                                                                   (1958).
+   G. Profeta, L. Fast, A. Continenza, S. Massidda, and         36 T. A. Maier, S. Graser, D. J. Scalapino, and P. Hirschfeld,
+
+   E. K. U. Gross, Phys. Rev. B 72, 024545 (2005).                 Phys. Rev. B 79, 134520 (2009).
+11 A. Sanna and E. K. U. Gross, To be pubblished.               37 J. Wen, G. Xu, Z. Xu, Z. W. Lin, Q. Li, Y. Chen, S. Chi,
+12 A. Floris, G. Profeta, N. N. Lathiotakis, M. Lüders,
+                                                                   G. Gu, and J. M. Tranquada, Phys. Rev. B 81, 100513
+   M. A. L. Marques, C. Franchini, E. K. U. Gross, A. Con-
+                                                                   (2010).
+   tinenza, and S. Massidda, Phys. Rev. Lett. 94, 037004        38 S. M. Shapiro, G. Shirane, and J. D. Axe, Phys. Rev. B
+
+   (2005).                                                         12, 4899 (1975).
+13 G. Profeta, C. Franchini, N. N. Lathiotakis, A. Floris,      39 R. E. Prange, Phys. Rev. 129, 2495 (1963).
+                                                                40 A more general and unbiased way would be to start from
+   A. Sanna, M. A. L. Marques, M. Lüders, S. Massidda,
+                                                                   Hedin cycle34 and iterate it self-consistently. This would
+   E. K. U. Gross, and A. Continenza, Phys. Rev. Lett. 96,
+                                                                   lead also include the T -matrix diagrams considered here,
+   047003 (2006).                                                  but at a slow convergence rate34.
+14 A. Sanna, G. Profeta, A. Floris, A. Marini, E. K. U. Gross,  41 E. Sasioglu, A. Schindlmayr, C. Friedrich, F. Freimuth,
+
+   and S. Massidda, Phys. Rev. B 75, 020511 (2007).                and S. Blügel, Phys. Rev. B 81, 054434 (2010).
+15 A. Floris, A. Sanna, S. Massidda, and E. K. U. Gross,        42 G. Onida, L. Reining, and A. Rubio, Rev. Mod. Phys. 74,
+
+   Phys. Rev. B 75, 054508 (2007).                                 601 (2002).
+16 P. Cudazzo, G. Profeta, A. Sanna, A. Floris, A. Conti-       43 E. E. Salpeter and H. A. Bethe, Phys. Rev. 84, 1232 (1951).
+                                                                44 J. Hertz and D. Edwards, Journal of Phys. F: Metal
+   nenza, S. Massidda, and E. K. U. Gross, Phys. Rev. Lett.
+                                                                   Physics 3, 2174 (1973).
+   100, 257001 (2008).                                          45 S. Doniach and S. Engelsberg, Phys. Rev. Lett. 17, 750
+17 P. Cudazzo, G. Profeta, A. Sanna, A. Floris, A. Conti-
+                                                                   (1966).
+   nenza, S. Massidda, and E. K. U. Gross, Phys. Rev. B 81,     46 V. P. Zhukov, E. V. Chulkov, and P. M. Echenique, Phys.
+
+   134506 (2010).                                                  Rev. B 72, 155109 (2005).
+18 M. A. L. Marques, M. Lüders, N. N. Lathiotakis, G. Pro-      47 P. Romaniello, F. Bechstedt, and L. Reining, Phys. Rev.
+
+   feta, A. Floris, L. Fast, A. Continenza, E. K. U. Gross,        B 85, 155131 (2012).
+                                                                48 G. Vignale and K. S. Singwi, Phys. Rev. B 32, 2156 (1985).
+   and S. Massidda, Phys. Rev. B 72, 024546 (2005).             49 L. G. Molinari, Phys. Rev. B 71, 113102 (2005).
+19 R. Akashi and R. Arita, Phys. Rev. Lett. 111, 057006         50 F. Aryasetiawan and S. Biermann, Phys. Rev. Lett. 100,
+
+   (2013).                                                         116402 (2008).
+20 C. Bersier, A. Floris, A. Sanna, G. Profeta, A. Continenza,  51 N. F. Berk and J. R. Schrieﬀer, Phys. Rev. Lett. 17, 433
+
+   E. K. U. Gross, and S. Massidda, Phys. Rev. B 79, 104503        (1966).
+                                                                52 L. J. Sham and W. Kohn, Phys. Rev. 145, 561 (1966).
+   (2009).                                                      53 R. Del Sole, L. Reining, and R. W. Godby, Phys. Rev. B
+21 A. Sanna, C. Franchini, A. Floris, G. Profeta, N. N. Lath-
+                                                                   49, 8024 (1994).
+   iotakis, M. Lüders, M. A. L. Marques, E. K. U. Gross,        54 E. Runge and E. K. U. Gross, Phys. Rev. Lett. 52, 997
+
+   A. Continenza, and S. Massidda, Phys. Rev. B 73, 144512         (1984).
+                                                                55 I. Mazin, Nature 464, 183 (2010).
+   (2006).                                                      56 L. J. Sham and M. Schlüter, Phys. Rev. Lett. 51, 1888
+22 L. Boeri, O. V. Dolgov, and A. A. Golubov, Phys. Rev.
+                                                                   (1983).
+   Lett. 101, 026403 (2008).                                    57 M. Marques Ph.D. thesis, Density Functional Theory for
+23 P. Morel and P. W. Anderson, Phys. Rev. 125, 1263 (1962).
+24 I. I. Mazin, D. J. Singh, M. D. Johannes, and M. H. Du,         Superconductors, Exchange and Correlation Potentials for
+
+   Phys. Rev. Lett. 101, 057003 (2008).
+25 P. Hohenberg and W. Kohn, Phys. Rev. 136, B864 (1964).
+26 T. Kreibich, R. van Leeuwen, and E. K. U. Gross, Phys.
+
+   Rev. A 78, 022501 (2008).
+                                                              13
+
+   Inhomogeneous Systems (Bayerische Julius-Maximilians          G. Profeta, A. Sanna, S. Sharma, and E. K. U. Gross, Su-
+
+   Universität Würzburg, 1998).                                  perconductor Science and Technology 22, 034006 (2009).
+58 F. Essenberger, P. Buczek, A. Ernst, L. Sandratskii, and   62 A. Sanna Ph.D. thesis, Application of Density Functional
+
+   E. K. U. Gross, Phys. Rev. B 86, 060412 (2012).               Theory for Superconductors to real materials (Universitià
+59 W. L. McMillan, Phys. Rev. 167, 331 (1968).
+60 P. B. Allen and R. C. Dynes, Phys. Rev. B 12, 905 (1975).     degli Studi di Cagliari, 2007).
+61 S. Massidda, F. Bernardini, C. Bersier, A. Continenza,     63 P. Buczek, A. Ernst, P. Bruno, and L. M. Sandratskii,
+
+   P. Cudazzo, A. Floris, H. Glawe, M. Monni, S. Pittalis,       Phys. Rev. Lett. 102, 247206 (2009).
+

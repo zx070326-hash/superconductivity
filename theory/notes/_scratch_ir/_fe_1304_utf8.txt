@@ -1,0 +1,398 @@
+arXiv:1304.3638v1 [cond-mat.supr-con] 12 Apr 2013  A phenomenological multiband Eliashberg model for
+                                                   LiFeAs
+
+                                                                     G A Ummarino1, Sara Galasso1 and A Sanna2
+
+                                                                        1 Istituto di Ingegneria e Fisica dei Materiali, Dipartimento di Scienza Applicata e
+                                                                        Tecnologia, Politecnico di Torino, Corso Duca degli Abruzzi 24, 10129 Torino, Italy
+                                                                        2 Max-Planck-Institut fu¨r Mikrostrukturphysik, Weinberg 2, D-06120 Halle, Germany
+                                                                        E-mail: giovanni.ummarino@infm.polito.it
+
+                                                                        Abstract. The phenomenology of LiFeAs superconductor can be explained in the
+                                                                        framework of a four-band s±-wave Eliashberg theory. We have examined the
+                                                                        experimental data available in literature and we have found out that it is possible
+                                                                        to reproduce the experimental critical temperature, the gap values and the upper
+                                                                        critical magnetic ﬁeld within an eﬀective model in moderate strong-coupling regime
+                                                                        that must include both an intraband term λ11 ∼ 0.9 and an interband spin-ﬂuctuations
+                                                                        (λtsoft ∼ 1.5) coupling. The presence of a non negligible intraband coupling can be a
+                                                                        ﬁctitious eﬀect of the violation of Migdal’s Theorem.
+
+                                                                        PACS numbers: 74.25.F, 74.20.Mn, 74.20.-z
+
+                                                   keywords: Multiband superconductivity, Fe-based superconductors, Eliashberg
+                                                   equations, Non-phononic mechanism
+A phenomenological multiband Eliashberg model for LiFeAs  2
+
+     The family of iron pnictide superconductors, discovered by the Hosono group [1]
+in 2008, has focused an intense research in this four years. Many compounds with
+diﬀerent crystal structures and physical properties have been discovered and character-
+ized [2, 3, 4], among them LiFeAs [5] has proved to be a peculiar one.
+First of all LiFeAs, unlike almost all other iron-compounds, does not need neither charge
+doping nor pressure to condense in the superconducting state [5], this implies that no
+disorder is present. Further, it seems to be not magnetic and angle-resolved photoemis-
+sion spectroscopy (ARPES) reports poor nesting [6]. At a glance these characteristics
+could turn us away from the idea of an unconventional pairing mechanism, however the
+phonon-mediated coupling seems to be too weak [7] to explain the relatively high criti-
+cal temperature (Tc=18 K). Moreover, recent neutron inelastic scattering measurements
+show the evidence of strong antiferromagnetic ﬂuctuations [8], reconciling LiFeAs with
+other Fe-based superconductors.
+A multigap scenario is suggested by the presence of ﬁve diﬀerent sheets in the Fermi
+surface [9]: Two electron pockets are centered near the M-point of the Brillouin zone
+and three hole pockets around the Γ-point. Despite the Fermi surface shows ﬁve
+diﬀerent sheets, according to our electronic structure calculations the 5-th sheet can
+be disregarded because of its low density of states (see Table 1 and Figure 1) and
+size [10, 11, 12, 13, 14]. Consequently, as a starting point, we can model the electronic
+structure of LiFeAs by using a four-band model [15, 16] with two hole bands (1 and 2)
+and two electron bands (3 and 4).
+In this work we construct a theoretical model to describe the phenomenology of LiFeAs,
+by using a minimal number of phenomenological parameters in combination with Density
+Functional Theory (DFT) calculations and the Eliashberg theory of superconductivity.
+The model is then tested by simulating the temperature dependance of the critical ﬁeld.
+
+     Recently, four diﬀerent gaps have been observed by ARPES measurements on
+LiFeAs [18]. Hence, in order to describe the superconductive properties of this
+compound, a four-band Eliashberg model [15, 16] with s± symmetry [17] can be used.
+The experimental gap values [18] have been used to ﬁx the free parameters of the model
+and, after this, the critical temperature and the upper critical magnetic ﬁeld [19] have
+been calculated. The ﬁnal result is a moderate strong-coupling regime λtot ∼ 1.6 − 2.0
+where the total electron-boson coupling must include two diﬀerent contributions: a
+purely interband coupling mediated by spin-ﬂuctuations (sf ), with λstoft ∼ 1.5 and a
+purely intraband coupling λ11, whose origin will be discussed hereafter. The isotropic
+values of the gaps at T = 8 K are reported to be ∆1 = 5.0 meV, ∆2 = 2.6 meV,
+∆3 = 3.6 meV, ∆4 = 2.9 meV. As a ﬁrst approximation, since just a small anisotropy
+is observed, we consider only the isotropic part.
+The Eliashberg theory [20] generalized to multi-band systems has already been
+successfully used to describe the properties of MgB2 [21, 22, 23] and iron compounds
+[24, 25]. A four-band Eliashberg model includes eight coupled equations for the gaps
+∆i(iωn) and the renormalization functions Zi(iωn), where i is the band index (that
+A phenomenological multiband Eliashberg model for LiFeAs         3
+
+Figure 1. Fermi Surface of LiFeAs.
+
+Table 1. Fermi Surface resolved Kohn Sham properties [10]: The Fermi density of
+states (N (0)) is given in states/spin/eV, the Fermi Velocities (vF ) in 105 m/sec, and
+plasma frequencies (ωp) in eV. ab label the in-plane and c for the out-of-plane direction
+of the Fermi velocities and the diagonals of the plasma tensor [14].
+
+FS     N(0)   vFab         vFc      ωpab                  ωpc
+
+1      0.556  1.157        0.207    1.131                 0.202
+
+2      0.646  1.382        0.032    1.455                 0.034
+
+3      0.616  1.535        0.865    1.581                 0.890
+
+4      0.370  2.014        0.459    1.161                 0.365
+
+5      0.039  2.454        1.227    0.639                 0.319
+
+TOT    2.228  1.523        0.529    2.980                 1.035
+
+ranges between 1 and 4) and ωn are the Matsubara frequencies. The imaginary-axis
+equations are:
+
+ωnZi(iωn) = ωn + πT ΛiZj(iωn, iωm)NjZ (iωm) +
+
+                                          m,j
+
++ [Γij + ΓM ij ]NjZ (iωn)                                        (1)
+
+    j
+
+Zi(iωn)∆i(iωn) = πT [Λi∆j (iωn, iωm) − µ∗ij(ωc)] ×
+
+                                          m,j
+
+× Θ(ωc − |ωm|)Nj∆(iωm) + [Γij + ΓM ij ]Nj∆(iωn)                  (2)
+
+                           j
+
+where Γij and ΓM ij are the non magnetic and magnetic impurity scattering rates,
+ΛZij(iωn, iωm) = Λipjh(iωn, iωm) + Λisjf (iωn, iωm), Λ∆ij (iωn, iωm) = Λipjh(iωn, iωm) −
+Λsijf (iωn, iωm), sf means antiferromagnetic spin ﬂuctuations and ph phonons.
+A phenomenological multiband Eliashberg model for LiFeAs                                                                                4
+
+Θ(ωc − |ωm|) is the Heaviside function and ωc is a cutoﬀ energy. In particular,
+
+                            +∞          αi2j F ph,sf (Ω)
+                                      (ωn − ωm)2 + Ω2
+Λpijh,sf (iωn, iωm) = 2          dΩΩ                                                   ,  µi∗j (ωc)  are  the  elements  of  the  4  ×  4
+
+                         0
+Coulomb pseudopotential matrix and, ﬁnally,
+                                                                                −1
+
+Nj∆(iωm) = ∆j(iωm) · ωm2 + ∆j2(iωm) ,
+
+                                                                     −1
+
+NjZ (iωm) = ωm · ωm2 + ∆2j (iωm) .
+
+The electron-boson coupling constants are deﬁned as
+
+       λpijh,sf = 2              +∞  dΩ  αi2j F  ph,sf (Ω)                          .                                                (3)
+                               0
+                                                 Ω
+
+The solution of Equation (1) and Equation (2) requires a huge number of
+
+input parameters (32 functions and 16 constants); nevertheless, some of these are
+
+interdependent, others may be extracted from experiments and still others ﬁxed by
+
+appropriate approximations.
+
+At the beginning we ﬁxed the same conditions that have been used for many other
+
+pnictides, as shown in Ref. [17], and we assumed that: i) the total electron-phonon
+
+coupling constant is small and mostly intraband [26]; ii) antiferromagnetic spin
+
+ﬂuctuations mainly provide interband coupling [3, 24]. To account for these assumptions
+
+in the simplest way (as has already been done for other iron-compounds with good
+results) we should take: λpiih = λpijh = 0, µi∗i(ωc) = µ∗ij(ωc) = 0 i.e. the electron-phonon
+coupling constant and the Coulomb pseudopotential compensate each other, in ﬁrst
+approximation, and λsiif = 0, i.e. SF produce only interband coupling [24]. However,
+within these assumptions, we were not able to reproduce the gap values of LiFeAs, and
+
+in particular the high value of ∆1, the best results obtained are reported in the second
+row of Table 2.
+
+In order to solve this problem it is necessary to introduce at least an intraband coupling
+
+in the ﬁrst band, then λ11 = 0.
+The ﬁnal matrix of the electron-boson coupling constants becomes
+
+                                λ11                                     0                  λ13 λ14 
+
+       λij  =                     0              0                                         λ23      λ24                            (4)
+                                = λ13ν13  λ32 = λ23ν23                                      0            
+                         
+                           λ31                                                                      0    
+                                                                                                          
+
+                            λ41 = λ14ν14 λ42 = λ24ν24 0 0
+
+where νij = Ni(0)/Nj(0) and Ni(0) is the normal density of states at the Fermi level for
+the i − th band (i = 1, 2, 3, 4). We chose spectral functions with Lorentzian shape i.e:
+
+       αi2jFij(Ω) = Cij{L(Ω + Ωij, Yij) − L(Ω − Ωij, Yij)}                                                                           (5)
+
+where  L(Ω ± Ωij, Yij)      =             1      and                     Cij           are  normalization      constants,    necessary
+                                 (Ω±Ωij )2+Yi2j
+
+to obtain the proper values of λij while Ωij and Yij are the peak energies and half-
+
+widths of the Lorentzian functions, respectively [24]. In all the calculations we set
+
+Ωij = Ωisjf = Ωs0f = 8 meV [8], and Yij = Yisjf = Ωsijf /2 [27]. The cut-oﬀ energy is
+ωc = 18 Ω0sf and the maximum quasiparticle energy is ωmax = 21 Ω0sf . We put Γij=ΓM ij =0
+A phenomenological multiband Eliashberg model for LiFeAs  5
+
+because the ARPES measurement are on very good single crystals of LiFeAs [18]. Band-
+structure calculations (see Table 1) provide information about the factors νij that enter
+the deﬁnition of λij. The obtained values are ν13 = 0.9019, ν14 = 1.5010, ν23 = 1.0483,
+ν24 = 1.7447.
+After these considerations the free parameters are reduced to the ﬁve coupling constants
+λ13, λ23, λ14, λ24 and λ11. First of all we solved the imaginary-axis Eliashberg Equa-
+tions (1) and (2) (actually we continued them analytically on the real-axis by using the
+approximants Pad`e technique) and we ﬁxed the free parameters in order to reproduce
+the gap values at low temperature.
+
+     The large number of free parameters (ﬁve) may suggest that it is possible to
+ﬁnd diﬀerent sets that produce the same results. It is not so, as a matter of fact
+the predominantly interband character of the model drastically reduce the number of
+possible choices.
+At the beginning, in order to have the fewest number of free parameters, we set Ω11
+to be the same of the antiferromagnetic SF (even if the intraband coupling can not be
+mediated by SF). In this case (see third row of table 2) the value of λ11 is very large.
+We add only λ11 because only the band 1 has a low Fermi energy and only in this band
+the Migdal’s theorem breaks down. The eﬀect of the vertex corrections [28, 29] can be
+simulated by an eﬀective coupling that is bigger than real coupling [30, 31]. Certainly
+in the bands 2, 3 and 4, the phonon couplings are very small and therefore we have
+not considered the possibility to have λ22, λ33, λ44 = 0 and also, in a previous paper,
+we have demonstrated that, in these systems, the eﬀect of a small phononic intraband
+coupling is negligible [24].
+Then we considered for Ω11 the typical phonon energies [7]. In this case (as
+reported in fourth and ﬁfth row of table 2) the value of λ11 is 0.86-0.9, while
+the antiferromagnetic spin ﬂuctuations contribution correspond to a moderate strong
+coupling regime (λtsoft ∼ 1.5).
+In fact, we have solved the Eliashberg equations in two other cases: in the ﬁrst case
+we used as α121F (Ω) the calculated phonon density of states G(Ω) and the second case
+we considered the calculated total electron-phonon spectral function α2Ftot(Ω) both
+appropriately scaled. The proper choice is the second one, but this spectral function
+should be in principle diﬀerent for each band; since the ﬁrst band shows peculiar
+characteristics the evaluation of the electron phonon coupling could be not so reliable.
+Then we decided to use the phonon spectra and let the coupling to be a free parameter.
+These spectral functions are shown in Figure 2.
+At this point there are no more free parameters. The critical temperature can be
+evaluated and it turns out to be very close to experimental one, Tccalc = 18.6 − 20.1 K.
+ By solving real-axis Eliashberg equations we obtained the temperature dependence of
+the gaps (see Figure 3) for the parameter sets reported in the third and fourth row of
+Table 2.
+
+   The multiband Eliashberg model developed above can also be used to explain the
+A phenomenological multiband Eliashberg model for LiFeAs       6
+
+Table 2. The ﬁrst row shows the experimental data. The second row concerns the
+pure interband case (λii = 0) while the last three include an intraband term (λ11 = 0):
+A very large value appears in the ﬁrst case (the third row), a smaller one if the phonon
+spectral function G(Ω) (fourth row) or the electron-phonon spectral function α2F (Ω)
+(ﬁfth row) are considered. The critical temperatures are given in K and the gap values
+in meV.
+
+           λ11 λtot λ13 λ23 λ14 λ24 ∆1 ∆2 ∆3 ∆4 Tc
+
+Ex.        -     -   -    -    -       - 5.0 2.6 3.6 2.9 18.0
+
+sf         0.00 1.80 1.78 0.66 0.45 0.52 3.7 2.6 3.6 2.9 15.9
+
+sf,? 2.10 2.00 1.15 0.80 0.45 0.30 5.0 2.6 3.6 2.9 18.6
+
+sf, ph (1) 0.86 1.62 1.06 0.79 0.42 0.30 5.1 2.6 3.7 2.9 20.0
+
+sf, ph (2) 0.90 1.63 1.15 0.80 0.45 0.30 5.0 2.6 3.6 2.9 20.1
+
+Figure 2. The calculated phononic density of states G(Ω) (red dashed line) and the
+calculated total electron-phonon spectral function α2Ftot(Ω) (black solid line).
+
+experimental data of temperature dependence of the upper critical magnetic ﬁeld [19].
+
+For the sake of completeness, we give here the linearized gap equations in the presence
+
+of magnetic ﬁeld, for a superconductor in the clean limit. In the following, vF j is the
+Fermi velocity of the j − th band, and Hc2 is the upper critical ﬁeld:
+
+ωnZi(iωn)        = ωn + πT ΛiZj(iωn − iωm)sign(ωm)             (6)
+
+                          m,j
+
+Zi(iωn)∆i(iωn) = πT       Λ∆ij (iωn − iωm) − µi∗j(ωc) ·
+
+                     m,j
+
+                    · θ(|ωc| − ωm)χj(iωm)Zj(iωm)∆j(iωm)        (7)
+
+χj(iωm) =     2     +∞
+
+              βj 0      dq exp(−q2) ·
+
+           · tan−1                  q βj                  .
+                    |ωmZj(iωm)| + iµBHc2sign(ωm)
+A phenomenological multiband Eliashberg model for LiFeAs  7
+
+Figure 3. Temperature dependence of the absolute gap values (lines) and
+experimental data (symbols) at 8K. The dark cyan solid (dashed) line represents the
+ﬁrst gap, the orange solid (dashed) line the second one, the violet solid (dashed) line
+the third and the red solid (dashed) line the fourth, calculated with the parameters of
+fourth (third) row of Table 2.
+
+                     Figure 4. Experimental temperature dependence of the upper critical ﬁeld (symbols),
+                     and the relevant ﬁtting curves (lines) obtained by solving the Eliashberg equations in
+                     magnetic ﬁeld. Red circles and solid red (dashed dark blue) line for H c, black square
+                     symbols and solid black (dashed orange) line for H ab calculated with the parameters
+                     of fourth (third) row of Table 2. The dotted olive (H c) and navy (H ab) and the
+                     dashed-dotted magenta (H c) and pink (H ab) lines are,respectively, the fourth and
+                     ﬁrst case of Table 2 but where vF 1 isn’t a free parameter but it is taken by Table 1
+
+Here βj = πHc2vF2 j/(2Φ0) and Φ0 is the unit of magnetic ﬂux. In these equations the
+four bare Fermi velocities vF j [32] are the input parameters. As the ﬁrst band shows
+peculiar characteristics even in the calculation of the Fermi velocity can be present some
+corrections, then we decided to let the ﬁrst Fermi velocities to be free parameters and
+we choose them to ﬁnd the best ﬁt of the experimental data [19] while the other values
+have been ﬁxed to the values reported in Table 1. Then vF 1, in each case, is the only
+free parameter. The obtained values are: vFc1 = 2.28 · 105 m/s and vFa1b = 1.74 · 105
+A phenomenological multiband Eliashberg model for LiFeAs  8
+
+m/s, in the phonon case and vFc1 = 2.79 · 105 m/s and vFa1b = 2.14 · 105 m/s, if the spin
+ﬂuctuation spectral function is considered. Figure 4 shows the experimental data and
+the best theoretical curves (solid and dashed lines) obtained by solving the Eliashberg
+equations within the model discussed above. As can be seen, the results obtained in
+the two considered cases are almost indistinguishable and in very good agreement with
+the experimental data. In the Figure 4 we shows also the curves calculated with vF 1
+taken by Table 1 when λ11 = 0 (fourth case in Table 2, dotted line olive and navy) and
+when λ11 = 0 (ﬁrst case in Table 2, dashed-dotted line magenta and pink). In both
+situations there is no agreement with the experimental data. The curves calculated in
+absence of the term λ11 don’t agree with the experimental data so we deduce that the
+higher value of vFa1b,c isn’t produced by the presence of an intraband term (λ11 = 0) but,
+probably, by the peculiar characteristics of band 1. However one must consider the fact
+that the Eliashberg equations are derived by assuming Migdal’s theorem. In presence
+of an anomalous band dispersion as for band 1, the theory may partially break down.
+Allowing vFa1b,c as a free parameter implicitly implies that we are ”phenomenologically”
+going beyond the ﬁrst order contributions (i.e. now we cannot neglect the eﬀects of the
+vertex corrections in the band 1). The break down of the Migdal’s theorem leads to use
+eﬀective values of λ11 and vF 1 diﬀerent from real value because the framework of the
+theory is partially inadequate.
+
+     To summarize we have constructed a phenomenological model of superconductivity
+for LiFeAs able to describe its critical temperature, the multigap structure measured by
+Umezawa and coworkers in Ref. [18] and other experimental observations. However this
+process was not straightforward, to be able to conjugate a spin ﬂuctuation dominated
+pairing with the experimental gap structure we have been forced to introduce an
+intraband coupling that acts only on the ﬁrst band. The presence of a phononic, purely
+intraband term seems to indicate an intrinsic incompatibility between the structure of
+the superconducting gaps as measured by Umezawa and coworkers in Ref. [18] and a
+purely spin-ﬂuctuation mediated pairing. A possible explanation may be linked to the
+very low Fermi energy of the band for which vertex corrections [28, 29] to the usual
+Migdal-Eliashberg theory may be relevant, and are expected to increase the stenght of
+the phononic pairing [30, 31].
+In conclusion, our calculations show that LiFeAs presents peculiar features with respect
+to other iron compounds and it cannot be explained within the framework of a pure
+interband spinﬂuctuation mediated superconductivity.
+
+References
+
+[1] Kamihara Y, Watanabe T, Hirano M and Hosono H 2008 J. Am. Chem. Soc. 130 3296.
+[2] Stewart G R 2011 Rev. Mod. Phys. 83 1589.
+[3] Hirschfeld P J, Korshunov M M and Mazin I I, Rep. Prog. Phys. 74 124508.
+[4] Johnston D C 2010 Adv. Phys. 59 803.
+[5] Tapp J H, Tang Z, Lv B, Sasmal K, Lorenz B, Chu P C W and Guloy A M 2008 Phys.
+
+      Rev. B 78 060505(R).
+A phenomenological multiband Eliashberg model for LiFeAs  9
+
+[6] Borisenko S V, Zabolotnyy V B, Evtushinsky D V, Kim T K, Morozov I V, Yaresko A N, Kordyuk
+      A A, Behr G, Vasiliev A, Follath R and Bu¨chner B 2010 Phys. Rev. Lett. 105 067002.
+
+[7] Huang G Q, Xing Z W and Xing D Y 2010 Phys. Rev. B 82 014511.
+[8] Taylor E A, Pitcher M J, Ewings R A, Perring T G, Clarke S J and Boothroyd A T 2011 Phys.
+
+      Rev. B 83 220514R.
+[9] Singh D J 2008 Phys. Rev. B 78 094511.
+[10] Electronic structure calculations are done within Kohn-Sham [11] density functional theory in
+
+      the PBE [12] approximation for the exchange correlation functional and using the experimental
+      lattice structure [5]. Ultrasoft pseudopotentials are used to describe core states, while valence
+      wavefunctions are expanded in planewaves with a 40 Ry cutoﬀ (400 Ry for charge expansion).
+      We use the implementation provided by the ESPRESSO package [13]. A coarse grid of 20×20×16
+      k-points is explicitly calculated and then Fourier interpolated to compute accurate Fermi velocities
+      and plasma frequencies.
+[11] Kohn W and Sham L J 1965 Phys. Rev. 140 A1133.
+[12] Perdew J P, Burke K and Ernzerhof M 1996 Phys. Rev. Lett. 77 3865.
+[13] Giannozzi P et Al. 2009 J. Phys. Condens. Matter 21 395502.
+[14] Golubov A A, Brinkman A, Dolgov O V, Kortus J, Jepsen O 2002 Phys. Rev. B 66 054524.
+[15] Benfatto L, Cappelluti E and Castellani C 2009 Phys. Rev. B 80 214522.
+[16] Popovich P, Boris A V, Dolgov O V, Golubov A A, Sun D L, Lin C T, Kremer R K and Keimer B
+      2010 Phys. Rev. Lett. 105 027003.
+[17] Mazin I I, Singh D J, Johannes M D and Du M H 2008 Phys. Rev. Lett. 101 057003.
+[18] Umezawa K, Li Y, Miao H, Nakayama K, Liu Z -H, Richard P, Sato T, He J B, Wang D -M, Chen
+      G F, Ding H, Takahashi T, and Wang S -C 2012 Phys. Rev. Lett 108 037002.
+[19] Kasahara S, Hashimoto K, Ikeda H, Terashima T, Matsuda Y and Shibauchi T 2012 Phys. Rev. B
+      85 060503(R).
+[20] Eliashberg G M 1960 Sov. Phys. JETP 11 696.
+[21] Shulga S V, Drechsler S -L, Fuchs G, and Mu¨ller K -H 1998 Phys. Rev. Lett. 80 1730.
+[22] Ummarino G A, Gonnelli R S, Massidda S, Bianconi A 2004 Physica C 407 12.
+[23] Nicol E J, Carbotte J P 2005 Phys. Rev. B 71 054501.
+[24] Ummarino G A, Tortello M, Daghero D and Gonnelli R S 2009 Phys. Rev. B 80 172503.
+[25] Ummarino G A, Daghero D, Tortello M and Gonnelli R S 2011 J. Supercond. Nov. Magn. 24 247.
+[26] Boeri L, Calandra M, Mazin I I, Dolgov O V and Mauri F 2010 Phys. Rev. B 82 020506R.
+[27] Inosov D S, Park J T, Bourges P, Sun D L, Sidis Y, Schneidewind A, Hradil K, Haug D, Lin C T,
+      Keimer B and Hinkov V 2010 Nature Physics 6 178-181.
+[28] Pietronero L, Stra¨ssler S and Grimaldi C 1995 Phys. Rev. B 52 10516.
+[29] Grimaldi C, Pietronero L and Stra¨ssler S 1995 Phys. Rev. B 52 10530.
+[30] Paci P, Cappelluti E, Grimaldi C and Pietronero L 2001 Phys. Rev. B 65 012512.
+[31] Ummarino G A and Gonnelli R S 1997 Phys Rev B 56 R14279.
+[32] Suderow H, Tissen V G, Brison J P, Mart´ınez J L, Vieira S, Lejay P, Lee S and Tajima S 2004
+      Phys. Rev. B 70 134518.
+
