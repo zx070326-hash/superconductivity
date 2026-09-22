@@ -22,26 +22,30 @@ eps = np.array([0.0987, 0.0987, -0.3595, 0.2078, -0.7516])  # 1,2,3,4,5 -> idx 0
 
 # ---------------------------------------------------------------------------
 # Table I: intraorbital hopping parameters (m=1,3,4,5; m=2 by C4 symmetry x<->y)
+# CORRECTED 2026-09-22: page-image cross-check (200dpi) found column misalignment
+# in the original pdftotext -layout extraction; values below match
+# theory/notes/literature/graser1003.0133_5orbital_TB_parameters_2026-09-22.md Sec.4.
 # ---------------------------------------------------------------------------
 t1 = dict(x=-0.0604, y=-0.3005, xx=0.0253, xy=0.2388, xxy=-0.0414,
-          xyy=-0.0237, xxyy=0.0158, z=0.0, xz=-0.0101, xxz=0.0126, xyz=0.0421)
-t3 = dict(x=0.3378, xy=0.0011, xxy=-0.0947, z=0.1001)  # only nonzero entries per table
-# reinterpret cleanly against the printed xi33 formula (x, xy(=cross), xx term):
-# xi33 = 2 t3_x (coskx+cosky) + 4 t3_xy_cross coskx cosky + 2 t3_xx (cos2kx+cos2ky)
-t3 = dict(x=0.3378, xx=0.0011, xy=-0.0947, z=0.1001)
-t4 = dict(x=0.1965, xx=-0.0528, xy=0.1259, xxy=-0.032, xxyy=0.0045, z=0.0563, xz=0.0662, xyz=0.0)
-t5 = dict(x=-0.0656, xx=0.0001, xxy=0.01, xxyy=0.0047, z=0.0, xz=-0.0036)
+          xyy=-0.0237, xxyy=0.0158, z=0.0, xz=-0.0101, xxz=0.0126, xyz=0.0)
+t3 = dict(x=0.3378, xx=0.0011, xy=-0.0947, z=0.0)
+t4 = dict(x=0.1965, xx=-0.0528, xy=0.1259, xxy=-0.032, xxyy=0.0045, z=0.1001, xz=0.0662, xyz=0.0421)
+t5 = dict(x=-0.0656, xx=0.0001, xxy=0.01, xxyy=0.0047, z=0.0563, xz=-0.0036)
 
 # ---------------------------------------------------------------------------
 # Table II: interorbital hopping parameters
+# CORRECTED 2026-09-22: same page-image cross-check; theory/notes/literature/
+# graser1003.0133_5orbital_TB_parameters_2026-09-22.md Sec.5 is the single source
+# of truth (row mn -> column values), superseding the earlier mis-shifted values.
 # ---------------------------------------------------------------------------
-t12 = dict(x=-0.4224, xy=0.1934, xxy=-0.0325, xxyy=0.0158, z=-0.019, xz=0.0524, xyz=-0.0168, xxyz=0.0)
-t13 = dict(x=0.1549, xy=0.0589, xxy=0.0005, xxyy=0.0, z=0.0, xz=0.0566, xyz=0.0, xxyz=0.0018)
-t14 = dict(x=-0.0526, xy=-0.007, xxy=-0.0055, xxyy=0.0004, z=0.0, xz=-0.0023, xyz=0.0349, xxyz=0.0283)
-t24 = dict(x=-0.2845, xy=0.0, xxy=-0.0108)  # only feeds real (sin kz) terms -> vanish at kz=0
-t15 = dict(x=0.0, xy=-0.0862, xxy=0.0, xxyy=0.0, z=0.0, xz=0.0, xyz=-0.0203, xxyz=0.0)
-t34 = dict(xy=-0.0475, xxy=0.0046)
-# t35, t45 rows blank in Table II -> identically zero at all k (documented, not a bug)
+t12 = dict(x=0.0, xy=0.1934, xxy=-0.0325, xxyy=0.0158, z=0.0, xz=0.0, xyz=-0.0168, xxyz=0.0)
+t13 = dict(x=-0.4224, xy=0.0589, xxy=0.0005, xxyy=0.0, z=0.0, xz=0.0, xyz=0.0, xxyz=0.0)
+t14 = dict(x=0.1549, xy=-0.007, xxy=-0.0055, xxyy=0.0, z=0.0, xz=0.0524, xyz=0.0349, xxyz=0.0018)
+t24 = dict(x=0.0, xy=0.0, xxy=0.0, xxyy=0.0, z=0.0, xz=0.0566, xyz=0.0, xxyz=0.0283)
+t15 = dict(x=-0.0526, xy=-0.0862, xxy=0.0, xxyy=0.0, z=0.0, xz=0.0, xyz=-0.0203, xxyz=0.0)
+t34 = dict(x=0.0, xy=0.0, xxy=-0.0108, xxyy=0.0, z=0.0, xz=0.0, xyz=0.0, xxyz=0.0)
+t35 = dict(x=-0.2845, xxy=0.0046)
+t45 = dict(xy=-0.0475, xxyy=0.0004, z=-0.019, xz=-0.0023)
 
 
 def _xi11(kx, ky, kz=0.0):
@@ -130,6 +134,20 @@ def _xi34(kx, ky, kz=0.0):
     return 4*t34['xy']*(np.sin(2*ky)*np.sin(kx) - np.sin(2*kx)*np.sin(ky))
 
 
+def _xi35(kx, ky, kz=0.0):
+    """xi_35, paper text L.603 (graser1003.0133.txt): real, no kz dependence."""
+    return (2*t35['x']*(np.cos(kx)-np.cos(ky))
+            + 4*t35['xxy']*(np.cos(2*kx)*np.cos(ky) - np.cos(2*ky)*np.cos(kx)))
+
+
+def _xi45(kx, ky, kz=0.0):
+    """xi_45, paper text L.604. The z/xz (sin kz) terms vanish identically at kz=0
+    (both the sin-kz prefactor and its imaginary unit drop out), leaving a real
+    kz=0 residue -- NOT the omission it looks like; documented, not a bug."""
+    return (4*t45['xy']*np.sin(kx)*np.sin(ky)
+            + 4*t45['xxyy']*np.sin(2*kx)*np.sin(2*ky))
+
+
 def build_H_graser(kx, ky, kz=0.0):
     """5x5 Hermitian Hamiltonian, Graser et al. BaFe2As2 fit, 2D cut kz=0."""
     H = np.zeros((5, 5), dtype=complex)
@@ -147,8 +165,8 @@ def build_H_graser(kx, ky, kz=0.0):
     H[0, 4] = _xi15(kx, ky, kz);  H[4, 0] = np.conj(H[0, 4])
     H[1, 4] = _xi25(kx, ky, kz);  H[4, 1] = np.conj(H[1, 4])
     H[2, 3] = _xi34(kx, ky, kz);  H[3, 2] = np.conj(H[2, 3])
-    H[2, 4] = 0.0;                H[4, 2] = 0.0   # xi35 = 0 (blank row in Table II)
-    H[3, 4] = 0.0;                H[4, 3] = 0.0   # xi45 = 0 (blank row in Table II)
+    H[2, 4] = _xi35(kx, ky, kz);  H[4, 2] = np.conj(H[2, 4])
+    H[3, 4] = _xi45(kx, ky, kz);  H[4, 3] = np.conj(H[3, 4])
     return H
 
 

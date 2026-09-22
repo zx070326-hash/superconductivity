@@ -303,11 +303,61 @@ def test_four_index_pairing():
     print(f"  {'PASS' if ok_diagblock else 'FAIL'}: two-factor equals the diagonal block of the four-factor tensor (diff={max_diff:.2e}).")
     return (ok and ok_diagblock), max_diff
 
+# ---------------------------------------------------------------------------
+# TEST E: reproduce the algorithm actually used in the existing FeSe 5-orbital
+#   code (_scratch_ir/_fese_5orbital_FINAL_2026-09-22.py, lines 71-88) on THIS
+#   validated 2-band model, and check whether it also violates FDT.
+#   That code computes, for each k:
+#     chi0_orbital[i,j] += conj(U_k[i,m]) * chi0_band_mn * U_kq[j,n]
+#   i.e. a SINGLE band-basis-to-orbital-basis rotation U_k^dagger (.) U_kq
+#   applied to the raw band-space object chi0_band_mn = (f_m(k)-f_n(k+q))/denom.
+#   This has only 2 U-insertions total, whereas the correct Wick-derived
+#   two-factor formula (chi0_matrix above) needs 4 U-insertions (one bra/ket
+#   pair at k for band mu, one bra/ket pair at k+q for band nu). The two
+#   formulas coincide only if U were literally the identity (i.e. orbital
+#   basis = band basis), which is never true away from k-points of vanishing
+#   inter-orbital hybridization.
+# ---------------------------------------------------------------------------
+def chi0_naive_single_rotation(q, w, Nk=4000, eta=0.03, T=1e-3):
+    ks = (2*np.pi/Nk)*np.arange(Nk)
+    chi = np.zeros((2,2), dtype=complex)
+    for k in ks:
+        Em, Ep, U_k = diagonalize(k)
+        Emq, Epq, U_kq = diagonalize(k+q)
+        Ek, Ekq = [Em, Ep], [Emq, Epq]
+        for m in range(2):
+            for n in range(2):
+                denom = Ek[m] - Ekq[n] + 1j*eta
+                num = fermi(Ek[m], T) - fermi(Ekq[n], T)
+                band_mn = num/denom
+                for i in range(2):
+                    for j in range(2):
+                        chi[i, j] += np.conj(U_k[i, m])*band_mn*U_kq[j, n]
+    return chi/Nk
+
+def test_existing_5orbital_algorithm_on_2band():
+    print("\n"+"="*70)
+    print("TEST E: existing 5-orbital-code algorithm (2-U rotation) vs correct (4-U)")
+    print("="*70)
+    q, w = 1.1, 0.7
+    correct = chi0_matrix(q, w, Nk=4000)
+    naive = chi0_naive_single_rotation(q, w, Nk=4000)
+    diff = np.max(np.abs(correct-naive))
+    print(f"  correct chi0_matrix(q,w):\n{correct}")
+    print(f"  existing-code-style chi0(q,w):\n{naive}")
+    print(f"  max abs diff = {diff:.3e}  (large -> confirms existing formula is a different, wrong object)")
+    im_naive = (naive - naive.conj().T)/(2j)
+    eigs = np.linalg.eigvalsh(im_naive)
+    mixed = eigs.min() < -1e-6 and eigs.max() > 1e-6
+    print(f"  Im chi eigenvalues (existing-code style) = {eigs}  {'MIXED SIGN -> FDT VIOLATED (matches Day-7 symptom)' if mixed else 'consistent sign'}")
+    return diff, mixed
+
 if __name__ == "__main__":
     nviol, ntot, worst = test_psd()
     ok_decoupled = test_decoupled_limit()
     imnorm, asym, etadrift = test_static_hermitian()
     ok_pairing, max_diff = test_four_index_pairing()
+    diff5, mixed5 = test_existing_5orbital_algorithm_on_2band()
 
     print("\n"+"="*70)
     print("SUMMARY")
@@ -316,3 +366,5 @@ if __name__ == "__main__":
     print(f"B. decoupled-limit cross-check: {'PASS' if ok_decoupled else 'FAIL'}")
     print(f"C. static reality/eta-drift:    Im~{imnorm:.1e}, asym~{asym:.1e}, drift~{etadrift:.1e}")
     print(f"D. four-index conjugation law:  {'PASS' if ok_pairing else 'FAIL'}, diag-block match diff={max_diff:.2e}")
+    print(f"E. existing-5orbital-algorithm reproduced on 2-band: diff from correct = {diff5:.3e}, "
+          f"FDT {'VIOLATED (mixed sign)' if mixed5 else 'satisfied'} -- {'CONFIRMS existing code bug' if mixed5 else 'inconclusive'}")
