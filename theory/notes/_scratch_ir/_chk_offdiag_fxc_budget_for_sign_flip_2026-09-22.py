@@ -1,4 +1,40 @@
 """
+!!! DOCSTRING MODEL RETRACTED 2026-09-22 (team-lead, from-scratch audit) !!!
+The model stated below -- "Lambda_ij(kappa) = D_ij + kappa * R_ij, LINEAR in
+kappa, flip at kappa* = -D_ij/R_ij" -- is MIS-SPECIFIED, and so every printed
+kappa* below is NOT the off-diagonal f^xc strength it is labelled as.
+
+Why: Lambda^SF = f^xc chi f^xc is a SANDWICH, i.e. BILINEAR in f^xc. Putting
+F(kappa) = I + kappa*K (K off-diagonal) gives
+    F chi F = chi + kappa*(K chi + chi K) + kappa^2 * (K chi K),
+so Lambda_ij(kappa) = c0 + c1*kappa + c2*kappa^2 with
+    c0 = w_i . chi . w_j        (NOT this script's D, which drops chi's off-diagonal)
+    c1 = w_i.(K chi + chi K).w_j (NOT this script's R = full1 - D)
+    c2 = w_i . K chi K . w_j     (absent from this script's model entirely).
+This script instead scales the off-diagonal entries of the FS-weighted **chi**
+sum by kappa -- it conflates "off-diagonal in the ORBITAL INDEX OF chi" with
+"off-diagonal in f^xc". Those are different knobs.
+
+Audit script: _chk_offdiag_fxc_linear_model_is_misspecified_2026-09-22.py
+(exact Fraction arithmetic, no float in load-bearing lines). Results:
+  (A) explicit 3x3: c0=1/10 vs D=23/20, c1=21/10 vs R=-21/20, c2=14/5 != 0.
+  (B) same example: this script's formula reports a finite flip at kappa*=23/21
+      ~ 1.095, while the true quadratic has NO positive root at all.
+  (C) 4000 exact random trials: (c0,c1) != (D,R) in 4000/4000 = 100%; the two
+      models disagree on "is it flippable at all" in 1709/4000 = 42.7%, in BOTH
+      directions (1516 false-"open", 193 false-"closed").
+
+=> Because the error is TWO-SIDED, the numbers below support neither a PASS nor
+a FAIL verdict (they are not a one-sided bound). They must not be cited as the
+budget for the orbital-off-diagonal f^xc route. That budget is currently UNCOMPUTED.
+The `|D|/|Lambda|` medians (0.998 / 0.959) and theorem (D) are NOT affected --
+they concern DIAGONAL f^xc (where f_l^2 is the correct sandwich factor) and are
+recomputed in _chk_lambdaSF_positivity_is_perron_not_material_2026-09-22.py.
+Consumption point: meta/lambdaSF_positivity_is_inherited_not_measured_2026-09-22.md
+section 6 ("真正有预算的重设计是轨道非对角 f^xc") -- see its section 7 append.
+
+--- original docstring, retained verbatim, superseded by the above ---
+
 Budget-only task (team-lead, 2026-09-22): given the REAL Im chi^s used by
 essenberger's pipeline, how strong must an ORBITAL OFF-DIAGONAL f^xc_{ll'}
 be (relative to the diagonal, which is currently implicitly 1) to move
