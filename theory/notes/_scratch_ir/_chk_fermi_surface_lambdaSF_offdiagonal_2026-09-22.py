@@ -84,6 +84,7 @@ def load_module(fname):
 # as gauge-invariance-gate-PASS); gauge invariance itself is unaffected by an
 # overall sign flip (linear), so that PASS result stands unchanged. This wrapper
 # is the load-bearing chi0 for everything below.
+gate_mod = load_module("_chk_gauge_invariance_gate_dynamic_2026-09-22.py")
 _chi0_dynamic_raw = gate_mod.chi0_dynamic
 
 
