@@ -14,6 +14,9 @@
 
 **上游依赖**：
 - `rpa_screening_psd_derivation_2026-09-21.md`：W^RPA ⪰ 0 已证（analytic）
+  ⚠ **2026-09-22 订正**：该篇原证明第三步为假（Dyson 逐项 PSD，两条 rational-exact 反例）；
+  结论经一行修补后仍成立，但**仅静态 `ω=0`**（`W=(v⁻¹−χ₀)⁻¹≻0`），
+  **不含** `Im W(ω>0) ⪰ 0`。引用前先读该篇末尾的追加块。
 - `rpa_chi_nogo_exploration_2026-09-21.md`：0/23000 扫描 + 部分解析约束
 - Essenberger Eq.(37)：声称 Im Λ^SF_{ij} > 0（逐元，含非对角），需理论支撑
 

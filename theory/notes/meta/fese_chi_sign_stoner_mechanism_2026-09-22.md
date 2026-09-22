@@ -361,6 +361,8 @@ for q in special_points:
 - `rpa_diagonal_dominance_lit_2026-09-22.md` — 文献综述（无普遍定理）
 - `rpa_stoner_boundary_insight_2026-09-22.md` — Stoner 稳定性洞察
 - `rpa_screening_psd_derivation_2026-09-21.md` — W^RPA ⪰ 0 证明（单带）
+  ⚠ **2026-09-22 订正**：原第三步为假；修补后结论**仅静态 `ω=0`** 成立（但多带全矩阵都成立），
+  且**不给** `Im W(ω>0) ⪰ 0`。见该篇末追加块。
 
 ### Team B 产出（待交付）
 - Essenberger 参数重建

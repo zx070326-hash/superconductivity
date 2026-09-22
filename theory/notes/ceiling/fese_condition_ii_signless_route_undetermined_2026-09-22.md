@@ -2,7 +2,8 @@
 
 > 2026-09-22 · team-lead 对 `essenberger-chi-reconstruction` 交付
 > （`_scratch_ir/_chk_fese_signless_amplitude_test_2026-09-22.py`，判词 UNDETERMINED）的独立复核，
-> 分支 `p4-conj2`。本篇的复核脚本：`_scratch_ir/_chk_fese_signless_route_survival_region_2026-09-22.py`
+> 分支 `p4-conj2`（⚠ **订正**：实际 HEAD 在 `master`，`p4-conj2` 已于 `faeead5` 并入，见
+> `unsplit_LZ_route_relaxes_eq37_2026-09-22.md` 顶部订正行）。本篇的复核脚本：`_scratch_ir/_chk_fese_signless_route_survival_region_2026-09-22.py`
 > （精确有理算术，无浮点承重）。
 
 ## 0. 三句话
