@@ -1,0 +1,387 @@
+arXiv:1411.2121v1 [cond-mat.supr-con] 8 Nov 2014                 Ab-initio theory of Iron based superconductors
+
+                                                  F. Essenberger,1 A. Sanna,1 P. Buczek,1 A. Ernst,1, 2 L. Sandratskii,1 and E.K.U. Gross1
+                                                        1Max Planck Institute of Microstructure Physics, Weinberg 2, D-06120 Halle, Germany.
+                                                                    2Wilhelm-Ostwald-Institut für Physikalische und Theoretische Chemie,
+                                                                           Universität Leipzig, Linnéstraße 2, 04103 Leipzig, Germany
+                                                                                                     (Dated: June 15, 2021)
+
+                                                     We report the ﬁrst-principles study of superconducting critical temperature and superconducting
+                                                  properties of Fe-based superconductors taking into account on the same footing phonon, charge
+                                                  and spin-ﬂuctuation mediated Cooper pairing. We show that in FeSe this leads to a modulated
+                                                  s± gap symmetry, and that the antiferromagnetic paramagnons are the leading mechanism for
+                                                  superconductivity in FeSe, overcoming the strong repulsive eﬀect of both phonons and charge pairing.
+
+                                                     The discovery of the iron based superconductors           Therefore, albeit very useful as a tool for a general phys-
+                                                  (FeSC) in the last decade[1–4] has been a crucial event in   ical understanding, it does not directly help in the search
+                                                  the history of superconductivity (SC). Showing that high     for new superconducting systems with desired properties.
+                                                  temperature (hi-Tc) SC is not a unique property of the
+                                                  cuprates[5], and that it could occur in remarkably diﬀer-       The only way for theory to take the lead in the search
+                                                  ent classes of systems[6–10]. This discovery renewed the     for new and better hi-Tc materials is to develop a quanti-
+                                                  hope to ﬁnd a room temperature superconductor, prob-         tatively predictive ab-initio theory and solve the dilemma
+                                                  ably the most desired system in solid state physics.         of the pairing mechanism.
+
+                                                     In order to facilitate the search for new hi-Tc materi-      In this work we take a step in this direction by con-
+                                                  als, it is highly desirable to achieve a theoretical under-  structing a many-body perturbation based eﬀective inter-
+                                                  standing of the physical mechanism of hi-Tc SC. On a         action, solely from ﬁrst-principles calculations, and use
+                                                  microscopic level, a SC state is created by the pairing of   it within density functional theory for superconductors
+                                                  electrons to form Cooper pairs [11, 12]. Hence, the essen-   (SCDFT) [41–44]. While SCDFT proved to be highly re-
+                                                  tial question that theorists try to answer is what causes    liable in the description of el-ph superconductors[31, 45–
+                                                  this attractive pairing interaction.                         50], its spin-ﬂuctuation extension has been tested, until
+                                                                                                               now, just on a simple electron gas model[51]. As nei-
+                                                     A coupling provided by phonons has been ruled out         ther the functional, nor the theoretical framework, con-
+                                                  quickly after the discovery of Fe based superconduc-         tain any adjustable parameters, this scheme promises the
+                                                  tors because the electron-phonon (el-ph) coupling is         prediction of Tc, symmetry of the order parameter and
+                                                  much too weak to explain the observed high transition        excitation spectrum, just from knowledge of the chemical
+                                                  temperatures[13, 14] and no clear isotope eﬀect has been     structure of the material.
+                                                  measured [15–19]. A large number of diﬀerent theo-
+                                                  ries have been proposed: resonating valence bond [20,           In the present work we apply the scheme to the FeSC.
+                                                  21], ﬂuctuation exchange[22, 23], functional renormaliza-    We choose this family because the metallic parent state
+                                                  tion group[24, 25], orbital ﬂuctuations[26, 27], charge-     can be better described than the Mott-insulator state in
+                                                  ﬂuctuations[28–32], spin-ﬂuctuations[33–35] (SF). The        the cuprates. However we will observe that an unsatis-
+                                                  scientiﬁc community remains far from a general consen-       factory description of the parent compound aﬀects the
+                                                  sus on which is the dominant coupling mechanism.             predictive power of our theoretical approach.
+
+                                                     Among the diﬀerent theories the ones based on mag-           The ﬁrst conceptual step in the SCDFT scheme cur-
+                                                  netism are, in our opinion, the most promising ones, since   rently in use is the assumption of a second order phase
+                                                  in both cuprates and FeSC the superconductivity ap-          transition between the SC phase and its metallic par-
+                                                  pears close to an antiferromagnetic (AFM) phase[7, 8].       ent compound. This implies that Tc can be estimated
+                                                  Approaching the AFM phase, if the transition is of           by taking the electronic structure of the metallic non-
+                                                  second order, the magnetic susceptibility will become        superconducting phase as a starting point to act-on with
+                                                  large, and eventually diverge. This implies that spin-       a pairing ﬁeld computed from ﬁrst principles. So, the
+                                                  ﬂuctuations could become strong enough to overcompen-        very starting point of the theory is an approximation
+                                                  sate for the direct electron-electron repulsion and trigger  for the quasi-particle states of the parent metal, that we
+                                                  the SC condensation. This idea is supported by strong        do by taking the DFT Kohn-Sham (KS) band structure
+                                                  experimental[3] and theoretical[36] arguments.               [52, 53].
+
+                                                     SF mediated pairing has been extensively investigated        The calculated Fermi surface (FS) for FeSe, LiFeAS
+                                                  in the realm of Hubbard like models[35, 37–40]. Since this   and LaOFeAs (representatives of the 11, 111 and 1111
+                                                  approach necessarily involves a set of parameters, it does   family of FeSC) are shown in Fig. 1. All systems feature
+                                                  not allow genuine predictions of the critical temperature.   the same characteristics: Hole FS around the Γ-point
+                                                                                                               forming a barrel and electron FM around the M -point
+                                                                                                                             2
+
+Fig. 1. (color online) Fermi surface for three Iron supercon-   Fig. 2.          (color online) Spin scuceptibilities
+ductors in the tetragonal unit cell.
+
+                                                                Im[χzz (q = M, ω, G = 0, G = 0)] for LiFeAs, LaOFeAs
+
+                                                                and  FeSe,  computed  at  α   = 0.95.
+                                                                                          αc
+which may not extend along the whole kz direction form-
+
+ing the pockets. The calculations have been done using a
+
+state of the art plane wave code [54] and have been cross-      gularity of the susceptibility corresponding to the phase
+
+checked with an all-electron linearized augmented plane         transition to the magnetic ordered state. Instead the
+
+wave code [55]. Since the results are very sensitive to         susceptibility features ﬁnite-hight peaks corresponding to
+
+the atomic positions a full lattice relaxation is performed     paramagnons. The energy, lifetime and intensity of the
+
+[56, 57]. The calculated FS are in reasonable agreement         paramagnons depend on the value of α and all materi-
+
+with the results of the ARPES measurements [8, 9].              als feature a critical value αc for which the susceptibility
+
+However, the pronounced nesting between the two                 χzz (qM) diverges.
+
+parts of the FS with a nesting vector of qM =  π    ,  π  ,  0      In Fig. 2 we show the Im[χzz (qM)] of representatives
+                                               a       a
+                                                                                                                α
+leads to an instability with respect to the formation of        of  the  11,111  and  1111    families  using   αc  = 0.95.  All
+
+the stripe ordered AFM state. All compounds converge            three compounds show a peak in the low-energy region
+
+to an AFM ground state with a large moment of about             featuring the presence of paramagnon-type ﬂuctuations.
+
+1 µB per iron atom. This is in striking contrast with the       In the rest of the paper we will focus on one of them:
+
+experimental observation [58], and a well known problem         FeSe.
+
+of DFT calculations for this class of systems [33, 57]. It          The SCDFT theoretical framework taking into account
+
+has been suggested that the reason for this disagreement        spin-ﬂuctuation eﬀects has been discussed in Ref. 51.
+
+is that conventional DFT functionals like LSDA or GGA           This approach considers SF, el-ph and Coulomb (charge)
+
+do not account for dynamic zero-point spin ﬂuctuations          pairing on the same footing. First, to keep the formal-
+
+that are strong here. This leads to the overestimation of       ism complexity at minimum, we consider a multiband
+
+the stability of the long range magnetic order [58].            isotropic approximation, meaning that states and pair-
+
+In the constraction of the SCDFT SF functional [51]             ings are averaged over Brillouin zone volumes on isoen-
+
+an important role is played by the spin susceptibility χzz.     ergy surfaces. For example, the Kohn-Sham potential[42]
+
+The standard calculation of this quantity cannot be per-        of the SCDFT system ∆nk is averaged as:
+
+formed if the system has an artiﬁcial instability with re-
+
+spect to the formation of a long range magnetic order.                      ∆nk ≈ ∆n (E) :=      δ      ( nk −  E)  ∆nk      (2)
+                                                                                                        Nn (E   )
+The solution of this problem could come from the use                                          k
+
+an improved DFT functional perhaps going beyond stan-
+
+dard Kohn-Sham scheme. However, such a calculational            This way we can group together the holes (see Fig. 1)
+                                                                around the Γ−point (labeled with n = +) and the elec-
+scheme is not yet developed within ab-initio methods,           trons at the M -point (labeled with n = −). Within this
+                                                                approximation only s-wave pairing symmetries are possi-
+and we have to opt for another solution. We will con-           ble, including the s± symmetry suggested in Ref. 4. We
+                                                                will release this averaging approximation at the end of
+sider two diﬀerent ways to deal with the problem that           the paper.
+
+will help us to examine the dependence of the super-               Under this approximation we account for: 1) the
+                                                                phononic interaction by a band-resolved Eliashberg func-
+conducting transition temperature on the details of the         tion α2Fij (detailed deﬁnitions can be found in Ref. 45
+                                                                and references therein); 2) the Coulomb repulsion by the
+accepted approach. The ﬁrst method we consider is to            average of the RPA screened matrix elements (as it was
+                                                                already done in several previous applications of SCDFT,
+compute the magnetic susceptibility by scaling down the         more details can be found in Ref. 48 and 49; 3) the
+                                                                SF term containing an eﬀective interaction mediated by
+exchange-correlation (xc) ﬁeld, as has been proposed in         paramagnon excitations ΛSF as introduced in Ref. 51, and
+
+Ref. 14. By introducing a scaling parameter α the mag-
+
+netic response function can be written as[59, 60]:
+
+     (qω)           χKS (qω)                              (1)
+χzz        =                                .
+              1  −  αfxc  (qω) χKS (qω)
+
+By using a suﬃciently small α (< 1) one avoids the sin-
+                                                              3
+
+averaged as Λnkn k (ω) −→ Λij (E, E , ω) with i, j ∈
+{+, −}. The structure of phononic, SF and Coulomb con-
+tributions is very diﬀerent in nature. For the Coulomb
+interaction we use a static screening that proved to be
+highly reliable in phononic SCDFT[49, 50, 61–63]. The
+SF and phonon contributions, on the other hand, have
+a strong structure in ω with a low energy characteristic
+frequency. Therefore it is essential to take frequency de-
+pendence into account. In particular these interactions
+are negligible at energy scales large with respect to this
+characteristic one. This allows to safely disregard the E
+dependence of the interaction focusing on its behavior
+near the Fermi level [64, 65]. These considerations then
+translate into the following approximation scheme:
+
+α2Fij (E, E , ω) ≈ α2Fij ( F, F, ω) (attractive)
+
+wij (E, E , ω) ≈ wij (E, E , 0) (repulsive)
+
+ΛSF     (E,  E  , ω)  ≈  Λ ( SF  F,  F, ω)  (repulsive)
+    ij                       ij
+
+   Calculations show [66] the el-ph coupling (see Fig. 3a)    Fig. 3. (color online) Two bands resolved superconducting
+to be very small, in agreement with previous works[67,        pairing functions evaluated at the theoretically optimized zSe.
+68]. With the integrated coupling λ being less that 0.1, Tc   a) electron-phonon Eliashberg function (PH) ; b) Screened
+would be exponentially small if this was the only pairing     Coulomb matrix elements averaged on iso-energy surfaces
+channel. The Coulomb pairing (reported Fig. 3b) is as         (Coulomb); c) Spin ﬂuctuation Eliashberg function (SF) and
+expected, diagonally dominated (++ and – components).         SCDFT critical temperatures (Tc) as a function of the scaling
+Within the static approximation, this cannot lead to any      parameter α.
+pairing, therefore no superconductivity can be sustained
+at any temperature by the combined eﬀect of Coulomb           scribe the ground state of FeSe enforced us to introduce
+forces and phonons.                                           parameter α that we cannot determine from the ﬁrst-
+                                                              principles. The estimation of Tc also depends sensitively
+   The only possible superconductivity pairing must lay       on the underlying electronic system, both via the KS elec-
+in the SF term. By the reasons discussed above this           tronic structure (computed at the Se Whyckoﬀ position
+term depends critically on the parameter α. This can          zSe=0.25[72]) and the calculated spin susceptibility.
+be appreciated with the help of Fig. 3c). Here ΛSijF is
+shown as a function of the α/αc ratio. At α/αc =0.9              To enforce our ﬁndings we perform the SCDFT calcula-
+the pairing is negligible. The maximum eigenvalue[69] of      tions using an alternative way to overcome the problem of
+the λij matrix being λmax =0.07, comparable with the          the description of the magnetic ground state of FeSe. As
+phononic pairing. In the limit of α → αc, λmax rises up       shown in Fig. d the magnetic properties of FeSe strongly
+to 0.48. In spite of the fact that the susceptibility will    depend on the Wyckoﬀ positions of the Se atoms, zSe.
+diverge at α = αc and q = M this value is essentially
+the highest limit that can be reached after integrating
+over the Brillouin zone. In combination with the very
+high SF characteristic frequencies, such a coupling leads
+to a sizable critical temperature and, since (in this limit)
+SF are dominated by oﬀ diagonal components, to the
+expected s± symmetry[33].
+
+   If only SF coupling is considered a Tc as high as 11 K
+is found. However this critical temperature is reduced
+both by the inclusion of Coulomb terms (11 K → 4 K)
+and phonons [70] (11 K → 10 K), leading to an estimated
+maximum Tc of 3 K.
+
+   This estimation for Tc is in reassonable agreement with
+the experimentally observed 8 K[71]. This is an impor-
+tant success of the theory, showing that the SF are indeed
+the origin of the superconductivity in FeSe and giving
+Tc of the same order of magnitude as the experimental
+one. However, the inability of the standard DFT to de-
+                                                                                                                                            4
+
+Fig. 4. Eﬀect of the variation of zSe position. a) Spin ﬂuc-
+tuation spectral function ΛSF computed at zSe=0.22, leading
+to λmax = 1.3. b) projection of the Fermi surface (FS) on
+
+the xy-plane. Blue (dark) computed at zSe=0.22, and Yellow
+(gray) at zSe=0.25. c) Nesting function (normalized) along
+the Γ − M line. d) magnetic moment at the Iron site as a
+
+function of the zSe parameter. The values used in this work
+are marked by vertical dashed lines.
+
+The calculations show that the system is magnetic for         Fig. 5. Many body gap function in k−resolved calculation at
+zSe>0.22. We ﬁx zSe=0.22 in the paramagnetic region
+close to the transition to the AFM state. The proxim-         T  =  0  and  ω  =  0.  The  black  lines  are  the  FS  at  kz  =  −  π   .
+ity to the phase boundary results in intense paramagnon                                                                              2c
+ﬂuctuations. This leads in our theory to large SF pairing
+functions (see Fig. a) and to an estimated Tc of 24 K (by     lar we consider the case of FeSe. We demonstrate that
+including all three pairing channels, the SF-only calcula-    the SF are indeed the physical mechanism leading to the
+tion gives Tc of 32K). The detailed analysis shows that       formation of the Cooper pairs and superconductivity of
+the large diﬀerence in the value of Tc obtained in our        the system. We demonstrate that the pairing symme-
+two approachs is not due to the form of the spin suscep-      try is of the .... type. To overcome the problem of the
+tibility but due to a diﬀerent electronic structure near      standard DFT theory with the description of the FeSe
+the Fermi energy. This second case provides a sharper         ground state we adopt to diﬀerent approachs that allow
+nesting for the SF pairing (see Fig. c) and leads to an       us to reveal strong sensitivity to the details of the elec-
+increased interband pairing.                                  tronic structure. The estimated Tc varies between 3 K
+                                                              and 24 K that is in reasonable correlation with exper-
+   This large sensitivity of the predicted Tc to the lattice  imental value of 8 K. We believe that as soon as the
+properties is consistent with experimental observations       problem of the DFT description of the magnetic ground
+[3, 73–76], in particular with the observed correlation of    state of FeSe will be solved the suggested machinery will
+Tc with the anion position[77].                               provide a complitely ab-initio estimation of the super-
+                                                              conducting Tc in this compound and will open an avenue
+   We conclude the paper with an investigation of the gap     for the ﬁrst-principle design of the systems with high-Tc
+function in k-space, going beyond the two-band isotropic      supeconductivity.
+approximation used so far (Eq. 2). We divide the xy-
+plane of the Brillouin zone into sectors as shown in Fig. 5,  [1] H. Takahashi, K. Igawa, K. Arii, Y. Kamihara,
+and compute the superconducting gap corresponding to              H. Masahiro, and H. Hosono, Nature 453, 376 (2008).
+each sub-band. The use of this more accurate approach
+does not signiﬁcantly aﬀect the value of the critical tem-    [2] M. Rotter, M. Tegel, and D. Johrendt, Phys. Rev. Lett.
+perature (Tc increases by a few percent), it leads to a           101, 107006 (2008).
+signiﬁcantly modulated gap function within the s± sym-
+metry. The large dip in the ∆− is related to the CB           [3] T. Imai, K. Ahilan, F. L. Ning, T. M. McQueen, and
+ﬂuctuation (M1 − M2) in this band and is consequently             R. J. Cava, Phys. Rev. Lett. 102, 177005 (2009).
+not seen in ∆+ (Γ1 − Γ2). The smaller oscillations are
+related to intraband scattering, where the interaction is     [4] I. Mazin, Nature 464, 183 (2010).
+smaller between two minima of the gap (Γ2 − M2) and
+larger between two maxima (Γ1,3 = M2).
+
+   In this work we report the ﬁrst application of the
+SCDFT theory taking into account the SF. In particu-
+                                                                   5
+
+ [5] J. Bednorz and K. Müller, Zeitschrift für Physik B Con-             (2008).
+      densed Matter 64, 189 (1986).                                [39] J. Lorenzana, G. Seibold, C. Ortix, and M. Grilli, Phys.
+
+ [6] P. A. Lee, N. Nagaosa, and X.-G. Wen, Rev. Mod. Phys.               Rev. Lett. 101, 186402 (2008).
+      78, 17 (2006).                                               [40] M. Daghofer, A. Moreo, J. A. Riera, E. Arrigoni, D. J.
+
+ [7] J. G. Bednorz and K. A. Müller, Rev. Mod. Phys. 60,                 Scalapino, and E. Dagotto, Phys. Rev. Lett. 101, 237004
+      585 (1988).                                                        (2008).
+                                                                   [41] L. N. Oliveira, E. K. U. Gross, and W. Kohn, Phys. Rev.
+ [8] G. R. Stewart, Rev. Mod. Phys. 83, 1589 (2011).                     Lett. 60, 2430 (1988).
+ [9] J. Paglione and R. Greene, nature physics 6, 645 (2010).      [42] M. Lüders, M. A. L. Marques, N. N. Lathiotakis,
+[10] Z. Tesanovic, Physics 2, 60 (2009).                                 A. Floris, G. Profeta, L. Fast, A. Continenza, S. Mas-
+[11] J. Bardeen, L. N. Cooper, and J. R. Schrieﬀer, Phys.                sidda, and E. K. U. Gross, Phys. Rev. B 72, 024545
+                                                                         (2005).
+      Rev. 108, 1175 (1957).                                       [43] M. Lüders Ph.D. thesis, Density Functional Theory for
+[12] A. J. Leggett, Nat Phys 2, 134 (2006).                              Superconductors, A ﬁrst Principles Approach to the
+[13] P. Morel and P. W. Anderson, Phys. Rev. 125, 1263                   SC Phase (Bayerische Julius-Maximilians Universität
+                                                                         Würzburg, 1998).
+      (1962).                                                      [44] M. Marques Ph.D. thesis, Density Functional Theory
+[14] L. Ortenzi, I. I. Mazin, P. Blaha, and L. Boeri, Phys.              for Superconductors, Exchange and Correlation Poten-
+                                                                         tials for Inhomogeneous Systems (Bayerische Julius-
+      Rev. B 86, 064437 (2012).                                          Maximilians Universität Würzburg, 1998).
+[15] H. J. Bornemann and D. E. Morris, Phys. Rev. B 44,            [45] A. Sanna, S. Pittalis, J. K. Dewhurst, M. Monni,
+                                                                         S. Sharma, G. Ummarino, S. Massidda, and E. K. U.
+      5322 (1991).                                                       Gross, Phys. Rev. B 85, 184514 (2012).
+[16] L. C. Bourne, M. F. Crommie, A. Zettl, H.-C. z. Loye,         [46] C. Bersier, A. Floris, A. Sanna, G. Profeta, A. Conti-
+                                                                         nenza, E. K. U. Gross, and S. Massidda, Phys. Rev. B
+      S. W. Keller, K. L. Leary, A. M. Stacy, K. J. Chang,               79, 104503 (2009).
+      M. L. Cohen, and D. E. Morris, Phys. Rev. Lett. 58,          [47] A. Floris, A. Sanna, S. Massidda, and E. K. U. Gross,
+      2337 (1987).                                                       Phys. Rev. B 75, 054508 (2007).
+[17] P. M. Shirage, K. Kihou, K. Miyazawa, C.-H. Lee,              [48] S. Massidda, F. Bernardini, C. Bersier, A. Continenza,
+      H. Kito, H. Eisaki, T. Yanagisawa, Y. Tanaka, and                  P. Cudazzo, A. Floris, H. Glawe, M. Monni, S. Pittalis,
+      A. Iyo, Phys. Rev. Lett. 103, 257003 (2009).                       G. Profeta, A. Sanna, S. Sharma, and E. K. U. Gross, Su-
+[18] P. M. Shirage, K. Miyazawa, K. Kihou, H. Kito,                      perconductor Science and Technology 22, 034006 (2009).
+      Y. Yoshida, Y. Tanaka, H. Eisaki, and A. Iyo, Phys.          [49] A. Sanna, G. Profeta, A. Floris, A. Marini, E. K. U.
+      Rev. Lett. 105, 037004 (2010).                                     Gross, and S. Massidda, Phys. Rev. B 75, 020511 (2007).
+[19] R. H. Liu, T. Wu, G. Wu, H. Chen, X. F. Wang, Y. L.           [50] G. Profeta, C. Franchini, N. Lathiotakis, A. Floris,
+      Xie, J. J. Ying, Y. J. Yan, Q. J. Li, B. C. Shi, W. S. Chu,        A. Sanna, M. A. L. Marques, M. Lüders, S. Massidda,
+      Z. Y. Wu, and X. H. Chen, Nature 459, 64 (2009).                   E. K. U. Gross, and A. Continenza, Phys. Rev. Lett.
+[20] P. W. Anderson, Science 235, 1196 (1987).                           96, 047003 (2006).
+[21] P. W. Anderson, G. Baskaran, Z. Zou, and T. Hsu, Phys.        [51] F. Essenberger, A. Sanna, A. Linscheid, F. Tandetzki,
+      Rev. Lett. 58, 2790 (1987).                                        and E. Gross, arXiv 1409.7968 (2014).
+[22] H. Ikeda, R. Arita, and J. Kuneš, Phys. Rev. B 82,            [52] W. Kohn and L. J. Sham, Phys. Rev. 140, A1133 (1965).
+      024508 (2010).                                               [53] P. Hohenberg and W. Kohn, Phys. Rev. 136, B864
+[23] J. Zhang, R. Sknepnek, R. M. Fernandes, and                         (1964).
+      J. Schmalian, Phys. Rev. B 79, 220502 (2009).                [54] P. Giannozzi, S. Baroni, N. Bonini, M. Calandra, R. Car,
+[24] C. Platt, R. Thomale, and W. Hanke, Phys. Rev. B 84,                C. Cavazzoni, D. Ceresoli, G. L. Chiarotti, M. Cococ-
+      235121 (2011).                                                     cioni, I. Dabo, A. Dal Corso, S. de Gironcoli, S. Fabris,
+[25] R. Shankar, Rev. Mod. Phys. 66, 129 (1994).                         G. Fratesi, R. Gebauer, U. Gerstmann, C. Gougoussis,
+[26] T. Saito, S. Onari, and H. Kontani, Phys. Rev. B 82,                A. Kokalj, M. Lazzeri, L. Martin-Samos, N. Marzari,
+      144510 (2010).                                                     F. Mauri, R. Mazzarello, S. Paolini, A. Pasquarello,
+[27] H. Kontani and S. Onari, Phys. Rev. Lett. 104, 157001               L. Paulatto, C. Sbraccia, S. Scandolo, G. Sclauzero, A. P.
+      (2010).                                                            Seitsonen, A. Smogunov, P. Umari, and R. M. Wentzcov-
+[28] J. Ruvalds, Phys. Rev. B 35, 8869 (1987).                           itch, Journal of Physics: Condensed Matter 21, 395502
+[29] S.-M. Cui and C.-H. Tsai, Phys. Rev. B 44, 12500 (1991).            (19pp) (2009).
+[30] S. Zhou, G. Kotliar, and Z. Wang, Phys. Rev. B 84,            [55] The Elk FP-LAPW Code, http://elk.sourceforge.net .
+      140505 (2011).                                               [56] F. Essenberger, P. Buczek, A. Ernst, L. Sandratskii, and
+[31] R. Akashi and R. Arita, Phys. Rev. Lett. 111, 057006                E. K. U. Gross, Phys. Rev. B 86, 060412 (2012).
+      (2013).                                                      [57] I. I. Mazin, M. D. Johannes, L. Boeri, K. Koepernik, and
+[32] B. P. P. Mallett, T. Wolf, E. Gilioli, F. Licci, G. V. M.           D. J. Singh, Phys. Rev. B 78, 085104 (2008).
+      Williams, A. B. Kaiser, N. W. Ashcroft, N. Suresh, and       [58] Z. Yin, K. Haule, and G. Kotliar, Nature Materials 10,
+      J. L. Tallon, Phys. Rev. Lett. 111, 237001 (2013).                 932 (2011).
+[33] I. I. Mazin and M. D. Johannes, Nat Phys 5, 141 (2009).       [59] E. Runge and E. K. U. Gross, Phys. Rev. Lett. 52, 997
+[34] D. Manske, Theory of Unconventional Superconductors,                (1984).
+      Cooper-Pairing Mediated by Spin Excitations (Springer-       [60] E. K. U. Gross and W. Kohn, Phys. Rev. Lett. 55, 2850
+      Verlag Berlin Heidelberg, 2004).                                   (1985).
+[35] P. J. Hirschfeld, M. M. Korshunov, and I. I. Mazin, Re-
+      ports on Progress in Physics 74, 124508 (2011).
+[36] D. J. Scalapino, Rev. Mod. Phys. 84, 1383 (2012).
+[37] E. Dagotto, A. Moreo, A. Nicholson, Q. Luo, S. Liang,
+      and X. Zhang, Frontiers of Physics 6, 379 (2011).
+[38] T. Li, Journal of Physics: Condensed Matter 20, 425203
+                                                                 6
+
+[61] M. A. L. Marques, M. Lüders, N. N. Lathiotakis, G. Pro-     [70] The fact that phonons reduce the Tc in this material is
+      feta, A. Floris, L. Fast, A. Continenza, E. K. U. Gross,         a direct consequence of the stronger interband than the
+      and S. Massidda, Phys. Rev. B 72, 024546 (2005).                 intraband coupling λij (∼ 0.03 intraband and ∼ 0.05
+                                                                       interband), eﬀectively acting against the s± ordering.
+[62] A. Floris, A. Sanna, M. LÃŒders, G. Profeta, N. Lath-
+      iotakis, M. Marques, C. Franchini, E. Gross, A. Conti-     [71] F.-C. Hsu, J.-Y. Luo, K.-W. Yeh, T.-K. Chen, T.-W.
+      nenza, and S. Massidda, Physica C: Superconductivity             Huang, P. M. Wu, Y.-C. Lee, Y.-L. Huang, Y.-Y.
+      456, 45 (2007), recent Advances in MgB2 Research.                Chu, D.-C. Yan, and M.-K. Wu, Proceedings of
+                                                                       the National Academy of Sciences 105, 14262 (2008),
+[63] A. Floris, G. Profeta, N. Lathiotakis, M. Lüders, M. Mar-         http://www.pnas.org/content/105/38/14262.full.pdf+html.
+      ques, C. Franchini, E. Gross, A. Continenza, and S. Mas-
+      sidda, Phys. Rev. Lett. 94, 037004 (2005).                 [72] This value is obtained by structural relaxation on the
+                                                                       magnetic unit.
+[64] P. B. Allen and B. Mitrović, Theory of Superconducting
+      Tc, edited by F. S. Henry Ehrenreich and D. Turnbull,      [73] Y. Kamihara, T. Watanabe, M. Hirano, and
+      Solid State Physics, Vol. 37 (Academic Press, 1983) pp.          H. Hosonom, Journal of the American Chemical Society
+      1 – 92.                                                          130, 3296 (2008).
+
+[65] Y. Nambu, Phys. Rev. 117, 648 (1960).                       [74] K. Igawa, H. Okada, K. Arii, H. Takahashi, Y. Kamihara,
+[66] Phonons and el-ph matrix elements have been calculated            M. Hirano, H. H., S. Nakano, and T. Kikegawa, Journal
+                                                                       of the Physical Society of Japan 78, 03701 (2009).
+      within density functional perturbation theory[78] imple-
+      mented in quantum espresso [54]. A 10 × 10 × 6 and         [75] S. Medvedev, T. McQueen, I. Troyan, T. Palasyuk,
+      6 × 6 × 4 grid is used respectively for electronic and           M. Eremets, R. Cava, S. Naghavi, F. Casper, V. Kseno-
+      phononic sampling of the Brillouin zone. Core states are         fontov, G. Wortmann, and C. Felser, Nature Materials
+      threated in the ultrasoft pseudopotential approximation.         8, 630 (2009).
+      The planewave(charge) expansion is cut at 40(400) Ry.
+      The electronic response is also computed by means of       [76] S. J. Zhang, X. C. Wang, R. Sammynaiken, J. S. Tse,
+      liner response DFT, as implemented in the Korringa-              L. X. Yang, Z. Li, Q. Q. Liu, S. Desgreniers, Y. Yao, H. Z.
+      Kohn-Rostoker approximation[79]. The Brillouin zone is           Liu, and C. Q. Jin, Phys. Rev. B 80, 014506 (2009).
+      sampled with a grid of 16×16×4 points in order to prop-
+      erly sample the peak at qM. Since the excitations are at   [77] Y. Mizuguchi, Y. Hara, K. Deguchi, S. Tsuda, T. Ya-
+      low frequency a logarithmic grid in ω-space with a cut of        maguchi, K. Takeda, H. Kotegawa, H. Tou, and
+      1eV is used.                                                     Y. Takano, Superconductor Science and Technology 23,
+[67] L. Boeri, O. V. Dolgov, and A. A. Golubov, Phys. Rev.             054013 (2010).
+      Lett. 101, 026403 (2008).
+[68] R. Jishi and D. Scalapino, arXiv 1306.2925 (2013).          [78] S. Baroni, S. de Gironcoli, A. Dal Corso, and P. Gian-
+[69] H. Suhl, B. T. Matthias, and L. R. Walker, Phys. Rev.             nozzi, Rev. Mod. Phys. 73, 515 (2001).
+      Lett. 3, 552 (1959).
+                                                                 [79] P. Buczek, A. Ernst, P. Bruno, and L. M. Sandratskii,
+                                                                       Phys. Rev. Lett. 102, 247206 (2009).
+

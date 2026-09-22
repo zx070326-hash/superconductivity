@@ -7,7 +7,13 @@ Orbital order (paper's own convention, NOT the common dxy=1 convention):
   0 = dxz, 1 = dyz, 2 = dx2-y2, 3 = dxy, 4 = d3z2-r2
 
 Source: theory/notes/_scratch_ir/graser1003.0133.txt lines 545-626
-Note: mn=35 and mn=45 rows in Table II are blank in the paper -> xi35=xi45=0 (not an omission).
+CORRECTED 2026-09-22 (fese-extension flagged this docstring was stale): the mn=35/45
+rows are NOT blank in the paper -- that was a pdftotext-column-misalignment misreading
+of the plain-text extraction. Page-image cross-check recovered nonzero t35/t45 and the
+xi35/xi45 closed-form dispersion terms (L.603-604), both wired in below (see t35, t45
+dicts and _xi35/_xi45 functions). This comment previously claimed xi35=xi45=0 "not an
+omission" -- that claim was itself the omission; the code below has used the corrected
+nonzero values since the same 2026-09-22 edit, this docstring just hadn't caught up.
 kz=0 cut kills all sin(kz) terms and sets cos(kz)=1; this is an explicit simplification
 (BaFe2As2 is a 3D compound) documented here, not silently assumed.
 """
