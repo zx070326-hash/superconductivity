@@ -97,3 +97,20 @@ fxc_test = U_hubbard * np.eye(5) + epsilon * OffDiagOnly(orbital_structure)
 - 脚本：`../_scratch_ir/scdft_orbital_fxc_route2_2026-09-22.py`
 - 前一次同形伪影：`day4_scalar_fxc_artifact_retraction_2026-09-22.md`
 - Sylvester 惯性定律阻碍（第二层夹心）：`sylvester_inertia_blocks_naive_sandwich_2026-09-22.md`
+
+
+---
+
+## 追加（team-lead 独立复核订正，2026-09-22 晚）——原文保留，只加不改
+
+**旧陈述错在哪**：§二 的控制检验（diag-only / scalar-equiv / FULL 三者 `n_neg` 相同）方法上是对的，
+撤回「ROUTE 2 SUPPORTED」正确。但结论句「非对角结构对结果贡献为零」把一个**定理性的零**读成了**经验性的零**：
+（a）被扫的 `χ₀` 是两因子构造，规范依赖（`chi0_two_factor_form_is_gauge_dependent_2026-09-22.md`）；
+（b）合法构造下静态 `Re χ₀ ⪯ 0` 是定理（`static_chi0_nsd_is_a_theorem_2026-09-22.md`），
+`n_neg` 的静态取值不携带任何 `f^xc` 结构信息——非对角贡献「为零」不是本次参数化的性质，是任何参数化的性质。
+另：`fxc(Q_AFM)` 对角元全为负（−2.176…−1.200）而 Hubbard 基线 `U=+1.0`——两者符号相反却被并排比较 `n_neg`，
+这一点本篇未说明；在 Day 6 里被正确地用「对角锁定 U=1.0」消除。
+
+**新陈述凭什么对**：撤回维持。待办「Day 6 干净检验」已做（`day6_…`），其结果同样零自由度（见该篇追加）。
+出路 2 的正确终点不是「更好的 `f^xc` 参数化」，而是定理 (S1)：`(FχF)_ij ≥ 0` 对**每个** PSD `χ` 成立 ⟺ `F = s·wwᵀ` 秩一，
+物理 `f^xc` 非秩一 ⟹ 夹心结构**永远**推不出 Eq.(37)（`fxc_sandwich_cannot_give_elementwise_positivity_2026-09-22.md`，`analytic`，充要）。
