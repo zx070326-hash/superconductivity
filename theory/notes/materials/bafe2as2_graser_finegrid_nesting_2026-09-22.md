@@ -92,3 +92,21 @@ X/Y 处的增强与"X/Y 确认为电子口袋"（见文献笔记第 8 节第 2 �
 - 被取代（保留存档）的简化模型：[iron_based_tight_binding_params_2026-09-22.md](iron_based_tight_binding_params_2026-09-22.md)、[iron_based_nesting_survey_plan_2026-09-22.md](iron_based_nesting_survey_plan_2026-09-22.md)、[iron_based_Q_AFM_universality_2026-09-22.md](iron_based_Q_AFM_universality_2026-09-22.md)
 - 静态 χ₀ 规范依赖（不影响本文——本文只用能带能量，不构造 χ₀）：
   [../misc/essenberger_chi_sign_structure_2026-09-22.md](../misc/essenberger_chi_sign_structure_2026-09-22.md)
+
+---
+
+## 追加（team-lead，2026-09-22 晚）：对「对角峰与 X/Y 并列」的两条限定——未测，不是订正
+
+读了 `_graser1003_nesting_scan_2026-09-22.py` L.19/L.68：`ξ(q) = Σ_k A(k)A(k+q)`，`A(k)=Σ_n Lorentzian(ε_n(k)−μ, η)`，
+`k_z=0`。这两点使结论 4「全局非平凡极大值在对角方向、与 X/Y 相当」**不能**直接转述为「χ₀(q) 在对角方向与 (π,0) 相当」：
+
+1. **ξ 不含轨道矩阵元。** `A(k)` 是带求和的总谱权，`ξ` 数的是费米面几何重叠；`χ₀_{ij}(q)` 的每一项带
+   `|⟨u_{k,m}|…|u_{k+q,n}⟩|²` 型相干因子，跨口袋、轨道性质不同的重叠被它压低。对角峰所连的两个口袋是否轨道相容，
+   决定它在 χ₀ 里是否保留——本篇待办 1 已写「归属未核」，这里补一句：**即便归属核了，也还差矩阵元这一层**。
+   这不是本篇的错（本篇明说只用能带能量），是下游引用时的边界。
+2. **`k_z=0` 切片。** 1003.0133 是 3D 模型（Table I/II 的 `z/xz/xxz/xyz` 列），本篇只扫 `k_z=0`；
+   `k_z` 平均可改变对角/X 的相对强度。**未测**。
+
+**预算**：`Q_AFM` 的精确落点对天花板主线的消费点——经 `../ceiling/unsplit_LZ_route_relaxes_eq37_2026-09-22.md`（定理 (U)）与
+`../ceiling/fese_condition_ii_signless_route_undetermined_2026-09-22.md`——已为 **∞**（嵌套机制不再承重任何一格），
+故以上两条**只记不派**。若将来嵌套重新承重，先补矩阵元版 χ₀ 再谈对角峰。
