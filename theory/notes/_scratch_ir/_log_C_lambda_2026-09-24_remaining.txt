@@ -1,0 +1,78 @@
+-- lam=8.0 mus=0.13 side=lower wE=0.382417923
+    [lower μ*=0.13] f=0.300 w̄=0.497143 Nc=4 mu_lo=1.755643136 (0.2s) PASS
+    [lower μ*=0.13] f=0.150 w̄=0.439781 Nc=4 mu_lo=1.361136308 (0.1s) PASS
+    [lower μ*=0.13] f=0.060 w̄=0.405363 Nc=4 mu_lo=1.135012225 (0.2s) PASS
+    [lower μ*=0.13] f=0.025 w̄=0.391978 Nc=3 mu_lo=1.060371776 (0.2s) PASS
+    [lower μ*=0.13] f=0.010 w̄=0.386242 Nc=3 mu_lo=1.024047549 (0.2s) PASS
+   -> C=0.145685231 C/Cinf=0.79729 w=0.386242 Nc=3
+-- lam=10.0 mus=0.13 side=upper wE=0.337646676
+    [upper μ*=0.13] f=0.300 w̄=0.236353 Nc=2 nleaf=1 worst=0.844234583 (0s) PASS
+    [upper μ*=0.13] f=0.150 w̄=0.287000 Nc=2 nleaf=52 worst=0.997905666 (30s) PASS
+    [upper μ*=0.13] f=0.060 w̄=0.317388 Nc=3 nleaf=98 worst=0.998808239 (57s) PASS
+    [upper μ*=0.13] f=0.025 w̄=0.329206 Nc=3 nleaf=133 worst=0.998641498 (78s) PASS
+    [upper μ*=0.13] f=0.010 w̄=0.334270 Nc=3 nleaf=153 worst=0.999525712 (90s) PASS
+   -> C=0.150564456 C/Cinf=0.82399 w=0.334270 Nc=3
+-- lam=10.0 mus=0.13 side=lower wE=0.337646676
+    [lower μ*=0.13] f=0.300 w̄=0.438941 Nc=4 mu_lo=1.786707541 (0.1s) PASS
+    [lower μ*=0.13] f=0.150 w̄=0.388294 Nc=3 mu_lo=1.385776532 (0.2s) PASS
+    [lower μ*=0.13] f=0.060 w̄=0.357905 Nc=3 mu_lo=1.150354396 (0.2s) PASS
+    [lower μ*=0.13] f=0.025 w̄=0.346088 Nc=3 mu_lo=1.061963784 (0.2s) PASS
+    [lower μ*=0.13] f=0.010 w̄=0.341023 Nc=3 mu_lo=1.024665254 (0.2s) PASS
+   -> C=0.147582982 C/Cinf=0.80767 w=0.341023 Nc=3
+-- lam=2.0 mus=0.0 side=upper wE=0.751648293
+    [upper μ*=0.0] f=0.300 w̄=0.526154 Nc=5 nleaf=1 worst=0.718930357 (0s) PASS
+    [upper μ*=0.0] f=0.150 w̄=0.638901 Nc=6 nleaf=1 worst=0.981255458 (0s) PASS
+    [upper μ*=0.0] f=0.060 w̄=0.706549 Nc=7 nleaf=33 worst=0.997682645 (20s) PASS
+    [upper μ*=0.0] f=0.025 w̄=0.732857 Nc=7 nleaf=63 worst=0.998431827 (37s) PASS
+    [upper μ*=0.0] f=0.010 w̄=0.744132 Nc=7 nleaf=101 worst=0.999581895 (61s) PASS
+   -> C=0.151236028 C/Cinf=0.82766 w=0.744132 Nc=7
+-- lam=2.0 mus=0.0 side=lower wE=0.751648293
+    [lower μ*=0.0] f=0.300 w̄=0.977143 Nc=9 mu_lo=1.393916606 (0.1s) PASS
+    [lower μ*=0.0] f=0.150 w̄=0.864396 Nc=8 mu_lo=1.201686524 (0.2s) PASS
+    [lower μ*=0.0] f=0.060 w̄=0.796747 Nc=7 mu_lo=1.081624729 (0.2s) PASS
+    [lower μ*=0.0] f=0.025 w̄=0.770440 Nc=7 mu_lo=1.034142983 (0.2s) PASS
+    [lower μ*=0.0] f=0.010 w̄=0.759165 Nc=7 mu_lo=1.013678240 (0.2s) PASS
+   -> C=0.148241256 C/Cinf=0.81128 w=0.759165 Nc=7
+-- lam=3.2953 mus=0.0 side=upper wE=0.537644980
+    [upper μ*=0.0] f=0.300 w̄=0.376351 Nc=3 nleaf=1 worst=0.662516270 (0s) PASS
+    [upper μ*=0.0] f=0.150 w̄=0.456998 Nc=4 nleaf=1 worst=0.933298712 (0s) PASS
+    [upper μ*=0.0] f=0.060 w̄=0.505386 Nc=5 nleaf=29 worst=0.999400455 (17s) PASS
+    [upper μ*=0.0] f=0.025 w̄=0.524204 Nc=5 nleaf=53 worst=0.999612064 (31s) PASS
+    [upper μ*=0.0] f=0.010 w̄=0.532269 Nc=5 nleaf=76 worst=0.999407485 (45s) PASS
+   -> C=0.164718304 C/Cinf=0.90145 w=0.532269 Nc=5
+-- lam=3.2953 mus=0.0 side=lower wE=0.537644980
+    [lower μ*=0.0] f=0.300 w̄=0.698938 Nc=6 mu_lo=1.488533180 (0.2s) PASS
+    [lower μ*=0.0] f=0.150 w̄=0.618292 Nc=6 mu_lo=1.243254576 (0.2s) PASS
+    [lower μ*=0.0] f=0.060 w̄=0.569904 Nc=5 mu_lo=1.096696053 (0.2s) PASS
+    [lower μ*=0.0] f=0.025 w̄=0.551086 Nc=5 mu_lo=1.040157224 (0.2s) PASS
+    [lower μ*=0.0] f=0.010 w̄=0.543021 Nc=5 mu_lo=1.016037600 (0.1s) PASS
+   -> C=0.161456556 C/Cinf=0.88360 w=0.543021 Nc=5
+-- lam=4.0 mus=0.0 side=upper wE=0.477593276
+    [upper μ*=0.0] f=0.300 w̄=0.334315 Nc=3 nleaf=1 worst=0.648198470 (0s) PASS
+    [upper μ*=0.0] f=0.150 w̄=0.405954 Nc=4 nleaf=1 worst=0.920787585 (0s) PASS
+    [upper μ*=0.0] f=0.060 w̄=0.448938 Nc=4 nleaf=29 worst=0.999141288 (17s) PASS
+    [upper μ*=0.0] f=0.025 w̄=0.465653 Nc=4 nleaf=51 worst=0.999626744 (30s) PASS
+    [upper μ*=0.0] f=0.010 w̄=0.472817 Nc=4 nleaf=74 worst=0.999362498 (44s) PASS
+   -> C=0.168304891 C/Cinf=0.92108 w=0.472817 Nc=4
+-- lam=4.0 mus=0.0 side=lower wE=0.477593276
+    [lower μ*=0.0] f=0.300 w̄=0.620871 Nc=6 mu_lo=1.518644688 (0.2s) PASS
+    [lower μ*=0.0] f=0.150 w̄=0.549232 Nc=5 mu_lo=1.255857003 (0.2s) PASS
+    [lower μ*=0.0] f=0.060 w̄=0.506249 Nc=5 mu_lo=1.101128661 (0.2s) PASS
+    [lower μ*=0.0] f=0.025 w̄=0.489533 Nc=4 mu_lo=1.041904983 (0.2s) PASS
+    [lower μ*=0.0] f=0.010 w̄=0.482369 Nc=4 mu_lo=1.016719708 (0.2s) PASS
+   -> C=0.164972121 C/Cinf=0.90284 w=0.482369 Nc=4
+-- lam=6.0 mus=0.0 side=upper wE=0.377578793
+    [upper μ*=0.0] f=0.300 w̄=0.264305 Nc=2 nleaf=1 worst=0.626759376 (0s) PASS
+    [upper μ*=0.0] f=0.150 w̄=0.320942 Nc=3 nleaf=1 worst=0.901770609 (0s) PASS
+    [upper μ*=0.0] f=0.060 w̄=0.354924 Nc=3 nleaf=27 worst=0.999489481 (16s) PASS
+    [upper μ*=0.0] f=0.025 w̄=0.368139 Nc=3 nleaf=48 worst=0.998610475 (28s) PASS
+    [upper μ*=0.0] f=0.010 w̄=0.373803 Nc=3 nleaf=72 worst=0.999852814 (43s) PASS
+   -> C=0.173820789 C/Cinf=0.95126 w=0.373803 Nc=3
+-- lam=6.0 mus=0.0 side=lower wE=0.377578793
+    [lower μ*=0.0] f=0.300 w̄=0.490852 Nc=4 mu_lo=1.569834809 (0.1s) PASS
+    [lower μ*=0.0] f=0.150 w̄=0.434216 Nc=4 mu_lo=1.276638720 (0.2s) PASS
+    [lower μ*=0.0] f=0.060 w̄=0.400234 Nc=4 mu_lo=1.108306770 (0.2s) PASS
+    [lower μ*=0.0] f=0.025 w̄=0.387018 Nc=3 mu_lo=1.044715599 (0.1s) PASS
+    [lower μ*=0.0] f=0.010 w̄=0.381355 Nc=3 mu_lo=1.017813366 (0.2s) PASS
+   -> C=0.170378794 C/Cinf=0.93243 w=0.381355 Nc=3
+DONE
