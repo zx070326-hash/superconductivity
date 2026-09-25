@@ -1,0 +1,416 @@
+VOLUME 42, NUMBER 8            PHYSICAL REVIEW LETTERS                                                                      19 FEBRUARY 1979
+
+     Superconducting Properties of A 15 Compounds Derived from Band-Structure Results
+
+                         B. M. Klein, L. L. Boyer, and D. A. Papaconstantopoulos
+
+                                       Naval Research Laboratory, washington, D. C. 20375
+                                                           (Beceived 12 October 1978)
+
+                   Calculations of the electron-phonon interaction, ,A, and T are presented for ten differ-
+                ent A15 compounds, V&X and Nbs&, X=A1, Ga, Si, Ge, and Sn. The calculated tempera-
+                ture-dependent magnetic susceptibility of Nb3Sn is also shown to be in good agreement
+                with experiment. We argue that the low-temperature anomalies in ~any A15 materials
+                are related to the very sharp structure in the density of states near the Fermi energy
+                found in our ab initio band-structure results.
+
+There has been great interest in the A. 15 mate-                                         etc., for the A15's. To illustrate the success of
+
+rials for more than two decades, primarily due                                           our approach we show in Fig. 1 our calculated
+
+to the high superconducting transition tempera-                                          magnetic susceptibility of Nb, Sn  along   'witThhethce al-
+                                                                                         experimental results of Reywald
+tures (T,) and other  unusual electrical                                    and me-                                         et al.
+chanical properties
+                      exhibited by many                                     of them. '   culations are in excellent quantitative agreement
+
+In recent years the advent of sophisticated numer-                                       with experiment, and are based on the formulas'
+
+ical techniques for calculating the electronic                                           x(T) =x.~+x~(T)/ll- uF(&)~,
+
+structure of A. 15 compounds has enabled a num-
+
+ber of groups to relate some of the properties of                                        F(&)=x (&)&x~(0),
+
+the A15's   to the electronic  mbaanndnesr.tru' c'ture                      in a
+relatively  first-principles
+                                                                                         where X,~ is a temperature-independ'ent orbital
+
+We have recently done a comprehensive set of                                             susceptibility, p, is a Coulomb interaction param-
+
+ab initio, self-consistent, augmented plane-wave                                         eter, and Xp') is the temperature-dependent
+
+(APW) calculations for ten different 415 com-                                            wPaeulhiavseusucseepdtibthileityv. alueFs or0.t9he89fXit1s0ho'wenmuinjg  Fig.   1
+
+pounds:  '  V, X and Nb, X, with X=Al,   Ga, Si, Ge,                                                                                                                and
+and Sn.     In this Letter we report on  calculations
+
+of the magnetic susceptibility, electron-phonon
+
+interaction, and 7', for these materials. We                                             2. 7
+
+show that a good quantitative understanding of                                           2. 6—
+many of the anomalous properties of the A. 15's                                          2. 5—
+                                                                                         2. 4—
+can be derived from our band-structure results
+
+without additional assumptions regarding quasi
+
+one-dimensionality, or resort to model density-
+
+of-states singularities.
+
+All of our APW band-structure calculations
+
+have been done using a warped-muffin-tin ap-
+
+proach (fully general treatment of the potentia. l
+
+outside of the nonoverlapping AI?W spheres), and                                         lO
+
+cinoculpuldieng)r,elaatlilvissetilcf-coenfsfeiscttesnt(lyne. gle' ctTinhge  spin-orbit     I
+                                                                            bulk of the
+                                                                                         O 2.2—
+calculations were performed using the local den-
+                                                                                              2. 'I—
+sity-functional form of exchange correlation, al-
+                                                                                             2.0—
+though additional calculations were done using
+                                                                                              1.9—
+other local exchange approximations to check the
+
+sensitivity of our results to exchange. None of
+
+the results reported here are qualitatively ex-
+
+change-approximation sensitive, although details                                         1.8          I  I  I         I     I       I
+
+of the Fermi surfaces, for instance, are.                                                             50 100 150 200 2 50 500
+
+The first question we address is whether our                                                                   T (K)
+
+band-structure and density-of-states results can                                          FIG. 1. Calculated magnetic susceptibility of Nb&Sn
+
+reproduce the unusual temperature dependences                                            (solid curve) and experimental results (dots) from Bef.
+                                                                                         8.
+of the magnetic susceptibilities, elastic constants,
+
+530                                      1979 The American Physical Society
+VOLUME 42, NUMBER 8      PHYSICAL REVIEW LETTERS                                                                     19 FEBRUARY 1979
+
+0.695 for X„b and p,, respectively. These are                             expression"                                         of
+reasonable values for these quantities. For in-
+                                                                          of Schweiss                                          0.01'~
+" stance, we find a value of P = 0.1-0.2 using the                        Dynes
+
+Morel-Anderson formula, our fitted values of                              ( states
+                                                                                               eatnadl.t'he  phonon density
+
+                                                                                                             In all cases q~
+                                                                          — for the A15 compounds lectron-phonon scatter-
+                                                                          " ing from the B site is very ineffective. Since
+
+,IU, and typical values of the 415 d-band width                           the calculated phonon moments are somewhat
+(- 0.2 eV) and average phonon frequencies (- 200
+                                                                          crude estimates, there are potential errors of
+                                                                          . -2N for 10%%uo
+K). Our y(T) results are in significantly better                                       X and    for T,
+
+' quantitative agreement with experiment than                             A theoretical estimate of the A. 15 specific-
+
+those of van Kessel, Myron, and Mueller.                                  heat y values can be made using our calculated
+
+The strong temperature dependence of )((T) (and                           values of N(E„) and &. On comparing these re-
+
+presumably of the elastic constants) results from                         sults with the various experimental values, in
+
+a rapid variation of N(E), the density of states,                         several cases we find discrepancies of more
+
+near the Fermi energy EF. This variation is ap-                           than 25%%uo. Similar comparisons for other transi-
+proximately 5(P/o in a 1-mRy (- 150 K) range
+                                                                          tion-metal compounds and elements often yield
+
+around EF. Similar good agreement is found for                            similar discrepancies. We feel that the origin of
+
+V,Si and V,Ga. The compounds without sharp                                this disagreement deserves further study.
+
+structure in N(E) near EF (e.g. , V,A1, V,Ge,                             A striking result is the prediction of relatively
+
+V,Sn, Nb, Al, and Nb, Ga) do not exhibit strongly                         low values of N (E~), r), X, and T, for both Nb, Ge
+
+temperature    -doerpeenxdpeenrtimesnutsaclleyp.tib'iliWtiees    either   and Nb, Si (for three different lattice constants,
+theoretically                                                  emphasize
+                                                                          5.03, 5.10, and 5.20 A). Both X and T, were de-
+
+that these conclusions follow from our first-                             termined for these compounds using estimated
+
+principles-derived N(E), and do not depend on                                          Nb-site
+                                                                                       results
+                                                                          '" values of the                                    from the
+                                                                                                                              observed
+                                                                          experimental
+model density-of-states functions. Our ab initio                                                phonon       Smno. 'menTtshe
+
+band-structure calculations seem fully able to ac-                                              for Nb,
+
+                                                                          high T, values for Nb, Ge, in excess' of 23 K
+
+count for the existence or absence of anomalies                           in relatively thin film samples, can be reconciled
+
+in the A. 15 compounds.                                                   with our results only if there is unusual phonon
+
+We have also calculated the electron-phonon in-                           softening in this material or if there is some oth-
+
+" teractions g„and q~, and mass enhancement fac-                          er unusual property such as defects or surface
+
+tors X, using the Gaspari-Gyorffy theory, and                             phonon effects which somehow enhance T, in
+
+the assumption of decoupling the contributions                            these samples. Experimental information on the
+
+" g from the A. and B sites in the A. 415 com-                            phonon spectrum of Nb, Ge is especially important
+
+pounds. Results are shown in Table I, along                               in order to solve this puzzle. We remark that
+
+with the T, values calculated using the Allen-                            experimentally measured x-ray photoelectron
+
+                 TABLE I. Electronic density of states at the Fermi level, N(EF) [states/
+               By-(unit cell) for two spins]; electron-phonon interactions for the A and B
+               sites, qz and qs (ev/A ); calculated and measured (by inverting the McMil-
+
+               an-type equation of Bef. 13) mass enhancement factors ;A, and calculated
+
+               . and measured values of T, The value @*=01. 3 was used throughout.
+
+                                                                             B ~cele.  ~expt.    cake.
+
+                                                                          0.03 1.09             C
+                                                                          0.05 1.48            y Z            empt.
+                                                                          0.07 1.18
+                                                                          0.05 0.67                          C
+                                                                          0.04 0.52
+               v3Al                 188.9                       6.87      0.05 2.14     0.87   14.8 9.6
+                                                                9.26      0.13 1.92     1.17
+               V3Ga                 266.7                                 0.05 0.65     1.12   23.0 16.5
+               V3Si                                             8.90      0.05 0.64     0.70
+                                    200.2                                 0.05 0.64     0.61   18.4 17.1
+               V&Ge                 114.7                       5.04      0.07 0.89     1.60    5.3 6.1
+                                                                3.89      0.06 1.12     1.74
+               V&Sn                 123.0                      13.40                            1.9 3.8
+                                    199.2                      11.91                   & 1.0   25.1 18.6
+               NbsA1                191.8
+                                     61.42                      4.90                    1.80   22.5 20.3
+               Nb~Ga                 69.20                      4.83                    1.44
+                                     83.61                      4.84                            3.5
+               NbsSi (ao = 5.03 A)  106.7                       6.70                            34 & 10
+               Nb&Si (ao = 5.10 A)  158.6                                                       3.4
+               Nb&Si (ao = 5.20 A)                              8.49                            8.2 23.2
+                                                                                               12.6 18.0
+               Nb3Ge
+
+               Nb&Sn
+
+                                                                                                                              531
+VOLUME 42, NUMBER 8                                PHYSICAL REVIEW LETTERS                              19 PEBRUARY 1.979
+
+I6,0                                   Nb~AI ~                       As a last point we show in Fig. 2 a plot ofg vs
+I2, 0—                             Nb Gag&
+                                                                   N(EF) for the A15 materials. Very approximately
+             Nb Si ~Nb&Ge          ~ Nb Sn                         the vanadium- and niobium-based compounds fall
+
+                                           ~~V Al                  into two families, with g ~b,&)q~,~. Although the
+                                                                   relationship rtccN (E,) is qualitatively obeyed,
+      Nb~SI  ~  (3) y Ge                                           there is a good deal of scatter. This could be
+                                                                   real, or may be related to uncertainties (-1(Po)
+4,0-r        eNb Si                                                in our calculated N(Ez).
+
+                     ~ V, Sn                                         We gratefully acknowledge a collaboration with
+
+                                                                   Dr. L. F. Mattheiss on the A15 band-structure
+
+                                                                   calculations.
+
+     0                             200                             L. B. Testardi, in Physical Acoustics, edited by
+     50                       150                        250  500
+                IOO                                                       Mason and B N Thur ston (Ac ademyc New York
+
+                           N(E, )-(states/Ry/unit cell)            1978), Vo). X; M. Weger and I. B. Goldberg, in solid
+                                                                   State Physics, edited by H. Ehrenreich, F. Seitz, and
+  FIG. 2. Calculated electron-phonon interaction g
+                                                                   D. Turnbull (Academic, New York, 1978), Vol. 28; Yu.
+=N(EF) (t ) vs electronic density of states for ten A15
+compounds (three lattice constants for Nb3Si, see text).           A. Izyumov and Z. Z. Kurmaev, Usp. Fiz. Nauk. llew,
+
+                                                                   193 (1974) [Sov. Phys. Usp. 17, 856 (1974)].
+
+                                                                     L. F. Mattheiss, Phys. Rev. 188, A112 (1965), and
+
+spectra" and recent specific heat measurements"                    Phys. Bev. B 12, 2161 (1975).
+                                                                     B. M. Klein, D. A. Papacon. stantopoulos, and L. L.
+for Nb, Ge appear to support our result that Nb, Ge
+is a relatively low-density-of-states A15 materi-                  Boyer, Ferroelectrics 16, 299 (1977), and J. Phys. F
+
+' al. The experimental results of Somekh and                       8, 61V (19V8).
+
+Evetts, who obtained T, enhancements of nearly                     G. Arbman and T. Jarlborg, Solid State Commun. 26,
+5 K for V,Ge by sputtering, also indicates that
+there is still much to be understood regarding                     857 (1978), and references therein.
+the physics of thin-film samples of A15 materi-
+als. We also note that the above arguments apply                   B. M. Klein, L. L. Boyer, D. A. Papaconstantopou-
+equally well to our results for Nb, Si.                            los, and L. F. Mdttheiss, Phys. Rev. B 18, 6411 (1978).
+                                                                     A. T. van Kessel, H. W. Myron, and F. M. Mueller,
+  Our results for T, for Nb, Sn in Table I show
+                                                                   Phys. Rev. Lett. 41, 181, 520(E) (1978).
+that our calculations underestimate X by 2(Po
+for this compound. Recent tunneling measure-                         ~K. M. Ho, W. E. Pickett, and M. L. Cohen, Phys.
+ments by Moore, Beasley, and Rowell" show
+                                                                   Rev. Lett. 41, 580, 815 (1978).
+that there is a significant enhancement of the tun-
+neling density of states, a'(co)F(~o), at low fre-                 W. Reywald, M. Bayl, and B. W. Cohen, and G. D.
+
+quencies compared with the phonon density of                       Cody, Phys. Bev. B 6, 868 (1972).
+
+states, E(~). This would indicate that we may                      A. M. Clogston, Phys. Rev. 186, A8 (1964).
+
+be overestimating (&u') in the denominator in the                  ~~P. Morel and P. W. Anderson, Phys. Bev. 125,
+
+expression for X for Nb, Sn, and would account                     1268 (1962).
+for our underestimation of X.
+                                                                   G. D. Gaspari and B. L. Gyorffy, Phys. Rev. Lett.
+  We note that our N(E„) va.lue for Nb, Ge differs
+                                                                   28, 801 (1972).
+considerably from those of Arbman and Jarlborg4                    J. 2B. M. Klein and D. A. Papaconstantopoulos,
+and of Allen et al.22 This accounts for the differ-                                                                    Phys.
+ent calculated values of 7", for Nb, Ge between our
+results and Ref. 4. We believe that our tech-                      F 6, 1185 (1976).
+
+' niques for calculating N(E) for the 415 materials                  P. B. Allen and B. C. Dynes, Phys. Bev. B 12, 905
+                                                                   (1975).
+' for a given band ggzucggg~e are the most accurate                 ~4B. P. Schweiss, B. Benker, E. Schneider, and
+
+currently available. Additional discrepancies                      W. Reichardt, in Superconductivity in d and f-Band-
+are due to the different band-structure approxi
+mations made by the different groups (see Ref. 5                   Metals, edited by D. H. Douglass (Plenum, New York,
+for a discussion of the different band-structure                   1976), p. 189.
+
+techniques).                                                        This was first pointed out in Ref. 8 for V&Si.
+
+                                                                   '6J. B. Gavaler, Appl. Phys. Lett. 23, 480 (1978).
+
+                                                                   YL. B. Testardi, J. H. Wernick, and W. A. Boyer,
+
+                                                                   Solid State Commun. 15, 1 (1974).
+
+                                                                     B. A. Pollak, C. C. Tsuei, and R. W. Johnson, Solid
+
+                                                                   State Commun. 19, 899 (1976).
+
+                                                                    J. ~C. C. Tsuei, S. von Molnar, and M. Coey, Phys.
+                                                                   Rev. Lett. 41, 664, 1194(E) (1978), and references
+
+                                                                   therein.
+
+                                                                     B. E. Somekh and J. E. Evetts, Solid State Commun.
+
+                                                                   24, 738 (1977).
+
+532
+VOLUME 42, NUMBER 8  PHYSICAL RKVIKW LKTTKRS                                                                                          19 FEBRUARY 1979
+
+ ~'D. F. Moore, M. B. Beasley, J. and M. Howell, in      2P. B. Allen, %. E. Pickett, K.M. Ho, and M. L. Co-
+
+Proceedings of the Fifteenth International Conference  hen, Phys. Hev. Lett. 40, 1592 (197S).
+on Low Temperature Physics, Grenoble, France, Au-         L. L. Boyer, Bull. Am. Phys. Soc. 28, 438 (1978),
+gust 24, 1978 (to be published).
+                                                       and Phys. Bev. B (to be published).
+
+            Temperature-Dependent Single-Ion Excitations in Anisotropic Paramagnets
+
+                                                    M. E. Lines
+
+                                        Bell Laboratories, Mu~~ay IIill, New Jersey 07974
+                                                         (Q,eceived 1 December 1978)
+
+             By an exact calculation for an Ising chain it is established that single-ion (electronic) ener-
+           gy levels are temperature dependent in anisotropic paramagnets. The effect is produced by
+           developing anisotropic spin-spin correlations and, in a more general context, is investigated
+           using the correlated-effective-field statistical approximation. It should be directly observ-
+           able by spectroscopic means in strongly anisotropic paramagnetic systems.
+
+Most crystal-field- split electronic excitations       unless that anisotropy is marked. The effect is
+                                                       produced by developing anisotropic spin correla-
+involving   magnetic ions in concentrated  magnetic    tions as temperature is lowered and the CEF
+systems                                    therefore   theory appears, by comparison with the exact re-
+           are dispersionless. ' They can
+                                                       sults in the Ising chain limit, to be an adequate
+be thought of as effective "single-ion" excita-        approximation in most physical situations.
+
+tions. The exceptions are those which involve            Consider first a spin-1 closed Ising linear chain
+
+' levels                                         ex'-  with single-ion anisotropy, described by the
+                                                       Hamiltonian
+change
+possessing nonzero matrix elements of                     & = Q [D(S„')2—2JS„'S„~~, ],
+energy with thermally populated states.
+
+Although optical spectra dominantly contain
+
+modes in the latter category (at least in absorp-
+
+tion) the gross effects of magnetic order upon
+
+"' them are in fact often well accounted for by sim-
+
+ple (dispersionless) molecular-field theory,
+
+due presumably to the relative smallness of the        , ' '. where spin quantum number S =1, number of
+
+relevant matrix elements for these cases. In           spins N- and S&+, =-S, Regrouping the
+
+this picture, the single-ion excitations are shifted   terms in the form
+
+or split by the internal molecular field in an            & = ZlsD(~. ')'+sD(~. +i')' —2~~.'~. +x'1,
+
+ordered magnetic phase, but become tempera-
+
+ture independent above the ordering temperature        one notes that the partition function Z can be ex-
+
+where this internal field averages to zero. To         pressed in S' representation as
+                                                           Z=tr QV„,
+my knowledge this temperature independence for
+
+paramagentic phases is still commonly assumed
+
+and no more accurate theoretical discussion has
+
+ever been presented. Experimental evidence for         in which all the matrices V„have an identical
+                                                       Hermitian form
+paramagnetic line shifts is scant, but I have
+
+found one paper" which claims such an observa-                                                            2J)- -8(D-2r) 8Di2 -8(D+-2J ))
+
+tion ln Dy3A150g2.                                                                                        e -ba/2
+
+In this Letter I establish by an exact calcula-        V—                                                                      -&&/2
+                                                                                                       l
+                                                       j) Vn                                                       y        -8(D
+tion for an Ising linear-chain model that single-                                                         8(D+2
+                                                                                                                     -8D/2
+
+ion energy gaps can indeed be significantly tem-       where p =1/kT and the product II implies simple
+
+perature dependent in a disordered anisotropic         matrix multiplication.
+                                                         By a unitary transformation V'= 8 'VS the ma-
+magnetic system. In a more general context I
+                                                       trix V can be diagonalized in the form
+note that the correlated-effective-field (CEF)
+                                                            i t'» 0 O
+theory of magnetism" suggests that this tempera-
+                                                            V'= 0 z+ 0
+ture dependence is present in all paramagnetic
+                                                              (oo s
+systems which possess uniaxial or lower mag-
+
+netic anisotropy although the effect may be sma11
+
+                     1979 The American Physical Society                                                                               533
+

@@ -1,0 +1,8 @@
+# 允许清单：tools/check_cited_artifacts_tracked.sh 专用。
+# 每行 `<仓库相对路径><TAB><理由>`；`#` 开头为注释，空行忽略。
+# 仅限两类理由：① 版权 PDF（*.pdf 是仓库根 .gitignore 第 2 行有意的规则）；
+# ② 受版权论文的全文文本抽取层（pdftotext 产物，供逐字核对，不得入库分发）。
+# 拿不准的条目不要放进来——留给 FAIL，由裁定者决定是 git add -f 还是补充理由。
+theory/notes/_scratch_ir/_ess1409_utf8.txt	受版权论文全文文本层（arXiv:1409.7968 Essenberger et al., pdftotext -enc UTF-8 -layout 产物，供逐字核对，不得分发）
+theory/notes/_scratch_ir/_mc2006.txt	受版权论文全文文本层（arXiv:cond-mat/0607832 Moussa & Cohen 2006，pdftotext 产物，供逐字核对，不得分发）
+theory/notes/_scratch_ir/graser1003.0133.txt	受版权论文全文文本层（arXiv:1003.0133 Graser et al. 2010，pdftotext 产物，供逐字核对，不得分发）

@@ -1,0 +1,771 @@
+arXiv:0711.1543v1 [cond-mat.supr-con] 9 Nov 2007  Linear response results for phonons and electron-phonon coupling in hcp Sc - spin
+                                                                         ﬂuctuations and implications for superconductivity
+
+                                                                                                                   S. K. Bose
+                                                                        Physics Department, Brock University, St. Catharines, Ontario L2S 3A1, CANADA
+
+                                                                   We present a FP-LMTO (full potential linear muﬃn-tin orbitals) study of the variation in the
+                                                                electronic structure, phonon frequencies and electron-phonon coupling in hcp Sc under pressure.
+                                                                The electron-phonon coupling constant λ is found to increase steadily with pressure in the hcp
+                                                                phase, until the pressure reaches a value where the hcp phase becomes unstable. Linear response
+                                                                calculations for the normal pressure c/a ratio predict a phase change somewhere between calculated
+                                                                pressures of 22 and 30 GPa. The calculated frequencies for the equilibrium hcp lattice parameters are
+                                                                in good agreement with the inelastic neutron scattering results. There is a small upward shift in the
+                                                                Γ-point E2g mode frequency under pressure, in qualitative agreement with the Raman spectroscopy
+                                                                study of Olijnyk et al. (J. Phys.:Condens. Matter,18, 10971 (2006)). From the measured value of
+                                                                the electronic speciﬁc heat constant and the calculated values of the Fermi level density of states and
+                                                                electron-phonon coupling constant, we conclude that the electron-paramagnon coupling constant in
+                                                                hcp Sc should be comparable to the electron-phonon coupling constant. This indicates that the spin
+                                                                ﬂuctuation eﬀects are strong enough to suppress superconductivity completely in hcp Sc. We argue
+                                                                that spin ﬂuctuations should be reduced by a factor of two or more in the high pressure Sc-II phase.
+                                                                Based on estimates of the electron-paramagnon coupling constants and the calculated or estimated
+                                                                electron-phonon coupling constants, we argue that the hcp phase may become superconducting with
+                                                                a very low transition temperature immediately prior to the transition to the Sc-II phase and that the
+                                                                Sc-II phase should indeed be superconducting. The electronic, electron-phonon and spin ﬂuctuation
+                                                                properties in hcp Sc under pressure are compared with those of the high pressure hcp phase of Fe,
+                                                                which was reported to be superconducting a few years back.
+
+                                                                  PACS numbers: 74.25.Jb, 74.25.Kc, 74.70.Ad, 74.90.+n
+
+                                                                         I. INTRODUCTION                       composite incommensurate structures, consisting of host
+                                                                                                               and guest substructures.
+                                                     This work was motivated by a recent work of Hamlin
+                                                  and Schilling,1 who reported the measurement of the su-         In this communication we present ab initio calculations
+                                                  perconducting transition temperature Tc in Sc as a func-     of the electronic structure, elastic properties, phonons
+                                                  tion of pressure. Superconductivity in Sc is induced un-     and electron-phonon coupling in the low pressure hcp
+                                                  der pressure, with Tc increasing monotonically to 8.2 K at   phase of Sc. The purpose is to shed some light on why
+                                                  74.2 GPa. Hamlin and Schilling1 report measurements of       hcp Sc is not superconducting, while the substance might
+                                                  Tc between ∼ 55 GPa (Tc ∼ 5K) and 74.2 GPa (Tc = 8.2         become superconducting under pressure. Several scenar-
+                                                  K). The normal pressure phase of Sc is hcp and it is         ios are possible. It might be that the electron-phonon
+                                                  known to undergo several changes in its crystal struc-       coupling in the hcp phase is small, making superconduc-
+                                                  ture as a function of pressure, the ﬁrst such transition     tivity unlikely in this phase. This coupling may increase
+                                                  known to be occurring around 22-23 GPa3,4,5 from hcp         with pressure, but still remain too small for superconduc-
+                                                  (Sc-I) to a complicated structure, referred to as Sc-II. To  tivity to appear over the entire pressure range for which
+                                                  date the normal and low pressure hcp phase is known to       the hcp phase is stable. Another possibility is that the
+                                                  be non-superconducting. Earlier work by Wittig et al.2       electron-phonon coupling is strong enough to support su-
+                                                  showed that superconductivity is possibly induced in the     perconductivity in the hcp phase. In this latter scenario
+                                                  hcp phase at high pressure around 20 GPa, immediately        one needs to explore why superconductivity is suppressed
+                                                  before it enters the complex Sc-II phase. Tc in the hcp      in the hcp phase and appears only in the high pressure
+                                                  phase was estimated to be less than 0.1 K.                   Sc-II phase. Calculations of the phonon frequencies as a
+                                                                                                               function of pressure should also show softening of certain
+                                                     Ab initio theoretical studies of superconductivity in Sc  modes leading to the instability of the hcp phase at high
+                                                  as a function of pressure is rendered diﬃcult by the fact    pressure.
+                                                  that the superconducting Sc-II phase is not only com-
+                                                  plex, but also that its exact structure still remains open      We use the full potential linear muﬃn-tin orbital (FP-
+                                                  to investigation and reﬁnement.3,4,5 Ormeci et al.23 have    LMTO) method6 to study the electronic structure and
+                                                  studied the electronic structure of the Sc-II phase pro-     the linear response scheme developed by Savrasov7,8 to
+                                                  posed by Fujihisa et al.3 and McMahon et al.5 and pro-       compute the phonon-frequencies, the Eliashberg spectral
+                                                  duced results suggesting that the structure proposed by      function and the electron-phonon coupling constant λ as
+                                                  McMahon et al. might provide a better representation         a function of volume in hcp Sc. For the sake of simplicity
+                                                  of the Sc-II phase. Both of these proposed structures are    and convenience in the calculation, the c/a ratio is kept
+                                                                                                               ﬁxed at the normal pressure value.9 This restriction of
+                                                                                                                           2
+
+the c/a ratio being kept ﬁxed at the normal pressure          Energy (mRy)  100
+value should not be of any concern from the viewpoint                        95
+of the main results and conclusions of this work. This                       90     5.8  6  6.2                       6.4
+will become clear from the discussion in the following                       85
+sections.                                                                    80
+                                                                             75
+   Sc is the lightest of the 3d- transition metals. It would                 70
+be of interest to see how the electron-phonon coupling in                    65
+hcp Sc compares with that of the late transition metal                       605.6
+hcp Fe, which was reported to be superconducting by
+Shimizu et al.10 (see also Ref.11) a few years back. The                                 Lattice parameter, a (a.u.)
+hcp phase is the stable phase of Fe at pressures ∼ 10
+GPa and higher. Bose et al.12 reported FP-LMTO linear-        FIG. 1: FP-LMTO total energy per atom versus lattice pa-
+response results for hcp Fe. They showed, in agreement        rameter in hcp Sc for the c/a = 1.592, valid for the normal
+with earlier LAPW(linear augmented plane-wave)-based          pressure values: a = 3.31 A˚, c = 5.27 A˚[9]. For convenience in
+rigid muﬃn-tin (RMT) results of Mazin and coworkers,13        plotting, a constant value of -1529.0 Ry from the total energy
+that not only should hcp Fe be superconducting, but also      per atom has been subtracted.
+conventional (electron-phonon) s-wave superconductivity
+in hcp Fe should persist up to a much higher pressure         gies ≤ 48-70 Ry, depending on the lattice parameter, in
+than what is found in the experiments. Both ferromag-         the interstitial region. Brillouin zone (BZ) integrations
+netic and antiferromagnetic spin ﬂuctuation eﬀects were       were performed with the full-cell tetrahedron method,15
+considered in the works of Bose et al.12 and Mazin et         using 1200 k-points in the irreducible zone. The pressure
+al.13 The conclusion was that such spin ﬂuctuation ef-        and bulk modulus calculated from this energy-volume
+fects in hcp Fe could lower Tc somewhat, but could not        curve, using the generalized Birch-Murnaghan equation
+account for the rapid disappearance of Tc with increas-       of state,16,17 are shown in Table I. Note that the mini-
+ing pressure, as observed by Shimizu et al.10 Nontrivial      mum energy occurs almost exactly at the normal pressure
+diﬀerences between the electronic structures of Fe and        lattice parameter of 6.255 a.u. The calculated bulk mod-
+Sc, due in particular to the large diﬀerence in the num-      ulus of 56 GPa at this9 equilibrium lattice parameter is
+ber of d-electrons, cause signiﬁcant diﬀerences in their      somewhat higher than the experimental value, 43.5 GPa.
+elastic as well as electron-phonon scattering properties,     One interesting observation is that the lattice parameter
+which should have opposite eﬀects on the overall electron-    5.75 a.u., or the volume per atom V0 = 131 a.u., corre-
+phonon coupling constant.                                     sponds to a pressure of 22 GPa. This is the pressure at
+                                                              which the hcp Sc-I phase becomes unstable against the
+   Ormeci et al.23 have used crystalline approximants         formation of a complicated structure known as the Sc-II
+of the incommensurate structures proposed by Fujihisa         phase.3,4,5 As will be discussed later, the linear response
+et al.3 and McMahon et al.5 in studying the electronic        results show that the phonon frequencies calculated for
+structure of the Sc-II phase. The unit cells of these ap-     lattice parameter a = 5.6 a.u. are imaginary. Thus, for
+proximants contain 22 atoms for the model proposed by         the normal pressure c/a ratio, the hcp structure becomes
+Fujihisa et al.3 and 42 atoms for the model suggested by      unstable at some lattice parameter between 5.75 and 5.6
+McMahon et al..5 Because of the high computational de-        a.u. The calculated pressure at 5.6 a.u. is ∼ 30 GPa.
+mand due to the large number of atoms in the unit cells       Given the uncertainties in the pressure calculation, this
+of these approximants, we are unable to extend the lin-       result is in good agreement with the experimental obser-
+ear response calculations of phonons and electron-phonon      vation of a phase change in Sc at 22-23 GPa. Additional
+coupling to the Sc-II phase.                                  linear response calculations to better locate the phase
+                                                              change were not done.
+             II. ELECTRONIC STRUCTURE
+                                                                 The FP-LMTO DOS calculated for three lattice pa-
+   FP-LMTO results of total energy as a function of the       rameters are shown in Fig.2. Panel (a) shows the DOS
+lattice parameter in hcp Sc is shown in Fig.1. The c/a        for the experimental normal pressure lattice parameters:
+ratio was kept ﬁxed at the normal pressure value.9 As in      a = 3.31 A˚, c = 5.27 A˚.9 Panels (b) and (c) show
+the earlier calculation for hcp Fe,12 the generalized gra-    the DOSs for the lattice parameters 5.75 a.u. and 5.60
+dient approximation of Perdew and Wang (GGA1)14 for           a.u., respectively, with the same c/a ratio as in (a). For
+the exchange-correlation potential was used. The elec-        the equilibrium lattice parameters (panel (a)), the Fermi
+tronic structure was computed using a two-κ spd LMTO          level falls in a shallow valley between two small peaks.
+basis for the valence band. 3s- and 3p-semi-core states
+were treated as valence states in separate energy win-
+dows. The charge densities and potentials were repre-
+sented by spherical harmonics with l ≤ 6 inside the non-
+overlapping MT spheres and by plane waves with ener-
+                                                                                                                                            3
+
+TABLE I: FP-LMTO results for hcp Sc for the normal pres-                           TABLE II: LMTO-ASA results for (approximate) s-, p-, d-
+sure c/a ratio, 1.592. a= lattice parameter (a.u.), V0 = vol-
+ume per atom (a.u.), P =pressure (GPa), B=Bulk Modulus                             and f -orbital resolved charges: ns, np, nd, nf and the corre-
+(GPa), N (0)= DOS at the Fermi level (states/(Ry cell)).
+                                                                                   sponding Fermi level DOSs:  Ns, Np, Nd, Nf .     n′   =  , nd +nf
+
+                                                                                                                                            ns +np
+
+                                                                                   n−  = (nd + nf ) − (ns + np) and N ′  =  Nd +Nf  are presented to
+                                                                                                                            Ns +Np
+
+a                      6.255    6.15    6.05             5.95    5.85    5.75      reveal the trends in the inter-orbital charge transfer and the
+V0                     168.72  160.37  152.67           145.22  138.02  131.07
+P                      -0.084                           11.22   16.20   22.28      redistribution of the orbital-resolved DOSs as a function of
+B                               3.21    6.85
+N (0)                   56.2    67.2    79.6             93.0     108    125       volume per atom. N (0) is the total DOS at the Fermi level.
+                       58.06   54.82   51.59            49.07   47.27   47.71
+                                                                                   All DOS are in units of states/(Ry cell). a= lattice parameter
+
+                                                                                   (a.u.)
+
+                  3 (a) experimental lattice parameter                             a          6.255    6.15    6.05       5.95       5.85    5.75
+                                                                                   ns         0.730   0.720   0.714      0.704      0.695   0.685
+                  2                                                                np         0.690   0.677   0.662      0.645      0.626   0.603
+                                                                                   nd         1.545   1.567   1.589      1.614      1.641   1.672
+                  1                                                                nf         0.031   0.033   0.034      0.036      0.037   0.039
+                                                                                   n−         0.156   0.203   0.247      0.301      0.357   0.423
+States/(eV atom)  0-6          -4      -2               0       2               4  n′          1.11    1.15    1.18       1.22       1.27    1.33
+                                                                                   N (0)      57.89   54.78   53.03      51.60      50.16   53.34
+                  3 (b) a= 5.75 a.u.                                               Ns (0)     0.941   0.946   0.964      0.982      1.020   1.226
+                                                                                   Np (0)     14.836  13.729  12.889     12.257     11.914  13.558
+                  2                                                                Nd (0)     40.789  39.110  37.887     37.080     36.444  37.222
+                                                                                   Nf (0)     1.326   1.301   1.287      1.280      1.280   1.335
+                  1                                                                N′          2.67    2.75    2.83       2.90       2.92    2.60
+
+                  0-6          -4      -2               0       2               4
+
+                  3 (c) a= 5.60 a.u. (unstable)
+
+                  2
+
+                  1
+
+                  0-6          -4      -2               0       2               4
+
+                                                 Energy (eV)                       charge transfer (see references in [1]). In any electronic
+
+FIG. 2: FP-LMTO DOSs for three lattice parameters of hcp                           structure calculation the numbers of s-, p- and d- elec-
+Sc: (a) Normal pressure values[9]: a = 6.255 a.u., c/a =
+1.592, (b) a = 5.75 a.u. and (c) a = 5.60a.u.; c/a ratio for (b)                   trons are essentially functions of the basis set used, if
+and (c) is the same as in (a). It appears that as the Fermi level
+moves from the shallow valley region between two small peaks                       such a division is at all possible for the method used.
+(a) to a shoulder (c), the hcp structure becomes unstable.
+                                                                                   It is easier to keep track of s → d charge transfer in
+                                                                                   LMTO-ASA (atomic sphere approximation),20 where the
+
+                                                                                   basis consists of muﬃn-tin orbitals only, rather than in
+
+                                                                                   FP-LMTO. In Table II we present the orbital- or partial
+
+                                                                                   wave channel-resolved electron numbers as a function of
+
+With increasing pressure, the bands broaden, ﬂattening                             the lattice parameter, as obtained by the LMTO-ASA
+these peaks and the valley region (panel (b)). It appears                          method.21 The results presented were obtained by using
+that as this region around the Fermi level changes to a                            the exchange correlation potential of Perdew and Wang22
+shoulder (panel (c)), the hcp phase becomes unstable.
+                                                                                   in the local density approximation. Checks for a couple
+   Hamlin and Schilling1 discuss the importance of the                             of lattice parameters using GGA114 had revealed similar
+role of s → d charge transfer in the variation of electron-
+phonon coupling and the changes in the crystal structure                           results. The decrease in ns and the increase in nd are
+under pressure. Pettifor18 has discussed the variation of                          monotonic as a function of decreasing lattice parameter.
+the d-band occupancy under pressure of 4d- transition
+metals, showing that the increase in the d-electron oc-                            In fact, charge transfer takes place from the extended s-
+cupancy of the early transition metals under pressure is
+rapid. Duthie and Pettifor19 used a s − d band model                               and p-orbitals to the less extended or localized d- and
+to discuss the correlation between the d-band occupancy
+and the crystal structures in rare earths. They showed                             f -orbitals. Of particular interest are n′ and n−, deﬁned
+that d-electron concentration nd increases under pressure                                     nd +nf
+and a sequence of crystal structure changes takes place                            as n′   =  ns +np  and n−  = (nd + nf ) − (ns + np),  quantify-
+as nd changes from 1.5 to 2.5. With increasing pres-
+sure, the volume available to the electrons outside the                            ing the transfer of electrons from the delocalized to the
+ion cores diminishes rapidly. As a result, simple metals
+like Li and Na are known to become non-free-electron-                              localized channels. At normal pressure the electrons are
+like under pressure and Cs is known to become a tran-
+sition metal as the 5d-band begins to ﬁll due to s → d                             divided almost equally between the localized and delocal-
+                                                                                   ized channel (n− = 0.15). With increasing pressure the
+
+                                                                                   electrons more and more occupy the localized orbitals.
+
+                                                                                   As the pressure increases diﬀerent partial bands
+
+                                                                                   broaden at diﬀerent rates. In Table II we also show the
+
+                                                                                   changes in partial or angular momentum-resolved DOSs
+
+                                                                                   at the Fermi level. The ratio of the localized orbital
+
+                                                                                   DOSs (Nd(0)+ Nf (0)) to the delocalized orbital DOSs
+                                                                                   (Ns(0)+Np(0)) seem to increase steadily under pressure,
+                                                                                           4
+
+except for the lowest lattice parameter shown. The de-      frequency peaks.
+crease in N ′ for the lattice parameter 5.75 a.u. could be     The Raman spectroscopy work by Olijnyk et al.27
+speciﬁc to LMTO-ASA, as the somewhat large change in
+N (0) between the lattice parameters 5.85 and 5.75 a.u.     shows a shift of the E2g frequency under pressure from
+is not observed in the FP-LMTO results (Table I).           139 cm−1 to about 150 cm−1 at 18.8 GPa. The cal-
+
+   Ormeci et al.23 have calculated the partial charges in   culated Γ-point TO mode frequency increases from 130.5
+the high pressure Sc-II phase. They use the full-potential  cm−1 at the normal pressure lattice parameter (a= 6.255
+local-orbital (FPLO) method of Koepernik and Eschrig24      a.u.) to 135.1 cm−1 at a = 5.75 a.u., i.e., the increase
+with an spd-basis. At ambient pressure, in the hcp struc-
+ture, their nl-projected charges for the 4s, 4p, and 3d     is much more subdued. In Table III we have presented
+channels are 0.70, 0.59 and 1.70, respectively. In the
+Sc-II phase at about two thirds of the ambient pressure     the calculated E2g frequency for various lattice parame-
+volume per atom, these numbers become 0.54-0.65, 0.27-      ters. Although the variation may seem non-monotonic,
+0.51, and 1.92-2.05, respectively. Their calculations also
+suggest that a complete s → d charge transfer would         the diﬀerences are very much within the error bars of the
+require pressures in excess of 240 GPa.
+                                                            calculation. What can perhaps be concluded is that there
+   III. PHONONS AND ELECTRON-PHONON
+                               COUPLING                     is no phonon-softening and most probably this frequency
+                                                            does increase by approximately 5 cm−1. This is about
+   The FP-LMTO linear response results for phonons and
+electron-phonon coupling are summarized in Table III.       45-50% of the observed shift. Note that calculations for
+The dynamical matrix was generated for 32 phonon wave
+vectors in the irreducible BZ, corresponding to a mesh      the stable hcp phase for a lattice parameter between 5.75
+of (7,7,7) reciprocal lattice divisions. The BZ sums for
+the dynamical and electron-phonon (Hopﬁeld) matrices        and 5.6 a.u. might reveal a higher shift. The discrepancy
+was done for a (28,28,28) mesh, resulting in 1200 wave
+vectors in the IBZ. These choices were based on exten-      between the calculated and the observed shift could be
+sive tests performed by Savrasov and Savrasov7,8 in their
+study of the phonons and electron-phonon coupling in        partly due to the possible variation in the c/a ratio under
+elemental metals and alloys. Phonon density of states
+F (ω), Eliashberg spectral function α2F (ω) and the func-   pressure, which has not been considered in the calcula-
+tion α2(ω) = α2F (ω)/F (ω) are shown in Fig. 3 for three    tion. Olijnyk et al.27 have analyzed the shift in the E2g
+diﬀerent lattice parameters with the c/a ratio ﬁxed at      frequency in terms of the relation
+the normal pressure value.
+                                                                         √         1/2
+   The calculated phonon frequencies appear to be in rea-            1   4 3a2C44
+sonably good agreement with the inelastic neutron scat-     µE2g  =  2π      mc         ,  (1)
+tering (INS) results.25,26 For the normal pressure lattice
+parameter (6.255 a.u.), the calculated longitudinal and     where m is the atomic mass and C44 is the elastic shear
+transverse optic (LO and TO) mode frequencies at the        modulus. They relate their result to the behavior of the
+Γ-point are 6.273 THz (209 cm−1) and 3.912 THz (130.5       shear modulus at the transition. The possible variation
+cm−1), respectively. These compare well with the inelas-    of the c/a ratio with pressure should be factored in in
+tic neutron scattering results of Wakabayashi et al.25:     this discussion. The coarse wave vector mesh used for
+6.91 and 4.04 THz for the LO and TO modes, respec-          the phonon frequency calculation prevents us from us-
+tively. The recent Raman spectroscopy study of Olijnyk      ing the slope of the phonon dispersion curves or the long
+et al.27 puts the TO mode (E2g) frequency at a somewhat     wavelength method to compute the elastic constants. Ab
+higher value of 139 cm−1. On the whole, the calculated      initio calculation of the elastic constants, including C44,
+frequencies are a bit lower than the INS results of Wak-    via long wavelength and homogeneous deformation meth-
+abayashi et al.25 These authors have analyzed the INS       ods using energy-minimized c/a ratios will be the subject
+results in terms of a sixth-neighbor modiﬁed axially sym-   of a separate publication.
+metric force constant model and produce a frequency dis-
+tribution, which reveals a maximum frequency of about          It is noteworthy that both calculation and the Raman
+7.25 THz or 241.8 cm−1, approximately 10% higher than       study show a positive shift of the E2g frequency, in con-
+the maximum calculated frequency 215 cm−1 (Table III)       trast to the behavior in Y and the regular Lanthanides,
+in this work. The shape of the frequency distribution       where a softening of the E2g mode under pressure is asso-
+agrees in general with the phonon DOS F (ω) shown in        ciated with the transition to the high-pressure Sm-type
+Fig. 3, except for the relative heights of some of the low  structure.28,29 Incidentally, in our linear response calcula-
+                                                            tion, as the lattice parameter is lowered to 5.6 a.u. where
+                                                            the instability of the hcp phase is manifest via appearance
+                                                            of some imaginary frequencies, the E2g mode frequency
+                                                            stays real and has a lower value 124 cm−1. At a lattice
+                                                            parameter of 5.2 a.u., this frequency, along with many
+                                                            others, are imaginary.
+
+                                                               Broadening of the phonon bands and the increase in
+                                                            the maximum phonon frequencies with pressure is appar-
+                                                            ent in Fig. 3. Maximum phonon frequency increases from
+                                                            215 cm−1 to 295 cm−1, as the lattice parameter changes
+                                                            from the normal pressure value to 5.75 a.u., where the
+                                                            estimated pressure (Table I) is 22-23 GPa. Note that
+                                                            with increasing pressure, initial increases in ω¯, ω˜ and ωln
+                                                            are followed by a decrease, revealing phonon softening.
+                                                                                                  5
+
+                       a=6.255 a.u.                        a=6.05 a.u               a=5.75 a.u.
+                                                                       20
+                 15              α2(ω) 15
+
+cm-1             10                      10
+
+                 5                       5                             10
+
+                 0                       0                                   0  100 200 300
+                       0 50 100 150 200 0      50 100 150 200 250 0             100 200 300
+
+States (1/cm-1)  0.1 F(ω)                0.1                             0.08
+                                                                         0.06
+                 0.05                    0.05                            0.04
+                                                                         0.02
+                 0                       0
+                       0 50 100 150 200 0                                    0
+                                         0.8   50 100 150 200 250 0
+                         α2F(ω)          0.6
+                 0.4                                                       0.8
+                                                                           0.6
+                                         0.4                               0.4
+                                                                           0.2
+                 0.2                     0.2
+
+                 0                       0                             0
+                       0 50 100 150 200 0 50 100 150 200 250 0                  100 200 300
+
+                       Frequency (cm-1)        Frequency (cm-1)                 Frequency (cm-1)
+
+FIG. 3: Phonon density of states F (ω), the Eliashberg spectral function α2F (ω) and the function α2(ω), deﬁned as the ratio
+α2F (ω)/F (ω), for three lattice parameters a = 6.255 (experimental normal pressure value), 6.05, and 5.75 a.u., with c/a ratio
+
+ﬁxed at the normal pressure value.
+
+At normal pressure, the shape of the α2F (ω) function      continues to increase.
+follows that of the phonon DOS F (ω). With increas-
+ing pressure, diﬀerences between the shape of the two         The electron-phonon coupling parameter λph is a com-
+functions appear due to increased contribution from low    bination of an electronic parameter (Hopﬁeld parame-
+frequency phonons, a consequence of phonon softening.      ter) η = I2 N (0) (N (0) being the Fermi level DOS
+There is a feed-back eﬀect: electron-phonon coupling       for one type of spin) and the mean square phonon fre-
+leads to both phonon linewidth and renormalization of      quency ω2 : λph = η/m ω2 . I2 is the Fermi surface
+the phonon frequency, and the latter, in turn, aﬀects the  average of the square of the electron-phonon matrix el-
+coupling constant. Unfortunately, the 7,7,7 division of    ement. The electronic and phonon-related parameters
+the BZ misses most of the symmetry points. However, it     act in opposite directions in aﬀecting the coupling con-
+appears that there are several regions of the wave vector  stant: λ is enhanced by having higher I2 at lower fre-
+space that show large mode coupling. Linear response       quency. As the Hopﬁeld parameter for transition metals
+calculations for the lattice parameter 5.6 a.u. show that  has often been calculated using the rigid muﬃn-tin ap-
+the phonon frequency at the wave vector closest to the     proximation of Gaspari and Gyorﬀy,31 in Table III we
+L-point for the 7,7,7 division becomes imaginary ﬁrst.     have compared the values obtained via the FP-LMTO
+For the lattice parameter 5.75 a.u., this wave vector has  linear response method (η) and those obtained by using
+a very large mode coupling constant. In Table III, it is   the RMT scheme implemented within the LMTO-ASA
+clear that general phonon softening starts as the lattice  method,32,33 known as the rigid atomic sphere (RAS)
+parameter increases beyond 6.05 a.u. (as seen from ωln)    method. The latter values, labeled as η(RM T /RAS), are
+or 5.85 a.u. (as seen from ω¯ and ω˜), while the E2g mode  in general agreement with the FP-LMTO results, but are
+continues to stiﬀen and the maximum phonon frequency       somewhat overestimated, with the level of the overesti-
+                                                           mation increasing with pressure. This is in contrast with
+                                                                                                                                                        6
+
+the results for the late transition metal hcp Fe, where                                            Here, gkij,,kν′ is the electron-phonon matrix element, with
+RAS was shown to consistently underestimate the Hop-                                               ν being the phonon polarization index and k, k′ repre-
+                                                                                                   senting electron wave vectors with band indices i, and j,
+ﬁeld parameter, with the level of the underestimation in-                                          respectively. λph(0) = λph is the electron-phonon cou-
+creasing with pressure.12 The values of the Fermi surface                                          pling parameter, the values of which are given in Table
+averaged electron-phonon matrix element I2 , obtained                                              III. The contribution connected with spin ﬂuctuation can
+from the linear response calculation and by using the                                              be written as
+
+RMT approximation, are also shown in Table III.
+
+ IV. SUPERCONDUCTIVITY IN HCP Sc,                                                                  λsf (n − n′) =         ∞       dω2P (ω)       ,      (7)
+BASED PURELY ON ELECTRON-PHONON                                                                                          0   (ωn − ωn′ )2 + ω2
+
+                           COUPLING                                                                where P (ω) is the spectral function of spin ﬂuctuations,
+                                                                                                   related to the imaginary part of the transversal spin sus-
+   Since ab initio results of the electron-phonon coupling                                         ceptibility χ±(ω) as
+in hcp Sc have not been reported in the literature, it
+would be of some interest to derive values of the su-                                              P  (ω)  =  −  1   |gkk′ |2 Imχ±(k, k′, ω)     FS  ,
+perconducting transition temperature Tc based on the                                                             π
+present calculations. Indeed, the values of the coupling
+constant λph listed in Table III suggest that Tc could                                             where F S denotes Fermi surface average. λsf = λsf (0)
+be high enough to be experimentally observable. The                                                is often referred to as the electron-paramagnon coupling
+superconducting transition temperature can be obtained
+by solving the linearized isotropic Eliashberg equation at                                         constant.
+Tc(see, e.g., Ref.30):                                                                                In Eq.(4), µ∗(ωc) is the screened Coulomb interaction,
+
+                              πTc                                                                             µ∗(ωc)  =  1  +  µ   µ    /ωc)  ,         (8)
+                              ωn                                                                                                  ln(E
+         Z (iωn )  =  1  +              W+(n − n′)sign(ωn′ )(, 2)
+
+                                   n′                                                              with µ = N (0)Vc F S being the Fermi surface average
+                                                                                                   of the Coulomb interaction. E is a characteristic electron
+Z (iωn )∆(iωn )    =  πTc     |ωn |≪ωc  W−(n  −  n′)  ∆(iωn′    )  ,
+                                   n′                   |ωn′ |                                     energy, usually chosen as the Fermi energy EF and ωc is a
+                                                                                                   cut-oﬀ frequency, usually chosen ten times the maximum
+where ωn = πTc(2n+1) is a Matsubara frequency, ∆(iωn)                                              phonon frequency: ωc ≃ 10ωpmhax.
+is an order parameter and Z(iωn) is a renormalization
+factor. Interactions W+ and W− contain a phonon con-                                                  For a start, we ignore all consideration of spin ﬂuc-
+tribution λph, a contribution from spin ﬂuctuations λsf ,
+and eﬀects of scattering from impurities. With scattering                                          tuations and impurity scattering and solve the Eliash-
+arantdesnoγnmm=agn2eτ1m ticaimndpuγrnimtie=s, r2eτs1npmectrievfeerlyr,intgheteoxmpraegssnieotnics
+                                                                                                   berg equation with only the electron-phonon term and
+for the interaction terms are :                                                                    the Coulomb pseudopotential µ∗(ωc). As is often done,
+                                                                                                   we assume that a reasonable value for µ is ∼ 1.0, and
+     W+(n − n′) = λph(n − n′) + λsf (n − n′)                                                       from the calculated Fermi energies EF we obtain µ∗ for
+                                                                                                   all volumes, with the cut-oﬀ frequency ωc assumed to be
+                         +δnn′ (γnm + γm),                            (3)                          ten times the maximum phonon frequency. The values
+
+and                                                                                                are listed in Table III. As shown in this table, the super-
+
+     W−(n − n′) = λph(n − n′) − λsf (n − n′)                                                       conducting transition temperature in hcp Sc based on
+                          −µ∗(ωc) + δnn′ (γnm − γm). (4)
+                                                                                                   consideration of electron-phonon coupling alone can be
+The phonon contribution is given by
+                                                                                                   signiﬁcant, increasing monotonically with pressure from
+         λph(n − n′) = 2       ∞ dωωα2(ω)F (ω)                        (5)
+                              0 (ωn − ωn′ )2 + ω2 ,                                                2K to ∼ 10K until the instability of the hcp phase sets
+
+                                                                                                   in. Interestingly, the Tc values reported by Hamlin and
+                                                                                                   Schilling1 for the high pressure Sc-II phase fall in this
+
+                                                                                                   range, while no superconducting behavior has been ob-
+
+                                                                                                   served in the hcp phase.
+
+                                                                                                      For pedagogical reasons, we have listed in TableIII the
+                                                                                                   values of Tc obtained by using the Allen-Dynes form30 of
+                                                                                                   the McMillan expression:
+
+where α2(ω)F (ω) is the Eliashberg spectral function, de-                                          Tc  =   ωln  exp   −  λ   1.04 (1 + λph)          ,  (9)
+ﬁned as                                                                                                    1.2              − µ∗(1 + 0.62λph)
+
+α2F (ω)  =    1               |gkij,,kν′ |2δ(εki )δ(εkj ′ )δ(ω − ωkν−k′ ) .                        where ωln is the logarithmically averaged phonon
+            N (0)                                                                                  frequency,30 obtained from our linear response calcula-
+                   k,k′,ij,ν
+                                                                                                   tions and reported in Table III. Note that the Coulomb
+                                                                      (6)                          pseudopotential µ∗ appearing in the McMillan equation
+                                                                                            7
+
+TABLE III: Hopﬁeld parameters from the linear response calculation η and the rigid muﬃn-tin (atomic sphere) approximation η
+(RMT/RAS), the Fermi surface average of the square of the electron-phonon matrix element I2 and I2 (RMT/RAS) from the
+
+linear response and the RMT results, respectively; logarithmic average phonon frequencies ωln; maximum phonon frequencies
+ωm, average phonon frequencies ω¯ = ω and ω˜ = ω2 1/2; the Γ-point E2g mode frequency ω(E2g); Coulomb pseudopotentials
+for Eliashberg equation (µ∗(ωc)) and McMillan formula (µl∗n); electron-phonon coupling parameters λph; calculated critical
+temperatures (Tccalc) from the solution of the Eliashberg equations (2) and the critical temperatures from the McMillan formula
+(9)(TcMcM) for various lattice parameters a.
+
+a                               aB  6.255                    6.15    6.05    5.85    5.75
+η                     Ry/bohr2      0.0381                  0.0433  0.0519  0.0666  0.0771
+ I2                 (Ry/bohr)2      0.0026                  0.0031  0.0040  0.0056  0.0065
+η (RMT/RAS)           Ry/bohr2      0.0439                  0.0509  0.0591  0.0826  0.1077
+ I2 (RMT/RAS)       (Ry/bohr)2      0.0030                  0.0037  0.0045  0.0065  0.0081
+                                    160.4                   195.0   198.1   195.4   177.7
+ωln                              K  111.5                   135.5   137.7   135.8   123.5
+                            cm−1    214.5                   230.4   246.9   279.6   294.7
+ωm                          cm−1    130.5                   134.95  133.4   136.14  135.0
+ω (E2g )                    cm−1    122.4                   142.3   145.1   145.6   135.3
+ω¯                          cm−1    131.5                   148.6   152.3   155.8   148.1
+ω˜                          cm−1    0.253                   0.256   0.260   0.266   0.269
+µ∗(ωc)                              0.160                   0.161   0.163   0.165   0.166
+µ∗(ωln )                         K  0.639                   0.576   0.657   0.807   1.033
+λph                              K
+TcMcM                                2.34                    1.66    2.96    5.66    9.18
+Tccalc                               2.17                    1.75    3.13    6.00    9.64
+
+above is related to µ∗(ωc) appearing in the Eliashberg      in hcp Sc as well is highly probable and has been dis-
+equation via30                                              cussed in the literature on a few occasions.36,37 Jensen
+                                                            and Maita38 argue that the spin ﬂuctuation eﬀects are
+µ∗  =  µ∗ (ωln)  =             µ∗(ωc)        .  (10)        responsible for the rapid depression of Tc in the Zr-Sc
+                    (1 + µ∗(ωc) ln (ωc/ωm))                 alloy system, as Sc is added. Ab initio calculations of the
+                                                            spin susceptibility of hcp Sc at equilibrium volume based
+Our results are computed with ωc/ωm = 10. The Tc            on the spin-density functional theory by MacDonald et
+values obtained by solving the Eliashberg equations and     al.39 yield an exchange-correlation enhancement factor of
+                                                            4.03 over the band value and 17.2 over the free-electron
+those from the McMillan expression Eq.(9) show excellent    value at the same average electron density as in hcp Sc.
+agreement. Earlier, calculations for hcp Fe12 had shown     An earlier calculation by Das37 puts the Stoner enhance-
+                                                            ment factor at 4.6 (over the band value). The value cal-
+the McMillan expression to overestimate Tc with respect     culated for fcc Pd by Janak40 is 4.46. This shows that
+to the results from the Eliashberg equation, while for fcc  the spin ﬂuctuations in hcp Sc should be as strong as in
+and bct boron an opposite trend was revealed.34             fcc Pd.
+
+          V. SPIN FLUCTUATION EFFECTS                          For a proper theoretical treatment of the spin ﬂuctu-
+                                                            ation eﬀects one needs to compute λsf (n − n′) from the
+                 A. hcp Sc at normal pressure               spin susceptibility function given by Eq.(7). However, it
+                                                            is important to note that such treatments tacitly assume
+   Faced with the results of the previous section, one      a Migdal-like theorem being applicable to spin ﬂuctua-
+needs to produce convincing arguments as to why hcp         tions. The Eliashberg equations (Eq.(2)) are based on
+Sc is not superconducting despite suﬃciently strong         the assumption that the maximum or the cut-oﬀ energy
+electron-phonon coupling. A mechanism that is known         of spin ﬂuctuation is much smaller than the characteristic
+to cause suppression of superconductivity is spin ﬂuctu-    electronic energy, e.g. the Fermi level. A somewhat qual-
+ations, which is often quoted as the reason why fcc Pd is   itative treatment of spin ﬂuctuations can be based on es-
+not superconducting.35 It is argued that the high value of  timating λsf = λsf (0) from experiments. Both electron-
+N (0) in fcc Pd leads to considerable Stoner enhancement    phonon and the electron-paramagnon interactions con-
+of paramagnetic spin susceptibility, making it a border-    tribute to the electronic speciﬁc heat. In an independent
+line ferromagnetic material, and spin ﬂuctuations tending   one-electron picture this is interpreted as the electronic
+to ferromagnetic alignment of spins lead to the breaking    mass enhancement or equivalently, enhancement of the
+of the Cooper pairs. That such a mechanism is operative
+                                                                         8
+
+density of states over the bare value N (0). The latter is                  Based on the analysis of high and low temperature
+the value given by calculations, where these interactions                speciﬁc heats, Knapp and Jones46 also suggested that
+are not included in the one-electron Hamiltonian. Thus,                  for Pd λph = 0.7. The electronic speciﬁc heat constant
+a reliable estimate of the electron-paramagnon coupling                  γ for Pd is only slightly lower than that in hcp Sc,41,46
+constant λsf can be obtained from the measured value of                  lying between 10.0 and 9.2 mJ/mole K2. The calculated
+the temperature co-eﬃcient of the electronic speciﬁc heat                bare band density of states N (0) for fcc Pd is about 1.3
+γ, and the calculated values of the bare electron density                states/(eV atom spin), giving λeff in the range 0.66 and
+of states and the electron-phonon coupling constant λph:                 0.5. An analysis by Savrasov and Savrasov8 puts the
+                                                                         value at 0.69. The value λph = 0.7 suggested by Knapp
+                      γ    =  π2  kB2  N  ∗  (0)                  (11)   and Jones would leave no room for spin ﬂuctuation eﬀects
+                              3                                          in Pd, and would render Pd superconducting. The FP-
+                   N ∗(0) = N (0)(1 + λeff )                             LMTO linear response calculation for fcc Pd by Savrasov
+                                                                  (12)   and Savrasov8 yields λph = 0.35, giving λsf in the range
+                                                                         0.3-0.15. These values of λph and λsf can adequately
+                   λeff = λph + λsf .                             (13)   explain the nonexistence of superconductivity in fcc Pd.
+                                                                         We have repeated the linear response calculation for fcc
+Here, γ and N (0) refer to the values per atom. The                      Pd and obtain a value of λph = 0.37, in close agreement
+                                                                         with the result of Savrasov and Savrasov.8 Note that the
+Coulomb interactions are included in an average sense                    calculation by Pinski and Butler47 based on the RMT ap-
+                                                                         proximation yields λph = 0.41 for fcc Pd, in reasonable
+in the density functional calculations of N (0), and have                agreement with the FP-LMTO linear response results.
+                                                                         To summarize, our linear response calculations and elec-
+therefore been left out of Eq. (12).                                     tronic speciﬁc heat analysis show that in both hcp Sc
+                                                                         and fcc Pd the values of electron-phonon and electron-
+   Among all the elemental metals, excluding the rare-                   paramagnon coupling constants are comparable, with the
+                                                                         latter being slightly lower. This is qualitatively diﬀerent
+earths, Sc has the largest electronic speciﬁc heat con-                  from the previous results of Knapp and Jones,46 which
+stant γ, followed by Y and Pd.41 The reported experi-                    would suggest that in Sc λph is signiﬁcantly lower than
+                                                                         λsf , and vice versa for fcc Pd. Note that according to
+mental values at normal pressure are 10.9-10.33 mJ/mole                  our results both λph and λsf are larger in hcp Sc than
+K2.26,38,41,42,43,44 Considering the latest and the most                 the corresponding quantities in fcc Pd.
+conservative value of γ =10.33 mJ/mole K2,26,42 we get
+N ∗(0)= 2.2 states/(eV atom spin). With the calcu-                          While the nature of spin ﬂuctuations in fcc Pd is ac-
+                                                                         cepted to be ferromagnetic, that in hcp Sc could be an-
+lated value of 1.067 states/(eV atom spin), we get λeff                  tiferromagnetic. The dynamic susceptibility χ(q, ω) in
+= 1.063. The calculated value of λph = 0.639 then                        Pd has a peak at q = 0, whereas χ(q, ω) in hcp Sc is
+yields λsf =0.422. Eﬀects of spin ﬂuctuations on Tc                      expected to have a peak at some ﬁnite wave vector Q.
+can be incorporated by a simple rescaling of λph and                     First-principles calculation of χ(q) including spin-orbit
+the Coulomb pseudopotential µ∗: λph → λph/(1 + λsf ),                    coupling and all other relativistic eﬀects by Thakor et
+µ∗ → (µ∗ + λsf )/(1 + λsf ).45 An extension of the McMil-                al.48 yields a peak at the wave vector q = (0, 0.0.57)π/c),
+lan formula13 that is often used to incorporate the spin                 consistent with a Fermi surface nesting vector. Earlier
+                                                                         calculations produce a peak along the same direction
+ﬂuctuation eﬀects is                                                     but at diﬀerent values49,50 of q. Capellmann36 has dis-
+                                                                         cussed the eﬀect of incipient antiferromagnetism in Sc
+Tc  =  ωlpnh  exp  −  λph  −    1.04(1 +     λph + λsf )  +  λsf  )]  .  and shown that the antiferromagnetic spin ﬂuctuations
+       1.2                    λsf − µ∗[1     + 0.62(λph                  should lead to a repulsive electron-electron interaction,
+                                                                         resulting in suppression of superconductivity. The mod-
+                                                                  (14)   iﬁed McMillan formula (Eq.(14)) has been used to es-
+                                                                         timate Tc for both ferromagnetic and antiferromagnetic
+This formula is meaningful as long as λsf is suﬃciently                  spin ﬂuctuations.12,13
+less than λph, so that the denominator in the argument
+of the exponential in Eq. (14) stays positive and not                      B. Superconductivity in hcp Sc at high pressure
+                                                                            immediately before the transition to Sc-II phase
+close to zero. For the above values of λph, λsf and the
+Coulomb pseudopotential µ∗=0.16 (see Table III), this                       Our linear response calculation yields a high value
+                                                                         λph ∼ 1.0 of the electron-phonon coupling constant at
+condition breaks down. In fact, for comparable values                    high pressure hcp phase prior to the transition to the
+                                                                         complex Sc-II structure. It is natural to ask whether
+of λph and λsf , the Kernel of the Eliashberg equation
+(Eq. (2)) W−(n−n′), given by Eq.(4), becomes negative,
+allowing no solution for Tc. It should be emphasized
+that the McMillan-type formulas in the presence of spin
+
+ﬂuctuations are good for rough ball-park estimates of Tc
+only.
+
+   Note that our calculated value of λph = 0.639 for nor-
+mal pressure hcp Sc is signiﬁcantly higher than the value
+
+λph = 0.3 that has been suggested by Knapp and Jones,46
+based on a comparison of the high and low temperature
+
+electronic speciﬁc heats. A value of λph = 0.3 would sug-
+gest λsf = 0.76, more than twice larger than λph. Our
+
+results suggest that λsf < λph, but their values are close.
+This leads to the possibility that if spin ﬂuctuations can
+
+be suppressed via application of pressure, superconduc-
+
+tivity can indeed appear.
+                                                                                                     9
+
+spin ﬂuctuations should be able to suppress supercon-         VI. COMPARISON BETWEEN HCP Sc AND
+ductivity despite such strong electron-phonon coupling.                                      HCP Fe
+Since speciﬁc heat data are not available for such high
+pressures, a reliable estimate of λsf is diﬃcult. However,       The bulk moduli of all transition metals are known to
+a reasonable step might be to scale the ambient pres-         increase (at least initially) as a function of band ﬁlling,51
+sure λsf according to the density of states N (0) at high     and the bulk moduli of the late transition metals are in
+pressure shown in Table I. This gives λsf = 0.346 for the     general higher than those of the early ones. The bulk
+smallest volume or the highest pressure calculation. With     modulus of Fe is thus expected to be larger than that
+λph = 1.0, λsf = 0.346, µ∗ = 0.166, and ωln = 177.7K,         of Sc, a consequence of Fe having more d-electrons. The
+as shown in Table III, and using Eq.(14), we get Tc =         calculations of Bose et al.12 for the hcp phase of Fe show
+0.14 K. As pointed out earlier, at comparable values of       values in the range of 300 GPa to 970 GPa, corresponding
+λph and λsf , Eq.(14) may not be reliable, and one needs      to volumes per atom for which the calculated Tc is above
+to solve the Eliashberg equation. However, our estimate       zero (the theoretical superconducting phase). These val-
+of Tc = .14K indicates that there is a possibility of hcp     ues are 4-5 times higher than the bulk modulus values
+Sc turning superconducting just before the onset of the       of Sc shown in Table I. Accordingly, the average phonon
+high pressure Sc-II phase. This is indeed what has been       frequency in hcp Fe is about four times higher than in
+reported by Wittig et al..2 Note that such a conclusion       Sc. Because of a much larger number of d-electrons in
+would not be tenable for smaller values of λph, as the        hcp Fe (6.5 on average) than Sc (1.6 on average), the
+results of Knapp and Jones46 would suggest.                   electron-phonon matrix element I2 in Fe is also much
+                                                              larger. As a result, despite the lower value of N (0), the
+   The use of energy-optimized c/a ratio at higher than       Hopﬁeld parameter η = N (0) I2 in hcp Fe turns out
+ambient pressures may change the calculated values of         to be more than double that in Sc (compare Table III
+λph somewhat, but such small changes are not expected         with TABLE II of Ref. [12]). However, the dominating
+to inﬂuence our results qualitatively and will not aﬀect      eﬀect turns out to be the lower phonon frequencies in Sc,
+the nature of the conclusions.                                leading to higher values of λph.
+
+            C. Superconductivity in Sc-II phase                  Spin ﬂuctuations, most probably of an antiferromag-
+                                                              netic nature,12,13 are believed to be present in the high
+   Spin ﬂuctuations are expected to be signiﬁcantly re-       pressure hcp phase of Fe. Because the density of states
+duced in the Sc-II phase. According to the calculations       N (0) in hcp Fe is about half that in hcp Sc, spin ﬂuc-
+of Ormeci et al.,23 the density of states at the Fermi        tuations in hcp Fe should be much weaker. There is no
+level N (0) in the Sc-II structure should be about half the   speciﬁc heat data available for hcp Fe, the stable phase
+value in the ambient pressure hcp Sc. This suggests that      of Fe at pressures of ∼10 GPa and higher. As a result,
+λsf should be reduced to a value of 0.2 or less. Reason-      an experimental estimate of λsf in hcp Fe is not avail-
+able choices of ωln in the Sc-II phase at pressures ∼30       able. Some theoretical estimates were provided in Refs.
+GPa (see Table III) and µ∗ should be 210.0 K and 0.166,       [12,13].
+respectively. A value of λph=0.95 in Eq.(14) would yield
+a Tc=1.4 K. Reducing the value of λsf to 0.1 would result        For a crude estimate of the ratio between the values
+in a Tc of 4.5 K. These numbers suggest that supercon-        of λph for hcp Fe and Sc, we can assume the Hopﬁeld
+ductivity in the Sc-II phase can be explained based on        parameter η to be simply proportional to the fractional d-
+the quantities calculated for the high pressure hcp Sc and    DOS, Nd(0)/N (0). For an estimate of m ω2 , we can use
+reasonable estimates of the reduction in the spin ﬂuctu-      the result proposed by Moruzzi, Janak and Schwarz,52
+ation eﬀects that is expected as a result of the change in    relating the Debye temperature ΘD to the bulk modulus,
+the density of states. Note that phonon softening causes      atomic mass and the average Wigner-Seitz radius:
+λph to increase in the hcp phase immediately before the
+transition to the Sc-II structure. At the start of the Sc-II  ΘD = 41.63  s0B  ,  (15)
+phase the value of λph should be somewhat less than the                    m
+value 1.033 shown in Table III, hence the choice 0.95. It
+should be noted that although the density of states N (0)     where s0 is the average Wigner-Seitz radius in a.u. and
+decreases with increasing pressure, there is a rapid in-      B is the bulk modulus in kbar. This result suggests that
+crease in the electron-phonon matrix element I2 with          m ω2 ∝ s0B. Using B values from Table I and TABLE
+decreasing volume (see Table IV). A high value of λph         I of [12], the DOS values from Table II, s0 computed
+in the Sc-II phase is thus possible despite the reduced
+value of N (0). Chances are that at the start of the Sc-      from a = 4.6 a.u, c/a = 8/3 for Fe and a = 6.255
+II phase both λph and λsf are somewhat less than the          a.u., c/a = 1.592 for Sc, we get λF e/λSc = 0.45. This
+values suggested here.                                        compares favorably with the value 0.66, according to the
+                                                              computed linear response values (Table III and TABLE
+                                                              II of [12]). We have used Nd(0) = 34.55 states/(Ry cell)
+                                                              and N (0) = 40.79 states/(Ry cell) (TABLE I of [12])
+                                                              for Fe. The proportionality of η to fractional d-DOS,
+                                                              Nd(0)/N (0), can be somewhat justiﬁed on the basis of
+                                                               10
+
+the RMT result of Gaspari and Gyorﬀy31:                        vector mesh. The estimated pressure, based on the lin-
+                                                               ear response results, for the instability to appear is 23-
+η = 2N (0)     (l  +   1)Ml2,l+1    fl  1   fl+1   ,  (16)     30 GPa. This pressure range, which can certainly be
+                                  2l +     2l + 3              narrowed with additional calculations, agrees with the
+            l                                                  experimental observations. The Γ-point E2g frequency
+                                                               shows a modest increase with pressure, in qualitative
+where N (0) is the Fermi level DOS per atom per spin           agreement with the Raman work by Olijnyk et al.27
+and fl is a relative partial state density,                    Energy-optimized choice of the c/a ratio for each volume
+                                                               per atom may lead to a better agreement.
+                   fl  =  Nl (0)  .                   (17)
+                          N (0)                                   The electron-phonon coupling constant λph is found to
+                                                               increase steadily with pressure in the hcp phase, until the
+Ml,l+1 is the electron-phonon matrix element obtained          pressure reaches a value where the hcp phase becomes un-
+from the gradient of the potential and the radial solu-        stable. An estimate of the electron-paramagnon coupling
+tions Rl and Rl+1 of the Schr¨odinger equation evaluated       constant based on the measured temperature coeﬃcient
+at the Fermi energy. Neglecting the matrix elements and        of the electronic speciﬁc heat, calculated band density of
+                                                               states and λph suggests that the spin ﬂuctuations at nor-
+all partial DOSs other than Nd(0) amounts to the result        mal pressure should be strong enough to suppress super-
+η ∝ Nd(0)/N (0). Of course, this provides a very crude         conductivity completely. At the highest pressures where
+estimate and can only be relied on in deciding whether λ       the hcp phase is still stable, the increase in λph and a de-
+for one material is greater or lower than for the other and    crease in λsf in proportion to the calculated band density
+                                                               of states suggest the possibility of a very low Tc super-
+no quantitative reliability can be guaranteed. In fact, in     conductivity, as noted by Wittig et al.2 A comparison
+getting the estimate λph,F e/λph,Sc = 0.45 we have ig-         of the band densities of states in the hcp and the Sc-II
+nored the possible diﬀerences in the p- and f - DOSs of        phases shows that the spin ﬂuctuation eﬀects in the Sc-II
+the two solids. Consideration of these diﬀerences would        phase should be reduced by a factor of two or more. It is
+                                                               argued that this suppression of spin ﬂuctuation combined
+lead to an inferior quantitative agreement. Also, the ra-      with electron-phonon coupling constants of a magnitude
+tio m ω2 for Fe to Sc for the volumes considered is 2.35       similar to that calculated for the high pressure hcp phase
+                                                               can indeed account for the observed superconductivity in
+according to Eq.(15), while the value from the linear re-      the Sc-II phase.
+sponse calculation is 3.5.
+                                                                  ACKNOWLEDGMENTS
+                          VII. SUMMARY
+                                                                  This work was supported by a grant from the Natural
+   FP-LMTO linear response calculations for the hcp            Sciences and Engineering Research Council of Canada.
+phase of Sc, based on a ﬁxed c/a ratio of 1.592, shows         The author acknowledges helpful discussions with B.
+a monotonic increase in electron-phonon coupling with          Mitrovi´c, J. Kortus and O. Jepsen.
+pressure. Calculated phonon frequencies for the equilib-
+rium lattice parameter are 6-10% lower than those ob-
+tained via INS experiments.25 The agreement can per-
+haps be improved with calculations done on a ﬁner wave
+
+ 1 J.J. Hamlin and J.S. Schilling, Phys. Rev. B76, 012505         (2001); see also S.S. Saxena and P.B. Littlewood, Nature
+
+   (2007); see also cond-mat/0703730v1, 27 Mar 2007.              (London), 412, 290 (2001).
+ 2 J. Wittig, C. Probst, F.A. Schmidt, and K.A. Gschneidner,   11 D. Jaccard, A. T. Holmes, G. Behr, Y. Inada, and Y.
+
+   Jr., Phys. Rev. Lett.42, 469 (1979).                           Onuki, Physics Letters A, Vol. 299 (2-3) (2002) pp. 282-286
+ 3 H. Fujihisa et al. , Phys. Rev. B 72, 132103 (2005).
+ 4 Y. Akahama, H. Fujihisa, and H. Kawamura, Phys. Rev.           cond-mat/0205557.
+                                                               12 S.K. Bose, O.V. Dolgov, J. Kortus, O. Jepsen, and O.K.
+   Lett.94, 195503 (2005).
+ 5 M.I. McMahon, L.F. Lundegaard, C. Hejny, S. Falconi, and       Andersen, Phys. Rev. B67, 214518 (2003).
+                                                               13 I.I. Mazin, D.A. Papaconstantopoulos, M.J. Mehl, Phys.
+   R.J. Nelmes, Phys. Rev. B73,134102 (2006).
+ 6 S.Yu. Savrasov, and D.Yu. Savrasov, Phys. Rev. B46,            Rev. B65, 100511 (R) (2002).
+                                                               14 J.P. Perdew, J.A. Chevary, S.H. Vosko, K.A. Jackson,
+   12181 (1992).
+ 7 S.Y. Savrasov, Phys. Rev. B54, 16470 (1996).                   M.R. Pederson, D.J. Singh, and C. Fiolhais, Phys. Rev.
+ 8 S.Y. Savrasov, and D.Y. Savrasov, Phys. Rev. B54, 16487
+                                                                  B46, 6671 (1992).
+   (1996).                                                     15 P.E. Blo¨chl et al., Phys. Rev. B49, 16223 (1994).
+ 9 C. Kittel, Introduction to Solid State Physics, John Wiley  16 F. Birch, J. Geophys. Res. 457, 227 (1952).
+                                                               17 F.D. Murnaghan, Proc. Nat. Acad. Sci. USA 30, 244
+   1996, 7th Edn., p. 23.
+10 K. Shimizu, T. Kimura, S. Furomoto, K. Takeda, K. Kon-         (1944).
+                                                               18 D.G. Pettifor, J. Phys. F 7, 623 (1977).
+   tani, Y. Onuki, and K. Amaya, Nature (London), 412, 316     19 J.C.Duthie and D.G. Pettifor, Phys. Rev. Lett.38, 564
+                                                                 11
+
+   (1977).                                                       33 H.L. Skriver and I. Mertig, Phys. Rev. B32, 4431 (1985).
+20 O.K. Andersen, O. Jepsen, and D. Glo¨tzel, in Highlights
+                                                                    , 5325 (1993).
+   of Condensed Matter Theory, edited by F. Bassani et al.       34 S.K. Bose, T. Kato, and O. Jepsen, Phys. Rev. B72,
+
+   (North-Holland, Amsterdam, 1985), p.59.                          184509 (2005).
+21 Inside each muﬃn-tin (atomic) sphere there is a small con-    35 N.F. Berk and J.R. Schrieﬀer, Phys. Rev. Lett.17, 433
+
+   tribution from the tails of orbitals centered about the sur-     (1966).
+                                                                 36 H. Capellmann, J. Low Temp. Phys. 3, 189 (1970).
+   rounding spheres. This may cause a disproportionate in-       37 S.G. Das, Phys. Rev. B13, 3978 (1976).
+                                                                 38 M.A.Jensen and J.P. Maita, Phys. Rev.149, 409 (1966).
+   crease in the high l-components, particularly l = 3. The      39 A.H. MacDonald, K.L. Liu, and S.H. Vosko, Phys. Rev.
+
+   increase in the nf with decreasing volume may be partly          B16, 777 (1977).
+   due to this eﬀect.                                            40 J.F. Janak, Phys. Rev. B16, 255 (1977).
+22 J.P. Perdew and Y. Wang, Phys. Rev. B45, 13244 (1992).        41 See Table XIII and Fig. 18 of K.A. Gschneidner, Jr., Solid
+23 A. Ormeci, K. Koepernik, and H. Rosner, Phys. Rev. B74,
+                                                                    State Physics 16, edited by F. Seitz and D. Turnbull, Aca-
+   104119 (2006).
+24 K. Koepernik and H. Eschrig, Phys. Rev. B59, 1743                demic Press 1964, pp. 275-426.
+                                                                 42 T.-W.E. Tsang, K.A. Gschneidner, Jr., F.A. Schmidt, and
+   (1999).
+25 N. Wakabayashi, S.K. Sinha, and F.H. Spedding, Phys.             D.K. Thome, Phys. Rev. B31, 235 (1985).
+                                                                 43 H.E. Flotow and D.W. Osborne, Phys. Rev. 160, 467
+   Rev. B4, 2398 (1971), see also Lando¨ldt-Bernstein New
+                                                                    (1967).
+   Series 111/13a, Metals: Phonon and Electron States and        44 C.A. Swenson, Phys. Rev. B53, 3669 (1996).
+                                                                 45 J.M. Daams, B. Mitrovi´c, and J.P. Carbotte, Phys. Rev.
+   Fermi Surfaces, eds. P.H. Dederichs, H. Schober, and
+                                                                    Lett. 46, 65 (1981).
+   D.J. Sellmyer, series eds. K.-H. Hellwege and J.L. Olsen,     46 G.S. Knapp and R.W. Jones, Phys. Rev. B6, 1761 (1972).
+                                                                 47 F.J. Pinski and W.H. Butler, Phys. Rev. B19, 6010 (1979).
+   Springer-Verlag, 1981.                                        48 V. Thakor, J.B. Staunton, J. Poulter, S. Ostanin, B. Gi-
+26 J. Pleschiutschnig, O. Blaschko, and W. Reichardt, Phys.
+                                                                    natempo, and E. Bruno, Phys. Rev. B68, 134412 (2003).
+   Rev. B44, 6794 (1991).                                        49 J. Rath and A.J. Freeman, Phys. Rev. B11, 2109 (1975).
+27 H. Olijnyk, S. Nakamo, A.P. Jephcoat and K. Takemura,         50 S. Liu, R.P. Gupta, and S.K. Sinha, Phys. Rev. B4, 1100
+
+   J. Phys. : Condens. Matter 18, 10971 (2006).                     (1971).
+28 H. Olijnyk, High Pressure Res. 13, 99 (1994).                 51 see, for example, page 148, Fig. 25 of Ref. [20].
+29 H. Olijnyk, J. Phys. : Condens. Matter 17, 43 (2005).         52 V.L. Moruzzi, J.F. Janak, and K. Schwartz, Phys. Rev. B
+30 P.B. Allen and B. Mitrovi´c, Solid State Physics, edited by
+                                                                    37, 790 (1988).
+   H. Ehrenreich, F. Seitz, and D. Turnbull (Academic, New
+
+   York 1982), vol. 37, p.1.
+31 G.D. Gaspari and B.L. Gyorﬀy, Phys. Rev. Lett. 28, 801
+
+   (1972).
+32 D. Glo¨tzel, D. Rainer, and H.R. Schober, Z. Phys. B 35,
+
+   317 (1979).
+

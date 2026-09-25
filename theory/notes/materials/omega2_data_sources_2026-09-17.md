@@ -118,7 +118,26 @@ Table I (p.3) 逐字数据：
 | YH9 | DFPT | 3.038 | 0.958 | 0.409 | 1308 | 252 (236) |
 | YH9 | SPIA | 1.749 | 0.944 | 0.460 | 1905 | 240 |
 
-（μ*=0.11；括号内 Tc 为用重整化 μ*(N) 后的值；DFPT/SSCHA 谱函数来自外部引用 [11]=Kong et al. *Nat. Commun.* **12**, 5075 (2021)（YH6）与 [20]=Du & Duan, *PRB* **108**, 174507 (2023)（YH9），本文作者在此基础上重新计算了各阶矩。）
+（μ*=0.11；括号内 Tc 为用重整化 μ*(N) 后的值；DFPT/SSCHA 谱函数来自外部引用 [11]（YH6）与 [20]（YH9），本文作者在此基础上重新计算了各阶矩。）
+
+> **★ 2026-09-25 订正（主会话一手核对参考文献表）——原文此处把 [11] 写成 Kong，错了。**
+> **旧陈述错在哪**：原写 `[11]=Kong et al. Nat. Commun. 12, 5075 (2021)（YH6）`。
+> **引用编号 [11] 是对的，挂在它上面的作者名是错的**——Kong 是 **[12]**。
+> **新陈述凭什么对**（`_scratch_ir/_ding2507_txt.txt` 参考文献表逐字）：
+> - 第 404 行：`[11] I. A. Troyan, D. V. Semenok, A. G. Kvashnin, ... and A. R. Oganov, Anomalous high-`
+>   ⟹ **[11] = Troyan et al. 2021（YH6）**；该文作者含 Errea / Bianco / Calandra / Mauri / Monacelli
+>   ——正是做 SSCHA 的那批人，与「SSCHA 谱来自 [11]」自洽。
+> - 第 347–352 行：`[12] P. Kong, V. S. Minkov, ... and M. I. Eremets, Superconductivity up to 243 K in the`
+>   `yttrium-hydrogen system under high pressure, Nature Communications 12, 5075 (2021)`
+>   ⟹ **Kong 是 [12]**，且它是 **YH9 的 243 K 实验**文献，不是 YH6 的谱源。
+> - 正文归属逐字：第 228 行 `parameters of YH6 calculated by SSCHA in Ref. [11]`；
+>   第 260 行 `SSCHA result of YH6 from Ref. [11]`。
+> - 第 384 行：`[20] M. Du, Z. Li, D. Duan, and T. Cui, Superconducting ...`
+>   ⟹ **[20] 的作者是 Du–Li–Duan–Cui 四人**，原文缩写成「Du & Duan」漏了两位。
+>
+> ⟹ **YH6 的谱源是 Troyan 2021，不是 Kong 2021。**
+> 下游影响：Tc_exp 的取值归属亦按此——**224 K 出自 Troyan=[11]（YH6）**、
+> **243 K 出自 Kong=[12] 的标题（YH9）**。见 `../ceiling/hydride_ceiling_r_h3s_yh6_yh9_2026-09-25.md`。
 
 - **λ**：有——但注意本文用的是"λ(m)"（Matsubara阶数 m 的推广定义），不是传统单一标量 λ；λ(0) 对应常规 λ。
 - **ω_log**：**Table I 中没有 ω_log 列**。我通读了全文7页，正文中没有找到显式的 ω_log 数值报告——本文用的核心量是 ω̄₂（见下），文中未见 ω_log 的单独讨论或表格。**结论：ω_log 在本文中未找到（not found）**，若需要须自己从文中引用的外部 α²F(ω)（Kong 2021 / Du 2023）积分得到。

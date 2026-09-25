@@ -19,7 +19,13 @@ def ln_tc_allen_dynes(lam, mu, r):
     L1 = 2.46 * (1 + 3.8 * mu)
     L2 = 1.82 * (1 + 6.3 * mu) * r
     f1 = (1 + (lam / L1) ** 1.5) ** (1 / 3)
-    f2 = 1 + (r**2 - 1) * lam**2 / (lam**2 + L2**2)
+    # AD75 Eq.(35) 的形状因子是 (r − 1)，**不是** (r² − 1)。
+    # 2026-09-25 订正（原写 (r**2 - 1)）。两条独立见证：
+    #   (a) AD75 Table I 29 行零参数复现：(r−1) 3.85% vs (r²−1) 4.84%
+    #       —— theory/notes/_scratch_ir/_chk_ad75_table1_frak_f_2026-09-20.py
+    #   (b) arXiv:2010.12225 Eq.(S6) 第三方重印（同式，无平方、无开方）
+    # 重解记录：theory/notes/_scratch_ir/_chk_main_f2_defect_repair_and_slambda_rescan_2026-09-25.py
+    f2 = 1 + (r - 1) * lam**2 / (lam**2 + L2**2)
     return np.log(f1 * f2 / 1.2) + ln_tc_mcmillan(lam, mu)
 
 

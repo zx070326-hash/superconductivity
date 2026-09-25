@@ -1,0 +1,666 @@
+First-Principles Theory of Anharmonicity and the Inverse Isotope Eﬀect in Superconducting Palladium-Hydride Compounds
+Ion Errea1,2, Matteo Calandra1, and Francesco Mauri1 1Universit´e Pierre et Marie Curie, CNRS, IMPMC, 4 Place Jussieu, 75252 Paris, France and
+2IKERBASQUE, Basque Foundation for Science, 48011, Bilbao, Spain
+Palladium hydrides display the largest isotope eﬀect anomaly known in literature. Replacement of hydrogen with the heavier isotopes leads to higher superconducting temperatures, a behavior inconsistent with harmonic theory. Solving the self-consistent harmonic approximation by a stochastic approach, we obtain the anharmonic free energy, the thermal expansion and the superconducting properties fully ab initio. We ﬁnd that the phonon spectra are strongly renormalized by anharmonicity far beyond the perturbative regime. Superconductivity is phonon mediated, but the harmonic approximation largely overestimates the superconducting critical temperatures. We explain the inverse isotope eﬀect, obtaining a -0.38 value for the isotope coeﬃcient in good agreement with experiments, hydrogen anharmonicity being the main responsible for the isotope anomaly.
+PACS numbers: 74.20.Pq,63.20.Ry,74.25.Kc
+
+arXiv:1305.7123v2 [cond-mat.supr-con] 16 Oct 2013
+
+The explanation of the ion-mass isotope eﬀect in phonon-mediated superconductors is one of the greatest success of BCS theory [1]. In a BCS superconductor composed of only one type of ions of mass M , the superconducting critical temperature (Tc) is expected to behave as Tc ∝ M −α, where α = 0.5 is the isotope coeﬃcient. In conventional superconductors with more atomic species, the total isotope coeﬃcient should also be close to 0.5. However, in many superconductors like MgB2 [2], fullerides [3] or high-Tc cuprates [4–6] the isotope coeﬃcient is substantially reduced and, in the most extreme case of palladium hydrides (PH), it is even negative [7–9].
+An isotope coeﬃcient α = 0.5 relies on the following assumptions: (i) the phonon frequencies are harmonic, consequently, (ii) the electron-phonon interaction is mass independent, and (iii) the electron-electron interaction is not aﬀected by the isotope substitution. Thus, a reduced isotope eﬀect can either be the ﬁngerprint of a non-conventional mechanism (e.g. spin-ﬂuctuations or correlated superconductivity) or the breakdown of one of these assumptions (e.g. anharmonicity). In both cases, the superconducting state is considered anomalous and current state-of-the-art calculations do not quantitatively account for the behavior of Tc as a function of the isotope mass. This is due to the diﬃculties of dealing either with non-conventional mechanisms or with anharmonicity.
+Here we consider the most pathological case present in literature, the inverse isotope eﬀect in PH. PdH has Tc = 8−9K [7, 8]. Hydrogen substitution with the heavier deuterium leads to a higher Tc, as Tc(PdD) ≈ 10−11K [7, 8], leading to α = −[lnTc(PdD) − lnTc(PdH)]/ln2 ≈ −0.3. Remarkably, PdT has a higher Tc than PdD, but there is no experimental value at full stoichiometry [9]. A considerable theoretical and experimental eﬀort [10– 22] has been devoted to explain this phenomenon over the last decades. Karakozov et al. [10], in a pioneering work, studied anharmoniciy in PH in the framework of perturbation theory to the bare harmonic phonon fre-
+
+quency and concluded that the negative isotope eﬀect
+
+could be due to anharmonicity, as other authors sug-
+
+gested later [20]. Other explanations based on electronic
+
+properties [17], zero-point motion [22] and volume ef-
+
+fects [21] have been invoked as well. Inelastic neutron
+
+scattering experiments [15] show strongly temperature
+
+dependent phonon lifetimes, a clear ﬁngerprint of anhar-
+
+monicity. Furthermore, ab initio total energy calcula-
+
+tions [19, 20] suggest that the potential felt by the hy-
+
+drogen atoms is very anharmonic. Nevertheless, no state-
+
+of-the-art calculations of the electron-phonon interaction
+
+and anharmonicity are present so that the interplay of
+
+these eﬀects is still unclear.
+
+In this work we study the occurrence of phonon-
+
+mediated superconductivity in PH and show that the
+
+inverse isotope eﬀect is quantitatively explained by the
+
+inclusion of anharmonicity. Anharmonicity is so large
+
+that perturbative approaches [10, 23–25] are not feasi-
+
+ble in PH. To solve this issue, we implement the self-
+
+consistent harmonic approximation (SCHA) [26] within
+
+a ﬁrst-principles approach. Diﬀerently from other meth-
+
+ods developed to deal with anharmonic eﬀects [27–29],
+
+our method allows to access directly the anharmonic free
+
+energy of the system, with full inclusion of the anhar-
+
+monic potential terms, and is variational in the free en-
+
+ergy with respect to a trial harmonic potential. More-
+
+over, compared to other implementations of the SCHA
+
+[30, 31], we replace the cumbersome calculation of an-
+
+harmonic coeﬃcients by the evaluation of atomic forces
+
+on supercells with suitably chosen stochastic ionic con-
+
+ﬁgurations.
+
+The ionic Hamiltonian is H = T + V , where T and
+
+V are the kinetic and potential energy operators. In the
+
+adiabatic approximation the potential is deﬁned by the
+
+Born-Oppenheimer (BO) energy surface. Then, the free
+
+energy of the ionic system can be calculated as FH =
+
+−
+
+1 β
+
+ln ZH ,
+
+where
+
+the
+
+partition
+
+function
+
+is
+
+ZH
+
+=
+
+tr[e−βH ]
+
+and β = 1/(kBT ). A quantum variational principle in
+
+2
+
+the free energy can be established for an arbitrary trial Hamiltonian H = T + V as [26]
+
+FH ≤ FH [H] = FH + dR[V (R) − V(R)]ρH(R), (1)
+
+where ρH(R) = R|e−βH|R /ZH is the probability to ﬁnd a system described by H in a general R ionic conﬁguration. The equality holds for H = H. The SCHA takes a harmonic V and minimizes FH [H] with respect to it [26]. One advantage of taking a harmonic potential is that FH and ρH(R) can be expressed in a closed form in terms of the phonon frequencies and polarizations [32]. In particular, ρH(R) is Gaussian and is given as
+
+
+
+√
+
+
+
+ρH(R) = AH exp −
+stαβµ
+
+MsMt 2a2µH
+
+sα µH
+
+tµβHusαutβ  ,
+
+(2)
+
+where AH is the normalization constant, s and t are atom indexes, α and β Cartesian indexes, µ is a mode index, M
+
+denotes the mass of an atom, u = R−Req is the displacement from equilibrium, aµ2H = coth(β ωµH/2)/(2ωµH), and {ωµH} and { µsαH} represent the phonon frequencies and polarizations deﬁned by H.
+
+As long as the equilibrium positions are ﬁxed by sym-
+
+metry, as in PH, minimizing FH [H] with respect to V is equivalent to performing the minimization with respect
+
+to the force constant matrix C, which deﬁnes the trial
+
+harmonic potential as V
+
+=
+
+1 2
+
+stαβ usαCsαtβ utβ . The
+
+minimization is carried through the components of C in
+
+the basis of N × N hermitian matrices preserving crystal
+
+symmetries, where N is the number of modes. We min-
+
+imize FH [H] by a conjugate-gradient (CG) algorithm, which requires the knowledge of the gradient ∇FH [H]
+
+with respect to C:
+
+∇FH [H] = − EHstαβ dRf˜Hsα(R)utβρH(R), (3)
+stαβ
+
+where EHstαβ =
+
+µ
+
+Mt/Ms(
+
+sα µH
+
+∇
+
+ln
+
+aµH
+
++
+
+∇
+
+sα µH
+
+)
+
+µtβH,
+
+and f˜Hsα(R) = f sα(R) − fHsα(R) is the diﬀerence between
+
+the force on the s-th atom along the direction α, f sα(R),
+
+and the harmonic force derived from V, fHsα(R). At each step j of the CG minimization, the trial harmonic Hamil-
+
+tonian is updated to Hj, till the minimum is found. At
+
+the minimum, the {ωµH} frequencies form the SCHA
+
+phonon spectrum renormalized by anharmonicity
+
+In our stochastic SCHA (SSCHA) approach, both
+
+FH [H] and ∇FH [H] are calculated making use of im-
+
+portance sampling and reweighting techniques. We start
+
+deﬁning an initial trial H0 harmonic Hamiltonian and
+
+creating a set of {RI }I=1,...,Nc ionic conﬁgurations in a supercell according to the ρH0 (R) distribution given in Eq. (2). These conﬁgurations are trivially created
+
+making use of random numbers generated with a Gaus-
+
+sian distribution. Secondly, we calculate the BO energy
+
+and the atomic forces for each random conﬁguration RI , V (RI ) and f sα(RI ), respectively. This allows us to evaluate the integrals in Eqs. (1) and (3) as an average of the integrands over the Nc conﬁgurations (importance sampling). Thus, we can compute the free energy and its gradient, and perform the ﬁrst CG step to obtain H1. In principle we should reevaluate BO energies and forces for the supercell at each CG step j, a very time-demanding task as generally hundreds of steps are needed to converge. This can be avoided with a reweighting procedure. We introduce the reweighting ρHj (RI )/ρH0 (RI ) factor (equal to one in the ﬁrst j = 0 step) in the importance sampling evaluation of the integrals. Namely, FH [Hj] and ∇FH [Hj] are obtained as:
+
+FH [Hj ]
+
+1 FHj + Nc
+
+Nc
+[V
+I =1
+
+(RI
+
+)
+
+−
+
+Vj
+
+(RI
+
+)]
+
+ρHj ρH0
+
+(RI (RI
+
+) )
+
+,
+
+(4)
+
+∇FH [Hj]
+
+−
+stαβ
+
+EHstjαβ
+
+1 Nc
+
+Nc
+f˜Hsαj (RI )utIβ
+I =1
+
+ρHj (RI ) , ρH0 (RI )
+
+(5)
+
+where the equality holds for Nc → ∞. Including the reweighting factor, we can use the BO energies and forces
+
+of the conﬁgurations created with the initial ρH0 (R) dis-
+
+tribution also for the following j CG iterations. However,
+
+if
+
+1 Nc
+
+Nc i=1
+
+ρHj
+
+(Ri)/ρH0 (Ri)
+
+deviates
+
+substantially
+
+from
+
+one, FH [Hj] and ∇FH [Hj] cannot be accurately evalu-
+
+ated anymore as the initial set of conﬁgurations does not
+
+represent closely ρHj (R). When this occurs, we use the probability distribution of the current step, ρHj (R), to create a new set of conﬁgurations for which we recompute
+
+atomic forces and BO energies to be used in the present
+
+and subsequent CG iterations. The process continues till
+
+the gradient vanishes.
+
+We apply this method to stoichiometric PdH, PdD and
+
+PdT. Total energies, atomic forces, harmonic phonons
+
+and deformation potentials needed for the Eliashberg
+
+functions are computed with density-functional theory
+
+(DFT) and linear response [34, 35]. We use the Perdew-
+
+Zunger local-density approximation [36] and ultrasoft
+
+pseudopotentials [37].
+
+We ﬁrst demonstrate the capability of our developed
+
+method to obtain the free energy as a function of tem-
+
+perature. We calculate FH [H] and ∇FH [H] from a model potential combining the ab initio harmonic po-
+
+tential with a fourth-order on-site anharmonic potential
+
+ﬁtted to the DFT total energies [38]. The potential sat-
+
+isﬁes the symmetries of the rock-salt structure [19] and
+
+has also been used to study cubic ferroelectrics [39]. In
+
+this system anharmonic forces are short-range and, con-
+
+sequently, phonon dispersions calculated with the model
+
+potential and with ab initio forces are in close agreement
+
+(see Supplemental Material). The use of the model al-
+
+lows us to estimate the free energy at several volumes and
+
+a (a.u.)
+d(ln a)/dT (x 10-6K-1)
+
+7.78
+25
+
+7.77
+
+20
+
+15
+
+7.76
+
+10
+
+5
+
+7.75
+
+0 0
+
+7.74
+
+PdH PdD PdT Exp. PdH0.7 Exp. PdD0.7
+
+100
+
+200
+
+300
+
+T (K)
+
+7.73
+7.72
+7.71 0
+
+PdH PdD PdT Exp. PdH Schirber et al.
+Exp. PdD Schirber et al.
+Exp. PdH Ross et al.
+
+50
+
+100 150 200 250 300
+
+T (K)
+
+FIG. 1. (Color online) Equilibrium lattice parameters as a function of temperature for PdH, PdD and PdT compared to experimental results [13, 21]. In the inset the calculated thermal expansion coeﬃcients are shown together with the measured values in Ref. [33].
+
+temperatures very eﬃciently. Minimizing the free energy we obtain the lattice parameter of each isotope as a function of temperature. The absolute values of the lattice parameters and the thermal expansion coeﬃcients, Fig. 1, are in good agreement with measurements [13, 21, 33].
+Once the equilibrium volumes are determined, we obtain the SSCHA phonon dispersions computing the forces on the {RI }I=1,...,Nc conﬁgurations completely from ﬁrst principles [38], overcoming the approximation of a model potential. The results are shown in Fig. 2 and compared with available experimental data on deuterium and tritium deﬁcient samples. The breakdown of the harmonic approximation is evident in all systems, particularly in PdH and PdD displaying imaginary phonon frequencies. The anharmonic correction given by the SSCHA is larger than the harmonic phonon frequency itself, invalidating any possible perturbative approach. Interestingly, both the low-energy acoustic and high-energy optical modes are aﬀected by anharmonicity even if the largest correction involves the H-character optical modes. At zone center the PdH optical modes are degenerate at 488 cm−1, in good agreement with inelastic neutron and Raman experiments [11–14] (around 450-472 cm−1 at diﬀerent temperatures and H concentrations). Since the H atom is smaller than the octahedral void in the Pd fcc lattice, hydrogen vibrations are characterized by very anharmonic rattling modes. This is conﬁrmed by the weak mass dependence of the root-mean square displacement of hydrogen (0.55 a.u. in PdH, 0.48 a.u. in PdD and 0.44 a.u. in PdT at 0 K), which does not scale according to the harmonic M −0.5 relation.
+From the calculated phonon spectra we obtain the
+
+Frequency (cm-1)
+
+Frequency (cm-1)
+
+(a) 900
+800 700 600 500 400 300 200 100
+0
+(b) -100
+700
+600
+500
+400
+300
+200
+100
+0
+(c)
+500
+400
+
+Anharmonic Harmonic
+
+Anharmonic Harmonic Exp. PdD0.63 T=150K
+Exp. PdD0.63 T=295K
+
+PdH
+
+Anharmonic Harmonic Exp. PdT0.70 T=80K
+
+PdD
+
+3
+Pd H
+Pd H
+Pd H
+
+Frequency (cm-1)
+
+300
+
+200
+
+100
+
+0Γ
+
+XK
+
+PdT
+Γ L PDOS
+
+FIG. 2. (Color online) Harmonic and SSCHA phonon spectra calculated for PdH (a), PdD (b) and PdT (c) at the equilibrium volume at 0 K. The experimental results obtained for non-stoichiometric PdD0.63 [15] and PdT0.70 [16] are shown. In the right panels the PDOS projected onto Pd and H atoms is plotted within the harmonic approximation (dotted lines) and the SSCHA (solid lines).
+
+Eliashberg function as
+
+α2F (ω) =
+
+1
+
+sµα(q)√tµβ∗(q)
+
+N (0)NkNq kqnm stαβµ 2ωµ(q) MsMt
+
+×dskαn,k+qmdtkβn∗,k+qmδ( kn)δ( k+qm)δ(ω − ωµ(q)), (6)
+
+where dksαn,k+qm = kn|δV /δusα(q)|k + qm is the deformation potential, |kn is a Kohn-Sham state with en-
+
+α2F(ω) , λ(ω)
+
+(a)
+2.5
+2
+1.5
+
+PdH
+
+α2F(ω) Anharmonic α2F(ω) Harmonic λ(ω) Anharmonic λ(ω) Harmonic
+
+1
+
+0.5
+
+0
+0 100 200 300 400 500 600 700 800 900
+(b) 2
+PdD
+1.5
+
+α2F(ω), λ(ω)
+
+1
+
+0.5
+
+0
+
+0
+
+100 200 300 400 500 600
+
+(c) 2
+
+PdT
+1.5
+
+α2F(ω), λ(ω)
+
+1
+
+0.5
+
+0
+
+0
+
+100
+
+200
+
+300
+
+400
+
+500
+
+Frequency (cm-1)
+
+FIG. 3.
+
+(Color online) α2F (ω) and λ(ω) =
+
+2
+
+ω 0
+
+dω
+
+α2F (ω
+
+)/ω
+
+for (a) PdH, (b) PdD and (c) PdT within
+
+the harmonic approximation and the SSCHA.
+
+ergy kn measured from the Fermi level ( F ), Nk and Nq are the number of electron and phonon momentum
+
+points used for the Brillouin-zone (BZ) sampling, and
+
+N (0) is the density of states per spin at F . We compute α2F (ω) in the harmonic or anharmonic case by
+
+using the harmonic or SSCHA phonon frequencies and
+
+polarizations in Eq. (6). The electron-phonon coupling
+
+constant λ, as well as the logarithmic frequency aver-
+
+age ωlog
+
+ωlog, are
+
+=
+
+exp(
+
+2 λ
+
+o0∞ btadiωnαed2Fa(sω)λln=ω/2ω)0∞[d40ω]α. 2FW(eωe)/stωimaantde
+
+Tc from the solution of the single-band Migdal-Eliashberg
+
+equations, using µ∗ = 0.085 as calculated in Ref. [18]. In
+
+the harmonic approximation the equilibrium volume of
+
+PdT is used for all isotopes as, in this case, there are no
+
+imaginary phonons. α2F (ω) functions are shown in Fig.
+
+3 and the results for Tc are presented in Table I.
+
+In the harmonic approximation λ is independent of the
+
+mass and the isotope coeﬃcient is determined by ωlog.
+
+Thus, the heavier the isotope the lower Tc and α is close
+
+to 0.5. The harmonic approximation strongly overesti-
+
+mates Tc, predicting very high values for all compounds. This overestimation is due to the very soft H-character
+
+vibrations that contribute as λ ∝ ω−2 to the electron-
+
+phonon coupling, leading to extraordinary values for λ.
+
+This is evident from the comparison between the phonon
+
+4
+density of states (PDOS), Fig. 2, and α2F (ω), Fig. 3.
+In the SSCHA, both λ and, consequently, Tc are substantially reduced due to the enhancement of the frequencies induced by anharmonicity. The hardening is more important the lighter the isotope as lighter atoms feel the potential farther away from equilibrium because of the ﬂuctuations of the zero-point motion. This makes λ mass-dependent and larger the heavier the isotope. Remarkably, the diﬀerences in λ explain the inverse isotope eﬀect in Tc and the value we obtain for the isotope coeﬃcient α is in good agreement with experiments (see Table I). The obtained Tc’s are close to experimental results even if no anharmonic corrections were incorporated into the deformation potential. As noted by α2F (ω) and the integrated electron-phonon coupling λ(ω) in Fig. 3, H-character optical modes have the largest contribution to λ, between 75% and 79% of the total depending on the isotope. The contribution of the low-energy Pd-character acoustic modes is similar for the three hydrides. Thus, we conclude that superconductivity and the inverse isotope eﬀect in PH is driven by hydrogen anharmonicity.
+In summary, we present a stochastic implementation of the SCHA that allows us to treat anharmonic eﬀects in the non-perturbative regime. The method gives access directly to the free energy of the system and is variational in the free energy with respect to a trial harmonic Hamiltonian. The method is applied to PH calculating the free energy, the thermal expansion, the anharmonic phonon spectra and the superconducting properties. We demonstrate that superconductivity in PH is phonon-mediated and the anomalous inverse isotope effect is due to the large anharmonicity of hydrogen vibrations, which is impossible to treat within perturbation theory. Our ﬁndings open new perspectives in the interpretation of reduced isotope eﬀects in superconductors. Moreover, we demonstrate that anharmonicity induces a huge suppression of Tc, almost a factor of 10 in PdH. This poses the question of whether harmonic Tc calculations in high-pressure metallic hydrides [41] are overestimated [23], in particular, in the very similar PtH [42].
+
+TABLE I. Calculated λ, ωlog and Tc values for PH. ωlog values are given in cm−1 and Tc’s in K. Experimental values for
+Tc [7, 8] are presented as well. The value of α between isotopes
+PdA and PdB is calculated as αPdA(B) = −(lnTc(PdB) − lnTc(PdA))/(lnMB − lnMA).
+
+Harmonic
+
+SSCHA
+
+Exp.
+
+λ ωlog Tc λ ωlog Tc Tc [7] Tc [8]
+
+PdH 1.55 205 47 0.40 405 5.0 9 8
+
+PdD 1.55 150 34 0.46 304 6.5 11 10
+
+PdT 1.55 125 30 0.48 257 6.9
+
+αPdH(D) αPdH(T)
+
+0.47 0.41
+
+-0.38 -0.29 -0.32 -0.29
+
+5
+
+More generally, our methodological developments will allow to investigate strongly anharmonic systems in the non-perturbative regime, ranging from ferroelectrics [39], charge-density wave systems [43], and many more.
+We are grateful to A. Bergara for fruitful discussions. IE acknowledges ﬁnancial support from the Department of Education, Language policy and Culture of the Basque Government (Grant BFI-2011-65). Computer facilities were provided by CINES, CCRT and IDRIS.
+[1] J. Bardeen, L. N. Cooper, and J. R. Schrieﬀer, Phys. Rev. 108, 1175 (1957).
+[2] D. G. Hinks, C. H, and J. D. Jorgensen, Nature 411, 457 (2001).
+[3] M. S. Fuhrer, K. Cherrey, A. Zettl, M. L. Cohen, and V. H. Crespi, Phys. Rev. Lett. 83, 404 (1999).
+[4] D. G. Hinks, H. Claus, and J. D. Jorgensen, Nature 457, 457 (2001).
+[5] B. Batlogg, R. J. Cava, A. Jayaraman, R. B. van Dover, G. A. Kourouklis, S. Sunshine, D. W. Murphy, L. W. Rupp, H. S. Chen, A. White, K. T. Short, A. M. Mujsce, and E. A. Rietman, Phys. Rev. Lett. 58, 2333 (1987).
+[6] R. H. Liu, T. Wu, G. Wu, H. Chen, X. F. Wang, Y. L. Xie, J. J. Ying, Y. J. Yan, Q. J. Li, B. C. Shi, W. S. Chu, Z. Y. Wu, and X. H. Chen, Nature 459, 64 (2009).
+[7] B. Stritzker and W. Buckel, Zeitschrift fu¨r Physik 257, 1 (1972).
+[8] J. E. Schirber and C. J. M. Northrup, Phys. Rev. B 10, 3818 (1974).
+[9] J. E. Schirber, J. M. Mintz, and W. Wall, Solid State Communications 52, 837 (1984).
+[10] A. E. Karakozov and E. G. Maksimov, Zh. Eksp. Teor. Fiz. 74, 681 (1978).
+[11] A. Kolesnikov, I. Natkaniec, V. Antonov, I. Belash, V. Fedotov, J. Krawczyk, J. Mayer, and E. Ponyatovsky, Physica B: Condensed Matter 174, 257 (1991).
+[12] R. Sherman, H. K. Birnbaum, J. A. Holy, and M. V. Klein, Physics Letters A 62, 353 (1977).
+[13] D. K. Ross, V. E. Antonov, E. L. Bokhenkov, A. I. Kolesnikov, E. G. Ponyatovsky, and J. Tomkinson, Phys. Rev. B 58, 2591 (1998).
+[14] M. Chowdhury and D. Ross, Solid State Communications 13, 229 (1973).
+[15] J. M. Rowe, J. J. Rush, H. G. Smith, M. Mostoller, and H. E. Flotow, Phys. Rev. Lett. 33, 1297 (1974).
+[16] J. M. Rowe, J. J. Rush, J. E. Schirber, and J. M. Mintz, Phys. Rev. Lett. 57, 2955 (1986).
+[17] R. J. Miller and C. B. Satterthwaite, Phys. Rev. Lett. 34, 144 (1975).
+[18] B. M. Klein, E. N. Economou, and D. A. Papaconstantopoulos, Phys. Rev. Lett. 39, 574 (1977).
+[19] C. Els¨asser, K. M. Ho, C. T. Chan, and M. Fa¨hnle, Phys. Rev. B 44, 10377 (1991).
+[20] B. M. Klein and R. E. Cohen, Phys. Rev. B 45, 12405 (1992).
+[21] J. E. Schirber and B. Morosin, Phys. Rev. B 12, 117
+
+(1975). [22] P. Jena, J. Jones, and R. M. Nieminen, Phys. Rev. B
+29, 4140 (1984).
+[23] B. Rousseau and A. Bergara, Phys. Rev. B 82, 104504 (2010).
+[24] L. Paulatto, F. Mauri, and M. Lazzeri, Phys. Rev. B 87, 214303 (2013).
+[25] M. Lazzeri and S. de Gironcoli, Phys. Rev. B 65, 245402 (2002).
+[26] D. J. Hooton, Philosophical Magazine Series 7 46, 422 (1955).
+[27] P. Souvatzis, O. Eriksson, M. I. Katsnelson, and S. P. Rudin, Phys. Rev. Lett. 100, 095901 (2008).
+[28] O. Hellman, I. A. Abrikosov, and S. I. Simak, Phys. Rev. B 84, 180301 (2011).
+[29] B. Monserrat, N. D. Drummond, and R. J. Needs, Phys. Rev. B 87, 144302 (2013).
+[30] I. Errea, B. Rousseau, and A. Bergara, Phys. Rev. Lett. 106, 165501 (2011).
+[31] I. Errea, B. Rousseau, and A. Bergara, Journal of Applied Physics 111, 112604 (2012).
+[32] S. Rossano, F. Mauri, C. J. Pickard, and I. Farnan, The Journal of Physical Chemistry B 109, 7245 (2005).
+[33] R. Abbenseth and H. Wipf, Journal of Physics F: Metal Physics 10, 353 (1980).
+[34] P. Giannozzi et al., J. Phys. Condens. Matter 21, 395502 (2009).
+[35] S. Baroni, S. de Gironcoli, A. Dal Corso, and P. Giannozzi, Rev. Mod. Phys. 73, 515 (2001).
+[36] J. P. Perdew and A. Zunger, Phys. Rev. B 23, 5048 (1981).
+[37] Calculations are performed applying the QuantumESPRESSO [34] code. A 50 Ry cutoﬀ is used for the plane-wave basis and a 24 × 24 × 24 mesh for the BZ integrations in the unit cell. The sum over k in Eq. (6) required a 72 × 72 × 72 grid.
+[38] Total energies and forces needed in Eqs. (4) and (5) are computed in a 2 × 2 × 2 supercell containing 16 atoms. The diﬀerence between the SSCHA force constant matrix and the harmonic force constant matrix in the 2 × 2 × 2 supercell is interpolated to a 4 × 4 × 4 supercell. The harmonic 4 × 4 × 4 force constant matrix is added to the result. We veriﬁed that the anharmonic phonon dispersion obtained for the model potential in this way coincides with that obtained directly in a 4 × 4 × 4 supercell. We use Nc = 20000 and Nc = 300 for the calculations with the model and ab initio potential, respectively. For the ab initio calculation a single set {RI }I=1,...,Nc is suﬃcient if the result of the model potential is used as H0.
+[39] W. Zhong, D. Vanderbilt, and K. M. Rabe, Phys. Rev. B 52, 6301 (1995).
+[40] P. B. Allen and R. C. Dynes, Phys. Rev. B 12, 905 (1975). [41] D. Y. Kim, R. H. Scheicher, H.-k. Mao, T. W. Kang, and
+R. Ahuja, Proc. Natl. Acad. Sci. USA 107, 2793 (2010). [42] D. Y. Kim, R. H. Scheicher, C. J. Pickard, R. J. Needs,
+and R. Ahuja, Phys. Rev. Lett. 107, 117002 (2011). [43] G. Gru¨ner, Density Waves in Solids (Addison-Wesley,
+Reading, MA, 1994).
+
+

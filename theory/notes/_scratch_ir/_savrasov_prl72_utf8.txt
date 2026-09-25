@@ -1,0 +1,365 @@
+VOLUME 72, NUMBER 3  PH YSICAL REVIEW LETTERS                                                    17 JA WUARV 1994
+
+        Linear-Response Calculations of Electron-Phonon Interactions
+
+                    ' S. Y. Savrasov, D. Y. Savrasov, * and O. K. Andersen
+
+        Max-Planck-Institut filr Festkorperforschung, D 705-65 Stuttgart, Federal Republic of Germany
+                                                 (Received 3 September 1993)
+
+         A new, generally applicable method is developed for ab initio calculation of the wave-vector
+     dependent electron-phonon coupling. The screening of the one-electron potential is evaluated by
+     linear-response theory using the local-density approximation and linear mufBn-tin orbitals. We
+     calculate electron-phonon coupling strengths and transport properties in Al and, for the first time,
+     in Nb and Mo. Our results are consistent with the experimental results and are compared with
+     previous theoretical results.
+
+     PACS numbers: 63.20.Kr, 71.10.+x, 72.15.Eb
+
+   The electron-phonon interaction is decisive for many       that of Baroni et aL [12] that systems with narrow bands
+properties of metals [1], such as the electrical and ther-    such as d bands are treated as easily as systems with
+mal resistivities, superconductivity, and the renormaliza-
+tion of the linear electronic specific heat. In the strong-   only broad bands because it uses muffin-tin, rather than
+coupling theory of superconductivity [2], a central quan-     plane-wave, basis sets for the electron wave functions. In
+tity is the electron-phonon spectral distribution function    the present Letter, we generalize this method to the corn-
+cszF(~) and its first reciprocal moment A. The problem        putation of the wave-vector dependent electron-phonon
+to calculate A ab initio is important, in particular, for     coupling. The screening potential for every q is found
+quantitative understanding of high-temperature super-         self-consistently without the use of any RMTA or RIA.
+conductivity. The purpose of this Letter is to develop        azF(io) and A are obtained by integration over the whole
+a new generally applicable method for calculating this        Brillouin zone. We demonstrate the applicability of this
+quantity which essentially amounts to the self-consistent
+finding of the full low-energy excitation spectrum of the     all-electron approach by computing as'(to) for a few el-
+
+metal: the quasiparticle energies Et,s and the phonon         emental metals, the sp-band metal Al and for the at-band
+
+frequencies toq„The. most popular estimate of E&~ is          metals Nb and Mo. Moreover, we present the results for
+                                                              the transport properties: the dimensionless At, as well as
+the one-electron band structure obtained from a density-      the phonon-limited electrical and thermal resistivities at
+
+functional calculation in the local-density approximation     273 K. For the d-band metals, these are the first fully
+
+(LDA) [3].                                                    screened ab initio calculations.
+  Many previous attempts to compute A, in particular
+                                                                 Our method employs the expression [14]
+for transition metals, focused on calculating merely the
+so-called electronic contribution [4], while the phonon fre-  a F(~) =                ) q"  b(~  —         ),
+quencies and eigenvectors were usually taken from inelas-                                            iraq
+
+tic neutron-scattering data and the self-consistent adjust-                           qv
+ment of the one-electron potential to the phonon distor-
+                                                              for u F(io) in terms of the phonon linewidths pq„arising
+tion was replaced by rigid-ion [5] or rigid-muffin-tin [6]
+approximations (RIA or RMTA). That these approxima-           from the electron-phonon interaction. Here, and in the
+tions are not justified in general was shown for the case
+of aluminium by Winter [7] using linear-response theory       following, we use atomic Rydberg units, Q means the
+for the screening.
+                                                              average over the Brillouin zone (BZ), v numerates the
+   Accurate phonon frequencies and eigenvectors, as well      phonon branches, and N(0) is the electronic density of
+as the self-consistent screening and, hence, the electron-    states per atom and per spin at the Fermi level. The
+phonon interaction, may however, be calculated with           linewidths are given by the Fermi "golden rule" which,
+the frozen-phonon total-energy approach using super-          when the energy bands around the Fermi level are linear
+cells, but only for commensurate phonon wave vectors q        in the range of the phonon energies, may be written as
+
+[8—11]. With the crude sampling allowed by the limited                                                         (2)
+
+size of the supercell, the accuracy of q-integrated quan-     j j' where and are the band indices, E&~ are the en-
+tities like A is usually not high enough for estimating for   ergies with respect to the Fermi level, and g&+ ., &. is
+                                                              the electron-phonon matrix element. The standard def-
+instance T,.
+                                                              inition of g is simply  the probability of scattering from
+   An efBcient linear-response technique based on the         the one-electron state
+solid-state Sternheimer method [12] was recently devel-                               [ kj) to the state [ k+ qj') via the
+                                                              phonon gv. In a case like ours, where the electronic states
+oped and shown to produce accurate phonon disper-             are approximated by superpositions of atom-centered or-
+sions and eigenvectors for arbitrary g in transition met-
+als [13]. The important advantage of this method over         bitals, it is inconvenient to evaluate this expression be-
+
+                                                              cause it involves the orbitals at the equilibrium atomic
+
+372                  003 1-9007/94/72 (3)/37 2 (4)$06.00
+
+                     l994 The American Physical Society
+VOLUME 72, NUMBER 3                                         PHYSICAL REVIEW LETTERS          17 JANUARY 1994
+
+positions and the potential for the displaced lattice. The                          double-~ syd-LMTO basis set [18] with the one-center
+                                                                                    spherical-harmonics expansions of the wave functions, as
+reason is that the states I kj) in the band calculation
+                                                                                    well as of the full potential, carried up to I =8. Next,
+are obtained not as exact solutions of the one-electron
+                                                                                    by summing over the 10 q points with the factor e'~
+Scrodinger equation but as the best approximation for
+                                                                                    we constructed the dynamical matrix on the real-space
+the equilibrium positions, using the Rayleigh-Ritz vari-
+                                                                                    lattice T. Inverse Fourier summation and subsequent di-
+ational principle with a finite orbital basis I y ). This
+                                                                                    agonalization finally yielded the phonon frequencies and
+introduces important incomplete-basis-set (IBS) correc-
+                                                                                    eigenvectors for any q. In order to calculate asF(u) and
+tions into the dynamical-matrix calculation [13]. The IBS                           A, the phonon linewidths were calculated for 47 q points.
+
+terms must also be taken into account when evaluating                               For each, the self-consistent screening potential 6'i'V was
+                                                                                    found using a small setup (47 k points instead of 256 and
+the electron-phonon matrix elements. They can be eas-                               a single-z LMTO basis set) which introduces only a (1—
+                                                                                    2)% error of the final results. The k-space integration in
+ily found by repeating the standard quantum-mechanical                              (2) involving the two 6 functions was performed with a
+                                                                                    very large number of k points (752) and using the full-
+derivation of the Fermi golden rule: The scattering rate                            zone tetrahedron method [19]. The largest numerical er-
+
+for transitions from an initial, unperturbed state into a fi-                       ror of asF(u) came from the q-space integration in (1).
+
+nal, perturbed state is the overlap integral squared. Since                         Its magnitude, we estimated by performing the integra-
+                                                                                    tion over merely the band-structure factor [which is p~„
+the final state corresponds to the displaced lattice, the                           approximated by Q&. , 6(El,~) 6(Ep+q )] using respec-
+                                                                                    tively 47 and 752 q points and found it to be about 6%
+best variational estimate for it must include the orbitals                          in both Nb and Mo. The total numerical error is thus
+                                                                                    about 10%. All the calculations were performed at the
+centered at the new atomic positions and adjusted to the
+                                                                                    experimental lattice constants.
+new one-electron potential. To linear order with respect
+                                                                                       We now discuss our ab initio results obtained for Al.
+to the displacements this leads to finding the change in
+                                                                                    Figure 1 shows the calculated o.sF(~) (full line) in com-
+the basis y"). The definition                          of g for use in (2) is thus
+                                                    I                               parison with the tunneling measurements [20] (squares).
+
+g~~ ',~, =  (k+ qj'  I  6  "V                          kj)                          The two curves are similar. Our a2F(u) is found to be
+                                          I
+                                                                                    very close to the empirical pseudopotential result [21]
+where A"~ are the coefficients of y") in the expansion of                           based on the rigid-ion approximation. General agreement
+I kj), and where 6 i"V and 6'i"yI " are, respectively, the
+                                                                                    is also found between our and the ab initio frozen-phonon
+changes in the one-electron potential and the basis due                             results of Dacorogna et aL [9] for the dispersion of pq„
+                                                                                    along the high-symmetry directions. The only exception
+to the phonon distortion [15]. Formula (3) is the linear-
+response analogy of evaluating g&+ ., &. via the splitting                          is that, in the [110] direction, our longitudinal branch
+of the bands in the frozen-phonon supercell method as                               exceeds theirs by a factor of 2, which is presumably con-
+done in Ref. [11]. It is less sensitive to the errors in the                        nected with replacing the 6 functions in (2) by Gaussians
+                                                                                    used in Ref. [9]. However, the relative weight of our high
+wave functions introduced by the variational principle,                             p values in the integrated quantity is found to be very
+has a correct long wavelength behavior, and allows one                              small. Our A value of 0.44 is very close to the value 0.42
+                                                                                    extracted from the tunneling measurements [20] (see Ta-
+f to avoid the inclusion of d — transitions in at-electron
+                                                                                                           1.0
+systems. The IBS corrections are represented by the sec-
+                                                                                    3 0.6—      00
+ond and third contributions in (3). They disappear for                                 0.4—     aa a
+                                                                                       0.2—     00
+plane-wave basis sets but should be taken into account                                          QO
+
+when using linear muEn-tin-orbital (LMTO) and linear                                            00
+                                                                                             0
+augmented-plane-wave (LAPW) bases [16], as we shall                                          4      c0l
+do.                                                                                          0
+                                                                                             0
+  The phonon linewidths p~„(2) often display violent
+                                                                                                        0.0
+variations through the BZ [17] for phase-space reasons,                                                        0 ] 2 Q 4 5 6 7 8 9 10
+such as Fermi-surface nesting, and the q summation in                                                                   Frequency, THz
+
+expression (1) for n F(u) must therefore be performed                                 FIG. 1. Calculated spectral function a F(u) (solid line)
+on a rather dense mesh. The phonon frequencies u~„are,
+                                                                                    for Al in comparison with the tunneling data (squares) [20].
+however, relatively smooth functions of q and need there,
+fore not be computed on such a dense mesh. The proce-
+
+dure we used is baaed on transformation of the dynamical
+matrix to real space: First, we performed self-consistent
+LDA-LMTO linear-response calculations [13] of co~„ for
+10 special q points. Each electronic-structure calcula-
+tion employed a large number of k points (256) and a
+
+                                                                                                         373
+VOLUME 72, NUMBER 3                                          PHYSICAL REVIEW LETTERS                                   17 JANUARY 1994
+
+  TABLE I. Comparison between calculated and experimen-
+
+tal values of electron-phonon coupling constant A, electrical
+resistivity p [y,A cm] and thermal resistivity w [K em/W] at
+273 K. Also shown are the calculated transport parameters
+
+Atr. Values in parentheses give decomposition of A in Nb by
+the Fermi-surface sheets (octahedron, jungle gym, and ellip-
+
+soids).
+
+                                                                                     0 '&
+
+         Al     Nb                                           Mo
+
+pcalc    0.44   1.26(1.44, 1.37,1.08)                        0.42
+
+pexp     0.42   1.33(1.71,1.43,1.10), 1.04'                  0.44'
+
+pctarlc  0.36   1.17                                         0.35                    00—      1 23
+                                                                                                  l I (.(/ll(. ll( $,
+calc                                                                                       0
+
+         2.35   13.67                                        4.31
+
+exp      2.43'  13.30'                                       4.88'
+
+calc     0.42   2.17                                         0.73                      FIG. 2. Calculated spectral function n F(~) (solid line)
+
+~exp     0.42'  1 93'                                        0.72'                   for Nb in comparison with the tunneling data (squares) [20].
+
+'Reference [20].                                                                     those measured by the de Haas —van Alphen (dHvA) ef-
+b Reference [26].                                                                    fect [26] yields an average mass enhancement of 1.33,
+'Reference [20], see also Ref. [25].
+                                                                                     which is close to the 1.26 found in our electron-phonon
+~From T, using p'=0. 13.
+                                                                                     calculation. The ratio of the measured electronic specific
+'Reference [31].
+                                                                                     heat coefficient to our calculated LDA density of states,
+ble I). The  frozen-phonon [9]  and the linear-response      cal-
+             Winter [7] gave,                                and                     N(0) =10.21 states/(Ryspin), also yields an enhance-
+culation of                     respectively, A = 0.45                               ment of 1.3. Another important result is that the mea-
+
+0.38. The A value derived from specific-heat measure-                                sured variation of the mass enhancement for the various
+
+ments with use of our calculated value for the density of                            cyclotron orbits agrees well with what our linear-response
+
+states at the Fermi level, N(0) =2.74 states/(Ry spin), is                           calculation yields (Table I), but it strongly disagrees with
+0.42. In order to check previous conclusions [7,22] about
+                                                                                     what is found with the RMTA [26]. Now, since both
+the inapplicability of the RMTA for sp metals, we also                               the cyclotron masses and the electronic specific-heat co-
+
+performed such a calculation and indeed found A =0.14.                               efficient are enhanced by electron-electron interactions,
+The further calculated quantities listed in Table I are the                          on top of the electron-phonon interactions, the tunnel-
+
+electronic transport parameter Ai„as well as electrical                              ing data could still be correct and our calculation wrong.
+                                                                                     However, our calculated values of electrical and thermal
+(p) and thermal (iu) resistivities at 273 K. The compu-
+tational method is analogous to that used in supercon-                               resistivities are close to the measured values (see Table
+
+ductivity theory and based on the low-order variational                              I). Moreover, the LDA value for the spin-lattice relax-
+
+estimate of the solution of Boltzman's equation [23]. We                             ation rate calculated without any spin enhancement (be-
+
+have not found any qualitative difFerences in the calcu-                             yond about 10%) is in good agreement with the exper-
+
+lated    oturranAspt,o—rt 0.s3p6e,cwtrahlichfunisctciloonse  comparing to the usual  imental value [27]. It therefore seems that the electron
+one;                                                         to the superconducting  phonon A is 1.2—1.3, and that the mass enhancement due
+                                                                                     to electron-electron interactions is less than 20%%uo in Nb.
+A. The calculated values of p and tu agree well with those                           Using such a large A value together with the measured T,
+measured.
+                                                                                     ' value in the McMillan formula [28] requires a Coulomb
+  Nb is the best studied elemental superconductor,
+                                                                                     pseudopotential of p, ~0.2 rather than the smaller value
+mainly because of its relatively high T, = 9.25 K. Many
+                                                                                       0.14 which is usually assumed [29].
+theoretical RMTA based calculations exist in the litera-
+                                                                                        We finally discuss our results for Mo. There are no tun-
+ture [17,22,24] and a large variety of A (1.12—1.86) have
+                                                                                     neling data for this material because of its low T, = 0.92
+been obtained. Also the results of tunneling measure-
+                                                                                     K and the weakness of phonon effects. Our linear-
+ments have been controversial [20]. In Fig. 2 we com-                                response calculations of nzF(u) are found to be close
+                                                                                     to our RMTA calculations and to earlier ones [30]. Our
+pare our calculated nzF(u) (full lines) with the tunneling                           total A is 0.42, vrhich is in a good agreement with the
+                                                                                     value 0.44 extracted from McMillan's T, expression us-
+data of Ref. [20] (squares). Even though the theoreti-                               ing @*=01. 3. The calculated transport spectral function
+                                                                                     displays behavior very similar to that of the superconduc-
+cal nzF(u) should be broadened because the 6 function
+                                                                                     tor (At, —0.35); our electrical and thermal resistivities
+„„— in Eq. (1) ought to be a                                                         are close to those measured, as shown in Table I.
+
+this tunneling experiment                                                               In summary, we have presented ab in, itio self-consistent
+                        Lorentzian of half-width             —p1z.0„4,               linear-response calculations of the electron-phonon cou-
+                        yields a coupling (At,
+
+[20,25]) which is weaker than what we calculate (A=1.26).
+
+We obtain similar results with the RMTA, in full agree-
+
+ment with earlier calculations [17,24], and thus conclude
+
+that the full inclusion of screening does not resolve this
+
+discrepancy. Comparison of our LDA band masses with
+
+374
+VOLUME 72, NUMBER 3  PHYSICAL REVIEW LETTERS                      17 JANUARY 1994
+
+pling for Al, Nb, and Mo using the LDA and LMTO                        B 44, 5388 (1991).
+basis sets. Our results show generally good agreement             [12] S. Baroni, P. Giannozzi, and A. Testa, Phys. Rev. Lett.
+between calculated and experimental electron-phonon-
+coupling strengths and transport properties. This indi-               58, 1861 (1987); N. E. Zein, Fiz. Tverd. Tela (Leningrad)
+cates that ab initio calculations of electron-phonon inter-
+actions are now feasible for metals with broad, as well                26, 3028 (1984) [Sov. Phys. Solid State 26, 1825 (1984)].
+                                                                  [13] S. Y. Savrasov, Phys. Rev. Lett. 69, 2819 (1992).
+as with narrow bands. It seems that more experimental             [14] P. B. Allen, Phys. Rev. B 8, 2577 (1972).
+and/or theoretical work is necessary to account for the           [15] We use the notation as in Ref. [13]. The operator 6~"
+
+discrepancy between the existing tunneling and the other               has the same meaning as operator 6+ introduced there.
+data for Nb.                                                           The evaluation of bq" V is done using the self-consistent
+
+  The authors are indebted to I. I. Mazin, E. G. Maksi-                procedure analogously to that developed in Ref. [12].
+mov, and A. I. Liechtenstein for many helpful discussions.        [16] O. K. Andersen, Phys. Rev. B 12, 3060 (1975).
+                                                                  [17] W. H. Butler, H. G. Smith, snd N. Waksbayashi, Phys.
+ ' On leave &om P. N. Lebedev Physical Institute of the
+                                                                      Rev. Lett. 39, 1004 (1977); W. H. Butler, F. J. Pinski,
+     Russian Academy of Sciences, 117924 Moscow, Russia.
+ [1] For a review, see, e.g., G. Grimvall, in Electron Phonon-        and P. B. Allen, Phys. Rev. B 19, 3708 (1979).
+                                                                  [18] S. Y. Savrasov and D. Y. Savrasov, Phys. Rev. B 46,
+     Interactions in, Metals, edited by E. P. Wohlfarth (North-
+     Holland, Amsterdam, 1981).                                        12 181 (1992).
+ [2] G. M. Eliashberg, Zh. Eksp. Teor. Fiz. 38, 966 (1960)        [19] O. Jepsen and O. K. Andersen, Phys. Rev. B 29, 5965
+    [Sov. Phys. JETP 11,696 (1960)];W. L. McMillan, Phys.
+     Rev. 187, 331 (1968).                                             (1984); P. B. Allen, Phys. Status Solidi B 120, 529
+ [3] For a review, see, e.g. , Theory of the Inhofnogeneous
+     Electron t as, edited by S. Lundqvist and S. H. March             (1983).
+     (Plenum, New York, 1983).                                    [20] See, e.g. , E. L. Wolf, Princples of Electron, Zbnneling
+ [4] For a review, see, e.g., B. M. Klein and W. E. Pickett, in
+                                                                       Spectroscopy (Oxford University, New York, 1985).
+   f Superconductivity in d and Ba-nd Metal-s, I989, edited
+                                                                  [21] H. K. Leung, J. P. Carbotte, D. W. Taylor, and C. R.
+     by W. Buckel and W. Weber (Kernforschungszentrum,                Leavens, Can. J. Phys. 54, 1585 (1976); see also Ref. [20).
+     Karlsruhe, 1982), p. 477.
+                                                                  [22] D. A. Papaconstantopoulus, L. L. Boyer, B. M. Klein, A.
+ [5] L. J. Sham and J. M. Ziman, Solid State Physics, edited          R. Williams, V. L. Moruzzi, and J. F. Janak, Phys. Rev.
+                                                                       B 15, 4221 (1977).
+     by H. Ehrenreich and D. Turnbull (Academic, New York,
+     1963), Vol. 15, p. 221.                                      [23] P. B. Allen, Phys. Rev. B 17, 3725 (1978).
+                                                                  [24] B. N. Harmon and S. K. Sinha, Phys. Rev. B 16, 3919
+ [6] G. D. Gaspari and B. L. Gyorffy, Phys. Rev. Lett. 28,
+                                                                       (1977); D. Glotzel, D. Rainer, and H. R. Schober, Z.
+     801 (1972)                                                       Phys. B 35, 317 (1979); M. Peter, T. Jarlborg, M. Ds-
+                                                                      corogna, and E. Moser, in Superconductivity in d- and
+ [7] H. Winter, J. Phys. F 11, 2283 (1981)
+                                                                     f Band Me-tals, 1988 (Ref. [4)), p. 515.
+ [8] For a review, see, e g , Ab Ini.tio. Calculations of Phonon
+                                                                  [25] Here, we make a comparison with the conventional data
+    Spectra, edited by J. T. Devreese, V. E. Van Doren, and            collected in Ref. [20].Indeed, the value of A=1.22 deduced
+
+     P. E. Van Camp (Plenum, New York, 1983).                           from the tunneling measurements (which is only 3FO lower
+ [9] M. M. Dacorogna, M. L. Cohen, and P. K. Lam, Phys.
+                                                                       than that found by us) has been reported in the literature
+     Rev. Lett. 55, 837 (1985).
+                                                                       (Ref. [29]).The obtained o, F(u) also agrees much better
+[10] T. W. Barbee, A. Garcia, M. L. Cohen, and J. L. Mar-
+                                                                        with our calculation.
+    tins, Phys. Rev. Lett. 62, 1150 (1989); R. E. Cohen, W.
+     H. Pickett, and H. Krakauer, Phys. Rev. Lett. 64, 2575       [26] G. W. Crsbtree, D. H. Dye, D. P. Ksrim, D. D. Koelling,
+
+     (1990).                                                          and J. B. Ketterson, Phys. Rev. Lett. 42, 390 (1979).
+                                                                  [27] T. Asada, K. Terakura, and T. Jarlborg, J. Phys. F 11,
+[11] A. I. Liechtenstein, I. I. Mszin, C. O. Rodriguez, O.
+                                                                       1847 (1981);D. Y. Ssvrasov (unpublished).
+     Jepsen, O. K. Andersen, and M. Methfessel, Phys. Rev.        [28] P. B.Allen and R. C. Dynes, Phys. Rev. B 12, 905 (1975).
+
+                                                                  [29] J. Bostock, M. L. A. MacVicar, G. B. Arnold, J. Za-
+
+                                                                      sadzinski, and E. L. Wolf, in Superconductivity in d- and
+
+                                                                     f Band Metals, e-dited by H. Suhl and M. B. Maple (Aca-
+
+                                                                       demic, New York, 1980), p. 153.
+
+                                                                  [30] See Ref. [20], p. 263, and references therein.
+
+                                                                  [31] Landolt-Bornstein, New Series, Group III, Vol. 15, Pt. c
+
+                                                                       (Springer-Verlag, Berlin, 1982).
+
+                                                                  375
+

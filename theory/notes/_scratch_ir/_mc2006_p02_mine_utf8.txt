@@ -1,0 +1,105 @@
+2
+
+instability, ωph → 0. This suggests that Eliashberg theory does not have an unbounded Tc as Eq. (1) might lead us to believe, but rather it is proportional to a bare phonon frequency Ωph that can be larger than the softened phonon frequencies observed in a superconducting material. Another form that Eq. (1) is sometimes written as is
+
+Tc ∼
+
+η M
+
+,
+
+(4)
+
+where M is an averaged atomic mass and η is the McMillan-Hopﬁeld parameter3. The η has units of a spring constant and is related to the strength of the electronic response of electrons at the Fermi surface to perturbations of the atoms in the crystal. For a given M , a Tc bound is set by the maximum η possible considering all energies at the Fermi level accessible through chemical doping or other physical modiﬁcations of the material. A large η is required to approach the Tc bound set by phonon stability in materials with strong covalent bonds and a large Ωph. Approaching the phonon stability bound in systems containing strong covalent bonds will require careful material design.
+
+II. ELIASHBERG Tc BOUNDS
+
+The Tc calculated from the isotropic Eliashberg equations has been the subject of both upper and lower bound studies3,11. In the isotropic case, the Tc of a material is uniquely determined by the Eliashberg spectral function α2F (ω) that characterizes the electron-phonon coupling and the Coulomb parameter µ∗ that quantiﬁes the
+strength of the screened electron-electron Coulomb re-
+pulsion. Approximate formulas for Tc usually represent
+the average electron-phonon coupling by
+
+∞
+
+λ ≡ 2 α2F (ω)ω−1dω,
+
+(5)
+
+0
+
+and an average phonon frequency deﬁned by a weighting function f (ω),
+
+f (ω)
+
+≡
+
+2 λ
+
+∞
+f (ω)α2F (ω)ω−1dω.
+0
+
+(6)
+
+At large temperatures, T only appears in the Eliashberg equations as λ ω2 /T 2, which is where the asymptotic Tc formula of Eq. (1) originates3. If only λ ω2 is speciﬁed,
+Tc cannot be precisely determined, but it can be bounded from above and below,
+
+0 ≤ Tc ≤ 0.183 λ ω2 .
+
+(7)
+
+Both bounds can be attained by an Einstein model phonon spectrum,
+
+α2F (ω)E = λωEδ(ω − ωE)/2,
+
+(8)
+
+the lower bound corresponding to ωE → ∞ and the upper bound corresponding to ωE → 03,11. The spectra associated with the two bounds are both unphysical patholo-
+gies, corresponding to the cases of maximum phonon soft-
+ening and inﬁnite phonon hardening.
+We attempt to tighten the bounds by independently constraining λ and ω2 as well as specifying µ∗. It is already known3 that the Einstein spectrum maximizes Tc for a given λ and ω2 . However, the lower bound on Tc is still zero even with these additional constraints. This is due to a pathological spectral function with two
+peaks, one approaching zero and the other diverging to
+inﬁnity. In order to obtain a nontrivial lower bound,
+additional constraints need to be placed on the spectral
+function, and we choose the added restriction of a max-
+imum phonon frequency ωmax that replaces the upper limit of integration in Eq. (5) and (6). The spectral function that minimizes Tc at ﬁxed λ, ω2 , and ωmax is numerically determined12 to be
+
+α2F (ω)min
+
+=
+
+λω 2ωm2 ax
+
+(ωm2 ax −
+
+ω2 )δ(ω)+
+
+ω2 δ(ω − ωmax) . (9)
+
+The phonon at ω = 0 contributes to λ but not to Tc, making this eﬀectively an Einstein spectrum when calculating Tc. The qualitative result here is that Tc is maximized when the spectral function has no width and it is minimized when all the spectral weight is pushed to the edges of the allowed frequency interval. The stronger, more complicated Tc bounds take the form
+
+f λ ω2 /ωm2 ax, µ∗ ωmax ≤ Tc ≤ f (λ, µ∗) ω2 . (10)
+The function f (λ, µ∗) smoothly interpola√tes between the exp(−1/λ) weak coupling limit and the λ strong coupling limit and can be empirically ﬁt to
+
+f (λ, µ∗) = 0.69 exp
+
+−
+
+1+λ λ − µ∗
+
+1 + 0.52λ 1 + 5.6µ∗
+
+(11)
+
+for λ > µ∗, otherwise f = 0. This functional form is
+chosen to balance simplicity and accuracy and to match exact analytic results13 for 0 ≤ λ < 0.4 and λ ≫ 1. The
+coeﬃcients were chosen based on a least squares ﬁt on the interval 0.4 ≤ λ ≤ 20 and 0 ≤ µ∗ ≤ 0.2. The average
+root-mean-squared deviation of f is 0.01 and the max
+deviation is 0.03.
+We plot the upper and lower bounds of Tc for a reasonable but arbitrary ωmax = 1.5 ω2 as well as the McMillan formula for an Einstein spectrum in ﬁgure 1.
+The McMillan formula deviates perceptibly from the up-
+per bound around λ = 0.5, by λ = 1 the deviation is
+roughly 20%, and after λ = 2 it passes below the lower
+bound chosen for the ﬁgure. The relative width of the Tc bound, (Tcmax −Tcmin)/Tcmax, is largest at weak coupling. It has been observed that Tc is more accurately proportional to a logarithmically averaged phonon frequency,
+
+

@@ -53,7 +53,7 @@
 |------|------|------|
 | `_scratch_ir/essenberger1411.2121.pdf` | 6 | FeSe/LiFeAs/LaOFeAs 实际材料计算 |
 | `_scratch_ir/essenberger1411.2121.txt` | 231 行 | pdftotext 提取（UTF-8） |
-| `_scratch_ir/essenberger1409.7968.pdf` | 14 | 自旋涨落泛函推导 + two-band 模型 |
+| `_scratch_ir/_essenberger1409.7968.pdf` | 14 | 自旋涨落泛函推导 + two-band 模型（2026-09-25 订正：原写漏前导下划线） |
 | `_scratch_ir/_ess1409_utf8.txt` | 927 行 | pdftotext 提取 |
 
 ### Grep 关键词覆盖
@@ -79,7 +79,7 @@ context: "approach necessarily involves a set of parameters"
 
 ### 已有搜索报告
 
-`_scratch_ir/graser_5orbital_parameters.txt`（2026-09-22，107 行）给出：
+`../_scratch_ir/_graser_5orbital_parameters.txt`（2026-09-22，实测 **106** 行；原写「107 行」且路径漏了前导下划线 ⟹ 指向一个不存在的文件，2026-09-25 订正）给出：
 
 #### 最可能来源（按优先级）
 
@@ -124,9 +124,20 @@ context: "approach necessarily involves a set of parameters"
 
 ---
 
-## 4. 典型参数范围（文献标准）
+## 4. ~~典型参数范围（文献标准）~~ —— **⚠ 2026-09-25 降级：无一手来源，不得引用**
 
-摘自 `graser_5orbital_parameters.txt` 第 45–63 行：
+> **旧陈述错在哪**：本节把下列数值冠以「文献标准」，并注明「摘自 `graser_5orbital_parameters.txt` 第 45–63 行」。
+> 但那个文件**自己的第 4 行**逐字写着 `Status: PARAMETERS NOT OBTAINED (web access blocked, search budget exhausted)`，
+> 第 45 行的小标题是 `TYPICAL PARAMETER RANGES (Literature Standard)` —— 即**该 agent 在没拿到任何原文的情况下
+> 自行写下的回忆值**，不是从 Graser 0812.0343 或任何论文抽取的。⟹ 这是一处**幻影引用**：
+> 数字看起来有出处，实际出处是一份自陈「未取得」的搜索报告。
+> **新陈述凭什么对**：我 2026-09-25 直接读了该 `.txt` 的第 1–12 行与第 45–48 行，两处逐字如上。
+> **判词**：本节全部数值等级为 **无来源（既非 `numerical-evidence` 也非引用）**，**任何结论不得消费**。
+> **真正有一手来源的 Graser 参数在别处**：`graser1003.0133_5orbital_TB_parameters_2026-09-22.md`
+> （arXiv:1003.0133 直接取回成功，文本层 + 页图双仪器）——需要参数请用那一篇。
+> 本节原文保留作为排查记录（「记录丢失时不得反向重建」的对偶：**也不得删掉错误记录来掩盖它**）。
+
+摘自 `../_scratch_ir/_graser_5orbital_parameters.txt` 第 45–63 行（⚠ 见上，该来源自陈未取得原文）：
 
 ### 在位能 ε_d（设 d_xy 为 0）
 - d_3z²-r²: ~+0.5 eV（最高）
@@ -207,7 +218,7 @@ context: "approach necessarily involves a set of parameters"
 ### 相关脚本
 - `_scratch_ir/_chk_essenberger_lambda_ij_psd.py`（多个 worktree 副本）
 - `_scratch_ir/_chk_essenberger_partition_2026-09-21.py`
-- `_scratch_ir/essenberger_fese_patch_band_mapping_2026-09-21.md`
+- `../_scratch_ir/_essenberger_fese_patch_band_mapping_2026-09-21.md`（2026-09-25 订正两处：原写漏了前导下划线；且该文件此前**只存在于某个 agent worktree**、主工作树没有 ⟹ 任何 clone 都读不到，现已取回主树并 `git add -f`。**是取回原件，不是重建**，181 行原样复制）
 
 ---
 

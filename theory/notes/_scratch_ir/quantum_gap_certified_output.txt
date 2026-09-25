@@ -1,0 +1,42 @@
+
+=== TFIM, N=6, dim=64 ===
+  s=  0.5  gap(float)=  0.131652  chol_ok=True  lb(lam1)=  3.863703  c(ub lam2)=  3.732051  gap_cert_lb=  0.131652  slack=1.00e-11  wall=0.2s
+  s=  0.7  gap(float)=  0.001975  chol_ok=True  lb(lam1)=  4.396166  c(ub lam2)=  4.394191  gap_cert_lb=  0.001975  slack=9.99e-12  wall=0.2s
+  s=  0.9  gap(float)=  0.000001  chol_ok=True  lb(lam1)=  5.416680  c(ub lam2)=  5.416679  gap_cert_lb=  0.000001  slack=1.00e-11  wall=0.2s
+  s= 0.95  gap(float)=  0.000000  chol_ok=True  lb(lam1)=  5.703948  c(ub lam2)=  5.703948  gap_cert_lb=  0.000000  slack=9.99e-12  wall=0.2s
+  s= 0.99  gap(float)=  0.000000  chol_ok=True  lb(lam1)=  5.940152  c(ub lam2)=  5.940152  gap_cert_lb= -0.000000  slack=1.00e-11  wall=0.2s
+  s=  1.0  gap(float)=  0.000000  chol_ok=True  lb(lam1)=  6.000000  c(ub lam2)=  6.000000  gap_cert_lb= -0.000000  slack=1.00e-11  wall=0.1s
+  s= 1.01  gap(float)=  0.000000  chol_ok=True  lb(lam1)=  6.060149  c(ub lam2)=  6.060149  gap_cert_lb= -0.000000  slack=1.00e-11  wall=0.1s
+  s= 1.05  gap(float)=  0.000000  chol_ok=True  lb(lam1)=  6.303572  c(ub lam2)=  6.303572  gap_cert_lb=  0.000000  slack=1.00e-11  wall=0.2s
+  s=  1.1  gap(float)=  0.000000  chol_ok=True  lb(lam1)=  6.613644  c(ub lam2)=  6.613643  gap_cert_lb=  0.000000  slack=9.99e-12  wall=0.2s
+  s=  1.5  gap(float)=  0.000967  chol_ok=True  lb(lam1)=  9.252270  c(ub lam2)=  9.251303  gap_cert_lb=  0.000967  slack=1.00e-11  wall=0.3s
+
+=== TFIM, N=8, dim=256 ===
+  s=  0.5  gap(float)=  0.098491  chol_ok=True  lb(lam1)=  5.125831  c(ub lam2)=  5.027339  gap_cert_lb=  0.098491  slack=1.00e-11  wall=13.9s
+  s=  0.7  gap(float)=  0.000307  chol_ok=True  lb(lam1)=  5.860395  c(ub lam2)=  5.860087  gap_cert_lb=  0.000307  slack=1.00e-11  wall=13.6s
+  s=  0.9  gap(float)=  0.000000  chol_ok=True  lb(lam1)=  7.222239  c(ub lam2)=  7.222239  gap_cert_lb=  0.000000  slack=1.00e-11  wall=13.1s
+  s= 0.95  gap(float)=  0.000000  chol_ok=True  lb(lam1)=  7.605264  c(ub lam2)=  7.605264  gap_cert_lb=  0.000000  slack=1.00e-11  wall=13.1s
+  s= 0.99  gap(float)=  0.000000  chol_ok=True  lb(lam1)=  7.920202  c(ub lam2)=  7.920202  gap_cert_lb= -0.000000  slack=1.00e-11  wall=13.7s
+  s=  1.0  gap(float)=  0.000000  chol_ok=True  lb(lam1)=  8.000000  c(ub lam2)=  8.000000  gap_cert_lb= -0.000000  slack=1.00e-11  wall=5.5s
+  s= 1.01  gap(float)=  0.000000  chol_ok=True  lb(lam1)=  8.080198  c(ub lam2)=  8.080198  gap_cert_lb= -0.000000  slack=1.00e-11  wall=11.3s
+  s= 1.05  gap(float)=  0.000000  chol_ok=True  lb(lam1)=  8.404763  c(ub lam2)=  8.404763  gap_cert_lb=  0.000000  slack=1.00e-11  wall=12.5s
+  s=  1.1  gap(float)=  0.000000  chol_ok=True  lb(lam1)=  8.818191  c(ub lam2)=  8.818191  gap_cert_lb=  0.000000  slack=1.00e-11  wall=10.2s
+  s=  1.5  gap(float)=  0.000091  chol_ok=True  lb(lam1)= 12.335761  c(ub lam2)= 12.335670  gap_cert_lb=  0.000091  slack=1.00e-11  wall=10.4s
+
+=== XXZ, N=6, dim=64 ===
+  Delta=    0  gap(float)=  0.267949  chol_ok=True  lb(lam1)=  2.000000  c(ub lam2)=  1.732051  gap_cert_lb=  0.267949  slack=1.00e-11  wall=0.2s
+  Delta=  0.5  gap(float)=  0.454018  chol_ok=True  lb(lam1)=  2.368034  c(ub lam2)=  1.914016  gap_cert_lb=  0.454018  slack=1.00e-11  wall=0.2s
+  Delta=  0.9  gap(float)=  0.634683  chol_ok=True  lb(lam1)=  2.710628  c(ub lam2)=  2.075945  gap_cert_lb=  0.634683  slack=1.00e-11  wall=0.2s
+  Delta=  1.0  gap(float)=  0.684742  chol_ok=True  lb(lam1)=  2.802776  c(ub lam2)=  2.118034  gap_cert_lb=  0.684742  slack=1.00e-11  wall=0.1s
+  Delta=  1.5  gap(float)=  0.529836  chol_ok=True  lb(lam1)=  3.300849  c(ub lam2)=  2.771013  gap_cert_lb=  0.529836  slack=1.00e-11  wall=0.2s
+  Delta=  2.0  gap(float)=  0.406283  chol_ok=True  lb(lam1)=  3.855773  c(ub lam2)=  3.449490  gap_cert_lb=  0.406283  slack=1.00e-11  wall=0.2s
+
+=== XXZ, N=8, dim=256 ===
+  Delta=    0  gap(float)=  0.198912  chol_ok=True  lb(lam1)=  2.613126  c(ub lam2)=  2.414214  gap_cert_lb=  0.198912  slack=1.00e-11  wall=8.9s
+  Delta=  0.5  gap(float)=  0.340015  chol_ok=True  lb(lam1)=  3.086994  c(ub lam2)=  2.746980  gap_cert_lb=  0.340015  slack=1.00e-11  wall=8.0s
+  Delta=  0.9  gap(float)=  0.482099  chol_ok=True  lb(lam1)=  3.531165  c(ub lam2)=  3.049066  gap_cert_lb=  0.482099  slack=1.00e-11  wall=8.4s
+  Delta=  1.0  gap(float)=  0.522674  chol_ok=True  lb(lam1)=  3.651093  c(ub lam2)=  3.128419  gap_cert_lb=  0.522674  slack=1.00e-11  wall=8.6s
+  Delta=  1.5  gap(float)=  0.375722  chol_ok=True  lb(lam1)=  4.303545  c(ub lam2)=  3.927823  gap_cert_lb=  0.375722  slack=9.99e-12  wall=6.9s
+  Delta=  2.0  gap(float)=  0.258764  chol_ok=True  lb(lam1)=  5.039429  c(ub lam2)=  4.780665  gap_cert_lb=  0.258764  slack=1.00e-11  wall=9.7s
+
+Total rows: 32, Cholesky FAIL: 0, certified-gap<=0 (i.e. not conclusive at this pad): 6

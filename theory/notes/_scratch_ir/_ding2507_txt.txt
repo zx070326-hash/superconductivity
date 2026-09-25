@@ -1,0 +1,450 @@
+arXiv:2507.03383v2 [cond-mat.supr-con] 6 Nov 2025  Anharmonicity and Coulomb pseudopotential effects on superconductivity in YH6 and
+                                                                                                                YH9
+
+                                                                                            Yucheng Ding,1 Haoran Chen,1 and Junren Shi1, 2, ∗
+                                                                           1International Center for Quantum Materials, Peking University, Beijing 100871, China
+
+                                                                                  2Collaborative Innovation Center of Quantum Matter, Beijing 100871, China
+                                                                                                                      (Dated: November 7, 2025)
+
+                                                                        Anharmonic effects are widely believed to be the primary cause of the overestimation of super-
+                                                                     conducting transition temperatures of yttrium hydrides YH6 and YH9 in theoretical predictions.
+                                                                     However, prior studies indicate that anharmonicity alone may be insufficient to account for this dis-
+                                                                     crepancy. In this work, we employ the stochastic path-integral approach to investigate the quantum
+                                                                     and anharmonic effects of ions in yttrium hydrides. Our calculations reveal significant corrections
+                                                                     to the electron-phonon coupling parameters and an increase in the average phonon frequency com-
+                                                                     pared to density functional perturbation theory, aligning closely with results from the stochastic
+                                                                     self-consistent harmonic approximation. We find that properly taking into account the renormal-
+                                                                     ization of the Coulomb pseudopotential due to the frequency cutoff, which is often overlooked in
+                                                                     previous calculations, is critical to predicting transition temperatures consistent with experimental
+                                                                     values for both YH6 and YH9. This indicates that, with this correction, anharmonic effects are
+                                                                     sufficient to explain the discrepancies between experimental and theoretical results.
+
+                                                                          I. INTRODUCTION                      YH6 and YH9 have been synthesized in multiple inde-
+                                                                                                               pendent experiments, achieving maximum Tc of approxi-
+                                                      Since the discovery of superconductivity in mercury,     mately 220 K and 240 K, respectively. While theoretical
+                                                   efforts have been focused on searching for superconduc-     calculations reproduce the dome-shaped Tc-pressure rela-
+                                                   tors with higher superconducting transition temperatures    tionship observed in experiments [20], they overestimate
+                                                   (Tc). The Bardeen-Cooper-Schrieffer (BCS) theory ex-        Tc by at least 20 K [10–13]. For instance, experimental Tc
+                                                   plains conventional superconductivity through electron-     values for Im¯3m YH6 at 165 GPa and P63/mmc YH9 at
+                                                   phonon coupling (EPC). It also illuminates the path to-     255 GPa are significantly lower than those predicted us-
+                                                   wards higher Tc, which requires stronger EPC and higher     ing density functional perturbation theory (DFPT). Even
+                                                   phonon frequency. In this regard, hydrides are excellent    incorporating anharmonic effects via SSCHA fails to fully
+                                                   candidates for achieving high Tc due to the light mass of   account for the discrepancy in YH6 [11], and no system-
+                                                   hydrogen atoms. Guided by this idea, various hydride su-    atic analysis of anharmonicity has been conducted for
+                                                   perconductors have been theoretically predicted [1]. Over   YH9 [26].
+                                                   the past decade, multiple hydride superconductors, such
+                                                   as H3S [2, 3], LaH10 [4–6], CaH6 [7–9], YH6 and YH9 [10–       In this paper, we present a first-principles study of an-
+                                                   13], have been successfully synthesized and exhibit Tc ex-  harmonic effects in yttrium hydride superconductors. To
+                                                   ceeding 200 K, while Li2MgH16 [14], which is predicted      account for the anharmonicity and quantum fluctuations
+                                                   to possess the highest Tc, has yet to be confirmed in ex-   of hydrogen ions, we adopt the stochastic path-integral
+                                                   periments.                                                  approach (SPIA) implemented with density functional
+                                                                                                               theory (DFT) [27–29]. SPIA is a non-perturbative ap-
+                                                      For hydride superconductors, discrepancies often arise   proach that does not make assumptions about the nature
+                                                   between experimental and theoretical Tc values. Several     of ion motion or the existence of an effective harmonic
+                                                   explanations have been proposed, including anharmonic       potential. Compared to SSCHA, SPIA offers broader
+                                                   effects on ion motion [11, 15, 16], diffusion of ion va-    applicability. It can be applied not only to solid sys-
+                                                   cancies [17, 18], structure phase transitions [19–21], and  tems [29], but also to systems with diffusive atoms, such
+                                                   nonhydrostatic stress in experiments [22]. Among these      as liquids [27], superionic solids [30], and systems with
+                                                   mechanisms, the quantum and anharmonic effects of hy-       diffusive defects [17]. Using SPIA, we investigate the
+                                                   drogen ions are widely accepted as the cause for the over-  Tc of YH6 at 165 GPa and YH9 at 255 GPa. We find
+                                                   estimation of Tc in theoretical calculations. One well-     that anharmonic effects significantly alter EPC parame-
+                                                   established method to incorporate these effects is the      ters and increase the average phonon frequency, aligned
+                                                   stochastic self-consistent harmonic approximation (SS-      with prior SSCHA findings. By properly taking into ac-
+                                                   CHA) [23–25], which has been highly successful in pre-      count the renormalization of the Coulomb pseudopoten-
+                                                   dicting Tc’s for various hydride superconductors [15, 16].  tial due to frequency cutoff, which is neglected in earlier
+                                                                                                               studies, we obtain Tc values that closely match experi-
+                                                      However, in the case of yttrium hydrides, the overesti-  mental observations for both compounds. This indicates
+                                                   mation of Tc in various calculations remains unexplained.   that anharmonic effects are sufficient to explain the dis-
+                                                                                                               crepancies between experimental and theoretical results
+                                                   ∗ junrenshi@pku.edu.cn                                      in these systems.
+
+                                                                                                                  The remainder of the paper is organized as follows.
+                                                                                                                                            2
+
+In Sec. II, we give a brief introduction of SPIA for an-        where N (ϵF ) is the electron density of states (DOS) at
+harmonic solids. In Sec. III, we apply SPIA to study            the Fermi level, and ⟨· · · ⟩FS denotes the average for all
+the superconductivity of YH6 and YH9. The computa-              initial states (nk) and final states (n′k′) over the Fermi
+tional details are provided in Sec. III A. We then present      surface. The EPC parameters then enter the isotropic
+the results of our calculations and compare them with           linearized Eliashberg equation [34] which we use to de-
+prior studies in Sec. III B. The renormalization of the         termine Tc in this paper
+Coulomb pseudopotential is discussed in Sec. III C. Fi-
+nally, we summarize our results in Sec. IV.                          ρ∆j =        λ(j    −  j′)  −  µ∗  −  ℏβ  |ω˜ (j )|δj j ′  ∆j′ ,  (3)
+                                                                                                           π
+                                                                            j′
+
+II. STOCHASTIC PATH-INTEGRAL                                    where ω˜(j) is the renormalized Matsubara frequency un-
+                    APPROACH
+                                                                der  isotropic    approximation         given  by     ω˜ (j )   =  π   (2j  +
+                                                                                                                                   ℏβ
+
+                                                                1 + λ(0) + 2      j      λ(i)).     To include the effect of the
+                                                                                  i=1
+   SPIA is a method for determining Tc of superconduc-
+tors based on ab initio path integral molecular dynamics        Coulomb interaction between electrons, we introduce the
+(PIMD) [31, 32]. The key to this approach is to deter-
+mine the effective interaction between electrons through        Morel-Anderson pseudopotential µ∗ [35, 36]. Eq. (3) is an
+the fluctuation of the electron-ion scattering T matrix.
+                                                                eigenvalue problem to be solved for the eigenvalue ρ and
+   To study the electron-ion scattering, we start with the
+electron Green’s function to describe the electron state.       renormalized gap ∆j. The emergence of a positive ρ in-
+The PIMD simulation samples a set of ion configura-             dicates the instability towards forming Cooper pairs and
+tions R(τ ) at each imaginary time τ . For each sam-
+pling, the electron Green’s function Gˆ[R(τ )] can be de-       thus the superconducting phase. It is shown in Ref. [27]
+termined with respect to the corresponding ionic field.
+The physical electron Green’s function Gˆ¯ is the average       that the linearized Eliashberg equation remains valid for
+over each sampled instantaneous electron Green’s func-
+tion, i.e., Gˆ¯ = ⟨Gˆ[R(τ )]⟩C .                                general systems including anharmonic solids as long as
+
+   The propagation and pairing of electrons occur in            the effective electron-electron interaction is determined
+states that diagonalize the physical electron Green’s func-
+tion. For harmonic solids, this basis is just the Bloch         by Eq. (1) when calculating the EPC parameters.
+states. For anharmonic solids, a generalized Bloch basis
+can be determined by diagonalizing the effective Hamilto-       When evaluating the EPC parameters in Eq. (2),
+nian which is derived from the electron Green’s function
+in plane-wave basis [29]. The index of the generalized          N (ϵF ) is determined by averaging the DOS over all PIMD
+Bloch states can be written as 1 = (n, k, ωj), where k is
+the quasi-wave-vector, n is the band index, and ωj is the       configurations on a denser k-grid to obtain converged
+Fermionic Matsubara frequency.                                  values (see Appendix A). The average of Wˆ is weighted
+
+   We then determine the electron-ion scattering T ma-          by the Lorentzian function γ/[(ϵnk − ϵF )2 + γ2], where
+trix and electron-electron interaction under the general-
+ized Bloch basis. For each ion configuration in PIMD, the       ϵnk is the eigen-energy of the generalized Bloch states.
+scattering T matrix of electron is determined by the iden-
+tity Tˆ [R(τ )] = ℏG¯ˆ−1(Gˆ[R(τ )] − Gˆ¯)G¯ˆ−1. The pair scat-  The half-width of the Lorentzian is set to γ = ω˜(0) =
+tering amplitude Γˆ is the fluctuation of the electron-ion
+scattering T matrix, given by Γ11′ = −β⟨|T11′ [R(τ )]|2⟩C .     π   (1  +  λ(0))  [27].
+Finally, the effective interaction Wˆ can be determined by      ℏβ
+solving the Bethe-Salpeter equation
+                                                                When solving the linearized Eliashberg equation
+
+                                                                Eq. (3), we need to set a truncation N for the summation
+
+                                                                over j. This truncation N (i.e., the Matsubara frequency
+
+                                                                cutoff) results in a renormalization of µ∗, as pointed out
+
+                                                                by Allen and Dynes [34]. It is given by
+
+                                                                                     1           =  1   + ln   νph ,                   (4)
+                                                                                  µ∗(N )            µ∗         ωN
+
+                                                                where νph is the phonon cutoff frequency at which µ∗
+                                                                is evaluated [36, 37]. This renormalized µ∗(N ), which
+                                                                replaces µ∗ in Eq. (3), is crucial for obtaining a Tc that
+
+                                                                is independent of the truncation N (see Sec. III C).
+
+                     1     W12 G¯2 2 Γ21′ .  (1)                III. SUPERCONDUCTIVITY OF YH6 AND YH9
+W11′ = Γ11′ + ℏ2β
+                        2                                                           A. Computational details
+
+   For conventional superconductors, it is usually rea-            The crystal structures of YH6 of Im¯3m space group at
+                                                                165 GPa and YH9 of P63/mmc space group at 255 GPa
+sonable to apply the isotropic approximation [33]. Un-          are taken from Refs. [10–12] and structurally optimized.
+                                                                All PIMD and DFT calculations are performed using
+der this approximation, we replace the effective interac-       a modified version of the Vienna ab initio Simulation
+tion Wˆ with an isotropic average over the Fermi surface,       Package (VASP) code [38]. The projector-augmented
+                                                                wave (PAW) method [39] is used to describe the ion-
+which is known as the EPC parameter λ given by                  electron interaction, and the Perdew-Burke-Ernzerhof
+
+λ(j − j′) = −N (ϵF )⟨Wnk,n′k′ (j − j′)⟩FS,   (2)
+                                                              3
+
+(a)  Y     (b)                                                                           B. SPIA results
+
+     H                                                           The results of PIMD simulations are shown in Fig. 1.
+                                                              Figures 1(a) and 1(c) illustrate the trajectories of hy-
+(c)     Y  (d)                                                drogen and yttrium ions in YH6 and YH9, respectively.
+                                                              Their radial distribution functions (RDFs) are shown in
+        H                                                     Figs. 1(b) and 1(d). It can be seen that both hydro-
+                                                              gen and yttrium ions vibrate near their equilibrium po-
+FIG. 1. Trajectories of centroid mode of all hydrogen (gray)  sitions without diffusion, and their RDFs exhibit sharp
+and yttrium (blue) ions in PIMD simulation for (a) YH6 under  peaks. This indicates that both YH6 and YH9 are solid
+165 GPa at 220 K from [100] view, and (c) YH9 under 255       at the simulated temperature. On the other hand, hydro-
+GPa at 240 K from [001] view. (b) and (d) are corresponding   gen ions exhibit relatively large vibration amplitudes and
+RDFs.                                                         a broadened H-H distribution, which suggests potential
+                                                              strong anharmonicity.
+
+                                                                 The EPC parameters of YH6 and YH9 are shown in
+                                                              Fig. 2. For YH6, the SPIA results exhibit a signifi-
+                                                              cant suppression of λ(0), λ(1) and λ(2) compared to the
+                                                              DFPT results. The values of these parameters, the be-
+                                                              havior of ν¯2(m) = 2π/ℏβ m2λ(m)/λ(0) and its asymp-
+                                                              totic value (i.e., the average phonon frequency ν¯2) are
+                                                              close to the results of SSCHA, which is shown in Fig. 2(a)
+                                                              and Table I.
+
+(PBE) functional [40] is used to describe the exchange-                    (a) YH6
+correlation effect of electrons.
+                                                                           (b) YH9
+   To accelerate the PIMD simulation while maintaining
+its first-principles accuracy, we apply the machine learn-    FIG. 2. (a) EPC parameters λ(m) of YH6 under 165 GPa
+ing force field (MLFF) module of VASP [41–43]. The            at 220 K. DFPT and SSCHA results are calculated using
+modified program allows an on-the-fly training of MLFF        the Eliashberg spectral functions presented in Ref. [11]. (b)
+in (PI)MD simulations [30]. The details of training can       EPC parameters λ(m) of YH9 under 255 GPa at 240 K.
+be found in Appendix B.                                       DFPT result is calculated using the Eliashberg spectral func-
+                                                              tion presented in Ref. [20] under 260 GPa. The inset shows
+   Using the MLFF generated above, we perform PIMD            the asymptotic behavior of ν¯2(m) = 2π/ℏβ m2λ(m)/λ(0),
+simulations for YH6 and YH9 with bead number Nb = 16.         whose asymptotic value gives the average phonon frequency
+A Langevin thermostat with the friction coefficients of       ν¯2.
+centroid mode set to [10 10] ps−1 is used to control the
+temperature of the canonical (NVT) ensemble [44]. We             For YH9, the SPIA results exhibit a strong suppres-
+use a 3 × 3 × 4 supercell containing 252 atoms for YH6
+and a 3 × 3 × 2 supercell containing 360 atoms for YH9.
+YH6 is simulated at 220 K while YH9 is simulated at 240
+K. The overall simulation time is 3 ps with a time step
+of 0.5 fs.
+
+   The ion configurations of YH6 and YH9 are uniformly
+sampled with a spacing of 40 time steps after a 0.5-ps
+equilibrium. DFT calculations are performed for these
+configurations. An energy cutoff of 350 eV for plane
+waves is used to expand electron wave functions, and a
+3×3×3 Γ-centered k-point grid is used to sample the Bril-
+louin zone of the supercell. The converged DFT results
+are then used as inputs of our MATLAB implementation
+of SPIA [29] to reconstruct the Hamiltonian. Finally, the
+effective electron-electron interaction Wˆ is calculated on
+the irreducible wedge of a 6 × 6 × 6 k-point grid of the
+supercell. The EPC parameters λ(m) are calculated by
+averaging Wˆ near the Fermi surface. The half-width of
+the Lorentzian smearing is 0.16 eV for YH6 and 0.18 eV
+for YH9.
+                                                                  4
+
+System Method λ(0) λ(1) λ(2) ν¯2 (K) Tc (K)                       predictions agree well with the experimentally observed
+                                                                  Tc values.
+           DFPT 2.534 1.109 0.477 1399 270 (248)
+YH6 SSCHA 1.779 0.948 0.446 1662 245 (218)                                    C. Renormalization of the Coulomb
+                                                                                               pseudopotential
+SPIA 1.712 0.910 0.444 1738  212
+                                                                     Properly taking into account the renormalization of µ∗
+YH9 DFPT 3.038 0.958 0.409 1308 252 (236)                         due to the frequency cutoff in the Eliashberg equation,
+SPIA 1.749 0.944 0.460 1905  240                                  as specified in Eq. (4), is crucial for correctly evaluating
+                                                                  Tc [34]. In Fig. 4, we test the relation between Tc and fre-
+TABLE I. The first few EPC parameters λ(m), average               quency cutoff by solving the linearized Eliashberg equa-
+                                                                  tion with and without the µ∗ renormalization using EPC
+phonon frequency ν¯2 and predicted Tc of YH6 and YH9. We          parameters of YH6 calculated by SSCHA in Ref. [11]. It
+set µ∗ = 0.11 for all methods. For DFPT and SSCHA re-             can be seen that without the µ∗ renormalization, Tc in-
+                                                                  creases continuously with the frequency cutoff and does
+sults, their EPC parameters and average phonon frequencies        not show a trend of convergence even at large N values.
+                                                                  In contrast, with the µ∗ renormalization, Tc converges
+are calculated based on the Eliashberg spectral functions pre-    quickly. This indicates that only with the renormaliza-
+                                                                  tion can we obtain a Tc that is independent of the trun-
+sented in Refs. [11, 20]. The Tc values are also directly taken   cation.
+from the same sources. Tc values in parentheses are calculated
+using our method with renormalized µ∗(N ). The DFPT re-
+
+sult for YH9 is for 260 GPa.
+
+sion of λ(0), a slight suppression of λ(1) and an enhance-
+ment of λ(m) (m ≥ 2) compared to the DFPT results.
+This leads to a notable enhancement of ν¯2(m) values
+and thus the average phonon frequency ν¯2, as shown in
+Fig. 2(b) and Table I. While the suppressed λ(1) would
+lower Tc, its effect is compensated by the enhancement of
+λ(m) (m ≥ 2). This could explain why DFPT still yields
+a decent prediction of Tc despite the sizable anharmonic
+corrections.
+
+                                                                  FIG. 4. The relation between Tc and frequency cutoff when
+                                                                  solving the linearized Eliashberg equation. The truncation N
+
+                                                                  denotes the frequency cutoff at ωN = (2N +1)π/ℏβ. The blue
+                                                                  line is calculated with the bare µ∗ = 0.11 while the red line
+                                                                  is calculated with the renormalized µ∗(N ) defined in Eq. (4).
+
+                                                                  The Eliashberg spectral function used in calculation is the
+
+                                                                  SSCHA result of YH6 from Ref. [11].
+
+FIG. 3. Tc values of YH6 and YH9 at various pressures. Filled        The renormalization of µ∗ plays an important role in
+points indicate experimental data from Refs. [11–13]. Empty
+points represent theoretical predictions from Refs. [11, 20] and  our accurate predictions of Tc’s. As shown in Table I,
+our SPIA calculations. µ∗ = 0.11 is used in all calculations.     SPIA yields EPC parameters that are close to the SSCHA
+
+   Setting µ∗ = 0.11, as determined from GW meth-                 results for YH6, yet it leads to a significant suppression of
+ods [33, 36], and νph = 2518 K [36], we find Tc to be             Tc. This can be attributed to the renormalization, which
+212 K for YH6 and 240 K for YH9. Table I lists the                increases µ∗. Table I also includes Tc’s calculated using
+results obtained using different methods. Figure 3 sum-           the renormalized µ∗ for both DFPT and SSCHA methods
+marizes observed or predicted Tc values from various ex-
+periments and calculations. It can be seen that our SPIA          (values in parentheses). These results reveal that, had
+                                                                  the renormalization of µ∗ been considered, SSCHA would
+
+                                                                  have made a satisfactory prediction for the Tc of YH6.
+                                                                  This suggests that anharmonic effects, combined with µ∗
+                                                                                                5
+
+renormalization, are sufficient to bridge the gap between Thus, a 6 × 6 × 6 k-grid of the supercell is sufficient for
+
+theory and experimental observations.                         the convergence of calculations.
+
+         IV. SUMMARY AND DISCUSSIONS                                       (a) YH6
+
+   In conclusion, we apply first-principles SPIA to study                  (b) YH9
+the anharmonic effects in yttrium hydride superconduc-
+tors YH6 and YH9. The anharmonic effects suppress             FIG. 5. EPC parameters λ(m) of (a) YH6 and (b) YH9 with
+the EPC parameters λ(0) and λ(1) while increasing the         respect to the k-grid density of the supercell. The asymptotic
+average phonon frequency, which is in close agreement         behavior of m2λ(m) is shown in the inset.
+with previous SSCHA results. Combined with the renor-
+malization of µ∗ due to the frequency cutoff, which is        Appendix B: Training of machine learning force field
+neglected in previous calculations, it leads to Tc that are
+consistent with the experimental ones.                           The training parameters are as follows. We use a
+                                                              3 × 3 × 3 supercell containing 189 atoms for YH6 and
+   Moreover, it would be interesting to investigate the       a 2 × 2 × 2 supercell containing 160 atoms for YH9.
+dome-shaped Tc-pressure relationship of YH6 and YH9           The (PI)MD simulations are performed in the NVT en-
+with SPIA in future studies. Prior studies have at-           semble with a Langevin thermostat to control the tem-
+tributed this non-monotonic behavior to structural phase      perature. The friction coefficients of centroid mode are
+transitions [20] or changes in hydrogen vacancy concen-       set to [10 10] ps−1 and a time step of 1 fs is used.
+tration [17]. SPIA is well-suited for systems with struc-     In DFT calculations, we use an energy cutoff of 500
+tural distortions or hydrogen vacancy diffusion.              eV for planes waves to expand electron wave functions
+                                                              and a 3 × 3 × 3 Γ-centered k-point grid to sample the
+   Given the critical role of the Coulomb interaction in      Brillouin zone of the supercell. The radial and an-
+predicting Tc, it would be desirable to determine its effect  gular descriptors of MLFF are constructed using pa-
+directly within the SPIA framework and without relying        rameters ML SION=0.3, ML LMAX2=4, ML MRB=12,
+on the µ∗ approximation. This could be achieved by gen-       ML RCUT1=8 and ML RCUT2=5.
+eralizing state-of-the-art first-principles methods, such as
+DFT for superconductors (SCDFT) [45] and GW -based               The training is performed in two steps. First, an on-
+methods [33, 36], to a broader class of systems suitable      the-fly MD training is performed. The temperature is
+for SPIA. Intriguingly, the ensemble average in SPIA may      raised from 200 K to 300 K in a 10-ps simulation. Second,
+introduce additional corrections arising from the inter-      quantum effects are taken into account by performing a
+play between interactions and dynamic structural disor-       PIMD simulation with bead number Nb = 8. A 5-ps
+der. This will be left for future studies.                    simulation is performed with the temperature raised from
+                                                              250 K to 300 K. During the simulation, if the error of a
+                     ACKNOWLEDGMENTS                          structure exceeds a certain threshold, a DFT calculation
+
+   We acknowledge Xuesong Hu and Hao Jin for use-
+ful discussions. This work is supported by the Na-
+tional Key R&D Program of China under Grant No.
+2021YFA1401900 and the National Science Foundation
+of China under Grant No. 12174005.
+
+         Appendix A: Convergence of calculation
+
+   In Eq. (2), the DOS N (ϵF ) and effective electron-
+electron interaction Wˆ are calculated on a k-point grid
+to sample the Brillouin zone of the primitive cell. To ob-
+tain converged EPC parameters, we need to perform non-
+self-consistent calculations of N (ϵF ) and Wˆ on a denser
+k-grid than that used for the electronic structure calcu-
+lations.
+
+   We test the k-grid density of the supercell required for
+converged EPC parameters in Fig. 5. It can be seen that
+a 4 × 4 × 4 k-grid yields EPC parameters and asymptotic
+values nearly identical to those of the 6 × 6 × 6 k-grid.
+                                                                  6
+
+is performed and the data is added to the training set.           force reaches 0.051 eV/A˚. For YH9, 349 structures and
+   The training results are as follows. For YH6, 407 struc-
+                                                                  284 (2438) local configurations for Y (H) are chosen, and
+tures and 278 (1983) local configurations for Y (H) are           the RMSE of the force reaches 0.071 eV/A˚.
+chosen, and the root-mean-square error (RMSE) of the
+
+ [1] Y. Sun, X. Zhong, H. Liu, and Y. Ma, Clathrate metal               temperature superconductivity in YH6, Advanced Mate-
+      superhydrides under high-pressure conditions: enroute to          rials 33, 2006832 (2021).
+      room-temperature superconductivity, National Science        [12] P. Kong, V. S. Minkov, M. A. Kuzovnikov, A. P. Droz-
+      Review 11, nwad270 (2023).                                        dov, S. P. Besedin, S. Mozaffari, L. Balicas, F. F. Bal-
+                                                                        akirev, V. B. Prakapenka, S. Chariton, D. A. Knyazev,
+ [2] D. Duan, Y. Liu, F. Tian, D. Li, X. Huang, Z. Zhao,                E. Greenberg, and M. I. Eremets, Superconductivity up
+      H. Yu, B. Liu, W. Tian, and T. Cui, Pressure-induced              to 243 K in the yttrium-hydrogen system under high pres-
+      metallization of dense (H2S)2H2 with high-Tc supercon-            sure, Nature Communications 12, 5075 (2021).
+      ductivity, Scientific Reports 4, 6968 (2014).               [13] Y. Wang, K. Wang, Y. Sun, L. Ma, Y. Wang, B. Zou,
+                                                                        G. Liu, M. Zhou, and H. Wang, Synthesis and supercon-
+ [3] A. P. Drozdov, M. I. Eremets, I. A. Troyan, V. Kseno-              ductivity in yttrium superhydrides under high pressure,
+      fontov, and S. I. Shylin, Conventional superconductivity          Chinese Physics B 31, 106201 (2022).
+      at 203 kelvin at high pressures in the sulfur hydride sys-  [14] Y. Sun, J. Lv, Y. Xie, H. Liu, and Y. Ma, Route to
+      tem, Nature 525, 73 (2015).                                       a superconducting phase above room temperature in
+                                                                        electron-doped hydride compounds under high pressure,
+ [4] H. Liu, I. I. Naumov, R. Hoffmann, N. W. Ashcroft,                 Phys. Rev. Lett. 123, 097001 (2019).
+      and R. J. Hemley, Potential high-Tc superconducting         [15] I. Errea, M. Calandra, C. J. Pickard, J. Nelson, R. J.
+      lanthanum and yttrium hydrides at high pressure, Pro-             Needs, Y. Li, H. Liu, Y. Zhang, Y. Ma, and F. Mauri,
+      ceedings of the National Academy of Sciences 114, 6990            High-pressure hydrogen sulfide from first principles: A
+      (2017).                                                           strongly anharmonic phonon-mediated superconductor,
+                                                                        Phys. Rev. Lett. 114, 157004 (2015).
+ [5] A. P. Drozdov, P. P. Kong, V. S. Minkov, S. P. Besedin,      [16] P. Hou, Z. Huo, and D. Duan, Quantum and anharmonic
+      M. A. Kuzovnikov, S. Mozaffari, L. Balicas, F. F. Bal-            effects in superconducting Im-3m CaH6 under high pres-
+      akirev, D. E. Graf, V. B. Prakapenka, E. Greenberg,               sure: A first-principles study, The Journal of Physical
+      D. A. Knyazev, M. Tkacz, and M. I. Eremets, Super-                Chemistry C 127, 23980 (2023), publisher: American
+      conductivity at 250 K in lanthanum hydride under high             Chemical Society.
+      pressures, Nature 569, 528 (2019).                          [17] H. Chen, H. Wang, and J. Shi, Enhancing superconduct-
+                                                                        ing transition temperature of lanthanum superhydride
+ [6] M. Somayazulu, M. Ahart, A. K. Mishra, Z. M. Geballe,              by increasing hydrogen vacancy concentration (2024),
+      M. Baldini, Y. Meng, V. V. Struzhkin, and R. J. Hem-              arXiv:2409.09836 [cond-mat.supr-con].
+      ley, Evidence for superconductivity above 260 K in lan-     [18] X. Jia, H. Chen, X. Ye, J. Lv, X. Zhang, H. Wang,
+      thanum superhydride at megabar pressures, Phys. Rev.              and Y. Yao, Emergence of diffusional hydrogen es-
+      Lett. 122, 027001 (2019).                                         cape in high-Tc superconducting calcium superhydride
+                                                                        at megabar pressures (2025), arXiv:2308.12618 [cond-
+ [7] H. Wang, J. S. Tse, K. Tanaka, T. Iitaka, and Y. Ma,               mat.supr-con].
+      Superconductive sodalite-like clathrate calcium hydride     [19] D. An, D. Duan, Z. Zhang, Q. Jiang, T. Ma, Z. Huo,
+      at high pressures, Proceedings of the National Academy            H. Song, and T. Cui, Type-I clathrate calcium hydride
+      of Sciences 109, 6463 (2012).                                     and its hydrogen-vacancy structures at high pressure,
+                                                                        Phys. Rev. B 110, 054505 (2024).
+ [8] L. Ma, K. Wang, Y. Xie, X. Yang, Y. Wang, M. Zhou,           [20] M. Du, Z. Li, D. Duan, and T. Cui, Superconducting
+      H. Liu, X. Yu, Y. Zhao, H. Wang, G. Liu, and Y. Ma,               phases of YH9 under pressure, Phys. Rev. B 108, 174507
+      High-temperature superconducting phase in clathrate               (2023).
+      calcium hydride CaH6 up to 215 K at a pressure of 172       [21] I. Errea, F. Belli, L. Monacelli, A. Sanna, T. Koretsune,
+      GPa, Phys. Rev. Lett. 128, 167001 (2022).                         T. Tadano, R. Bianco, M. Calandra, R. Arita, F. Mauri,
+                                                                        and J. A. Flores-Livas, Quantum crystal structure in the
+ [9] Z. Li, X. He, C. Zhang, X. Wang, S. Zhang, Y. Jia,                 250-kelvin superconducting lanthanum hydride, Nature
+      S. Feng, K. Lu, J. Zhao, J. Zhang, B. Min, Y. Long,               578, 66 (2020).
+      R. Yu, L. Wang, M. Ye, Z. Zhang, V. Prakapenka,             [22] H. Liu, C. Liu, Y. Ma, and C. Chen, Prominent stress-
+      S. Chariton, P. A. Ginsberg, J. Bass, S. Yuan, H. Liu,            driven anomalies in superconductivity of yttrium hexahy-
+      and C. Jin, Superconductivity above 200 K discovered in           dride, Phys. Rev. B 109, 064513 (2024).
+      superhydrides of calcium, Nature Communications 13,         [23] N. R. Werthamer, Self-consistent phonon formulation of
+      2863 (2022).                                                      anharmonic lattice dynamics, Phys. Rev. B 1, 572 (1970).
+                                                                  [24] P. Souvatzis, O. Eriksson, M. I. Katsnelson, and S. P.
+[10] F. Peng, Y. Sun, C. J. Pickard, R. J. Needs, Q. Wu,                Rudin, Entropy driven stabilization of energetically un-
+      and Y. Ma, Hydrogen clathrate structures in rare earth            stable crystal structures explained from first principles
+      hydrides at high pressures: Possible route to room-
+      temperature superconductivity, Phys. Rev. Lett. 119,
+      107001 (2017).
+
+[11] I. A. Troyan, D. V. Semenok, A. G. Kvashnin, A. V.
+      Sadakov, O. A. Sobolevskiy, V. M. Pudalov, A. G.
+      Ivanova, V. B. Prakapenka, E. Greenberg, A. G. Gavril-
+      iuk, I. S. Lyubutin, V. V. Struzhkin, A. Bergara, I. Er-
+      rea, R. Bianco, M. Calandra, F. Mauri, L. Mona-
+      celli, R. Akashi, and A. R. Oganov, Anomalous high-
+                                                                  7
+
+      theory, Phys. Rev. Lett. 100, 095901 (2008).                      phonon interaction, Phys. Rev. 125, 1263 (1962).
+[25] I. Errea, M. Calandra, and F. Mauri, Anharmonic free         [36] E. Kogler, D. Spath, R. Lucrezi, H. Mori, Z. Zhu,
+
+      energies and phonon dispersions from the stochastic self-         Z. Li, E. R. Margine, and C. Heil, Isome: Streamlining
+      consistent harmonic approximation: Application to plat-           high-precision eliashberg calculations, Computer Physics
+      inum and palladium hydrides, Phys. Rev. B 89, 064302              Communications 315, 109720 (2025).
+      (2014).                                                     [37] W. L. McMillan, Transition temperature of strong-
+[26] D. Semenok, Computational design of new superconduct-              coupled superconductors, Phys. Rev. 167, 331 (1968).
+      ing materials and their targeted experimental synthesis     [38] G. Kresse and J. Furthmu¨ller, Efficient iterative schemes
+      (2023), arXiv:2307.13313 [cond-mat.supr-con].                     for ab initio total-energy calculations using a plane-wave
+[27] H. Liu, Y. Yuan, D. Liu, X.-Z. Li, and J. Shi, Supercon-           basis set, Phys. Rev. B 54, 11169 (1996).
+      ducting transition temperatures of metallic liquids, Phys.  [39] G. Kresse and D. Joubert, From ultrasoft pseudopoten-
+      Rev. Res. 2, 013340 (2020).                                       tials to the projector augmented-wave method, Phys.
+[28] H. Chen, X.-W. Zhang, X.-Z. Li, and J. Shi, First-                 Rev. B 59, 1758 (1999).
+      principles estimation of the superconducting transition     [40] J. P. Perdew, K. Burke, and M. Ernzerhof, Generalized
+      temperature of a metallic hydrogen liquid, Phys. Rev. B           gradient approximation made simple, Phys. Rev. Lett.
+      104, 184516 (2021).                                               77, 3865 (1996).
+[29] H. Chen and J. Shi, Stochastic path-integral approach        [41] R. Jinnouchi, F. Karsai, and G. Kresse, On-the-fly ma-
+      for predicting the superconducting temperatures of an-            chine learning force field generation: Application to melt-
+      harmonic solids, Phys. Rev. B 106, 184501 (2022).                 ing points, Phys. Rev. B 100, 014105 (2019).
+[30] H. Chen and J. Shi, Coexistence of superconductivity and     [42] R. Jinnouchi, J. Lahnsteiner, F. Karsai, G. Kresse, and
+      superionicity in Li2MgH16, Phys. Rev. B 109, L140505              M. Bokdam, Phase transitions of hybrid perovskites sim-
+      (2024).                                                           ulated by machine-learning force fields trained on the fly
+[31] D. Chandler and P. G. Wolynes, Exploiting the isomor-              with bayesian inference, Phys. Rev. Lett. 122, 225701
+      phism between quantum theory and classical statistical            (2019).
+      mechanics of polyatomic fluids, The Journal of Chemical     [43] R. Jinnouchi, F. Karsai, C. Verdi, R. Asahi, and
+      Physics 74, 4078 (1981).                                          G. Kresse, Descriptors representing two- and three-body
+[32] D. Marx and M. Parrinello, Ab initio path integral molec-          atomic distributions and their effects on the accuracy of
+      ular dynamics: Basic ideas, The Journal of Chemical               machine-learned inter-atomic potentials, The Journal of
+      Physics 104, 4077 (1996).                                         Chemical Physics 152, 234102 (2020).
+[33] C. Heil, S. di Cataldo, G. B. Bachelet, and L. Boeri,        [44] M. Ceriotti, M. Parrinello, T. E. Markland, and D. E.
+      Superconductivity in sodalite-like yttrium hydride                Manolopoulos, Efficient stochastic thermostatting of
+      clathrates, Phys. Rev. B 99, 220502 (2019).                       path integral molecular dynamics, The Journal of Chem-
+[34] P. B. Allen and R. C. Dynes, Transition temperature of             ical Physics 133, 124104 (2010).
+      strong-coupled superconductors reanalyzed, Phys. Rev.       [45] C. Pellegrini and A. Sanna, Ab initio methods for super-
+      B 12, 905 (1975).                                                 conductivity, Nature Reviews Physics 6, 509 (2024).
+[35] P. Morel and P. W. Anderson, Calculation of the su-          [46] Y. Ding, https://doi.org/10.5281/zenodo.17472986
+      perconducting state parameters with retarded electron-            (2025).
+

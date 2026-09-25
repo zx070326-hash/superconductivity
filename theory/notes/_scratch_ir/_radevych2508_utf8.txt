@@ -1,0 +1,1110 @@
+arXiv:2508.21281v1 [cond-mat.supr-con] 29 Aug 2025  Rigid muﬃn-tin approximation in plane-wave codes for fast modeling of
+                                                                                phonon-mediated superconductors
+
+                                                                          Danylo Radevych,1, 2, ∗ Tatsuya Shishidou,3 Michael Weinert,3
+                                                                     Elena R. Margine,2 Aleksey N. Kolmogorov,2 and Igor I. Mazin1, 4,
+
+                                                           1Department of Physics and Astronomy, George Mason University, Fairfax, VA 22030, USA
+                                                                                   2Department of Physics, Applied Physics and Astronomy,
+
+                                                                            Binghamton University-SUNY, Binghamton, New York 13902, USA
+                                                             3Department of Physics, University of Wisconsin-Milwaukee, Milwaukee, WI 53201, USA
+                                                         4Quantum Science and Engineering Center, George Mason University, Fairfax, VA 22030, USA
+
+                                                                                                        (Dated: September 1, 2025)
+
+                                                           We present a pseudopotential-based plane-wave implementation of the rigid muﬃn-tin approxi-
+                                                        mation (RMTA), oﬀering a computationally eﬃcient alternative to its traditional use in all-electron
+                                                        codes. This approach enables the evaluation of angular-momentum-resolved electron-phonon matrix
+                                                        elements and McMillan-Hopﬁeld parameters of not only elemental transition metals but also their
+                                                        compounds. The results are benchmarked against full-potential linearized augmented plane wave
+                                                        calculations, showing excellent agreement. We further outline a practical route to extract atom-
+                                                        and symmetry-type-resolved electron-phonon coupling constants. By enabling the use of RMTA de-
+                                                        scriptors within high-throughput workﬂows, this framework signiﬁcantly lowers the computational
+                                                        cost of screening candidate superconductors, providing a valuable tool for materials discovery.
+
+                                                                           I. INTRODUCTION                        well-suited for fast pseudopotential-based plane-wave
+                                                                                                                  (PS+PW) codes, and are widely used for predicting su-
+                                                       Historically, the ﬁrst practical method for calculating    perconducting properties. The ﬁrst high-throughput ma-
+                                                    the electron-phonon coupling (EPC) constant in met-           terials screenings involving hundreds of α2F (ω)-based
+                                                    als was rigid muﬃn-tin approximation (RMTA) [1–3],            superconductivity calculations have been recently re-
+                                                    in which the electronic potential within a sphere around      ported [34–37], but the high DFPT computational cost
+                                                    each atom, called the muﬃn-tin (MT) sphere, was as-           imposes limitations in the form of restricted unit cell
+                                                    sumed to follow ionic displacements rigidly. Since the        sizes or conﬁned composition spaces. While these eﬀorts
+                                                    RMTA was formulated in terms of MT potentials and             mark important milestones in applying machine learning
+                                                    wavefunctions expanded in radial functions and spher-         to guide superconductor discovery, larger datasets, pro-
+                                                    ical harmonics, it was naturally implemented in many          ducible with fast physics-based methods, are needed for
+                                                    all-electron methods, such as the augmented plane wave        identifying broader design rules.
+                                                    (APW) [4–8], Korringa-Kohn-Rostoker (KKR) [9–11],
+                                                    and linear muﬃn-tin orbital (LMTO) [6, 12, 13] meth-             Several fast descriptors for superconductors have been
+                                                    ods, where atomic functions inside the MT sphere are          proposed, typically tailored to particular materials fam-
+                                                    evaluated explicitly. The RMTA method worked rea-             ilies. For MgB2-type layered compounds, the diﬀerence
+                                                    sonably well for materials with localized d-orbitals and      between in-plane boron phonon frequencies at the M and
+                                                    close-packed structures (e.g., V, Nb, Mo, and Pd) [12, 14–    Γ points was used as a softening marker expected to
+                                                    20], and was actively used to study superconductivity         correlate with the EPC [38]. In sp-metals, scaled EPC
+                                                    of various materials, such as A15 [16, 21] and C15 [22]       constants evaluated at the Brillouin-zone center were in-
+                                                    compounds, hydrides [23], nitrides [24], etc. While this      troduced as a proxy for the total EPC [39, 40], but
+                                                    method was designed with transition metals in mind, and       this approach cannot describe cases where zone-boundary
+                                                    routinely tended to underestimate the EPC in sp-metals,       phonons play a signiﬁcant role. More recently, frozen-
+                                                    corrections accounting for the long-range tails of the ionic  phonon calculations at a small number of high-symmetry
+                                                    MT potential at large distances in such materials have        q-points combined with energy band shifts were pro-
+                                                    been proposed [19, 25] and successfully applied to, e.g.,     posed to estimate the EPC across materials of general
+                                                    Ag [19] and Al, Ga, and Pb [25].                              chemistry, with particular emphasis on phases with large
+                                                                                                                  unit cells [41], although to date the method has been
+                                                       Later on, the RMTA was superseded by the much              applied exclusively to sp-bonded metals and hydrides.
+                                                    more accurate and universal linear-response method,           Real-space descriptors have also been explored, includ-
+                                                    formulated within density-functional perturbation the-        ing the electron-localization function [42, 43] and spatial
+                                                    ory (DFPT), [26–29] and by superconducting density-           derivatives of the Kohn–Sham potential [44], which were
+                                                    functional theory (SCDFT) [30–33], both of which are          used to estimate Tc in hydrogen-based superconductors.
+                                                                                                                  While eﬀective within their target classes, usually com-
+                                                    ∗ dradevyc@gmu.edu                                            prised of light elements, these descriptors underscore the
+                                                    † imazin2@gmu.edu                                             need for approaches that can extend to transition metals
+                                                                                                                  and their compounds.
+
+                                                                                                                     The RMTA could address this problem since it has
+                                                                                                                            2
+
+been successfully applied to transition metals, but so                                                 ∆τκ    Vκ (r)
+far it has not been formulated in a way suitable for
+pseudopotential-based codes, which are preferably used                             τκ                         r
+by modern search algorithms. To assist future supercon-
+ductor predictions and enhance the functionality of such        FIG. 1. Vector deﬁnitions for Eq. (1).
+codes, the current work presents a practical approach
+for evaluating EPC constants using the RMTA within              B. Assumption 2: Local-vibration approximation
+the plane-wave pseudopotential formalism. Developed
+method, which is a fast postprocessing step on top of              In the RMTA, the EP interaction is treated as local in
+a standard self-consistent ﬁeld (SCF) density functional        real space [1, 3], such that the total EPC constant for the
+theory (DFT) calculation, is applied to transition metals       whole material, λ, can be represented as a sum of atomic
+and their compounds. Calculated electron-phonon (EP)            EPC constants λ˜κ over Natoms atoms in the considered
+matrix elements [12] and McMillan–Hopﬁeld (MH) pa-              cell [49, 50]:
+rameters [3, 12, 17, 45, 46] are shown to agree well with
+the RMTA implementation within the full-potential lin-                                         Natoms
+earized augmented plane wave (FLAPW) method.
+                                                                                       λ=               λ˜κ.                (2)
+   The paper is organized as follows: Sec. II introduces
+the notations and describes the methodology, with more                                            κ
+detailed derivations provided in the Appendices. Sec. III
+outlines relevant technical aspects of the tests. Calcu-        The EPC constant for each atom is expressed as a ratio
+lated partial EP matrix elements and MH parameters              [see Eq. (3)] of an “electronic” contribution, represented
+are compared to those obtained with an FLAPW code               by MH parameter η˜κ, and a “phonon” part, given by the
+in Sec. IV. In the same section, estimates of EPC con-          mass of the ion Mκ times its average phonon frequency
+stants for simple metals are obtained using experimental         ωκ2 [3, 17, 45, 46].
+Debye temperatures. Sec. V discusses how the RMTA
+descriptors can be leveraged with machine learning algo-                      λ˜κ  =   η˜κ        1     ≈      η˜κ    .     (3)
+rithms. Unless stated otherwise, atomic Rydberg units                                  Mκ         ωκ2       Mκ ïωκ2ð
+are assumed throughout the paper.
+                                                                Although there are known approaches [3, 17, 51] to
+                      II. METHODOLOGY
+                                                                avoid full phonon calculations to obtain ωκ2 , their im-
+   This section describes three underlying assumptions          plementation is out of the scope of the present work.
+involved in the RMTA [47, 48] along with subtleties of
+atom- and type-resolved EPC constants and MH parame-            Instead, as an example, we approximate ωκ2 in simple
+ters, generalizes standard RMTA equations to the case of
+multiple symmetry types, introduces partial EP matrix           metals using experimental Debye temperatures θD, via
+elements and partial electronic density of states (eDOS)                      ωκ2      1  θD2
+needed to calculate MH parameters, and summarizes key           the relation       ≈   2       .
+equations derived in this work that make the RMTA com-
+patible with pseudopotentials.                                  The main focus of this work is the derivation of the
+
+      A. Assumption 1: Rigid-ion approximation                  expressions for the “electronic” part, which are more
+
+                                                                analytically involved than those for the “phonon” part,
+
+                                                                as they directly depend on pseudopotentials and atomic
+
+                                                                functions derived from them. The corresponding atomic
+
+                                                                MH parameter, η˜κ, is deﬁned as the Fermi-surface aver-
+                                                                age of the squared EP matrix elements for states at the
+
+                                                                Fermi level, divided by the eDOS at the Fermi energy:
+
+   The RMTA relies on the assumption that a change in                              Ω2          Nstates
+the potential acting on an electron located at the vector
+r from the ionic center τκ is given by the rigid displace-      η˜κ = (2π)6N (εF) ij                       dkδ (εi,k − εF)
+ment of the electron-ion interaction potential Vκ(r) (see
+Fig. 1), given by the dot product of the ionic displace-                                                BZ
+ment ∆τκ and gradient of the potential ∇Vκ. Using the
+spherical part of the potential, Vκ(r), present work eval-      ×                  dk′δ (εj,k′ − εF)                        (4)
+uates this change in Eq. (1), as was done in the original
+RMTA formulations [1, 2, 12].                                                 BZ
+
+                                                                × |ïΨj,k′ | ∇Vκ(r) |Ψi,kð|2 ,
+
+∆Vκ(r)  ≈  −∆τκ  ·  ∇Vκ(r)  =  −  (∆τκ  ·  rˆ)  dVκ(r)  .  (1)  where N (εF) is the eDOS at the Fermi level per cell per
+                                                  dr            spin; εF is Fermi energy; εi,k and εj,k′ are the Hamilto-
+                                                                nian eigenvalues of the states i and j corresponding to
+
+                                                                the wavefunctions Ψi,k(r) and Ψj,k′ (r) at momenta k
+                                                                and k′, respectively; Nstates is the total number of elec-
+                                                                tronic states; Ω is the unit cell volume; and “BZ” marks
+                                                                                                                          3
+
+the integration over the Brillouin zone. The eDOS in the       As shown in Appendix A, the spherical-band approx-
+denominator of Eq. (4) makes the atomic MH parameter        imation that separates the radial (k) and angular (kˆ)
+and the corresponding atomic EPC constant dependent         dependencies on the wavevector k as
+on the cell size. The total EPC constant, λ in Eq. (2),
+however, is independent of the cell size.                             aiκ,lm(k) = aiκ,l(k)Yl∗m(kˆ),                       (9)
+
+   In materials where diﬀerent Wyckoﬀ positions are oc-     along with the separation of radial (r) and angular (rˆ)
+cupied, it is convenient to introduce the EPC constant      components of r, is crucial. This approximation enables
+λµ for each of the Ntypes symmetry types, as deﬁned in      a signiﬁcant simpliﬁcation of the MH parameter η˜κ, re-
+Eq. (5). Each symmetry type includes only atoms of          ducing Eq. (4) to
+the same chemical element that are related by crystal-
+lographic symmetry operations, with Naµtoms being the       η˜κ =        (2l  2(l + 1)   3)  Mκ2;l,l+1
+number of atoms per type µ. The second equality of                            + 1)(2l +
+Eq. (5) follows from the fact that all atoms belonging to          l                                                      (10)
+the same type µ share identical values of λ˜κ.
+                                                                   nκ,l  (rκ,MT,    εF  ) × nκ,l+1  (rκ,MT,  εF)
+                                                            ×                           N (εF)                    ,
+      Naµtoms
+
+λµ =           λ˜κ = Naµtomsλ˜κ          .  (5)             where the partial EP matrix elements are deﬁned as an
+                                                            integral of two normalized radial functions with the po-
+      κ∈{µ}                      ∀κ∈{µ}                     tential gradient over the MT-sphere volume,
+
+   Unlike the atomic EPC constants, the type-speciﬁc        Mκ;l,l+1(rκ,MT, εF) =
+EPC constants, λµ, are independent of the cell size. The
+total EPC constant is then given by a sum over the EPC      rκ,MT  drr2Rκ,l(r,      εF)  dVκ (r)  Rκ,l+1(r,  εF)          . (11)
+constants corresponding to diﬀerent symmetry types [see     0                               dr
+Eq. (6)] [16, 52–55]. Importantly, the ability to ﬁnd the
+contributions of individual symmetry types to the overall   rκ,MT  drr2 Rκ2 ,l (r,  εF)  rκ,MT  drr2 Rκ2 ,l+1 (r,    εF)
+EPC in compounds allows for a straightforward compar-       0                            0
+ison between these contributions in diﬀerent materials.
+                                                               As a result of the spherical-band approximation,
+               Ntypes                                       Eq. (10) includes only partial EP matrix elements cor-
+                                                            responding to dipole transitions with ∆l = ±1. The
+          λ=           λµ.                  (6)             quantities nκ,l represent the partial eDOS for angular
+                                                            momentum l inside the MT sphere of atom κ, deﬁned as
+
+               µ
+
+   Since the masses Mκ and the averaged phonon frequen-     nκ,l(rκ,MT; εF) = nκ,lm(rκ,MT; εF)
+cies ωκ2 are identical for atoms of the same symmetry
+type, MH parameters for diﬀerent symmetry types can         =              Ω        m                                     (12)
+                                                                         (2π)3       rκ,MT
+also be introduced as                                              m
+                                                                                            drr2Rκ2,l(r, εF)
+
+                                                                                    0
+
+ηµ = Naµtomsη˜κ ∀ κ ∈ {µ}.                  (7)             ×                 dkδ(εi,k − εF) |aiκ,lm(k)|2 ,
+
+Similar to the type-speciﬁc EPC constants, the type-                  i BZ
+speciﬁc MH parameters do not depend on the cell size.
+Although the present formalism uses atomic parameters,      It is important to point out that the spherical-band ap-
+only the type-speciﬁc ones are reported in Section IV       proximation is not required for the partial eDOS calcula-
+since they can be compared across diﬀerent materials re-    tion, as can be seen in Eq. (12), where general coeﬃcients
+gardless of the unit cell choice.                           aiκ,lm(k) are used.
+
+C. Assumption 3: Spherical-band approximation                  Hereafter, the task of computing MH parameters in
+                                                            PS+PW codes comes down to the calculation of partial
+                                                            EP matrix elements and partial eDOS.
+
+   The RMTA assumes that the wavefunction for the             D. Partial EP matrix elements evaluated on the
+                                                                                            MT-sphere
+state i inside the MT sphere of atom κ, with radius rκ,MT,
+can be expanded in terms of radial functions Rκ,l(r, εi,k)     The original expression for the partial EP matrix ele-
+corresponding to the local screened potential Vκ(r) and     ments, introduced by Gaspari and Gyorﬀy [Eq. (11)] [1,
+spherical harmonics Ylm(rˆ) characterized by quantum        2], involves integration of the radial functions Rκ,l(r, εF)
+numbers l and m, with momentum-dependent coeﬃcients         and Rκ,l+1(r, εF), along with the derivative of the MT
+                                                            potential dVκ(r)/dr, over the volume of the MT-sphere
+aiκ,lm(k):                                                  [Fig. 2(a)]. This expression has three problems for the
+                                                            PS+PW codes: (1) A pseudopotential (PS) diﬀers from
+Ψi,k(r) = aiκ,lm(k)Rκ,l(r, εi,k)Ylm(rˆ).    (8)
+
+      lm
+                                                                                                                                                                       4
+
+(a)                                  (b) 0                                             (a)                           (b)            Vloc(r0) (Ry)
+          nl(rMT)
+                                          -20
+                                     V(r) (Ry)
+                          rMT                                                                            r           0
+
+                                                -40           rc           rMT                      r0               -5
+                                                                                          τκ
+                                                                             PS                                      -10
+                                                                             AE
+                   rc                                                                                                -15
+
+                                                -60                                                                  -20                                Vκ,loc(r)
+                                                                                                                           8
+
+                                                     0        1   2        3      4                                       (bohr)6                          8
+                                                                 r (bohr)                                                y         4
+                                                                                                                                       2         τκ        (b6ohr)
+FIG. 2. (a) Muﬃn-tin radius, rMT, compared to pseudopoten-                                                                                 0            4
+tial cut-oﬀ radius, rc < rMT; (b) diﬀerence between pseudopo-                                                                                     2
+tential (PS) and all-electron (AE) potential for radii below rc.                                                                                        x
+                                                                                                                                              0
+
+the all-electron (AE) potential within a cut-oﬀ radius                                 FIG. 3. (a) Relation between real-space grid r, centered on
+rc, where pseudization takes place, rendering the inte-                                the atom at τκ, and grid r0, centered on the origin of the cal-
+gration of the PS derivative in that region unreliable;                                culated cell; (b) spherically-symmetric atomic local potential
+(2) The screened self-consistent potential, as calculated                              Vκ,loc(r) extracted from periodic local potential with Eq. (15).
+in PS+PW codes, is periodic in the real space, and needs
+to be converted to localized screened atomic potentials;                               coeﬃcients of the plane-wave expansion of the periodic
+(3) The radial functions Rκ,l(r, ε) are not calculated ex-                             potential on a shifted grid, r, that is centered on a speciﬁc
+plicitly and need to be derived from available DFT data.                               atom at τκ [Fig. 3(a-b)], as well as by using the expan-
+                                                                                       sion of eiG·r in spherical Bessel functions and spherical
+   In our method, the ﬁrst problem is solved by referring                              harmonics for only l = m = 0 [see Appendix C for de-
+to the following reformulated expression for Eq. (11):                                 tails].
+
+                                                                                                  Vκ,loc(r) = Vκ,loc(|r0 − τκ|)
+
+                                                                                                             =       eiG·τκ     V˜  (G)  sin Gr      .             (15)
+                                                                                                                                           Gr
+Mκ;l,l+1(rMT, εF) =                                                                                               G
+
+[Vκ(r) − εF]r2 − (Lκ,l − l)[Lκ,l+1 + (l + 2)]                                     ,    In this equation, r = |r|, G = |G|, and eiG·τκ V˜ (G)
+
+                   r · ∂Lκ,l ∂Lκ,l+1                                 r=εr=κε,FMT       are modiﬁed coeﬃcients of the plane-wave expansion of
+                           ∂ε           ∂ε
+                                                                                       the same periodic potential Vloc(r) [Fig. 3(b)] but on a
+                       ∂ Rκ,l (r,ε)                                                    shifted radial grid, r, that is centered on the atom. The
+
+Lκ,l(r, ε) = r               ∂r      .                                                 potential Vloc(r) is DFT-screened. Hence, the extracted
+                                                                                       local pseudopotential Vκ,loc(r) is screened, too. Note that
+                       Rκ,l(r, ε)                                                      the local PS is equal to the AE potential above the cut-oﬀ
+
+                                                                              (13)     radius: Vκ(r) = Vκ,loc(r) ∀ r > rc.
+                                                                                          For the third problem, the method of choice is to gener-
+It was introduced by Pettifor [12] based on the radial
+                                                                                       ate radial functions Rκ,l(r, ε), which are compatible with
+Schro¨dinger equation for radial functions Rκ,l(r, ε) and                              the extracted screened potential Vκ,loc(r), for a particular
+                                                                                       energy ε by solving the corresponding radial Schro¨dinger
+their normalization conditions, provided in Appendix B.
+                                                                                       equation,
+Here, Vκ(r) is the local screened potential of the atom κ,
+
+Lκ,l(r, ε) is the logarithmic derivative of the radial part of
+
+the wavefunction evaluated around the Fermi level, and
+
+∂ Lκ,l+1  is  the  energy  derivative                of  the  logarithmic     deriva-
+    ∂ε
+tive. In this expression, the values of the potential and
+                                                                                          d2
+logarithmic derivatives at the MT-radius are suﬃcient to                               −  dr2  +  Vκl,eﬀ(r)  [rRκ,l(r, ε)] = ε [rRκ,l(r, ε)]                        ,
+
+calculate the partial EP matrix elements.                                                                                                                  ε=εF
+
+The second problem is addressed by using properties                                                                                                                (16)
+
+of the Fourier transformation. The self-consistent DFT                                 with an eﬀective potential Vκl,eﬀ(r) containing Vκ,loc(r),
+
+pseudopotential is given as a periodic local screened po-                              l-dependent semilocal (SL) potential Vκl,SL(r) that is non-
+
+tential Vloc(r0) [Fig. 3(b)] on the 3D real-space grid r0,                             zero only in the core region r < rc (see Fig. 4), and
+with a center at an arbitrary origin of the calculated unit                            centrifugal potential l(l + 1)/r2:
+
+cell. The Fourier transform of this potential is repre-
+
+sented by coeﬃcients                                                                                              l(l +   1)
+                                                                                                                     r2
+              V˜ (G)      1      dr0e−iG·r0 Vloc(r0),                                     Vκl,eﬀ(r)  =  Vκ(r)  +
+                          Ω
+                       =       Ω                                              (14)                                                            l(l +  1) .          (17)
+                                                                                                                                                 r2
+                                                                                                     =  Vκ,loc(r) + Vκl,SL(r)       +
+
+where G is a reciprocal lattice vector.                                                   Eq. (16) is solved numerically at the speciﬁed energy ε
+   A spherically-symmetric local screened atomic poten-                                by outward integration from r value close to zero to the
+
+tial, Vκ,loc(r), is then expressed in Eq. (15) by obtaining
+                20                       V(r) = Vloc + VSpL                                                                                     5
+
+                10                       V(r) = Vloc + VSdL               From the system of Eqs. (18), the coeﬃcients aκi,lm(k)
+                                                                       are found following Eq. (19), which is calculated by using
+                                                                       the Gauss-Legendre quadrature method [62].
+
+V(r) - εF (Ry)                           V(r) = Vloc
+
+                0                                                                      √1
+                                                                                         ΩRκ,l(r, εi,k)
+                                                                       aκi,lm(k)    =
+
+                -10
+
+                -20            rc                     rMT                  × drˆ           ei(k+G)·(τκ+r)ψ˜i(k + G) Yl∗m(rˆ)                        .
+
+                                                                                       G                                                   r=rκ,MT
+
+                -30                                                                                                                              (19)
+
+                     0.5 1.0 1.5 2.0 2.5 3.0                               Then, using Eqs. (19) and (A4) (see Appendix A), the
+
+                               r (bohr)                                partial eDOS, nκ,l, can be evaluated from the Fourier
+
+                                                                       coeﬃcients, ψ˜i(k + G), and the logarithmic derivatives,
+                                                                       ∂
+FIG. 4. Eﬀect of semilocal, l-dependent, contributions added           ∂ε  Lκ,l,   by  Eq.  (20).     Note that this method allows for
+to the local pseudopotential of Nb atom in Nb BCC structure.
+                                                                       the calculation of not only the l-resolved eDOS, but also
+
+                                                                       m-resolved eDOS, nκ,lm.
+
+desired MT-radius. This way, the energy derivatives of                                            l
+the logarithmic derivatives ∂Lκ,l/∂ε can be obtained by
+solving the radial Schro¨dinger equation at diﬀerent ener-             nκ,l(rκ,MT, εF) =              nκ,lm(rκ,MT, εF)
+gies close to the Fermi level. The contribution from the
+SL potential is pertinent to the PS approach: Diﬀerent                                         m=−l
+pseudopotentials are needed to generate radial functions
+for diﬀerent l values, while only one AE potential would                      l     rκ,MT         ∂                     Nstates
+generate all radial functions.                                                      (2π)3         ∂ε
+                                                                       =                       −      Lκ,l          dk           δ(εi,k − εF)×
+   Although most PS+PW codes use pseudopotentials in
+the non-local (NL) (dependent on r and r′) Vanderbilt-                     m=−l                               BZ         i=1
+Kleinman-Bylander (VKB) form [56–58] due to its com-
+putational eﬃciency in reciprocal space, we use the SL                                                                                  2
+form for simplicity in the current implementation. For
+the non-local ONCVPSP pseudopotentials by Hamann                              drˆ      ei(k+G)·(τκ+r)ψ˜i(k + G) Yl∗m(rˆ)                            .
+[59, 60] utilized in this work, automatic conversion of the
+NL components, read directly from the pseudopotential                               G                                                      r=εr=κε,FMT
+ﬁle, to the SL form is straightforward and described in
+Appendix D. In principle, solving the radial Schro¨dinger                                                                                       (20)
+equation with NL potentials directly [61] would give the
+same results.                                                              As can be seen from Eq. (13), the squared partial EP
+
+                                                                       matrix element, Ml2,l+1, contains energy derivatives of the
+
+                                                                       logarithmic     derivatives,   ∂     Lκ,l  and    ∂   Lκ,l+1  ,  in  the  de-
+                                                                                                      ∂ε                 ∂ε
+                                                                       nominator. These energy derivatives are normalization
+
+                                                                       integrals for the radial functions Rl and Rl+1 (see Ap-
+                                                                       pendix B) that cancel out when Ml2,l+1 is multiplied by
+
+                                                                       the partial eDOS nl and nl+1 from Eq. (20). Hence, if
+
+                                                                       the calculation of the partial eDOS themselves is not re-
+
+                                                                       quired, Eq. (10) for the MH parameters can be rewritten
+
+                                                                       in  a  form  independent       of  ∂   Lκ,l  and  ∂   Lκ,l+1,       such  that
+                                                                                                          ∂ε             ∂ε
+                                                                       energy derivatives of the logarithmic derivatives, or nor-
+  E. Partial eDOS inside the MT-sphere and total
+                                    eDOS                               malization integrals, do not have to be computed.
+
+   The partial eDOS inside the MT-sphere of atom κ are                     The eDOS at the Fermi level per cell per spin is com-
+derived based on the assumption that on the surface of
+the MT-sphere the wavefunction of the state i can be                   puted as a Brillouin-zone integral of the delta-functions
+expanded in both spherical harmonics and plane waves
+at the same time:                                                      summed over all electronic states,
+
+                                                                                   N (εF)   =    Ω           dk         δ (εi,k − εF) .          (21)
+                                                                                               (2π)3
+                                                                                                          BZ        i
+
+Ψi,k(r)            = lm aκi,lm(k)Rκ,l(rκ,MT, εi,k)Ylm(rˆ),                            III. TECHNICAL DETAILS
+                    = ψi,k(τκ + r)
+                                                                         The present implementation was developed within the
+Ψi,k(r)                                       r=rκ,MT               Quantum ESPRESSO (QE) package [63–65], which
+                                                                       was employed in this study for calculating the self-
+                    = √1      G ei(k+G)·(τκ+r)ψ˜i(k + G)           ,  consistent pseudopotentials with the plane-wave (PW)
+                                                                      code. Norm-conserving ONCVPSP [59, 60] pseu-
+                           Ω                                          dopotentials with the Perdew-Burke-Ernzerhof (PBE)
+
+
+
+                                                          r=rκ,MT
+
+                                                              (18)
+
+where ψ˜i(k + G) are coeﬃcients of the Fourier expansion
+
+of the wavefunction Ψi,k(r).
+                                                                                                                                         6
+
+[66] generalized-gradient approximation (GGA) for the         Ml,2l+1(rMT, εF) (Ry / bohr)2  10 (a)                                Md2f
+exchange-correlation functional were used for all atoms,                                      8                                    Mp2d
+with a wavefunction energy cutoﬀ of 120 Ry. The RMTA                                          6                                    Ms2p
+code was executed as a postprocessing step after the self-                                    4
+consistent ﬁeld (SCF) calculation. For the quantitative                                       2                       rMreTf
+veriﬁcation presented in Sec. IV, all structures were mod-
+eled with their primitive unit cells, and MT-radii were       η(rMT, εF) (eV / Å2)            0
+chosen to correspond to touching spheres. The default
+three-dimensional FFT mesh for charge density and self-                                      12 (b)
+consistent potential, automatically determined by the en-                                    10
+ergy cutoﬀ, was retained. A 24×24×24 Monkhorst-Pack
+k-point grid and Methfessel-Paxton smearing [67] with                                        8                                η
+σ = 10−2 Ry were utilized for the approximation of the
+occupation function in the SCF calculation. The tetrahe-                                     6                                ηdf
+dron method of integration [68] on the same k-point grid
+was selected for the evaluation of the partial and total                                     4                                ηpd
+eDOS across all structures, since it showed faster con-                                                                       ηsp
+vergence with respect to the k-point grid than smeared                                       2                        rMreTf
+delta-function approximations (see Section II of the Sup-
+plementary Information [69]).                                                                0
+
+   Calculated partial EP matrix elements and McMillan-                                       2.4     2.5  2.6         2.7          2.8
+Hopﬁeld parameters were compared to the FLAPW code                                                        rMT (bohr)
+ﬂair [70]. In FLAPW, semicore states of all atoms were
+treated as core states and included explicitly in core-       FIG. 5. (a) Partial EP matrix elements, Ml2,l+1, and (b) par-
+orthogonalization. Equations (10) and (13) were eval-         tial, ηl,l+1, and total, η, MH parameters as functions of the
+uated with the atomic potential, radial functions, and
+partial and total eDOS calculated using the FLAPW             muﬃn-tin radius, rMT, for the Nb atom in the BCC structure.
+method. The same MT-radii, k-point grid, and smear-
+ing parameters as those used for the RMTA calculations        Dashed vertical lines show the reference muﬃn-tin radius at
+with the PW code were employed to ensure consistency.         rM refT = 2.70 bohr.
+
+        IV. QUANTITATIVE VERIFICATION                         FLAPW methods for the electronic part calculated in
+                                                              selected simple metals and compounds is demonstrated
+   A key diﬀerence in how the partial EP matrix ele-          in Figs. 6 and 7, where Strukturbericht symbols [71] are
+ments and MH parameters depend on the choice of the           used as space-group identiﬁers for compounds. Crystallo-
+MT-radius is illustrated in Figs. 5(a)-(b) for the BCC        graphic parameters of the structures are provided in the
+structure of Nb. For all l channels, Ml2,l+1 decrease as      Supplementary Information [69]. The diﬀerences in par-
+MT-radius increases [Fig. 5(a)], consistent with Petti-       tial EP matrix elements (pd and df ) for metal atoms in
+for’s observation [12] that partial EP matrix elements        the selected structures do not exceed 5% [Fig. 6], with
+alone are not suﬃcient to describe the electronic part of     PS+PW and FLAPW results almost overlapping. In
+the EPC constant because they are strongly dependent          Fig. 7, which shows MH parameters for symmetry types
+on the MT-radius.                                             of the metal atoms, both partial and total MH parame-
+                                                              ters exhibit similar trends across the two methods. Both
+   On the contrary, the partial MH parameters, which          methods demonstrate that η parameter of Nb atoms in
+are presented in eV / ˚A2 following previous studies          NbN is mostly dominated by the df channel contribu-
+[12, 14, 16], appear to be less sensitive [Fig. 5(b)] to the  tion, in agreement with previous studies [16, 21]. The
+choice of the MT-radius since they include the partial        observed discrepancies bewteen PS+PW and FLAPW
+eDOS, which increases as the MT sphere expands. No-           are primarily due to slight diﬀerences in the electronic
+tably, while the df channel may seem dominant based           density of states. Importantly, there is no tendency for
+on its corresponding partial EP matrix element, it con-       one of the methods to produce consistently higher values
+tributes roughly the same to the total MH parameter η         than the other. Comparison of the total MH parameters,
+as the pd channel at the reference MT radius. Achieving       shown as circles in Fig. 7, to some previous APW results
+a nearly-ﬂat behavior of the total atomic MH parameter        [14, 16] is discussed in Section III of the Supplementary
+around the reference MT-radius was one of the objectives      Information [69].
+of this work. Nevertheless, the slight dependence on rMT
+indicates that careful selection of the MT-radius based          Table I compares the calculated MH parameters for
+on the cell geometry is advisable.                            simple metals with the results of Papaconstantopoulos et
+                                                              al. [14], and uses them to estimate the EPC constant
+   The good agreement between the PS+PW and
+                                                                                                                                     7
+
+                   (a)           Mp2d                                                              PS+PW      FLAPW
+                                                                                                         η          η
+Mp2d (Ry / bohr)2                                                                                        ηdf        ηdf
+                                                                                                         ηpd        ηpd
+                                                                                                         ηsp        ηsp
+
+                                               PS+PW                    η (eV / Å2)
+                                               FLAPW
+
+                   (b)           Md2f
+
+Md2f (Ry / bohr)2
+
+                                               PS+PW
+                                               FLAPW
+
+                   V3Sn   V3Si     V     Mo     Nb Nb3Si Nb3Si    NbN                V3Sn V3Si  V  Mo Nb Nb3Si Nb3Si NbN
+                   (A15)  (A15)  (BCC)  (BCC)  (BCC) (A15) (L12)  (B1)
+                                                                                     (A15) (A15) (BCC) (BCC) (BCC) (A15) (L12) (B1)
+                   2.36   2.23   2.48   2.57   2.70 2.46 2.46     2.31
+  rMT                                                                   FIG. 7. Comparison of partial, ηl,l+1, and total, η, type-
+(bohr)                                                                  resolved MH parameters between PS+PW and FLAPW
+                                                                        methods for types containing only metal atoms–V, Mo, and
+FIG. 6. Comparison of squared partial EP matrix elements,               Nb–in diﬀerent structures.
+Ml2,l+1, between PS+PW and FLAPW methods for metal
+atoms–V, Mo, and Nb–in diﬀerent structures: (a) pd chan-
+
+nel and (b) df channel. Corresponding MT-radii of the metal
+
+atoms are listed at the bottom of the ﬁgure.
+
+by approximating the “phonon” contribution via the ex-                  method is well-suited for high-throughput screening of
+perimental Debye temperature. It should be noted that                   candidate materials. As a minimal criterion, materials
+the MH parameters from Ref. [14] were obtained with                     with very low MH parameters can be reliably excluded
+the augmented plane wave (APW) method and Moruzzi-                      from consideration, as they are unlikely to exhibit super-
+Janak-Williams (MJW) LDA potentials [72]. The notice-                   conductivity.
+able diﬀerences from the present results are likely due
+to the evolution of potentials and the use of diﬀerent                     For a more complete estimate of the EPC constant,
+exchange-correlation functionals. While the prior MH                    the phonon part, given by the averaged squared phonon
+parameters tend to be lower than those obtained in this                 frequencies ωκ2 , still needs to be evaluated using a com-
+work, the overall trend across elemental metals remains                 putationally eﬃcient approach. One practical strategy
+similar. This consistency suggests that the RMTA can                    is to replace the direct evaluation of ωκ2 with that of
+be eﬀectively used to identify materials with a higher                  the interatomic force constants. These can be approxi-
+likelihood of superconductivity, provided that the same                 mated from the diagonal elements of the inverted dynam-
+RMTA implementation is applied consistently across all                  ical matrix, obtained at a few high-symmetry points on
+candidates.                                                             the Brillouin zone boundary via phonon linear-response
+                                                                        calculations [3, 41], or from the diagonal elements of the
+                         V. DISCUSSIONS                                 inverse force-constant matrix at the Γ-point in frozen-
+                                                                        phonon calculation, assuming a suﬃciently large super-
+                                                                        cell [17, 47, 51].
+
+   Machine learning studies [54, 79, 80] have demon-                       To improve RMTA predictions for sp-metals, correc-
+strated that McMillan-Hopﬁeld parameters and partial                    tions to the asymptotic behavior of the local ionic poten-
+eDOS can serve as eﬀective descriptors for identifying                  tial could be introduced, as done by Zdetsis et al. [25]
+potential superconductors. In this context, the present                 and Mazin et al. [19].
+                                                                                                                                        8
+
+TABLE I. Estimated semi-phenomenological EPC constant,        Eq. (4) can be rewritten as
+λ, based on calculated McMillan-Hopﬁeld parameters, η, at
+speciﬁed MT-radii, rMT, and experimental Debye tempera-            η˜κ  =       Ω2              Nstates     dkδ (εi,k − εF)
+ture, θD, for simple metals. θD values are taken from corre-               (2π)6N (εF)             ij
+sponding references. MH parameters ηref, calculated with the                                             BZ
+APW method and MJW potentials [14], are provided for the
+reference.                                                              ×          dk′δ (εj,k′ − εF)            dr         dr′          (A1)
+
+                                                                           BZ                               MT      MT
+
+Structure rMT η ηref [14] θD  λ                                         × Ψj,k′ (r′)Ψi∗,k(r′)Ψ∗j,k′ (r)Ψi,k(r)
+
+(bohr)  eV          eV   (K)                                            ×  (rˆ  ·  rˆ′)  dVκ(r)  dVκ(r′)    .
+        ˚A2         ˚A2                                                                    dr      dr′
+
+ V (BCC) 2.48 8.01  6.89 385 [73] 1.19                           While the explicit use of the wavefunction expansion
+Cu (FCC) 2.41 0.57  0.46 343 [74] 0.09
+Nb (BCC) 2.70 9.07  7.63 275 [75] 1.45                        from Eq. (8) would lead to four distinct sets of {l, m}
+Mo (BCC) 2.57 5.56  5.80 430 [76] 0.35
+Rh (FCC) 2.56 4.95  4.72 480 [77] 0.24                        quantum numbers, corresponding to each wavefunction,
+Pd (FCC) 2.66 2.65  1.99 299 [78] 0.31
+Ag (FCC) 2.73 0.28  0.29 225 [74] 0.06                        the adoption of the spherical approximation in Eq. (9)
+                                                              and the orthonormality of the kˆ- and kˆ′-dependent spher-
+
+                                                              ical harmonics reduce the number of independent angular
+                                                              momentum indices to two sets: {l, m} and {l′, m′}. As a
+
+                                                              result, Eq. (A1) simpliﬁes to
+
+VI. CONCLUSIONS
+
+   We presented a method for implementing the                                   Ω2          Nstates
+rigid muﬃn-tin approximation in pseudopotential-based
+plane-wave (PS+PW) codes to calculate the electronic          η˜κ  =    (2π)6N (εF) ij
+part of the EPC constant, expressed through the
+McMillan-Hopﬁeld parameter. The calculated values for                                                lm  l′ m′
+a variety of simple metals and compounds were vali-
+dated against results from a full-potential augmented                   dkk2|aiκ,l(k)|2δ (εi,k − εF)
+plane wave code. The excellent agreement in partial EP
+matrix elements and McMillan-Hopﬁeld parameters be-                × dk′(k′)2|ajκ,l′ (k′)|2δ (εj,k′ − εF)                               (A2)
+tween the pseudopotential and all-electron methods con-
+ﬁrms the reliability of the developed methodology. Some                  rκ,MT                              dVκ(r)                   2
+discrepancies with older references likely reﬂect the evo-              0                                     dr
+lution of potentials and exchange-correlation functionals          ×                drr2Rκ,l(r,      εF  )          Rκ,l′  (r,  εF)
+over time. As highlighted in previous machine learning
+studies, McMillan-Hopﬁeld parameters computed within               × drˆ drˆ′Ylm(rˆ)Yl∗′m′ (rˆ)Yl∗m(rˆ′)Yl′m′ (rˆ′)
+the PS+PW framework can be used as descriptors in ma-
+chine learning algorithms for high-throughput screening            × (rˆ · rˆ′) .
+of potential superconducting materials.
+                                                                 The next simpliﬁcation is achieved by taking advan-
+                     ACKNOWLEDGMENTS                          tage of the separation of the spatial dependence of r
+                                                              into radial, r, and angular, rˆ, components. Applying
+   This work was supported by National Science Foun-          the identity [81]
+dation (Grants No. DMR-2320074, DMR-2320073, and
+DMREF-2323857).                                                            (rˆ · rˆ′)    =  4π       1                                  (A3)
+                                                                                            3
+Appendix A: Assumptions of spherical potential and                                                        Y1∗m′′ (rˆ′)Y1m′′ (rˆ),
+         bands for McMillan-Hopﬁeld parameters
+                                                                                                m′′ =−1
+   This section demonstrates how the assumptions of a
+spherical potential and spherical bands lead to simpliﬁed     along with the properties of Gaunt coeﬃcients (integrals
+expressions for the MH parameters. Following [1, 2, 12],      involving three spherical harmonics [82]), Eq. (A2) sim-
+                                                              pliﬁes to a form involving only dipole transitions with
+                                                              l′ = l ± 1 and m′ = m + m′′. The resulting expression for
+                                                              η˜κ is given by Eqs. (10), (11), and (12).
+
+                                                                 Notably, the partial eDOS, deﬁned in Eq. (11), can be
+                                                              further simpliﬁed by using the normalization of the radial
+                                                              functions from Appendix B:
+                                                                                                                                9
+
+nκ,l(rκ,MT; εF) = nκ,lm(rκ,MT; εF)                                was expanded in terms of spherical harmonics Ylm and
+                                                                  spherical Bessel functions jl. If only the spherically-
+                         m                                        symmetric terms corresponding to l = m = 0 are kept,
+                                                                  Eq. (C1) simpliﬁes to the spherically-symmetric atomic
+                                                                potential given in Eq. (15).
+
+   =         Ωrκ,MT      −Rκ2 ,l  ∂  Lκ,l               (A4)          Appendix D: Semilocal and non-local parts of
+              (2π)3                   ∂ε                                             Hamann’s pseudopotentials
+          m                                          
+                                                                     For the atom κ, the total non-local Vanderbilt-
+                                            r=εr=κε,FMT           Kleinman-Bylander (NL-VKB) [56–58] pseudopotential
+                                                                  corresponding to the angular momentum l is generally
+   ×              dkδ(εi,k − εF) |aiκ,lm(k)|2 .                   written as
+
+          i BZ
+
+In Eq. (A4), the integrals over r are replaced by energy          Vκl,tot(r, r′) = Vκ,loc(r) + Vκl,NL(r, r′)
+derivatives of the logarithmic derivatives, ∂Lκ,l/∂ε, eval-
+uated only on the surface of the MT-sphere.
+
+ Appendix B: Normalization of the radial functions                        = Vκ,loc(r) +              Dκ,ij βκ,i(r)βκ,j (r′),  (D1)
+
+   From the radial Schro¨dinger equation and its energy                                      ij∈{l}
+derivative, an integral of the squared radial function can
+be converted into the energy-derivative of the logarithmic        where Vκl,NL(r, r′) is the fully non-local part that includes
+derivative of this function as                                    only the beta-projectors βκ,i(r) and βκ,j(r) generated for
+                                                                  the angular momentum l. These projectors are read di-
+ rκ,MT                                                            rectly from the pseudopotential ﬁle along with the nor-
+                                                                  malization coeﬃcients Dκ,ij. The local part Vκ,loc(r) is
+        drr2Rκ2,l(r, ε)                                           extracted from a DFT calculation. With fully non-local
+                                                                  pseudopotentials, the radial Schro¨dinger equation for the
+0                                                                 radial functions is
+
+= rκ2,MT  ∂Rκ,l   ∂Rκ,l     −  Rκ,l  ∂ 2 Rκ,l               (B1)
+           ∂ε      ∂r                 ∂r∂ε
+                                               r=rκ,MT               d2
+                                                                  −  dr2  [rRκ,l(r,  ε)]  +  dr′Vκl,tot(r, r′) [r′Rκ,l(r′, ε)]
+
+=  −rκ,MT Rκ2 ,l  ∂Lκ,l           .                                                           = ε [rRκ,l(r, ε)] .
+                   ∂ε                                                                                                                 (D2)
+                         r=rκ,MT
+                                                                     While Eq. (D2) can be solved numerically, in some
+     Appendix C: Local screened atomic potential                  cases it is more straightforward to convert the non-local
+                                                                  pseudopotential to a semilocal form, if such a conversion
+   The coeﬃcients V˜ (G) in the plane-wave expansion of           is possible. The non-local Hamann’s ONCVPSP pseu-
+the periodic local screened potential Vloc(r0) [Fig. 3(b)]        dopotentials [59, 60], used in the present work, allow for
+are given by Eq. (14), where the vector r0 starts at the          this conversion, as the pseudopotential ﬁles include the
+origin of the calculated periodic unit cell [see Fig. 3(a)].      radial functions χκ,l(r) = rRκ,l(r), evaluated at the same
+To obtain the periodic local potential on the atom-               refernce energies used to construct the beta-projectors.
+centered r-grid, with the atom located at τκ, such that           With these radial functions, the semilocal components of
+r0 = τκ + r, one can apply the inverse Fourier transform          the potential can be reconstructed as
+
+   Vκ,loc(r) = Vloc(r0) = Vloc(τκ + r)                                    Vκl,SL(r)  =       1              Dκ,ij βκ,i(r)
+                                                                                          χκ,l(r)
+                                                                                                     ij∈{l}                   (D3)
+
+                  =         eiG·τκ V˜ (G) eiG·r                                      × dr′βκ,j (r′)χκ,l(r′).
+
+                     G
+
+                  = 4π         eiG·τκ V˜ (G)             (C1)        Alternatively, since the Hamann’s ONCVPSP code
+                                                                  computes the SL parts internally, they can be printed
+                         G                                        directly in the pseudopotential ﬁle and read from there.
+                                                                  In our tests, the SL parts calculated with Eq. (D3) were
+                  × iljl(Gr)Yl∗m(Gˆ )Ylm(rˆ).                     found to be identical to those printed directly by the
+                                                                  Hamann’s ONCVPSP code.
+                      l,m
+
+In the last two lines of Eq. (C1), the plane wave eiG·r
+                                                                   10
+
+ [1] G. D. Gaspari and B. L. Gyorﬀy, Electron-Phonon Inter-              PhysRevB.15.5267.
+      actions, d Resonances, and Superconductivity in Tran-        [16] W. E. Pickett, Transferability and the electron-phonon
+      sition Metals, Phys. Rev. Lett. 28, 801 (1972), https:
+      //link.aps.org/doi/10.1103/PhysRevLett.28.801.                     interaction: A reinterpretation of the rigid-muﬃn-tin
+                                                                         approximation, Phys. Rev. B 25, 745 (1982), https:
+ [2] R. Evans, G. D. Gaspari, and B. L. Gyorﬀy, A sim-                   //link.aps.org/doi/10.1103/PhysRevB.25.745.
+      ple theory of the electron-phonon mass enhancement in        [17] V. L. Ginzburg and D. A. Kirzhnits, eds.,
+      transition metals, Journal of Physics F: Metal Physics 3,          High-temperature superconductivity (Kluwer Aca-
+      39 (1973), https://dx.doi.org/10.1088/0305-4608/3/                 demic/Plenum, New York, NY, 1982), 1982nd ed.
+      1/015.                                                       [18] I. I. Mazin, E. M. Savitskii, and Y. A. Uspenskii,
+                                                                         A simple approach to calculation of the phonon-limited
+ [3] I. R. Gomersall and B. L. Gyorﬀy, A simple theory of the            electrical resistivity in metals, physica status solidi (b)
+      electron-phonon mass enhancement in transition metal               112, 29 (1982), https://onlinelibrary.wiley.com/
+      compounds, Journal of Physics F: Metal Physics 4, 1204             doi/abs/10.1002/pssb.2221120147.
+      (1974), https://dx.doi.org/10.1088/0305-4608/4/8/            [19] I. I. Mazin, E. M. Savitskii, and Y. A. Uspenskii,
+      015.                                                               Electron-phonon eﬀects in 4d metals: calculation of cou-
+                                                                         pling constant and resistivity, Journal of Physics F: Metal
+ [4] B. M. Klein and D. A. Papaconstantopoulos, Electron-                Physics 14, 167 (1984), https://dx.doi.org/10.1088/
+      phonon interaction and superconductivity in transition             0305-4608/14/1/017.
+      metals and transition-metal carbides, Phys. Rev. Lett.       [20] S. K. Bose, J. Kudrnovsky, I. I. Mazin, and O. K.
+      32, 1193 (1974), https://link.aps.org/doi/10.1103/                 Andersen, Eﬀect of disorder on the electronic structure
+      PhysRevLett.32.1193.                                               of palladium, Phys. Rev. B 41, 7988 (1990), https:
+                                                                         //link.aps.org/doi/10.1103/PhysRevB.41.7988.
+ [5] J. C. Slater, Wave functions in a periodic potential, Phys.   [21] B. M. Klein, L. L. Boyer, and D. A. Papaconstan-
+      Rev. 51, 846 (1937), https://link.aps.org/doi/10.                  topoulos, Superconducting Properties of A15 Compounds
+      1103/PhysRev.51.846.                                               Derived from Band-Structure Results, Phys. Rev. Lett.
+                                                                         42, 530 (1979), https://link.aps.org/doi/10.1103/
+ [6] R. M. Martin, Electronic Structure: Basic Theory and                PhysRevLett.42.530.
+      Practical Methods (Cambridge University Press, 2004).        [22] T. Jarlborg and A. J. Freeman, Magnetism and super-
+                                                                         conductivity in c15 compounds from self-consistent band
+ [7] J. K. Dewhurst et al., The ELK Code, https://elk.                   calculations, Phys. Rev. B 22, 2332 (1980), https://
+      sourceforge.net.                                                   link.aps.org/doi/10.1103/PhysRevB.22.2332.
+                                                                   [23] D. A. Papaconstantopoulos and B. M. Klein, Supercon-
+ [8] A. Gulans, S. Kontur, C. Meisenbichler, D. Nabok,                   ductivity in the palladium-hydrogen system, Phys. Rev.
+      P. Pavone, S. Rigamonti, S. Sagmeister, U. Werner, and             Lett. 35, 110 (1975), https://link.aps.org/doi/10.
+      C. Draxl, exciting: a full-potential all-electron package          1103/PhysRevLett.35.110.
+      implementing density-functional theory and many-body         [24] W. Pickett, B. Klein, and D. Papaconstantopou-
+      perturbation theory, Journal of Physics: Condensed Mat-            los, Theoretical prediction of mon as a high tc
+      ter 26, 363202 (2014), https://dx.doi.org/10.1088/                 superconductor, Physica B+C 107, 667 (1981),
+      0953-8984/26/36/363202.
+                                                                         https://www.sciencedirect.com/science/article/
+ [9] J. Korringa, On the calculation of the energy of                    pii/0378436381906367.
+      a bloch wave in a metal, Physica 13, 392 (1947),             [25] A. D. Zdetsis, E. N. Economou, and D. A. Papa-
+                                                                         constantopoulos, Non-rigid-muﬃn-tin calculations of the
+      https://www.sciencedirect.com/science/article/                     electron-phonon interaction in simple metals, Phys. Rev.
+      pii/003189144790013X.                                              B 24, 3115 (1981), https://link.aps.org/doi/10.
+[10] W. Kohn and N. Rostoker, Solution of the schro¨dinger               1103/PhysRevB.24.3115.
+      equation in periodic lattices with an application to metal-  [26] P. Giannozzi, S. de Gironcoli, P. Pavone, and S. Baroni,
+      lic lithium, Phys. Rev. 94, 1111 (1954), https://link.             Ab initio calculation of phonon dispersions in semicon-
+      aps.org/doi/10.1103/PhysRev.94.1111.                               ductors, Phys. Rev. B 43, 7231 (1991), https://link.
+[11] W. H. Butler, F. J. Pinski, and P. B. Allen, Phonon                 aps.org/doi/10.1103/PhysRevB.43.7231.
+      linewidths and electron-phonon interaction in nb, Phys.      [27] X. Gonze and C. Lee, Dynamical matrices, born eﬀec-
+      Rev. B 19, 3708 (1979), https://link.aps.org/doi/                  tive charges, dielectric permittivity tensors, and inter-
+      10.1103/PhysRevB.19.3708.
+[12] D. G. Pettifor, Theory of energy bands and related prop-            atomic force constants from density-functional pertur-
+      erties of 4d-transition metals. II. The electron-phonon            bation theory, Phys. Rev. B 55, 10355 (1997), https:
+                                                                         //link.aps.org/doi/10.1103/PhysRevB.55.10355.
+      matrix element, superconductivity and ion core enhance-      [28] S. Baroni, S. de Gironcoli, A. Dal Corso, and P. Gi-
+      ment, Journal of Physics F: Metal Physics 7, 1009 (1977),          annozzi, Phonons and related crystal properties from
+      https://dx.doi.org/10.1088/0305-4608/7/6/017.                      density-functional perturbation theory, Rev. Mod. Phys.
+[13] O. K. Andersen, Linear methods in band theory, Phys.                73, 515 (2001), https://link.aps.org/doi/10.1103/
+      Rev. B 12, 3060 (1975), https://link.aps.org/doi/                  RevModPhys.73.515.
+      10.1103/PhysRevB.12.3060.                                    [29] A. Dal Corso, Density-functional perturbation the-
+[14] D. A. Papaconstantopoulos, L. L. Boyer, B. M. Klein,                ory with ultrasoft pseudopotentials, Phys. Rev. B 64,
+      A. R. Williams, V. L. Morruzzi, and J. F. Janak, Cal-
+      culations of the superconducting properties of 32 metals
+      with Z ≤ 49, Phys. Rev. B 15, 4221 (1977), https:
+      //link.aps.org/doi/10.1103/PhysRevB.15.4221.
+[15] W. H. Butler, Electron-phonon coupling in the tran-
+      sition metals: Electronic aspects, Phys. Rev. B
+      15, 5267 (1977), https://link.aps.org/doi/10.1103/
+                                                                                                                  11
+
+      235118 (2001), https://link.aps.org/doi/10.1103/            1103/PhysRevB.110.184517.
+      PhysRevB.64.235118.
+[30] L. N. Oliveira, E. K. U. Gross, and W. Kohn, Density-        [42] M. E. di Mauro, B. Bra¨ıda, I. Errea, T. Novoa, and
+      functional theory for superconductors, Phys. Rev. Lett.
+      60, 2430 (1988), https://link.aps.org/doi/10.1103/          J. Contreras-Garc´ıa, Molecularity: A fast and eﬃcient
+      PhysRevLett.60.2430.
+[31] M. Lu¨ders, M. A. L. Marques, N. N. Lathio-                  criterion for probing superconductivity, Phys. Rev. B
+      takis, A. Floris, G. Profeta, L. Fast, A. Continenza,
+      S. Massidda, and E. K. U. Gross, Ab initio the-             110, 174515 (2024), https://link.aps.org/doi/10.
+      ory of superconductivity. i. density functional formal-
+      ism and approximate functionals, Phys. Rev. B 72,           1103/PhysRevB.110.174515.
+      024545 (2005), https://link.aps.org/doi/10.1103/
+      PhysRevB.72.024545.                                         [43] F. Belli, S. Torres, J. Contreras-Garc`ıa, and
+[32] M. A. L. Marques, M. Lu¨ders, N. N. Lathiotakis, G. Pro-
+      feta, A. Floris, L. Fast, A. Continenza, E. K. U.           E. Zurek, Reﬁning tc prediction in hydrides via
+      Gross, and S. Massidda, Ab initio theory of supercon-
+      ductivity. ii. application to elemental metals, Phys. Rev.  symbolic-regression-enhanced  electron-localization-
+      B 72, 024546 (2005), https://link.aps.org/doi/10.
+      1103/PhysRevB.72.024546.                                    function-based descriptors (2025), 2506.17456,
+[33] A. Sanna, C. Pellegrini, and E. K. U. Gross, Com-
+      bining eliashberg theory with density functional theory     https://arxiv.org/abs/2506.17456.
+
+      for the accurate prediction of superconducting transi-      [44] T. Novoa, R. Bianco, J. Contreras-Garc´ıa, and I. Errea,
+      tion temperatures and gap functions, Phys. Rev. Lett.
+      125, 057001 (2020), https://link.aps.org/doi/10.            Real-space understanding of electron-phonon coupling in
+      1103/PhysRevLett.125.057001.
+[34] K. Choudhary and K. Garrity, Designing high-TC su-           superconducting hydrides (2025), 2507.06749, https://
+      perconductors with BCS-inspired screening, density func-
+      tional theory, and deep-learning, npj Computational         arxiv.org/abs/2507.06749.
+      Materials 8, 244 (2022), https://doi.org/10.1038/
+      s41524-022-00933-1.                                         [45] W. L. McMillan, Transition Temperature of Strong-
+[35] J. B. Gibson, A. C. Hire, P. M. Dee, O. Barrera,
+      B. Geisler, P. J. Hirschfeld, and R. G. Hennig, Accel-      Coupled Superconductors, Phys. Rev. 167, 331 (1968),
+      erating superconductor discovery through tempered deep
+      learning of the electron-phonon spectral function, npj      https://link.aps.org/doi/10.1103/PhysRev.167.
+      Computational Materials 11, 7 (2025), https://doi.
+      org/10.1038/s41524-024-01475-4.                             331.
+[36] N. K. Nepal and L.-L. Wang, Machine-learning guided
+      search for phonon-mediated superconductivity in boron       [46] J. J. Hopﬁeld, Angular Momentum and Transition-Metal
+      and carbon compounds (2024).
+[37] J. B. Gibson, A. C. Hire, P. M. Dee, B. Geisler, J. S.       Superconductivity, Phys. Rev. 186, 443 (1969), https:
+      Kim, Z. Li, J. J. Hamlin, G. R. Stewart, P. J. Hirschfeld,
+      and R. G. Hennig, Developing a complete AI-accelerated      //link.aps.org/doi/10.1103/PhysRev.186.443.
+      workﬂow for superconductor discovery (2025).
+[38] A. N. Kolmogorov, M. Calandra, and S. Curtarolo,             [47] I. I. Mazin, S. N. Rashkeev, and S. Y. Savrasov,
+      Thermodynamic stabilities of ternary metal borides: An
+      ab initio guide for synthesizing layered superconductors,   Nonspherical rigid-muﬃn-tin calculations of electron-
+      Phys. Rev. B 78, 094520 (2008), https://link.aps.
+      org/doi/10.1103/PhysRevB.78.094520.                         phonon coupling in high-Tc perovskites, Phys. Rev. B
+[39] C. O. Rodriguez, A. I. Liechtenstein, I. I. Mazin,           42, 366 (1990), https://link.aps.org/doi/10.1103/
+      O. Jepsen, O. K. Andersen, and M. Methfessel, Opti-
+      cal near-zone-center phonons and their interaction with     PhysRevB.42.366.
+      electrons in yba2cu3o7: Results of the local-density ap-
+      proximation, Phys. Rev. B 42, 2692 (1990), https:           [48] B. Wiendlocha, J. Tobola, and S. Kaprzyk, Search for
+      //link.aps.org/doi/10.1103/PhysRevB.42.2692.
+[40] Y. Sun, F. Zhang, C.-Z. Wang, K.-M. Ho, I. I. Mazin,         Sc3XB (X = In, Tl, Ga, Al) perovskites superconduc-
+      and V. Antropov, Electron-phonon coupling strength from     tors and proximity of weak ferromagnetism, Phys. Rev.
+      ab initio frozen-phonon approach, Phys. Rev. Mater.
+      6, 074801 (2022), https://link.aps.org/doi/10.1103/         B 73, 134522 (2006), https://link.aps.org/doi/10.
+      PhysRevMaterials.6.074801.
+[41] O. A. Dicks, K. Foyevtsova, I. Elﬁmov, R. P.                 1103/PhysRevB.73.134522.
+      Prasankumar, and G. Sawatzky, Computationally eﬃ-
+      cient method for calculating electron-phonon coupling for   [49] D. A. Papaconstantopoulos, M. J. Mehl, and P.-H.
+      high-throughput superconductivity screening, Phys. Rev.
+      B 110, 184517 (2024), https://link.aps.org/doi/10.          Chang, High-temperature superconductivity in LaH10,
+                                                                  Phys. Rev. B 101, 060506 (2020), https://link.aps.
+
+                                                                  org/doi/10.1103/PhysRevB.101.060506.
+
+                                                                  [50] D. A. Papaconstantopoulos, M. J. Mehl, and E. N.
+
+                                                                  Economou, High-temperature superconductivity in the ca-
+
+                                                                  sc-h system, Phys. Rev. B 108, 224508 (2023), https:
+
+                                                                  //link.aps.org/doi/10.1103/PhysRevB.108.224508.
+
+                                                                  [51] I. F. Foulkes and I. R. Gomersall, A simple theory of
+
+                                                                  the phonon contribution to the electron-phonon mass en-
+
+                                                                  hancement, Journal of Physics F: Metal Physics 5, 153
+
+                                                                  (1975), https://dx.doi.org/10.1088/0305-4608/5/1/
+
+                                                                  019.
+
+                                                                  [52] I. Mazin and S. Rashkeev, Eﬀect of low symmetry
+
+                                                                  on electron-phonon coupling in perovskite supercon-
+
+                                                                  ductors, Solid State Communications 68, 93 (1988),
+
+                                                                  https://www.sciencedirect.com/science/article/
+
+                                                                  pii/0038109888902517.
+
+                                                                  [53] Y. Quan, S. S. Ghosh, and W. E. Pickett, Compressed hy-
+
+                                                                  drides as metallic hydrogen superconductors, Phys. Rev.
+
+                                                                  B 100, 184505 (2019), https://link.aps.org/doi/10.
+
+                                                                  1103/PhysRevB.100.184505.
+
+                                                                  [54] M. J. Hutcheon, A. M. Shipley, and R. J. Needs, Predict-
+
+                                                                  ing novel superconducting hydrides using machine learn-
+
+                                                                  ing approaches, Phys. Rev. B 101, 144505 (2020), https:
+
+                                                                  //link.aps.org/doi/10.1103/PhysRevB.101.144505.
+
+                                                                  [55] Y. Quan, K.-W. Lee, and W. E. Pickett, MoB2 un-
+                                                                        der pressure: Superconducting Mo enhanced by boron,
+
+                                                                  Phys. Rev. B 104, 224504 (2021), https://link.aps.
+
+                                                                  org/doi/10.1103/PhysRevB.104.224504.
+
+                                                                  [56] L. Kleinman and D. M. Bylander, Eﬃcacious form for
+
+                                                                  model pseudopotentials, Phys. Rev. Lett. 48, 1425 (1982),
+                                                                                                                          12
+
+      https://link.aps.org/doi/10.1103/PhysRevLett.48.           tetrahedron method for brillouin-zone integrations, Phys.
+      1425.
+[57] D. M. Bylander and L. Kleinman, 4f resonances               Rev. B 49, 16223 (1994), https://link.aps.org/doi/
+      with norm-conserving pseudopotentials, Phys. Rev. B
+      41, 907 (1990), https://link.aps.org/doi/10.1103/          10.1103/PhysRevB.49.16223.
+      PhysRevB.41.907.
+[58] D. Vanderbilt, Soft self-consistent pseudopotentials in     [69] Supplementary information (2025).
+      a generalized eigenvalue formalism, Phys. Rev. B
+      41, 7892 (1990), https://link.aps.org/doi/10.1103/         [70] M. Weinert, G. Schneider, R. Podloucky, and
+      PhysRevB.41.7892.
+[59] D. R. Hamann, M. Schlu¨ter, and C. Chiang,                  J. Redinger, FLAPW: applications and implementa-
+      Norm-conserving pseudopotentials, Phys. Rev. Lett.
+      43, 1494 (1979), https://link.aps.org/doi/10.1103/         tions, Journal of Physics: Condensed Matter 21, 084201
+      PhysRevLett.43.1494.
+[60] D. R. Hamann, Optimized norm-conserving Vanderbilt          (2009), https://dx.doi.org/10.1088/0953-8984/21/
+      pseudopotentials, Phys. Rev. B 88, 085117 (2013),
+                                                                 8/084201.
+      https://link.aps.org/doi/10.1103/PhysRevB.88.
+      085117.                                                    [71] C. Hermann and P. P. Ewald, Strukturbericht 1913-1928
+[61] X. Gonze, R. Stumpf, and M. Scheﬄer, Analysis of sep-
+      arable potentials, Phys. Rev. B 44, 8503 (1991), https:    : Zeitschrift fu¨r Kristallographie, Kristallgeometrie,
+      //link.aps.org/doi/10.1103/PhysRevB.44.8503.
+[62] P. Rabinowitz and P. J. Davis, Methods of numerical in-     Kristallgeometrie, Kristallphysik, Kristallchemie,
+      tegration, Dover Books on Mathematics (Dover Publica-
+      tions, Mineola, NY, 2007), 2nd ed.                         Erga¨nzungsband (Akademische Verlagsgesellschaft,
+[63] P. Giannozzi, S. Baroni, N. Bonini, M. Calandra, R. Car,
+      C. Cavazzoni, D. Ceresoli, G. L. Chiarotti, M. Cococ-      Leipzig, 1931).
+      cioni, I. Dabo, A. Dal Corso, S. de Gironcoli, S. Fabris,
+      G. Fratesi, R. Gebauer, et al., QUANTUM ESPRESSO:          [72] V. L. Moruzzi, J. F. Janak, and A. R. Williams, Calcu-
+      a modular and open-source software project for quan-
+      tum simulations of materials, Journal of Physics: Con-     lated Electronic Properties of metals (Elsevier, 1978).
+      densed Matter 21, 395502 (2009), https://dx.doi.org/
+      10.1088/0953-8984/21/39/395502.                            [73] P. D. Desai, Thermodynamic properties of vanadium,
+[64] P. Giannozzi, O. Andreussi, T. Brumme, O. Bunau,
+      M. Buongiorno Nardelli, M. Calandra, R. Car, C. Cavaz-     International Journal of Thermophysics 7, 213 (1986),
+      zoni, D. Ceresoli, M. Cococcioni, N. Colonna, I. Carn-
+      imeo, A. Dal Corso, S. de Gironcoli, P. Delugas, et al.,   https://doi.org/10.1007/BF00503812.
+      Advanced capabilities for materials modelling with Quan-
+      tum ESPRESSO, Journal of Physics: Condensed Mat-           [74] C. Kittel,  Introduction to Solid State
+      ter 29, 465901 (2017), https://dx.doi.org/10.1088/
+      1361-648X/aa8f79.                                          Physics (Wiley, 2004), 8th ed., ISBN
+[65] P. Giannozzi, O. Baseggio, P. Bonfa`, D. Brunato, R. Car,
+      I. Carnimeo, C. Cavazzoni, S. de Gironcoli, P. Delugas,    9780471415268,              http://www.amazon.com/
+      F. Ferrari Ruﬃno, A. Ferretti, N. Marzari, I. Timrov,
+      A. Urru, and S. Baroni, Quantum ESPRESSO toward the        Introduction-Solid-Physics-Charles-Kittel/dp/
+      exascale, The Journal of Chemical Physics 152, 154105
+      (2020), https://doi.org/10.1063/5.0005082.                 047141526X/ref=dp_ob_title_bk.
+[66] J. P. Perdew, K. Burke, and M. Ernzerhof, Generalized
+      gradient approximation made simple, Phys. Rev. Lett.       [75] J. W. Arblaster, The thermodynamic properties of
+      77, 3865 (1996), https://link.aps.org/doi/10.1103/
+      PhysRevLett.77.3865.                                       niobium, Journal of Phase Equilibria and Diﬀu-
+[67] M. Methfessel and A. T. Paxton, High-precision sampling
+      for brillouin-zone integration in metals, Phys. Rev. B     sion 38, 707 (2017), https://doi.org/10.1007/
+      40, 3616 (1989), https://link.aps.org/doi/10.1103/
+      PhysRevB.40.3616.                                          s11669-017-0557-4.
+[68] P. E. Blo¨chl, O. Jepsen, and O. K. Andersen, Improved
+                                                                 [76] P. D. Desai, Thermodynamic properties of manganese
+
+                                                                 and molybdenum, Journal of Physical and Chemical Ref-
+
+                                                                 erence Data 16, 91 (1987), https://doi.org/10.1063/
+
+                                                                 1.555794.
+
+                                                                 [77] American Institute of Physics, Handbook (McGraw Hill
+
+                                                                 Higher Education, Maidenhead, England, 1972).
+
+                                                                 [78] J. A. Rayne, Heat capacity of palladium below 4.2°k,
+
+                                                                 Phys. Rev. 107, 669 (1957), https://link.aps.org/
+
+                                                                 doi/10.1103/PhysRev.107.669.
+
+                                                                 [79] A. M. Shipley, M. J. Hutcheon, R. J. Needs, and
+
+                                                                 C. J. Pickard, High-throughput discovery of high-
+
+                                                                 temperature conventional superconductors, Phys. Rev.
+
+                                                                 B 104, 054501 (2021), https://link.aps.org/doi/10.
+
+                                                                 1103/PhysRevB.104.054501.
+
+                                                                 [80] Z. Bai, M. Bhullar, A. Akinpelu, and Y. Yao, Un-
+
+                                                                 veiling future superconductors through machine learn-
+
+                                                                 ing, Materials Today Physics 43, 101384 (2024),
+
+                                                                 https://www.sciencedirect.com/science/article/
+
+                                                                 pii/S2542529324000609.
+
+                                                                 [81] J. D. Jackson, Classical Electrodynamics (John Wiley &
+
+                                                                 Sons, Nashville, TN, 1998), 3rd ed.
+
+                                                                 [82] J. A. Gaunt and R. H. Fowler, IV. The triplets of
+
+                                                                 helium, Philosophical Transactions of the Royal So-
+
+                                                                 ciety of London. Series A, Containing Papers of a
+
+                                                                 Mathematical or Physical Character 228, 151 (1929),
+
+                                                                 https://royalsocietypublishing.org/doi/abs/10.
+
+                                                                 1098/rsta.1929.0004.
+Rigid muﬃn-tin approximation in plane-wave codes for fast modeling of
+                            phonon-mediated superconductors
+                                 Supplementary Information
+
+                      Danylo Radevych,1, 2, ∗ Tatsuya Shishidou,3 Michael Weinert,3
+                 Elena R. Margine,2 Aleksey N. Kolmogorov,2 and Igor I. Mazin1, 4, †
+       1Department of Physics and Astronomy, George Mason University, Fairfax, VA 22030, USA
+
+                               2Department of Physics, Applied Physics and Astronomy,
+                        Binghamton University-SUNY, Binghamton, New York 13902, USA
+         3Department of Physics, University of Wisconsin-Milwaukee, Milwaukee, WI 53201, USA
+     4Quantum Science and Engineering Center, George Mason University, Fairfax, VA 22030, USA
+
+                                              I. CRYSTALLOGRAPHIC PARAMETERS
+Crsytallographic parameters of all the structures used in this work are reported in Table I.
+
+TABLE I. Crystallographic parameters of the considered structures.
+
+Structure Space a = b = c α = β = γ Atom x, y, z Wyckoﬀ
+group (bohr)              (◦)      (crystal units) position
+
+  V (BCC) Im¯3m 5.72      90   V   0, 0, 0     2a
+ Cu (FCC) F m¯3m 6.83
+ Nb (BCC) Im3¯m 6.24      90   Cu  0, 0, 0     4a
+ Mo (BCC) Im¯3m 5.95
+ Rh (FCC) F m3¯m 7.24     90   Nb  0, 0, 0     2a
+ Pd (FCC) F m¯3m 7.54
+ Ag (FCC) F m3¯m 7.72     90   Mo  0, 0, 0     2a
+V3Sn (A15) P m3¯n 9.42
+V3Si (A15) P m¯3n 8.93    90   Rh  0, 0, 0     4a
+Nb3Si (A15) P m¯3n 10.07
+Nb3Si (L12) P m¯3m 7.97   90   Pd  0, 0, 0     4a
+ NbN (B1) F m¯3m 8.29
+                          90   Ag  0, 0, 0     4a
+
+                          90   V 1/4, 1/2, 0 6d
+
+                               Sn  0, 0, 0     2a
+
+                          90   V 1/4, 1/2, 0 6d
+
+                               Si  0, 0, 0     2a
+
+                          90   Nb 1/4, 1/2, 0 6d
+
+                               Si  0, 0, 0     2a
+
+                          90   Nb 0, 1/2, 1/2  3c
+
+                               Si  0, 0, 0     1a
+
+                          90   Nb 1/2, 1/2, 1/2 4b
+
+                               N   0, 0, 0     4a
+
+                              II. SMEARING VS. TETRAHEDRON INTEGRATION METHODS
+
+   Convergence of the total and partial electronic density of states (eDOS) at the Fermi level with the uniform k-grid
+size is crucial to obtain reliable McMillan-Hopﬁled parameters. As can be seen in Figs. 1(a),(b), convergence of the
+McMillan-Hopﬁeld parameter for Nb BCC directly follows convergence of eDOS. When the tetrahedron method of
+integration is used to calculate eDOS through integrals with the delta-function in Eqs. (20),(21) of the main text,
+results converge signiﬁcantly faster [orange lines in Figs. 1(a),(b)] than when the same smearing is used for the
+approximation of the occupation function in the self-consistent ﬁeld (SCF) calculation and approximation of the
+delta-function in the eDOS part [black and gray lines in Figs. 1(a),(b)]. For this reason, the tetrahedron method of
+integration is used by default in all present RMTA calculations.
+
+∗ dradevyc@gmu.edu
+   imazin2@gmu.edu
+(a)  SCF & eDOS: MP σ = 10-2 Ry              (b)                                                                        2
+     SCF & eDOS: FD σ = 10-3 Ry
+     SCF: MP σ = 10-2 Ry, eDOS: tetrahedron                                          SCF & eDOS: MP σ = 10-2 Ry
+                                                                                     SCF & eDOS: FD σ = 10-3 Ry
+                                                                                     SCF: MP σ = 10-2 Ry, eDOS: tetrahedron
+
+N( εF) (Ry-1)
+                                                                        η (eV / Å2)
+
+FIG. 1. Nb BCC: (a) eDOS at the Fermi level and (b) McMillan-Hopﬁeld paramater convergence with the uniform k-grid size
+depending on the integration methods used. “MP”: Methfessel-Paxton smearing; “FD”: Fermi-Dirac smearing; σ: corresponding
+degauss values. In all cases, smearing is used for the approximation of the occupation function in the SCF part. In the following
+RMTA calculation, eDOS at the Fermi level converges faster when the tetrahedron method is used (orange lines) instead of
+the smeared delta-function approximation (black and gray lines).
+
+     III. MCMILLAN-HOPFIELD PARAMETERS COMPARED TO PREVIOUS APW RESULTS
+
+   In Fig. 2, present McMillan-Hopﬁeld parameters for metal atoms in the selected simple metals and compounds
+are compared to results reported by Papaconstantopoulos et al. [1] and Pickett [2], who used the APW method
+and touching MT-spheres. Our values are close to Papaconstantopoulos at al. and Pickett for simple metals, as
+well as they are reasonably close to Pickett’s values for V3Sn, V3Si, and NbN. At the same time, Pickett’s value
+for A15-Nb3Si is signiﬁcantly smaller than ours. This could be attributed to various technical details: diﬀerences in
+crystallographic parameters of the structures, all-electron potentials, exchange-correlation functionals, and perhaps
+whether Nb semicore states were treated as core or valence in the APW method. Based on the limited technical
+details provided in the reference [2], it is hard to identify the exact cause(s) of the discrepancy. All results, however,
+are correct within the frameworks they are derived from.
+
+                                       12.5
+
+     10.0
+
+     η (eV / Å2)  7.5
+
+                  5.0                        PS+PW
+                                             FLAPW
+                  2.5                        Papaconstantopoulos et al.
+
+                  0.0                        Pickett
+
+                        V3Sn   V3Si   V      Mo Nb Nb3Si NbN
+                        (A15)  (A15)
+                                      (BCC) (BCC) (BCC) (A15) (B1)
+
+FIG. 2. Present PS+PW and FLAPW McMillan-Hopﬁeld parameters for metal atoms–V, Mo, and Nb–in the selected simple
+metals and compounds compared to previous APW results by Papaconstantopoulos at al. [1] and Pickett [2].
+
+[1] D. A. Papaconstantopoulos, L. L. Boyer, B. M. Klein, A. R. Williams, V. L. Morruzzi, and J. F. Janak, Calculations of the
+    superconducting properties of 32 metals with Z ≤ 49, Phys. Rev. B 15, 4221 (1977), https://link.aps.org/doi/10.1103/
+    PhysRevB.15.4221.
+                                                                                                                                                         3
+
+[2] W. E. Pickett, Transferability and the electron-phonon interaction: A reinterpretation of the rigid-muﬃn-tin approximation,
+    Phys. Rev. B 25, 745 (1982), https://link.aps.org/doi/10.1103/PhysRevB.25.745.
+

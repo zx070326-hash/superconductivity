@@ -396,7 +396,7 @@
 
 ### 本地 PDF（已读）
 - `_scratch_ir/essenberger1411.2121.pdf`（FeSe 实际材料计算，6 页）
-- `_scratch_ir/essenberger1409.7968.pdf`（SCDFT 泛函推导，14 页）
+- `_scratch_ir/_essenberger1409.7968.pdf`（SCDFT 泛函推导，14 页；2026-09-25 订正：原写漏了前导下划线 ⟹ 指向不存在的文件）
 
 ### 调研限制
 - WebSearch 预算已用完（200/200）

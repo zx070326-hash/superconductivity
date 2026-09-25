@@ -1,0 +1,1138 @@
+PHYSICAL REVIEW B                     VOLUME 54, NUMBER 23              15 DECEMBER 1996-I
+
+Electron-phonon interactions and related physical properties of metals
+                            from linear-response theory
+
+                                          S. Y. Savrasov
+Max-Planck-Institut fu¨r Festko¨rperforschung, Heisenbergstrasse 1, 70569 Stuttgart, Germany
+
+                                                   D. Y. Savrasov
+                 P. N. Lebedev Physical Institute, Leninskii prospekt 53, 117924 Moscow, Russia
+
+                     ͑Received 11 April 1996; revised manuscript received 13 September 1996͒
+
+  Spectral distribution functions of electron-phonon interaction ␣2F(␻) obtained by ab initio linear-response
+calculations are used to describe various superconducting and transport properties in a number of elemental
+metals such as Al, Cu, Mo, Nb, Pb, Pd, Ta, and V. Their lattice dynamics and self-consistently screened
+electron-phonon coupling are evaluated within local density functional theory and using a linear-mufﬁn-tin-
+orbital basis set. We compare our theoretical ␣2F(␻) with those deduced from the tunneling measurements
+and ﬁnd a close agreement between them. Temperature-dependent electrical and thermal resistivities as well as
+transport constants ␭tr also agree well with the experimental data. The values of ␭tr are close to the electron-
+phonon coupling parameter ␭. For the latter a very good agreement with speciﬁc-heat measurements was
+found without any paramagnon contribution, except in Pd. We conclude that our method provides the descrip-
+tion of electron-phonon interactions in tested materials with an accuracy of 10%. ͓S0163-1829͑96͒05448-3͔
+
+I. INTRODUCTION                                                 phonon distortion was replaced by either a rigid-ion
+                                                                approximation8 ͑RIA͒ or the most popular rigid-mufﬁn-tin
+   Electron-phonon interaction ͑EPI͒ in metals is a subject of  approximation9 ͑RMTA͒. For isotropic metals, having a
+intensive theoretical and experimental investigations. The in-  large density of states at the Fermi energy, the RMTA works
+                                                                well in many cases, since the efﬁcient electronic screening
+terest in this problem arises from a variety of physical phe-   limits the change of the potential in the immediate vicinity of
+                                                                the displaced atom. However, there are some known prob-
+nomena such as electrical and thermal resistivities, renormal-  lems of the RMTA in transition metals. For example, aniso-
+ization of the electronic speciﬁc heat ͑electronic mass         tropy of the mass enhancement factor was not reproduced by
+enhancement͒, and, of course, superconductivity, and for a      the RMTA in Nb.10
+quantitative understanding of those a proper description of
+the EPI is required.1 Moreover, the reliable estimation of the     Accurate ␻q␯ and ␩q␯ as well as self-consistently
+                                                                screened electron-phonon interaction can be calculated
+EPI parameters in a particular case of high-temperature su-     within the total-energy frozen-phonon approach using the
+                                                                supercells.11–14 However, there is a serious drawback of this
+perconductivity may be decisive for recognizing the nature      method. A sufﬁciently large number of phonon wave vectors
+
+of this phenomenon. Unfortunately, even for some transition     q must be sampled in the Brillouin zone to get a good esti-
+                                                                mate of the average coupling strength ␭. A separate frozen-
+metals we have controversial experimental and theoretical       phonon calculation is required for each q and for each stud-
+data related to the estimation of the coupling constant ␭. The  ied mode. For small phonon wave vectors this requires very
+analysis is complicated by possible parallel processes of spin  large supercells. With the crude sampling allowed by the
+ﬂuctuations, for example, in the problem2 of renormalization
+                                                                limited size of the supercell, the accuracy of q integrated
+of speciﬁc heat and Tc or proximity effects in the tunneling    quantities like ␭ is usually low.
+data.3 To extract the quantities of interest one has to use
+                                                                   Another technique which can be employed for calculating
+some theoretical calculations and models. In this situation     the self-consistent change in the potential is the perturbative
+                                                                approach11 applicable for any q. The key quantity of this
+fully ab initio calculations of the one-electron spectra and    method is an independent-particle polarizability function.
+phonon dispersions based on density functional theory4          After applying the ﬁrst-order perturbation theory and ex-
+͑DFT͒ are most preferable. Applicability of the popular local   panding the ﬁrst-order changes in the one-electron wave
+density approximation5 ͑LDA͒ for the functional and treat-      functions over the basis of unperturbed Bloch states, the po-
+ment of the one-electron band structures as spectra of low-     larizability is expressed via the double sum over occupied
+                                                                and unoccupied states. Winter15 has successfully applied this
+energy electronic excitations were checked many times and       method to calculate ␭ in Al. Unfortunately, the perturbative
+there exist a large theoretical and experimental experience.6   approach has several drawbacks. First, the slowly convergent
+                                                                sum over the excited states requires their preliminary calcu-
+This allows us to conclude that even having been formally       lation by diagonalizing the unperturbed Hamiltonian matrix
+                                                                of very large dimension. Second, the self-consistency in this
+ground-state theory, DFT is a good starting point for inves-
+
+tigating the electron-phonon interaction.
+
+   Many previous attempts to compute EPI, in particular, for
+
+transition metals, have focused on calculating merely the
+electronic contribution to this quantity,7 while the phonon
+frequencies ␻q␯ and the eigenvectors ␩q␯ were usually taken
+from inelastic neutron-scattering data. There, the self-
+
+consistent adjustment of the one-electron potential to the
+
+0163-1829/96/54͑23͒/16487͑15͒/$10.00  54                        16 487  © 1996 The American Physical Society
+16 488  S. Y. SAVRASOV AND D. Y. SAVRASOV                                                                                                                                                   54
+
+method is done by inverting the dielectric matrix of the crys-    the quasiparticle energies are necessarily approximated by
+tal which is a relatively time-consuming problem.
+                                                                  the LDA energy bands.
+   To date, the most efﬁcient technique developed to calcu-
+late the lattice dynamics is the solid-state generalization16 of  In the framework of the density-functional linear-response
+the Sternheimer method.17 This method is not limited to
+q’s commensurate with the lattice as the frozen-phonon ap-        method the problem of calculating the phonon spectra and
+proach and it does not require the knowledge of all unper-
+turbed states as the perturbative approach. In the previous       the electron-phonon interaction is reduced to ﬁnding the
+paper18 ͑referred hereafter as I͒ we have given a full descrip-
+tion of this approach in the framework of the linear-mufﬁn-       ﬁrst-order variations in the one-electron wave functions, the
+tin-orbital ͑LMTO͒ method.19 The latter allows us to facili-
+tate the treatment of localized valence wave functions. In this   charge density and the effective potential induced by the
+paper we present details of generalizing this linear-response
+method to compute the wave-vector-dependent electron-             presence of a phonon with a given wave vector q. In paper I
+phonon coupling. ͑A brief report of this work has appeared
+already20.͒ We evaluate the spectral distribution functions       we have described an approach for the self-consistent solu-
+␣2F(␻) of the EPI from the phonon linewidths ␥q␯ accord-
+ing to the approach developed by Allen21 in the supercon-         tion of this problem in the framework of the LMTO method.
+ductivity theory.22 The electron-phonon matrix elements are
+calculated in the LMTO representation. Due to incomplete-         In this paper we test the produced self-consistent change in
+ness of the basis sets in band-structure calculations the cor-
+rections to these matrix elements are shown to exist and ex-      the one-electron potential as the potential of electrons inter-
+plicitly taken into account. The incomplete-basis-set ͑IBS͒
+corrections appear here in the same manner as in the calcu-       acting with the phonon mode ␻q␯ . Our task is to evaluate the
+lation of the dynamical matrix within the linear-response                                                                          q␯
+theory18 or when calculating the forces within the total-         electron-phonon matrix                element              g     kϩ q j    Ј,  kj      The latter is con-
+energy frozen-phonon approach in terms of the LMTO
+method.23                                                         ventionally written in the form
+
+   We apply the developed scheme to compute electron-                              g  q␯               ϭ   ͗  kϩ       q  j  Ј  ͉  ␦  q␯  V     eff͉  k     j  ͘  ,                         ͑1͒
+phonon coupling for a large number of elemental metals. We                            kϩ
+also present calculations of their phonon dispersion curves.                              qj  Ј  ,kj
+The results of computed transport properties such as
+temperature-dependent phonon-limited electrical resistivities     where both states ␺kj and ␺kϩqjЈ have the Fermi energy ⑀F
+and thermal conductivities obtained as low-order variational      and where the change in the potential is transformed from
+solutions of the Boltzman equation are also given. The
+method of calculating the transport properties is analogous to    the Cartesian system to the system associated with the eigen-
+that used in the supeconductivity theory and is based24 on        vectors ␩q␯(R␮) of a particular q␯ mode:
+calculating the transport spectral functions ␣2trF(␻). All the
+results presented in this paper are completely ab initio and                    ͚ ␦ q␯ V effϭ                  ␩q␯͑ R␮ ͒                     ␦ ϩ V eff               ,                      ͑2͒
+no adjustable parameters have been used in the calculations.                                   R,␮            ͑ M R␻q␯͒1/2                    ␦R␮
+
+   The rest of the paper is organized as follows. In Sec. II,     where M R are the nuclei masses. Here and in the following
+we derive the formulas for calculating the electron-phonon
+matrix elements and brieﬂy review the method of ﬁnding            the same notations as in I are used.
+superconducting and transport properties. Section III pre-
+sents the results of the calculations for phonon dispersions,     It   is  not  obvious             but          the      expression                        ͑1͒         for      g  q␯  qj  Ј,  kj
+electron-phonon interactions, and related properties for a                                                                                                                          kϩ
+number of elemental metals such as Al, Cu, Mo, Nb, Pb, Pd,
+Ta, and V. Section IV concludes the paper.                        should be corrected for the incompleteness of the basis func-
+
+                                II. METHOD                        tions. To see this we have to repeat the standard quantum-
+
+   The central problem in calculating the electron-phonon         mechanical derivation of the Fermi ‘‘golden rule’’ for the
+interaction is the evaluation of changes in the electronic
+Hamiltonian caused by atomic displacements. This generally        wave functions represented in terms of the LMTO basis set.
+requires the knowledge of the full low-energy excitation
+spectrum of the metal: the quasiparticle energies and the         The derivation considers a scattering rate for transitions from
+phonon frequencies. The calculations of vibrational proper-
+ties are, in principle, within the scope of the density-          an initial unperturbed state into a ﬁnal perturbed state at the
+functional based methods. Finding the quasiparticle excita-
+tion spectra is, on the other hand, a much more difﬁcult          time moment t. For the illustration let us take some Hamil-
+many-body problem. In the following we always assume that
+                                                                  tonian H and a perturbation ⌬V. To simplify the notations
+
+                                                                  we denote the initial state as ␺s(t) and the ﬁnal state as
+                                                                  ˜␺r(t). The scattering rate is given by the overlap integral
+                                                                  squared:
+
+                                                                                          Prs͑ t ͒ϭͦ͗˜␺r͑ t ͉͒␺s͑ t ͒ͦ͘2,                                                                   ͑3͒
+
+                                                                  In the time-dependent formulation we write
+
+                                                                                                 i  ‫ץ‬  ␺s͑       t  ͒  ϭ  H  ␺     s͑  t  ͒  ,                                              ͑4͒
+                                                                                                        ‫ץ‬t
+
+                                                                  and
+
+                                                                                      i   ‫ץ‬  ˜␺ r ͑  t  ͒  ϭ     ͑  H  ϩ     ⌬     V  ͒  ˜␺     ͑  t  ͒  .                                  ͑5͒
+                                                                                              ‫ץ‬t
+                                                                                                                                             r
+
+                                                                  We now use a variational estimate for the wave fucntions
+                                                                  like it is done in the LMTO method
+
+                                                                                             ͚ ␺ s͑ t ͒ ϭ                 ␹␣A␣s ͑ t ͒,                                                      ͑6͒
+                                                                                                           ␣
+
+                                                                  Eq. ͑4͒ becomes
+
+                                                                                                    ‫ץ‬  A   s  ͑  t  ͒
+                                                                           ͚ ͚ i͗  ␹  ␤͉  ␹  ␣͘            ␣           ϭ           ͗  ␹   ␤͉     H    ͉  ␹     ␣͘    A  s  ͑  t  ͒          ͑7͒
+                                                                              ␣                                                                                         ␣
+                                                                                                        ‫ץ‬t                   ␣
+54                                                        ELECTRON-PHONON INTERACTIONS AND RELATED . . .                                                                                                                    16 489
+
+or in the matrix notations                                                                                                             1                         ␲␦͑⑀rϪ             ⑀  s͒ͦ͗Ar͉⌬Hˆ Ϫ⑀r⌬Oˆ ͉Asͦ͘2.
+
+                                                                                                                    w  r  sϭ  lim            Prs͑  T  ͒ϭ2
+                                                                                                                              T→ϱT
+                                  Oˆ  ‫ץ‬  As͑  t  ͒        Hˆ
+                               i          ‫ץ‬t        ϭ         A  s͑  t  ͒  ,                                  ͑8͒                                                                                                                ͑16͒
+
+where the overlap matrix O␤␣ϭ͗␹␤͉␹␣͘ and the Hamil-                                                                 As one can see, this formula differs from the well-known
+tonian matrix H␤␣ϭ͗␹␤͉H͉␹␣͘. Using a standard substitu-
+tion As(t)ϭexp(Ϫi⑀s)As, Eq. ͑8͒ transforms to the matrix                                                            expression for wrs by the presence of the contributions asso-
+eigenvalue problem Hˆ Asϭ⑀sOˆ As the solution of which                                                              ciated with the change in the basis functions as follows from
+gives the best ͑in the variational sense͒ estimate for the
+                                                                                                                    the deﬁnitions ͑12͒.
+eigenfunctions of the operator H at a given basis ͕␹͖.
+                                                                                                                       We now restore the original notations. The electron-
+   As we have argued in I in order to obtain the best varia-                                                        phonon matrix element ͗Ar͉⌬Hˆ Ϫ⑀r⌬Oˆ ͉As͘ must describe
+tional estimate for the perturbed wave function ˜␺r(t) to the                                                       the scattering of an electron at the Fermi surface from the
+ﬁrst order, one should take into account both the change in                                                         state ͉kj͘ to the state ͉kϩqjЈ͘ via the phonon perturbation
+the expansion coefﬁcients, ⌬Ar, and the change in the basis                                                         ␦q␯Veff . We therefore set ͕r͖ϵ͕kϩqjЈ͖, ͕s͖ϵ͕kj͖, and us-
+                                                                                                                    ing the deﬁnitions ͑12͒, we obtain
+set, ⌬␹␣ , as seen from varying Eq. ͑6͒. Keeping the contri-
+butions to linear order, the overlap integral between the ini-                                                      g     q␯    j  Ј,  kjϭ   ͗  kϩ  q  j  Ј͉  ␦  q␯V      eff͉  kj  ͘
+                                                                                                                          kϩ q
+tial and ﬁnal state has the form
+                                                                                                                                             ͳ ͯ ͯ ʹ ͚ ϩ                        kϩ q j  Ј
+                                                                                                                                                          ␦   q␯  ␹    ␣kϪ qA   ␣          HϪ⑀kj             kj
+
+              ͗˜␺r͑ t ͉͒␺s͑ t ͒͘ϭ␦rsϩ͗Ar͑ t ͉͒⌬Oˆ ͉As͑ t ͒͘                                                                                         ␣
+
+                                             ϩ͗⌬Ar͑ t ͉͒Oˆ ͉As͑ t ͒͘,                                                                        ͳ ͯ ͯ ʹ ͚ ϩ                                           ␦  q␯     k     kj
+                                                                                                              ͑9͒                                  kϩqjЈ HϪ⑀kϩqjЈ                                         ␹  ␣  A  ␣     ,       ͑17͒
+                                                                                                                                                                                            ␣
+
+where ⌬Ar(t) can found from the solution of the equation                                                            where  ␦    q␯     ␹  k  denotes      the       variation          of  the     MT        basis       functions
+obtained after the linearizing of ͑5͒ or varying ͑7͒, i.e.,                                                                               ␣
+
+                                                                                                                    due to the phonon distortion of the q␯ mode. It is connected
+
+          Oˆ  ‫ץ‬  Ar͑  t  ͒        Oˆ  ‫ץ‬  ⌬   Ar͑    t  ͒         Hˆ                     Hˆ                          with  the          variation      ␦   ؉␹     k  /  ␦  R  ␮  in     the   same         way         as    for  the
+                  ‫ץ‬t                         ‫ץ‬t                                                                                                                  ␣
+       ⌬                    ϩ                             ϭ   ⌬            r͑     ͒  ϩ      ⌬     r  ͑     ͒  ͑10͒                                                                                 q␯␹    kϪ    q
+    i                          i                                     A         t               A        t           induced        potential,         Eq.        ͑2͒.     Note         that     ␦         ␣        is    a  Bloch
+
+                                                                                                                    wave of the vector k since only this gives a nonzero contri-
+
+or, equivalently,                                                                                                   bution to the integral with ␺kj . The last two contributions in
+                                                                                                                    ͑17͒ represent the IBS corrections which are not vanished
+                    Ar͑
+       i  Oˆ  ‫ץ‬  ⌬  ‫ץ‬t   t  ͒  ϭ  ͑   ⌬  Hˆ  Ϫ   ⑀  r⌬    Oˆ  ͒  A  r͑  t  ͒  ϩ   Hˆ  ⌬  A  r  ͑  t  ͒  ,     ͑11͒  unless ␺kj ,␺kϩqjЈ are the exact solutions.
+                                                                                                                       The key formula ͑17͒ can be understood very simply if we
+
+                                                                                                                    will interpret the electron-phonon matrix element as a split-
+
+where both the change in the Hamiltonian and the overlap                                                            ting of the degenerate band ⑀kjϭ⑀kϩqjЈϭ⑀F due to the pho-
+matrix contain the terms associated with the variation of the                                                       non distortion. As we discussed in I, the ﬁrst-order correction
+basis functions, i.e.,
+                                                                                                                    to ⑀kj found as a change in the eigenvalue of the matrix
+                    ⌬O␤␣ϭ͗⌬␹␤͉␹␣͘ϩ͗␹␤͉⌬␹␣͘,                                                                         problem contains both the expression of the standard pertur-
+
+                                                                                                                    bation theory as well as the incomplete-basis-set corrections
+
+    ⌬H␤␣ϭ͗␹␤͉⌬V͉␹␣͘ϩ͗⌬␹␤͉H͉␹␣͘ϩ͗␹␤͉H͉⌬␹␣͘.                                                                          ͓see formulas ͑9͒ and ͑12͒ in I͔. It would be advantageous to
+                                                                    ͑12͒
+                                                                                                                    use that formula because the eigenvalues of the matrix prob-
+
+                                                                                                                    lem are variationally accurate for the whole range of param-
+
+   In order to solve Eq. ͑11͒ we use the following represen-                                                        eters variation. It is a standard exercise to show that in the
+tation:
+                                                                                                                    case of the degenerate band ⑀kjϭ⑀kϩqjЈ the development of
+                                                                                                                    the perturbation theory for the matrix eigenvalue problem
+
+                         ⌬Ar͑ t ͒ϭeϪiOˆ Ϫ1Hˆ t⌬Br͑ t ͒.                                                       ͑13͒  will lead to the band splitting given by the formula ͑17͒.
+
+                                                                                                                    The expression ͑17͒ is thus the linear-response analogy of
+
+Then, the coefﬁcients ⌬Br(t) are given by                                                                           evaluating the electron-phonon matrix elements via the split-
+
+                                                                                                                    ting of the bands in the frozen-phonon method as done in
+
+ ͵ ⌬Br͑ t ͒ϭϪi teiOˆ Ϫ1Hˆ ␶Oˆ Ϫ1͑ ⌬Hˆ Ϫ⑀r⌬Oˆ ͒Ar͑ ␶ ͒d␶, ͑14͒                                                       Ref. 14. It is less sensitive to the errors in the wave functions
+                             a
+                                                                                                                    introduced by the variational principle, has a correct long-
+and the matrix element ͑9͒ is rewritten as follows:
+                                                                                                                    wavelength behavior, and allows one to avoid the inclusion
+
+                                                                                                                    of d- f transitions in d-electron systems.
+
+͗˜␺r͑ t ͉͒␺s͑ t ͒͘ϭ␦rsϩ͗Ar͉⌬Oˆ ͉As͘ei͑⑀rϪ⑀s͒t                                                                          For the electron-phonon spectral distribution functions
+                                                                                                                    ␣2F(␻), we employ the expression21 in terms of the phonon
+       ͵Ϫi t͗Ar͉⌬Hˆ Ϫ⑀s⌬Oˆ ͉As͘ei͑⑀rϪ⑀s͒␶d␶. ͑15͒
+                                    a                                                                               linewidths ␥q␯ ,
+
+                                                                                                                                                               1                       ␥ q␯
+                                                                                                                                                          2␲N͑⑀F͒                      ␻ q␯
+                                                                                                                                       ͚ ␣ 2 F ͑ ␻ ͒ ϭ                                       ␦  ͑  ␻  Ϫ   ␻  q␯    ͒  ,          ͑18͒
+
+As a common practice, we assume that the perturbation is                                                                                                                        q␯
+switched on adiabatically at the time moment tϭϪϱ. For
+the scattering rate per unit time we obtain the expression                                                          where N(⑀F) is the electronic density of states per atom and
+                                                                                                                    per spin at the Fermi level. When the energy bands around
+16 490                                                                                S. Y. SAVRASOV AND D. Y. SAVRASOV                                                                                                          54
+
+the Fermi level are linear in the range of phonon energies,                                                                          ͵ w                                       ϱd␻ x2
+the linewidth is given by the Fermi ‘‘golden rule’’ and is                                                                           ͑  T  ͒  ϭ  ␲  k     6 ⍀ cell    v  2  ͘  0 ␻ sinh2x
+written as follows:                                                                                                                                       N͑⑀F͒͗         x
+                                                                                                                                                       B
+
+                                                                                                                                                 ͫ ͬ ϫ ␣  t2rF  ͑  ␻  ͒ϩ    4x2  ␣  2outF  ͑  ␻  ͒  ϩ  2x2  ␣  i2nF  ͑  ␻  ͒  ,
+                                                                                                                                                                            ␲2                         ␲2
+
+͚ ␥ q␯ ϭ 2 ␲ ␻ q␯                   ͉  g  q␯    Ј,   kj  ͉  2␦  ͑  ⑀  kjϪ    ⑀  F  ͒  ␦  ͑  ⑀     kϩ  qjЈ   Ϫ     ⑀  F  ͒.                                                                                                    ͑22͒
+                kj jЈ                     k؉qj
+
+                                                                                                                        ͑19͒         with xϭ␻/2kBT. The LOVA results ͑20͒, ͑22͒ give the up-
+                                                                                                                                     per bound to the resistivities and allow us to test the calcu-
+The spectral distribution function ͑18͒ and its ﬁrst reciprocal                                                                      lated ␣2trF(␻).
+moment ␭ are usually used to describe such important mani-
+festation of the EPI as superconductivity and some normal-                                                                                                            III. RESULTS
+
+state properties. One such property is an enhancement of the                                                                                                       A. Technicalities
+
+electronic mass for the electron at the Fermi energy when its                                                                           Our calculations of phonon dispersions and electron-
+velocity vk is reduced by the factor 1ϩ␭k due to the inter-                                                                          phonon interactions for the elemental metals such as fcc Al,
+action with phonons. The value of ␭k is given by the recip-                                                                          Cu, Pb, Pd, and bcc Mo, Nb, Ta, V are performed in the
+rocal moment of the so-called k-dependent electron-phonon                                                                            framework of the linear-response LMTO method.18 The de-
+spectral function ␣2kF(␻).This renormalization is observed                                                                           tails of the calculations are the following: We ﬁnd the dy-
+in the de Haas–van Alphen and cyclotron-resonance experi-                                                                            namical matrix and the phonon linewidths for these materials
+
+ments. As a consequence, the low-temperature electronic                                                                              as a function of wave vector for a set of irreducible q points
+                                                                                                                                     at the (8,8,8) reciprocal lattice grid ͓29 points per 1/48th part
+speciﬁc heat is also renormalized. For the latter effect it is                                                                       of the Brillouin zone ͑BZ͔͒. The (I,J,K) reciprocal lattice
+                                                                                                                                     ͑or Monkhorst-Pack25͒ grid is deﬁned in a usual manner:
+sufﬁcient to know only the Fermi-surface averaged value of                                                                           qi jkϭ(i/I)G1ϩ( j/J)G2ϩ(k/K)G3 , where G1 , G2 , G3 are
+␭k , i.e., ␭.                                                                                                                        the primitive translations in the reciprocal space. The self-
+                                                                                                                                     consistent calculations performed for every wave vector in-
+   A full description of the superconducting state can be ob-                                                                        volve the following parameters: We use 3␬ϪspdϪ LMTO
+                                                                                                                                     basis set ͑27 orbitals͒ with the one-center expansions per-
+tained by solving the Eliashberg gap equations which relate                                                                          formed inside the MT spheres up to lmaxϭ6. In the intersti-
+                                                                                                                                     tial region the basis functions are expanded in plane waves
+the energy-gap function and the renormalization parameter                                                                            up to the cutoff approximately corresponding to 70, 140, and
+
+for superconducting state to the electron-phonon and the                                                                             200 plane waves per s, p, and d orbitals, respectively. All
+electron-electron interactions in the normal state.22 The                                                                            semicore states lying higher than Ϫ4 Ry are treated as va-
+electron-phonon-coupling function is given by ␣2F(␻). The                                                                            lence states in separate energy windows. The induced charge
+Coulomb interaction is usually represented by some constant                                                                          densities and the screened potentials are represented inside
+␮*. A detailed nature of the effective Coulomb repulsion is                                                                          the MT spheres by spherical harmonics up to lmaxϭ6 and in
+not very well known. Fortunately, various deﬁnitions for                                                                             the interstitial region by plane waves with the cutoff corre-
+␮* have only a weak inﬂuence on the solution of the gap
+equations and its values can, e.g., be found by adjusting the                                                                        sponding to the (16,16,16) fast-Fourier-transform grid in the
+                                                                                                                                     unit cell of direct space.
+calculated transition temperatures to the experimental ones.
+                                                                                                                                        The k-space integration needed for constructing the in-
+   Electron-phonon scattering has a dominant contribution to                                                                         duced charge density and the dynamical matrix is performed
+                                                                                                                                     over the (16,16,16) grid ͑145 points per 1/48th part of the
+the electrical resistivity for reasonably pure metals except for                                                                     BZ͒, which is twice denser than the grid of the phonon wave
+                                                                                                                                     vectors q. We use the improved tetrahedron method of Ref.
+the very low-temperature region where the impurity and                                                                               26. However, the integration weights for the k points at this
+
+electron-electron scattering are important. The inﬂuence of                                                                          (16,16,16) grid have been found to take precisely into ac-
+                                                                                                                                     count the effects arising from the Fermi surface and the en-
+the EPI on the transport properties are described in terms of                                                                        ergy bands. This is done with help of the energies ⑀kj gen-
+the transport spectral function24 ␣t2rF(␻)ϭ␣o2utF(␻)                                                                                 erated by the original full-potential LMTO method at the
+Ϫ␣i2nF(␻), where                                                                                                                     (32,32,32) grid ͑897 points per 1/48 BZ͒. The procedure is
+                                                                                                                                     explained in paper I ͑Ref. 18͒ in detail and allows us to
+͚ ͚ ␣2         ͑  ␻  ͒  ϭ           1                                  ͉     kЈ  Ϫj Јk, k␯j ͉  2  v  x͑  k͒    v     ͑  k͑  Ј  ͒  ͒  obtain more convergent results with respect to the number of
+out͑  in͒F                          F͒͗                                   g  kЈ                                   x
+                           N  ͑  ⑀        v  2  ͘                                                                                    k points.
+                                             x      ␯       kjkЈ jЈ                                                                     The k-space integration for the phonon linewidths ␥q␯ is
+
+                           ϫ␦͑ ⑀kjϪ⑀F͒␦͑ ⑀kЈjЈϪ⑀F͒␦͑ ␻Ϫ␻kЈϪk␯͒.                                                                      very slowly convergent because it involves two ␦ functions
+                                                                             ͑20͒                                                    according to Eq. ͑19͒. It is performed with the help of the
+                                                                                                                                     (32,32,32) grid in the BZ by means of the tetrahedron
+Here  ͗  v  2  ͘  is    the   average           square             of  the       x    component                      of     the      method of Ref. 27. The largest numerical error of ␣2F(␻)
+            x                                                                                                                        comes from the integration over q in the expression ͑18͒. Its
+                                                                                                                                     magnitude, we estimated by performing the integration over
+Fermi velocity. In the lowest-order variational approximation
+
+͑LOVA͒ for the solution of the Boltzmann equation the ex-
+
+pressions for electrical and thermal resistivities are
+
+               ͵ ␳            ␲⍀                         ϱd␻            x2
+                  ͑  T  ͒  ϭ  N͑⑀      cellk BT          0␻           sinh2x          ␣  t2rF     ͑  ␻   ͒  ,           ͑21͒
+                                       F ͒ ͗ v x2 ͘
+54                ELECTRON-PHONON INTERACTIONS AND RELATED . . .                              16 491
+
+    TABLE I. Comparison between calculated and experimental ͑Ref. 31͒ phonon frequencies ͑THz͒ at the high-symmetry points X, L for
+the fcc metals Al, Pb, Cu, Pd, and at the points H, N for the bcc metals V, Nb, Ta, Mo. Also listed are the theoretical-to-experimental
+volume ratios V/V0 used in the calculations.
+
+fccʈ bcc          Al     Pb     V                                 Nb     Ta     Mo     Cu     Pd
+
+XLʈHLT    theory  9.51   1.80   8.03                              6.43   5.13   5.71   7.69   7.17
+          exp.
+                  9.69   1.86                                     6.49   5.03   5.52   7.25   6.72
+
+XTʈNL     theory  5.83   1.06   7.22                              5.52   4.54   7.99   5.36   5.01
+          exp.
+                  5.78   0.89                                     5.66   4.35   8.14   5.13   4.64
+
+LLʈNT1    theory  9.84   2.18   4.76                              3.94   2.65   5.74   7.77   7.39
+          exp.
+                  9.69   2.18                                     3.93   2.63   5.73   7.30   7.02
+
+LTʈNT2    theory  4.33   0.92   6.17                              4.80   4.18   4.69   3.64   3.60
+          exp.
+                  4.19   0.89                                     5.07   4.35   4.56   3.42   3.34
+
+V/V0              0.955  1.002  0.990                             0.972  0.974  0.971  0.985  0.975
+
+merely the band-structure factor ͓which is ␥q␯ approximated       exchange-correlation potential parametrized after Ref. 30 is
+by ͚kj jЈ␦(⑀kjϪ⑀F)␦(⑀kϩqjЈϪ⑀F)͔ using, respectively,              used which gives the ratios V/V0 being much closer to unity
+(8,8,8) and (32,32,32) grids and found to be not larger than      ͑see Table I͒.
+7% in all cases.
+                                                                     Finally note that in Ref. 20 we have used a different
+   A few words should be said about the lattice parameters        method for treating the full-potential terms in the calculation
+used in the calculations. It is known that the equilibrium cell   which was based on the atomic cells and the one-center
+volume V found theoretically by the corresponding LDA-            spherical-harmonic expansions.23 This method is not directly
+based total-energy calculation is frequently obtained slightly    applicable to calculate phonon dispersions for materials with
+lower than the experimental volume V0. This usually leads to      open structures such as, e.g., the diamond structure and re-
+the calculated at V0 phonon frequencies which are softer          quires the replacement of empty sites of the lattice by empty
+comparing to the experimental ones. Often, a better agree-        spheres. This complicates the evaluation of the dynamical
+ment with the experiment can be obtained by performing the        matrix. In I we have employed another approach based on
+linear-response calculations at the theoretical volume. This      the plane-wave expansions for the LMTO’s in the interstitial
+is, in principle, a justiﬁed procedure from theoretical point of  region and have applied the method to calculate the phonon
+view. Unfortunately, the prescription does not work when          spectra in Si and NbC. While the materials considered in this
+calculating the phonon linewidths and ␣t2rF(␻): the results       work have close-packed bcc or fcc structures we also apply
+of calculated electrical and thermal resistivities agree less     this method which is more general for practical use. Some of
+well with the experiment. The reason for this discrepancy is      the results for Al, Nb, and Mo previously published20 do not
+connected with the sensitivity of these quantities to the shape   noticeably differ from those presented below in this paper.
+of the Fermi surface. It turns out that the use of the Fermi
+surfaces calculated at the experimental lattice constants con-                        B. Lattice-dynamical properties
+siderably improves the results. We can thus use theoretical
+volumes in the linear-response calculations of phonon dis-           In Table I we report the values of the calculated phonon
+persions and the electron-phonon matrix elements. To ﬁnd          frequencies at the high-symmetry points X and L for the fcc
+the phonon linewidths and ␣t2rF(␻) we can use, on the other       metals Al, Cu, Pb, and Pd as well as at the points H and N
+hand, the energy bands entered ͑19͒ which are generated at        for the bcc metals Mo, Nb, Ta, and V. For the comparison,
+the experimental lattice constants. We understand that it is      the experimental frequencies31 are also listed in Table I
+not a well justiﬁed procedure to use different lattice param-     along with the theoretical-to-experimental volume ratios
+eters in one calculation, but it somewhat helps to minimize       which have been used in the calculations.
+the errors connected with the LDA by simple means. The
+actual volume ratios V/V0 used in our calculations to ﬁnd the        Our results for the phonon dispersions along several sym-
+changes in the one-electron potentials are listed in Table I.     metry directions together with the corresponding densities of
+                                                                  states for these materials are displayed in Figs. 1͑a͒–͑h͒. The
+   Another comment concerns the choice of the exchange-           theoretical lines result from the interpolation between the
+correlation potential. The general strategy employed by us is     calculated frequencies which are denoted by circles. Many
+to use the exchange-correlation formula which gives the best      neutron-diffraction measurements are available31 for nearly
+prediction of the cell volumes. The von Barth–Hedin-like          all the metals considered here and these data are also shown
+formula after Ref. 28 is employed for all the metals except       in Fig. 1 by triangles. The only exception is V for which the
+Cu and V. For the 3d metals we have found that this formula       dispersion relations cannot be studied with neutrons since V
+gives the theoretical volumes which are too small                 is an almost totally incoherent neutron scatterer. While some
+(V/V0ϳ0.9). For Cu and V the Ceperley-Alder form29 of the         x-ray diffraction measurements exist in the literature31 their
+                                                                  accuracy seems to be less satisfactory than the corresponding
+16 492  S. Y. SAVRASOV AND D. Y. SAVRASOV                       54
+
+    FIG. 1. ͑a͒–͑h͒ Calculated phonon-dispersion curves along several symmetry directions for the eight elemental metals considered in this
+work. The lines result from the interpolation between the theoretical points ͑circles͒. The results of available neutron-diffraction measure-
+ments ͑Ref. 31͒ are shown by triangles. Also plotted are the calculated densities of states ͑DOS͒.
+
+neutron-scattering data for other materials and we do not       the main valence panel.͒ This kind of disagreement has also
+show the experimental points for V.                             been recently reported in Ref. 32 using the linear-response
+                                                                pseudopotential technique. It is possibly connected with the
+   From Fig. 1 we see that the agreement between theory         use of the local density approximation or the lack of spin-
+and experiment is good. Most of the calculated frequencies      orbit coupling effects in our calculation.
+agree within a few percent with those measured. This also
+follows from the numerical values listed in Table I. In par-       The most interesting cases are V, Nb, and Ta ͓Figs. 1͑c͒,
+ticular, for Al ͓Fig. 1͑a͔͒ a very good agreement is found in   ͑d͒, ͑e͒, respectively͔. The materials belong to group V of the
+all directions. As we have mentioned already, this calcula-     Periodic Table and all of them show anomalous behavior of
+tion is performed at the theoretical volume (V/V0ϭ0.955).       the phonon-dispersion curves. The presence of anomalies is,
+We have also checked the setup with the experimental vol-       ﬁrst of all, connected with the well-known dip of the longi-
+ume and found a considerable softening ͑about 20%) of the       tudinal mode in the (00␰) direction. The dip is correctly
+transverse modes. This illustrates the importance of perform-   reproduced by our calculation. Other important features of
+ing lattice-dynamical calculations at the theoretical volumes.  our calculation are ͑i͒ the softening of the transverse mode
+                                                                along the (00␰) direction at long wavelengths which is rather
+   The most important consequence of our calculation for        sharp in both V, Nb and is weaker in Ta as well as ͑ii͒ the
+lead ͓Fig. 1͑b͔͒ is that the pronounced dip of both the longi-  crossover of two transverse branches in the (␰␰0) direction.
+tudinal and transverse branches near the X point is well re-    The latter is, in fact, predicted for Ta because the measured
+produced. We have also found a slight overestimate of the
+transverse phonon frequencies near this zone boundary           dispersions in this direction are absent for the T1 branch
+which can be attributed neither to the discrepancy in the cell  except the zone-boundary point N.
+volume (V/V0ϭ1.002) nor to the neglection of the semicore
+states. ͑We have, in fact, included both 5d and 6d states in       The theoretical phonon dispersions for Mo also agree well
+                                                                with the experiment. The consequences of our calculations
+54  ELECTRON-PHONON INTERACTIONS AND RELATED . . .               16 493
+
+                                                                     FIG. 2. ͑a͒–͑h͒ Calculated spectral functions
+                                                                 ␣2F(␻) of the electron-phonon interaction ͑full
+                                                                 lines͒ for the eight elemental metals considered in
+
+                                                                 this work. The behavior of the electron-phonon
+                                                                 prefactor ␣2(␻) ͓deﬁned simply as the ratio
+                                                                 ␣2F(␻)/F(␻)͔ is shown by dashed lines. Sym-
+
+                                                                 bol plots present the results of available tunneling
+
+                                                                 experiments ͑Refs. 3, 35, and 39͒.
+
+here are the reproduced softening near the H point and the                            C. Superconducting properties
+absence of the large dip along the (␰␰␰) direction near
+␰ϳ0.7. The dip is presented in the dispersion curves of             We now discuss applications of our ab initio linear-
+nearly all bcc metals except for Mo and Cr, and is certainly     response method to calculate the electron-phonon coupling
+the feature of the behavior of the crystalline structure factor  and superconducting-state properties. First, we present our
+which enters the dynamical matrix as a sum over lattice vec-     results for the spectral distribution functions and ␭. Second,
+tors with the phase shift exp(iqt). Its absence indicates a      we describe our applications to solving the Eliashberg gap
+considerable wave-vector dependence of the electron-phonon       equations.
+matrix elements which seems to be well reproduced by our
+method.                                                             Calculated ␣2F(␻) for Al is shown in Fig. 2͑a͒ ͑full line͒.
+                                                                 The positions of the maxima here are conditioned by the
+   Finally, we compare the results of our calculations for Cu    form of the phonon density of states with the low-frequency
+and Pd which are presented in Fig. 1͑f͒ and Fig. 1͑g͒. The       phonon peak suppressed by the coupling function ␣2(␻)
+dispersion relations for these materials do not show the         ͑dashed line͒. ͓The latter is deﬁned simply as the ratio
+anomalies and are smooth. A slight overestimation of the         ␣2F(␻) to F(␻).͔ The broad phonon spectrum in Al is ex-
+theoretical phonon frequencies is found for both these met-      tended up to the maximal frequency ␻maxϷ470 K. The theo-
+als. The overestimation can likely be corrected by the use of    retical ␣2F(␻) in Fig. 2͑a͒ is compared with the results of
+the cell volumes in the calculation which would be slightly      the tunneling measurements3 ͑squares͒. We ﬁnd a rather
+larger than those found within the LDA. However, such a          good agreement between the two curves. In fact, our
+procedure is not justiﬁed theoretically. We think that em-       ␣2F(␻) is also found to be practically identical to the em-
+ploying the gradient-corrected density functional33 known to     pirical pseudopotential result of Ref. 34 based on the rigid-
+predict much better the equilibrium lattice parameter will       ion approximation. The latter is known to work well in
+allow us to improve these results.                               simple metals. General agreement is found between our and
+16 494                           S. Y. SAVRASOV AND D. Y. SAVRASOV                                        54
+
+    TABLE II. Comparison between the calculated electron-phonon coupling constants ␭calc and the values of ␭tun deduced from the
+tunneling experiments. Also listed are the values of ␭sϪh extracted from the measured speciﬁc-heat coefﬁcient ␥ with the use of our
+calculated density of states N(⑀F).
+
+                   Al     Pb            V                      Nb            Ta      Mo     Cu     Pd
+
+␭ calc             0.44   1.68          1.19                   1.26          0.86    0.42   0.14   0.35
+␭ tun              0.42a  1.55a         0.82a
+␭sϪh                                                           1.04,a 1.22b  0.78a
+                   0.43   1.64          1.00, 1.17
+                                                               1.17          0.83    0.45          0.69
+
+           states  5.49   6.87          26.14                  20.42         18.38   8.34   4.36   34.14
+                   1.36c  3.14c          9.04,c 9.82d           7.66c         5.84c  2.10c  0.69c  10.0c
+N(⑀F), Ry*cell
+
+     mJ
+␥, K2mol
+
+aReference 3.
+bReference 39.
+cReference 51.
+dReference 52.
+
+the ab initio frozen-phonon results of Dacorogna et al.12 for  the tunneling estimates of the coupling constant for Nb and
+
+the dispersion of the phonon linewidths along the high-        V are difﬁcult because of the oxidation of the surface layers.
+
+symmetry directions. The only exception is that, in the        Having lower transition temperature, such oxides act on the
+
+(00␰) direction, our longitudinal branch of ␥q␯ exceeds        tunneling spectra due to the proximity effect. The experi-
+theirs by a factor of 2. This is presumably connected with     mental ␭ in Nb varied in the past from the values36
+replacing the ␦ functions in ͑19͒ by Gaussians used in Ref.    0.58Ϫ0.68 with negative or anomalously small ␮* to the
+12. However, the relative weight of our high ␥ values in the   value37 0.9. At present, a satisfactory explanation of the
+integrated quantities, such as ␣2F(␻) and ␭, is found to be
+very small. Our value of ␭ is 0.44 which is very close to the  anomalous behavior of the thermally oxidized tunneling
+value of ␭tunϭ0.42 extracted from the tunneling
+measurements.3 The frozen-phonon12 and linear-response         junctions in Nb appears to be possible which gives the
+calculations of Winter15 gave, respectively, ␭ϭ0.45 and        values38,39 of ␭tunϭ0.92Ϫ1.22.
+0.38. The value of ␭sϪh extracted from the electronic
+speciﬁc-heat coefﬁcient ␥ and our calculated density of           In Figs. 2͑c͒, ͑d͒, ͑e͒ we present our calculated ␣2F(␻)
+states N(⑀F) using the relation                                ͑full lines͒ for V, Nb, and Ta, respectively. They all have
+                                                               rather broad spectra extended up to ␻maxϷ370 K, 310 K, and
+                          3␥                                   240 K. The coupling function ␣2(␻) ͑dashed line͒ in these
+                   1ϩ␭sϪhϭ2␲2kBN͑⑀F͒ ,              ͑23͒
+                                                               metals only slightly deviates from constant in a major part of
+is 0.43 ͑see Table II͒. In order to check previous             the frequencies. The approximation ␣2ϭconst works very
+conclusions15,40 about the inapplicability of the RMTA for
+                                                               well in Nb and Ta. This qualitative result implies that the
+sp metals, we also performed such a calculation and indeed
+found ␭RMTAϭ0.14.                                              electron-phonon coupling can be factorized into electronic
+                                                               and phonon-dependent factors.44,9
+   Lead is a well-studied classical example of strong-
+coupled superconductor with Tcϭ7.19 K and its tunneling           In Fig. 2 the calculated spectral functions are compared
+spectra have been studied a long time ago.35 Obtained
+␣2F(␻) using our linear-response method is presented in        with the results of the tunneling measurements ͑squares͒. As
+Fig. 2͑b͒, where it is compared with the results of the        it can be seen for V ͓Fig. 2͑c͔͒, our ␣2F(␻) disagrees with
+measurements.35 The two curves are similar. Our calculated     the measured one46 because of the appearance of the upper
+␭ϭ1.68 is found to be 8% larger than the tunneling value
+                                                               phonon peak not presented in the experiment. Even though
+1.55 and only 2% larger than the value 1.64 extracted from     the theoretical ␣2F(␻) should be broadened because the ␦
+speciﬁc-heat data ͑see Table II͒. This disagreement is well    function in Eq. ͑18͒ ought to be a Lorentzian of half width
+within the accuracy of our calculation.                        ␥q␯ , the electron-phonon coupling estimated by us
+                                                               (␭ϭ1.19) is 40Ϫ50 % stronger than the obtained
+   We now report our results for V, Nb, and Ta which are       ␭tunϭ0.82. The same situation is found for Nb. Our calcula-
+                                                               tion here ͓Fig. 2͑d͔͒ also does not show the suppression of
+the best-studied elemental superconductors because of their    the longitudinal peak. The latter is absent in nearly all the
+                                                               experiments for this metal.38 ͓A typical measured spectrum3
+relatively high-Tc values. Especially, for Nb which has the    is shown in Fig. 2͑d͒ by squares͔. As a result, the calculated
+highest Tcϭ9.25 K among the elemental metals, there exist      ␭ϭ1.26 is 20% higher than ␭tunϭ1.043. The discrepancy
+many experimental investigations of the tunneling              found by us has already been reported in the past RMTA-
+spectra36–39 and theoretical RMTA-based calculations.40–42     based calculations.41,42 To check the consistency of our re-
+
+Unfortunately, some of the results which have been reported    sults with the earlier ones, we have performed our own
+
+in the literature are controversial. First, the RMTA calcula-  RMTA calculations and obtained complete agreement be-
+tions give the values of ␭ varying from 1.12 to 1.86. Second,
+                                                               tween them. We thus conclude that the full inclusion of
+
+                                                               screening does not resolve the problem of the suppressed
+
+                                                               longitudinal peak.
+54                            ELECTRON-PHONON INTERACTIONS AND RELATED . . .                                  16 495
+
+    Unfortunately, our comparison with the experiment is            the corresponding phonon state densities shown for these
+                                                                    metals in Figs. 1͑f͒, ͑g͒, but a considerable frequency depen-
+complicated by the proximity effect and the extraction of the       dence of the electron-phonon prefactor ␣2(␻) ͑indicated by
+                                                                    dashed lines͒ is also predicted. For Mo our linear-response
+tunneling densities of states depends on the way the mea-
+                                                                    calculations are found to be close to our RMTA calculations
+sured data are processed. For example, in Nb the value of           and to earlier ones.49 The estimated average coupling here is
+
+␭tunϭ1.22 deduced from the tunneling experiments ͑which is          0.42 which can be compared with the value 0.45 deduced
+                                                                    from the speciﬁc-heat measurements ͑see Table II͒. The cal-
+only 3% lower than that found by us͒ has been reported in           culated value of ␭ for Cu is 0.14. The speciﬁc-heat estimate
+the literature.39 The obtained ␣2F(␻) ͓denoted in Fig. 2͑d͒         here is less reliable possibly because of the smallness of ␭
+
+by triangles͔ is found much closer to our calculation.              and errors due to the experimental uncertainty in the value of
+                                                                    ␥. Quite likely, however, there are some errors in the DFT
+    A better understanding of the present situation can be
+                                                                    value of the density of states connected with the many-body
+achieved by comparing the theoretical and the                       effects since the copper valence shell 3d10 is close to the
+experimental47,3 tunneling spectra for Ta since its supercon-       strongly correlated 3d9 conﬁguration. It is known that within
+
+ducting properties are close to those of V and Nb but this          DFT the position of d band is higher than experimentally
+
+metal is much less reactive with oxygen. Such a comparison          observed. The band which crosses the Fermi level is essen-
+
+is given in Fig. 2͑e͒. We ﬁnd rather good agreement between         tially s band but the effect of hybridization with the d band
+
+both curves. In particular, the upper phonon peak is not sup-       should lead to a lowering of the Fermi velocities. The latter
+pressed in the measured ␣2F(␻)and its amplitude is compa-
+                                                                    effect is stronger if the d band is closer to the Fermi energy.
+rable with that calculated by us. As a result, the theoretical
+                                                                    To obtain 1ϩ␭sϪhϳ1.1, one has to reduce our calculated
+␭ϭ0.86 agrees within 10% with the ␭tunϭ0.78.                        N(⑀F) by approximately 20% which is a reasonable estimate
+   In view of the data on Ta we cannot consider the discrep-        for the expected inﬂuence of the Coulomb correlations.
+
+ancy found for V and Nb as a drawback of either our linear-         Concerning other estimates of ␭ based on the transport prop-
+                                                                    erties, our calculated ␭trϭ0.13 while this value extracted
+response method or the use of the local density approxima-          from the measured resistivity data is 0.12 ͑see following sub-
+                                                                    section͒. Both values are in agreement with our supercon-
+tion. Partially this conclusion is also veriﬁed by alternative      ducting ␭.
+
+estimates of the coupling constant based on the speciﬁc-heat           As the last example, we consider Pd and discuss paramag-
+
+data and the de Haas-van Alphen ͑dHvA͒ experiments, but it          non effects. The superconductivity in Pd is absent because of
+                                                                    the large spin ﬂuctuations.2 There was also a discussion in
+should be noted that both cyclotron masses and the speciﬁc-         the literature50 on the paramagnon contributions to the mass
+
+heat coefﬁcient are also enhanced by the electron-electron          enhancement in Nb and V. The occurrence of paramagnons
+
+interactions. Evaluation of the average coupling from the           is connected with the ﬂuctuations of the electron spins. Para-
+speciﬁc-heat measurements51 yields an enhancement of 1.00
+                                                                    magnons usually counteract superconductivity since the lat-
+for V and 1.17 for Nb ͑see Table II͒. If one uses a more
+recent value52 of ␥ for V rather than the one listed in Ref. 51     ter has its origin in the formation of pairs with the opposite
+
+one obtains the enhancement ␭sϪhϭ 1.17, which nearly co-            spins. To extract the paramagnon contribution, we can use
+incides in this metal with our ␭ϭ1.19. Comparison between           our calculated values of ␭ together with the speciﬁc-heat51,52
+                                                                    estimates ␭sϪh after formula ͑23͒. The necessary data are
+the LDA band masses with those measured by the dHvA                 listed in Table II. Comparing these results does not leave any
+effect48 yields the enhancement of 1.33 for Nb, which is
+                                                                    place for ␭spinϭ␭sϪhϪ␭ in all the materials except in Pd
+close to the value 1.26 found in our calculation. Another           which is a typical example for paramagnon effects. Here
+                                                                    ␭sϪhϭ0.69 and with the use of our calculated ␣2F(␻) ͓Fig.
+important result is that the measured variation of the mass         2͑h͔͒, the average electron-phonon coupling is found to be
+                                                                    equal to 0.35. This results in our value of ␭spinϭ0.34 for Pd
+enhancement for the various cyclotron orbits in Nb agrees           which is close to its earlier estimate 0.31 based on the
+                                                                    RMTA calculation.43
+also well with our calculation. Namely, we have found a
+                                                                       After comparing the calculated and experimental spectral
+decomposition of ␭ by the Fermi-surface sheets: ͑i͒ octahe-
+                                                                    functions, we present the results of our applications to solv-
+dron, ͑ii͒ jungle gym, and ͑iii͒ ellipsoids, and have obtained
+                                                                    ing the Eliashberg gap equation with our knowledge of
+the contributions ␭iϭ1.44, ␭iiϭ1.37, and ␭iiiϭ1.08. They            ␣2F(␻). Having ﬁxed the Coulomb pseudopotential ␮*, the
+
+can  be  compared  with  the  measured  ␭  di HvAϭ  1.71,  ␭  ii    superconducting state is now completely described by the
+                                                              dHvA  strong-coupling theory of superconductivity.22 According to
+ϭ1.43, and ␭diiHi vAϭ1.10. ͑Note that the calculated within         the Allen-Dynes45 modiﬁed McMillan44 formula,
+
+the RMTA anisotropy of the mass enhancement strongly dis-
+
+agrees with these data.48͒ Moreover, we have estimated the
+
+transport constants ␭tr for these metals both from the calcu-
+lated and measured resistivity data. The values of ␭tr are
+usually believed to be close to the superconducting ones. ͑A
+
+complete report of our calculated transport properties will be
+
+given in the following subsection.͒ For V, the value of ␭tr
+found by us is 1.15 and, for Nb, ␭trϭ1.17. The calculated
+
+electrical and thermal resistivities are also close to those
+
+measured. It therefore seems that our electron-phonon cou-
+
+pling is accurate ͑within the computational accuracy of order
+
+10%) while the effect of the electron-electron interactions is      ͩ ͪ T
+
+small in these metals.                                              Mc cMϭ  ␻ log  exp         1.04͑1ϩ␭ ͒  ,  ͑24͒
+                                                                            1.2         Ϫ ␭Ϫ␮*͑1ϩ0.62␭ ͒
+    As the next two examples, we report the results of our
+
+applications for Mo and Cu. There are no tunneling data for
+
+these materials because of their low Tc and the weakness of         the effect of the ﬁrst reciprocal moment ␭ of ␣2F(␻) on
+phonon effects. The calculated spectral functions are pre-
+                                                                    Tc is most important. Unfortunately, the estimation of the
+sented in Figs. 2͑f͒, ͑g͒. Both curves qualitatively agree with     coupling constant from Tc is difﬁcult because of the un-
+16 496                                                             S. Y. SAVRASOV AND D. Y. SAVRASOV                                             54
+
+    TABLE III. Calculated values of the Coulomb pseudopotential                               Nb has approximately the same values in all the experiments
+                                                                                              and is equal to 1.56 meV.3 This value perfectly agrees with
+␮* which provide the experimental values of Tc as the solutions of                            that found by us which is equal to 1.53 meV. We have also
+the Eliashberg equation with our knowledge of ␣2F(␻). Values                                  found a good agreement in the energy gap for V which is
+
+T  McM      were    then  found   with  our  ␻log ,  ␭,       and  ␮*   in  order  to  check  within 4% of the experimental one. The discrepancy in the
+   c                                                                                          energy gap for Ta is again 1Ϫ2 %. Because of the low tran-
+                                                                                              sition temperature there is no tunneling data for Mo and we
+the accuracy of the McMillan Tc expression. Also shown are the                                only give the theoretical value of ⌬0. We thus see that de-
+                                                                                              spite the discrepancy in evaluating the coupling constants, an
+computed and the measured ͑Ref. 3͒ superconducting energy-gap                                 extremely good agreement (1Ϫ2 %) is obtained for the pre-
+                                                                                              dicted gap data. Such a coincidence is readily understood
+parameters ⌬0.                                                                                because the ratio 2⌬0 /Tc is slowly varying for different su-
+                                                                                              perconductors. ͑It is 3.52 within the BCS theory.͒ Fixing the
+                          Al Pb V Nb Ta Mo Cu Pd                                              Tc to its experimental value makes the value of ⌬0 insensi-
+                                                                                              tive to the errors in ␣2F(␻) and ␭.
+␮*                  0.12 0.17 0.30 0.21 0.17 0.14 0.11
+                                                                                                 To summarize, we have found that our results for the
+T  exp  ,   K       1.18 7.19 5.40 9.25 4.47 0.92 Ͼ0                                          spectral functions and, in particular, for the coupling con-
+   c                1.22 6.81 6.68 10.5 5.11 0.67 Ͼ0                                          stants are realistic for the correct description of the supercon-
+                                                                                              ducting properties. Especially, excellent agreement has been
+T  McM      ,  K                                                                              found between our calculated ␭ and the values extracted
+   c                                                                                          from speciﬁc-heat measurements. The values of ␭ deduced
+                                                                                              from the available tunneling experiments also agree within
+␻log , K            270 65 245 185 160 280 220 180
+                                                                                              10% with our calculations in all the materials except Nb and,
+⌬  calc  ,     meV  0.18 1.35 0.84 1.53 0.70 0.14                                             especially, V. However, taking into account the past ten-
+   0                                                                                          dency to correct the tunneling spectra for Nb as well as our
+                                                                                              calculations for Ta, we do not consider these discrepancies as
+⌬  exp   ,  meV     0.18 1.33 0.81 1.56 0.71                                                  essential.
+   0
+
+known value of ␮*. We use a standard Matsubara technique
+
+to solve numerically the Eliashberg equation for Tc and have
+found ␮* which gives the experimental value of Tc . The
+cutoff parameters ␻cut were taken to be equal to ten phonon-
+boundary frequencies ␻max . To treat the Coulomb pseudo-
+potential in terms of the expression ͑24͒ when solving the
+
+Eliashberg equation, we have rescaled actually used param-
+
+eters ␮*(␻cut) to ␮*ϭ␮*(␻log) according to
+
+                               1  ϭ  ␮  *  1   cut͒  ϩ  l  n  ␻ cut  .                 ͑25͒                            D. Transport properties
+                              ␮*           ͑␻                 ␻ log
+                                                                                                 We now report the results of our applications for calcu-
+Table III reports the obtained ␮* values. The main conclu-                                    lating the electron-phonon contribution to the electrical and
+                                                                                              thermal resistivities ͑conductivities͒. This ﬁeld remains very
+sion here is that the calculated ␮* varies between 0.11 and                                   important and interesting, ﬁrst, because the easily measured
+                                                                                              transport properties and, especially, the electrical resistivi-
+0.17 which is close to the conventional value usually taken,                                  ties, provide valuable information on the electron-phonon-
+                                                                                              coupling strength and, second, no large-scale investigations
+ϳ0.13. The noticeable exceptions are only Nb and, espe-                                       of these properties by ab initio theoretical calculations ap-
+                                                                                              peared so far.
+cially, V for which too large ␮* have been found. Of course,
+                                                                                                 We calculate the electrical and thermal resistivity using
+this overestimation occurs over the conventional quantity                                     the low-order variational approximation ͑LOVA͒ and our
+                                                                                              theoretical transport spectral functions found after Eq. ͑20͒.
+0.13 while the detailed theoretical data on the Coulomb                                       As follows from Eqs. ͑21͒ and ͑22͒ at high temperatures:
+
+pseudopotential are unknown. We think that the obtained
+
+quantities are still below the upper limit for the allowed
+
+␮* values.
+
+    Also          listed  in  Table  III   are  the  values        of   T  McM  evaluated
+                                                                           c
+
+after ͑24͒ with our calculated ␻log , ␭, and ␮*. As it can be                                               ␲⍀    cellk BT
+                                                                                                            N͑⑀   F ͒ ͗ v x2 ͘
+seen, the exact solution of the Eliashberg equation gives Tc                                          ␳  ϭ                      ␭  tr  ,         ͑26͒
+
+͑chosen to be the experimental value͒ which slightly deviates
+
+from that estimated after the McMillan expression. The ac-                                                        6⍀ cell
+                                                                                                                  N͑⑀F͒͗
+curacy of the later is averagely about 15%.                                                   w       ϭ                               ␭       ,  ͑27͒
+
+    To conclude that our spectral functions provide a proper                                             ␲  k              v    2  ͘      tr
+                                                                                                                                x
+description of superconductivity we have found the energy-                                                     B
+
+gap parameters ⌬0. These results are shown in the last two                                    and important information is contained in the transport con-
+rows of Table III. The available tunneling data for Al give                                   stant ␭tr deﬁned by
+
+⌬0 coinciding with the theoretical value. Some overestima-                                            ͵ ␭trϭ2  ϱ  d␻  ␣  t2rF      ͑  ␻   ͒  .   ͑28͒
+tion of the coupling constant in comparing to the experimen-                                                   0  ␻
+
+tal one has taken place in Pb, while ⌬0 agrees very closely.
+Let us turn to the important case of transition metals V, Nb,
+
+and Ta. As we have discussed already, the main difﬁculties                                    It is usually believed that the latter is close to the supercon-
+                                                                                              ducting ␭ because the expressions for ␣t2rF(␻) and
+in the tunneling studies in V and Nb are connected with the                                   ␣2F(␻) are quite similar, except for the factor
+                                                                                              ͓1Ϫv(k)v(kЈ)/͉v(k)͉2͔, which preferentially weights the
+oxidation of the surface layers and the tunneling estimations
+                                                                                              backscattering processes. However, there may exist a signiﬁ-
+of the coupling constant in Nb varied considerably in the
+
+past. In contrast to it, the measured superconducting gap in
+54                                           ELECTRON-PHONON INTERACTIONS AND RELATED . . .  16 497
+
+    TABLE IV. Comparison between calculated and empirical val-                       ␣2trF(␻) quite close to the superconducting ␣2F(␻) which
+                                                                                     have been shown in Fig. 1. The latter is also true for the
+ues     of  the  transport  constant  ␭tr .  The  values  of  ␭  exp  were  deduced
+                                                                 tr                  simple metals considered in this work. Unfortunately, we
+
+from the electrical-resistivity data ͑Ref. 55͒ with the help of our                  have not investigated an interesting question about the low-
+                                                                                     frequency behavior of the ␣t2rF(␻) due to a relatively coarse
+calculated bare plasma frequencies ␻p . Also listed are the average                  grid of the phonon wave vectors used for integrating the Eq.
+
+transport frequencies ⌰trϭͱ͗␻2͘tr.                                                   ͑20͒. The values of ␭tr calculated from our transport func-
+                                                                                     tions are listed in Table IV. Comparison between ␭tr and
+                 Al Pb V Nb Ta Mo Cu Pd                                              superconducting constants calculated earlier ͑Table II͒ gives
+
+␭  calc          0.37 1.19 1.15 1.17 0.83 0.35 0.13 0.43                             the difference between them within 20% in all the tested
+   tr
+                                                                                     materials. This is in agreement with previous conclusions
+␭  exp           0.39 1.52 1.15 1.11 0.93 0.40 0.12 0.50                             that ␭trϳ␭ for transition metals.54
+   tr
+                                                                                        The results of our calculated electrical resistivity ␳(T)
+␻p , eV 12.29 14.93 7.95 9.47 9.05 8.81 8.75 7.34                                    and thermal conductivity wϪ1(T) are presented, respec-
+
+⌰tr , K 330 75 260 200 170 290 230 190                                               tively, in Fig. 3 and Fig. 4 ͑full lines͒, up to the temperatures
+
+cant difference between ␣t2rF(␻) and ␣2F(␻) for the case of                          500 K. The symbols denote different measured points avail-
+strongly nested Fermi surfaces53 due to the contribution from
+the backscattering of electrons between the opposite sides of                        able from Refs. 55 and 56. ͑The residual values of the elec-
+the nested Fermi surface.                                                            trical resistivities are subtracted.͒ For the comparison with
+
+   Despite the complexity of the Fermi surfaces in the tran-                         the experiment we are limited by the temperatures
+sition metals, we have obtained the transport functions
+                                                                                     TϽ2⌰tr , where ⌰trϳͱ͗␻2͘tr is close to the average phonon
+
+                                                                                     energy. ͑We list our calculated values of ⌰tr in Table IV.͒
+
+                                                                                         FIG. 3. ͑a͒–͑h͒ Calculated temperature depen-
+                                                                                     dence of the electrical resistivity, ␳(T), as a
+                                                                                     lowest-order variational solution of the Boltz-
+                                                                                     mann equation for the eight elemental metals
+                                                                                     considered in this work. Symbols show different
+                                                                                     experimental data available from Ref. 55.
+16 498  S. Y. SAVRASOV AND D. Y. SAVRASOV                                                                                                          54
+
+                                                                                          FIG. 4. ͑a͒–͑h͒ Calculated temperature depen-
+                                                                                      dence of the thermal conductivity, wϪ1(T), as a
+                                                                                      lowest-order variational solution of the Boltz-
+                                                                                      mann equation for the eight elemental metals
+                                                                                      considered in this work. Symbols show different
+                                                                                      experimental data available from Ref. 56.
+
+This is so because the description of the transport properties       To compare the theoretical transport constants with the
+at high temperatures require us to take into account the an-      experiment, we ﬁt the measured data55 for ␳(T) by a poly-
+harmonicity effects and the Fermi-surface smearing. At low
+temperatures ͑usually when TϽ⌰tr/5) the calculations will         nomial series
+demand the inclusion of the N sheet54 and the inelasticity
+corrections beyond LOVA.54 Also, here a more careful inte-                                                n
+gration over the Brillouin zone is necessary to produce a
+correct limit of ␣2trF(␻) when ␻→0. Moreover, we cannot                                    ͚ ␳͑ T ͒ϭ ciT3Ϫ2i                                       ͑29͒
+consider very low temperatures because of the effects of                                               iϭ1
+electron-electron scattering, size effects, impurity scattering,
+etc., which may give considerable contributions in addition       at the temperatures ⌰tr/2ϽTϽ2⌰tr with nϭ2. ͑The accu-
+to the electron-phonon scattering. The latter is basically re-
+sponsible for the electrical resistivity of a metal at high tem-  racy of the ﬁt varies within 3% if n is increased.͒ The em-
+peratures in the absence of spin ﬂuctuations. For the thermal
+conductivity, the lattice contribution to the heat current also   pirical  values  ␭  exp  were  then       found      using       the  extracted  coef-
+exist and must be taken into account at the temperatures at                           tr
+least less than 100 K. From Table IV we see that, except
+lead, the values of ⌰tr in all other materials are well above     ﬁcient c1 as follows:
+the low-temperature region and the comparison of our results
+with the measured ones must be relevant at the intermediate                                      ␭  terxpϭ   c  1␻  2  ,                           ͑30͒
+temperatures.                                                                                                       p
+
+                                                                                                            8␲2kB
+
+                                                                  where ␻p is our calculated bare plasma frequency
+
+                                                                                           ␻  2  ϭ  8  ␲  N͑⑀F͒͗       v  2  ͘  .                  ͑31͒
+                                                                                              p            ⍀ cell         x
+54                                      ELECTRON-PHONON INTERACTIONS AND RELATED . . .                                                                          16 499
+
+The   obtained  ␭  exp  are  shown  in  Table  IV  where  they  can  be  constant. The discrepancy is, in principle, within our compu-
+                   tr
+
+compared with our calculated ␭tr . Note that similar numeri-             tational errors. Note, however, that the experimental
+
+cal estimates for ␭etrxp can also be made by analyzing thermal           behavior55      of      ␳(T)    used   in     evaluating       ␭    exp  may     depend   on
+                                                                                                                                             tr
+
+conductivities because the measured Lorentz number ap-                   the sample purity and should be veriﬁed by several measure-
+
+proaches to the Sommerfeld value at the temperatures                     ments. The disagreement can also be assigned to the inﬂu-
+
+Tу⌰tr .                                                                  ence of high-temperature effects in the vicinity of the upper
+
+   For Al ͓Fig. 3͑a͔͒ we have found good agreement between               limit (2⌰trϳ340 K͒ of the intermediate interval.
+the theoretical and the experimental55 resistivities at the                 The results for Mo are given in Fig. 3͑f͒ and Fig. 4͑f͒. To
+
+whole interval of the intermediate temperatures. The corre-              avoid the inﬂuence of high-temperature effects we have
+sponding values of the transport constants are ␭ctralcϭ0.37
+and ␭terxpϭ0.39. The reduction of the coupling constant                  dropped out the measured resistivity points at the tempera-
+(␭calcϭ0.44) to the transport one is less than 20%. There is
+                                                                         tures above 300 K ͑the calculated ⌰trϳ290 K͒. Fitting for
+also an agreement between the theoretical curve and the ex-              TϽ300 K gives the result for the empirical transport con-
+perimental points56 for the thermal conductivity ͓Fig. 4͑a͔͒
+above 150 K. The theory, however, underestimates wϪ1(T)                  stant   ␭ terxpϭ 0.40        which     is      close   to     our        prediction,   ␭  calc
+                                                                                                                                                                   tr
+
+                                                                         ϭ0.35. The agreement in the thermal-conductivity data is
+
+                                                                         satisfactory for the whole intermediate interval.
+
+at the lower temperatures. An obvious explanation here is the               The slope of the resistivity in Cu, Fig. 3͑g͒, is also ob-
+
+neglection of the lattice contribution to the thermal current.           tained quite accurate as in the other materials. The value of
+
+In fact, as can be seen from Fig. 4, such an underestimation             ␭tr is only slightly overestimated in the calculation. The dis-
+                                                                         crepancy in the calculated thermal conductivity, Fig. 4͑g͒, is
+at the low temperatures exist in all other materials considered
+                                                                         larger and is about 20% at the room temperature. We cannot
+in this work.
+                                                                         explain such disagreement by the renormalization due to the
+    A comparison with the experiment is complicated for lead
+                                                                         Coulomb correlations because, having been proportional to
+because of its low phonon energies (⌰trϳ75 K͒ and the
+importance of the anharmonic effects already at the low tem-             the   ratio  ␭  tr  /  ␻  2  both ␳(T)        and wϪ1(T)            must be insensitive
+                                                                                                   p
+
+peratures. The latter can possibly explain our discrepancy in            to this effect in the ﬁrst order. The underestimation of the
+
+the calculated electrical resistivity behavior shown in Fig.             theoretical wϪ1(T) can point out the largeness of the lattice
+
+3͑b͒. The same disagreement exists in our results for the                contribution to the thermal conductivity at the temperatures
+
+thermal conductivity, Fig. 4͑b͒. Here, the discrepancy is                above 100 K. Unfortunately, there is a number of known
+
+minimal at the temperatures near 75 K and grows fastly as                difﬁculties to extract the latter values from the
+                                                                         experiments.57 From the low-temperature data analysis57 one
+the temperature increases mainly because of the linear decay
+
+of the measured thermal conductivity. This obviously contra-             may conclude that the contribution to the thermal resistivity,
+dicts with the LOVA behavior of wϪ1(T) and is consistent
+                                                                         w  p    ,  from         the  process       of       a  phonon       decay     by  emitting
+                                                                            eϪh
+
+with our assumption on the importance of the anharmonicity.              electron-hole pairs is very small for Cu because of the ap-
+
+Unlike in the other considered metals, the computed value                parently weak electron-phonon coupling (␭ϳ0.12Ϫ0.14).
+
+1.19 of the transport constant here is signiﬁcantly smaller              This supports our explanation for the obtained discrepancy.
+
+than the electron-phonon ␭ϭ1.68. This reduction could also                  Finally, the predicted transport properties of Pd are pre-
+
+point out the importance of the anisotropy in the electron-              sented in Fig. 3͑h͒ and Fig. 4͑h͒. Like Cu, this metal has a
+                                                                         4d10 electronic conﬁguration, but, in contrast to Cu, we have
+phonon scattering as well as the Fermi-surface effects which
+
+are not well reproduced by LOVA. In the absence of a cal-                found a very good agreement between the calculated curve
+                                                                         wϪ1(T) and its measured behavior. We can consequently
+culation beyond LOVA it is difﬁcult to determine the main
+
+source of errors.                                                        judge that the thermal conductivity carried by phonons is
+
+    Measured resistivity for Nb starts to saturate at high tem-          small in this case which is consistent with the conclusion57
+
+peratures. In fact, this effect is evident ͓Fig. 3͑d͔͒ at the            that   the   contribution       w   p         is       large  for   Pd.  We      have  also
+                                                                                                             eϪh
+temperatures above 2⌰trϳ400 K and it does not appear at
+the intermediate interval where the behavior of the resistivity          found an underestimation of the electrical resistivity in the
+
+                                                                         calculation.        The      agreement        between         ␭ tr  and  ␭  exp  ͑see  Table
+                                                                                                                                                     tr
+only slightly deviates from the LOVA prediction. Comparing
+the calculated ␭trϭ1.17 and the empirical values ␭terxpϭ1.11             IV͒ is about 15% which is, in principle, the upper limit of
+gives the agreement about 5%. Like in Nb, there is a com-
+                                                                         our computational uncertainty. Most likely, however, that the
+
+                                                                         additional spin-ﬂuctuation mechanism of the resistivity is
+
+plete agreement between the theoretical and the experimental             also present in this metal.
+
+data for V ͓Fig. 3͑c͔͒ at the temperatures ⌰tr/5ϽTϽ2⌰tr                     In summary, the behavior of ␳(T) and w(T) is consistent
+
+͑calculated ⌰trϳ260 K͒. The theoretical ␭trϭ1.15 coincides               with the results ͑26͒, ͑27͒ at the intermediate temperatures
+
+with  the  ␭  exp  found     empirically.  The  applicability   of  our  and there is no signiﬁcant discrepancy between our calcula-
+              tr
+                                                                         tions and the experimental points. More precisely, we have
+method to the description of the transport properties for both
+                                                                                                                exp
+V and Nb is also supported by comparing the thermal-                     extracted    the        values  of  ␭  tr     using    the    experimental        data    for
+
+conductivity data, Figs. 4͑c͒ and 4͑d͒.                                  ␳(T) together with our band-structure value of ␻p and found
+
+   Figure 3͑e͒ and Fig. 4͑e͒ present the results of our calcu-           the agreement between the experimental and the theoretical
+lations in Ta. For wϪ1(T), an excellent correspondence of
+                                                                         transport constants to be about 10% ͑in particular, lower than
+
+the theoretical prediction with observed behavior is obtained,           5% for Al, Nb, Mo, and V͒. In fact, compared with the
+
+but ␳(T) is underestimated in our calculation within                     experiment          is  the  ratio  ␭  tr  /  ␻  2  .  Except       possibly  Cu  and    Pd,
+10Ϫ12 %. As a consequence, the evaluated ␭terxpϭ0.93                                                                      p
+
+slightly exceeds the value 0.83 of the theoretical transport             the DFT-based band-structure calculations assumed to pro-
+
+                                                                         vide the proper magnitude for the plasma frequency. So, we
+16 500  S. Y. SAVRASOV AND D. Y. SAVRASOV                                                                                                 54
+
+drop the possibility of error cancellations and conclude that         enhancement observed in the speciﬁc-heat measurements
+the theoretical ␭tr are in the real agreement with the experi-
+ment. A relatively high error level in Pb can be explained by         corresponds very well to our calculations and there is no
+the importance of the anharmonic effects. The large lattice
+contribution to the thermal conductivity could affect our             paramagnon contribution in all the metals except Pd; ͑v͒ we
+comparison for Cu. In Pd, the additional mechanism of the
+resistivity can also take place. Nevertheless, taking into ac-        have found the electrical and thermal resistivities in agree-
+count the agreement in the other calculated properties, we
+think that our description of the electronic transport in the         ment with the measured data; ͑vi͒ we have also found them
+considered materials is quite satisfactory.
+                                                                      to be well described by the LOVA expressions; ͑vii͒ the
+                            IV. CONCLUSION
+                                                                      theoretical  transport  constants  agree  with  the  values  of  ␭  exp
+   We have presented ab initio linear-response calculations                                                                               tr
+of the electron-phonon interaction in the transition metals
+Cu, Mo, Nb, Pd, Ta, V, and in the s p metals Al, Pb using the         within 10%. To summarize all of these results, we conclude
+local density-functional method and the LMTO basis set.
+Our results for the lattice dynamical, superconducting, and           that our method gives the description of the electron-phonon
+transport properties in these materials agree well with the
+experiment. They can be summarized as follows: ͑i͒ we have            coupling with the accuracy of order 10%. We also conclude
+obtained tunneling spectral functions ␣2F(␻) and their ﬁrst
+reciprocal moments ␭ close to the measured ones; ͑ii͒ the             that the effect of renormalization of the energy bands due to
+correct values for the superconducting energy gap have been
+found using our calculated ␣2F(␻) and ␮* corresponding to             electron-electron interactions is small ͑less than 20%, strictly
+the experimental Tc ; ͑iii͒ the solution of the Eliashberg
+equation for Tc ͑or for ␮* if Tc is ﬁxed͒ is well approxi-            speaking͒ in all considered materials. Some discrepancies
+mated by the conventional McMillan formula; ͑iv͒ the mass
+                                                                      between the theoretical and the tunneling values of ␭ in Nb
+
+                                                                      and V can be assigned to the difﬁculty in processing the
+
+                                                                      tunneling data. Nevertheless, it seems to us that more experi-
+
+                                                                      mental and theoretical work is necessary to account for the
+
+                                                                      large ␭ and ␮* in Nb and, especially, in V.
+
+                                                                                              ACKNOWLEDGMENTS
+
+                                                                         The authors are indebted to O. K. Andersen, O. V.
+                                                                      Dolgov, O. Jepsen, A. Liechtenstein, E. G. Maksimov, I. I.
+                                                                      Mazin, and S. Shulga for many helpful discussions. One of
+                                                                      us ͑D.Y.S.͒ was partially supported by Grant Nos.
+                                                                      INTAS͑93-2154͒, ISF͑MF-8300͒, and RFFI.
+
+ 1 For a review, see, e.g., G. Grimvall, in Electron-Phonon Interac-  13 T. W. Barbee, A. Garcia, M. L. Cohen, and J. L. Martins, Phys.
+    tions in Metals, edited by E. P. Wohlfarth ͑North-Holland, Am-
+    sterdam, 1981͒.                                                       Rev. Lett. 62, 1150 ͑1989͒; R. E. Cohen, W. H. Pickett, and H.
+
+ 2 For a review, see, e.g., G. Gladstone, M. A. Jensen, and J. R.         Krakauer, ibid. 64, 2575 ͑1990͒.
+                                                                      14 A. I. Liechtenstein, I. I. Mazin, C. O. Rodriguez, O. Jepsen, O. K.
+    Schrieffer, in Superconductivity, edited by R. D. Parks ͑Dekker,
+    New York, 1969͒, Vol. 2.                                              Andersen, and M. Methfessel, Phys. Rev. B 44, 5388 ͑1991͒.
+ 3 For a review, see, e.g., E. L. Wolf, in Principles of Electronic   15 H. Winter, J. Phys. F 11, 2283 ͑1981͒.
+                                                                      16 S. Baroni, P. Giannozzi, and A. Testa, Phys. Rev. Lett. 58, 1861
+    Tunneling Spectroscopy ͑Oxford University Press, New York,
+    1985͒.                                                                ͑1987͒; N. E. Zein, Fiz. Tverd. Tela ͑Leningrad͒ 26, 3028 ͑1984͒
+ 4 P. Hohenberg and W. Kohn, Phys. Rev. 136, B864 ͑1964͒.
+ 5 W. Kohn and L. J. Sham, Phys. Rev. 140, A1133 ͑1965͒.                  ͓Sov. Phys. Solid State 26, 1825 ͑1984͔͒.
+ 6 For a review, see, e.g., Theory of the Inhomogeneous Electron      17 R. M. Sternheimer, Phys. Rev. 96, 951 ͑1954͒; 107, 1565 ͑1957͒;
+
+    Gas, edited by S. Lundqvist and S. H. March ͑Plenum, New              115, 1198 ͑1959͒.
+    York, 1983͒.                                                      18 S. Y. Savrasov and O. K. Andersen, preceding paper, Phys. Rev.
+ 7 For a review, see, e.g., B. M. Klein and W. Pickett, in Supercon-
+                                                                          B 54, 16 470 ͑1996͒.
+    ductivity in d- and f-Band Metals, edited by W. Buckel and W.     19 O. K. Andersen, Phys. Rev. B 12, 3060 ͑1975͒.
+                                                                      20 S. Y. Savrasov, D. Y. Savrasov, and O. K. Andersen, Phys. Rev.
+    Weber ͑Kernforschungszentrum, Karlsruhe, 1982͒, p. 477.
+ 8 L. J. Sham and J. M. Ziman, in Solid State Physics, edited by H.       Lett. 72, 372 ͑1994͒.
+                                                                      21 P. B. Allen, Phys. Rev. B 6, 2577 ͑1972͒.
+    Ehrenreich and D. Turnbull ͑Academic, New York, 1963͒, Vol.       22 G. M. Eliashberg, Zh. E´ ksp. Teor. Fiz. 38, 966 ͑1960͒ ͓Sov. Phys.
+
+    15, p. 221.                                                           JETP 11, 696 ͑1960͔͒.
+ 9 G. D. Gaspary and B. L. Gyorfy, Phys. Rev. Lett. 28, 801 ͑1972͒.   23 S. Y. Savrasov and D. Y. Savrasov, Phys. Rev. B 46, 12 181
+10 W. H. Butler, in Physics of Transition Metals, 1980, edited by P.
+                                                                          ͑1992͒.
+    Rhodes, IOP Conf. Proc. No. 55 ͑Institute of Physics and Physi-   24 P. B. Allen, Phys. Rev. B 31, 305 ͑1971͒.
+    cal Society, London, 1981͒, p. 505.                               25 H. J. Monkhorst and J. D. Pack, Phys. Rev. B 13, 5188 ͑1976͒.
+11 For a review of supercell and perturbative approaches, see, e.g.,  26 P. Blo¨chl, O. Jepsen, and O. K. Andersen, Phys. Rev. B 49,
+
+    Ab Initio Calculations of Phonon Spectra, edited by J. T.             16 223 ͑1994͒.
+                                                                      27 P. B. Allen, Phys. Status Solidi B 120, 529 ͑1983͒.
+    Devreese, V. E. Van Doren, and P. E. Van Camp ͑Plenum, New        28 U. von Barth and L. Hedin, J. Phys. C 5, 1629 ͑1972͒; V. L.
+    York, 1983͒.
+12 M. M. Dacorogna, M. L. Cohen, and P. K. Lam, Phys. Rev. Lett.          Moruzzi, J. F. Janak, and A. R. Williams, Calculated Electronic
+
+    55, 837 ͑1985͒.                                                       Properties of Metals ͑Pergamon, New York, 1978͒.
+                                                                      29 D. M. Ceperley and B. J. Alder, Phys. Rev. Lett. 45, 566 ͑1980͒.
+54  ELECTRON-PHONON INTERACTIONS AND RELATED . . .                      16 501
+
+30 S. H. Vosko, L. Wilk, and M. Nusair, Can. J. Phys. 58, 120           42 B. N. Harmon and S. K. Sinha, Phys. Rev. B 16, 3919 ͑1977͒; D.
+    ͑1980͒.                                                                 Glo¨tzel, D. Rainer, and H. R. Schober, Z. Phys. B 35, 317
+
+31 Phonon States of Elements. Electron States and Fermi Surfaces of         ͑1979͒; M. Peter, T. Jarlborg, M. Dacorogna, and E. Moser, in
+
+    Alloys, edited by K.-H. Hellwege and O. Madelung, Landolt-              Superconductivity in d- and f-Band Metals ͑Ref. 7͒, p. 515.
+    Bo¨rnstein, New Series, Group III, Vol. 13, Pt. a ͑Springer-        43 F. J. Pinski and W. H. Butler, Phys. Rev. B 19, 6010 ͑1979͒.
+    Verlag, Berlin, 1981͒.                                              44 W. L. McMillan, Phys. Rev. 167, 331 ͑1968͒.
+32 S. de Gironcoli, Phys. Rev. B 51, 6773 ͑1995͒.                       45 P. B. Allen and R. C. Dynes, Phys. Rev. B 12, 905 ͑1975͒.
+33 J. P. Perdew and Y. Wang, Phys. Rev. B 33, 8800 ͑1986͒.              46 J. Zasadzinski, D. M. Burnell, E. L. Wolf, and G. B. Arnold,
+34 H. K. Leung, J. P. Carbotte, D. W. Taylor, and C. R. Leavens,
+    Can. J. Phys. 54, 1585 ͑1976͒; see, also, Principles of Electronic      Phys. Rev. B 25, 1622 ͑1982͒.
+    Tunneling Spectroscopy ͑Ref. 3͒.                                    47 L. Y. Shen, Phys. Rev. Lett. 24, 1104 ͑1970͒.
+35 See, e.g., W. L. McMillan and J. M. Rowell, in Superconductiv-       48 G. W. Crabtree, D. H. Dye, D. P. Karim, D. D. Koelling, and J. B.
+    ity, edited by R. D. Parks ͑Dekker, New York, 1969͒, Vol. 1.
+36 J. Bostock, V. Diadiuk, W. N. Cheung, K. H. Lo, R. M. Rose, and          Ketterson, Phys. Rev. Lett. 42, 390 ͑1979͒.
+    M. L. A. MacVicar, Phys. Rev. Lett. 36, 603 ͑1976͒; K. Ga¨rtner     49 See Principles of Electronic Tunneling Spectroscopy ͑Ref. 3͒, p.
+    and A. Hahn, Z. Naturforsch. Teil A 31, 361 ͑1976͒.
+37 B. Robinson, T. H. Geballe, and J. M. Rowell, in Superconduc-            263, and references therein.
+                                                                        50 H. Rietschel and H. Winter, Phys. Rev. Lett. 43, 1256 ͑1979͒.
+    tivity in d- and f-Band Metals, edited by D. H. Douglas, AIP        51 K. A. Geschneidner, in Solid State Physics: Advances in Research
+    Conf. Proc. No. 4 ͑AIP, New York, 1974͒, p. 381.
+38 G. B. Arnold, J. Zasadzinski, and E. L. Wolf, Phys. Lett. 69A,           and Applications, edited by H. Ehrenreich, F. Seitz, and D.
+    136 ͑1978͒; E. L. Wolf, J. Zasadzinski, J. W. Osmun, and G. B.
+    Arnold, J. Low Temp. Phys. 40, 19 ͑1980͒.                               Turnbull ͑Academic Press, New York, 1964͒, Vol. 16, p. 275.
+39 M. J. Bostock, M. L. A. MacVicar, G. B. Arnold, J. Zasadzinski,      52 R. Radebaugh and P. H. Keesom, Phys. Rev. 149, 217 ͑1966͒.
+                                                                        53 V. H. Grespi and M. L. Cohen, Solid State Commun. 81, 187
+    and E. L. Wolf, in Proceedings of the Third International Con-
+                                                                            ͑1992͒.
+    ference on Superconductivity of d- and f-Band Metals, edited by     54 E. J. Pinski, P. B. Allen, and W. H. Butler, Phys. Rev. B 23, 5080
+    H. Suhl and M. B. Maple ͑Academic Press, New York, 1980͒, p.
+                                                                            ͑1981͒.
+    153.                                                                55 Metals: Electronic Transport Phenomena. Metalle: Elektronische
+40 D. A. Papaconstantopoulus, L. L. Boyer, B. M. Klein, A. R. Wil-
+                                                                            Transport pha¨nomene, edited by K.-H. Hellwege and O. Made-
+    liams, V. L. Moruzzi, and J. F. Janak, Phys. Rev. B 15, 4221            lung, Landolt-Bo¨rnstein, New Series, Group III, Vol. 15, Pt. a
+    ͑1977͒.                                                                 ͑Springer-Verlag, Berlin, 1982͒.
+41 W. H. Butler, H. G. Smith, and N. Wakabayashi, Phys. Rev. Lett.      56 Metals: Electronic Transport Phenomena. Metalle: Elektronische
+    39, 1004 ͑1977͒; W. H. Butler, F. J. Pinski, and P. B. Allen,           Transportpha¨nomene, edited by K.-H. Hellwege and O. Made-
+    Phys. Rev. B 19, 3708 ͑1979͒.                                           lung, Landolt-Bo¨rnstein, New Series, Group III, Vol. 15, Pt. c
+                                                                            ͑Springer-Verlag, Berlin, 1982͒.
+                                                                        57 W. H. Butler and R. K. Williams, Phys. Rev. B 18, 6483 ͑1978͒.
+
