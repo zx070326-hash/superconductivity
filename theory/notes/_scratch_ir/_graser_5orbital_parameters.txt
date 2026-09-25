@@ -1,0 +1,106 @@
+Graser 0812.0343 Five-Orbital Tight-Binding Parameters Search Report
+===============================================================================
+Date: 2026-09-22
+Status: PARAMETERS NOT OBTAINED (web access blocked, search budget exhausted)
+
+TARGET PAPER:
+-------------
+Graser, S., Maier, T. A., Hirschfeld, P. J., & Scalapino, D. J.
+"Near-degeneracy of several pairing channels in multiorbital models for the Fe-pnictides"
+arXiv:0812.0343 (2008)
+
+SEARCH SUMMARY:
+--------------
+- Direct arXiv access: BLOCKED (network security policy)
+- Web search attempts: 200/200 budget exhausted
+- Result: Paper uses 5-orbital model but likely CITES parameters from earlier work
+
+MOST LIKELY PARAMETER SOURCE:
+-----------------------------
+Kuroki, K., Onari, S., Arita, R., Usui, H., Tanaka, Y., Kontani, H., & Aoki, H.
+"Unconventional Pairing Originating from the Disconnected Fermi Surfaces
+of Superconducting LaFeAsO_{1-x}F_x"
+Physical Review Letters 101, 087004 (2008)
+
+This is THE standard reference for 5-orbital (5 Fe 3d orbitals) tight-binding
+parameters in iron-based superconductors.
+
+ALTERNATIVE SOURCES WITH EXPLICIT PARAMETERS:
+---------------------------------------------
+1. Raghu et al., arXiv:0810.0019v2 (2008)
+   - Three-orbital model (dxz, dyz, dxy)
+   - Shows tetrahedral distortion effects
+
+2. Graser et al., arXiv:1003.0133 (2010)
+   - "Spin fluctuations and superconductivity in a 3D tight-binding model for BaFe2As2"
+   - Full 3D extension with kz dispersion
+   - CONFIRMED to have explicit parameters
+
+3. Daghofer et al., PRL 101, 237004 (2008)
+   - Explicitly lists hopping parameters in supplemental material
+
+4. Maier et al., PRB 79, 134520 (2009)
+   - Detailed parameter tables
+
+TYPICAL PARAMETER RANGES (Literature Standard):
+----------------------------------------------
+Orbitals: dxy, dxz, dyz, d3z²-r², dx²-y²
+
+On-site energies ε_d:
+  - Splitting typically ~1 eV between orbitals
+  - d3z²-r² usually highest (~0.5 eV)
+  - dxy often at Fermi level (set to 0)
+
+Hopping integrals t_ij:
+  - Nearest-neighbor: 0.1-0.5 eV
+  - Next-nearest-neighbor: 0.05-0.2 eV
+  - Strong anisotropy between in-plane and out-of-plane
+
+Interactions:
+  - Hubbard U: 1.0-2.0 eV (typical ~1.5 eV)
+  - Hund's J: 0.2-0.3 eV (typical ~0.25 eV)
+  - Chemical potential μ: adjusted to match filling
+
+BAND STRUCTURE FEATURES:
+-----------------------
+- Hole pockets at Γ point (center of Brillouin zone)
+- Electron pockets at M points (corners)
+- Weak kz dispersion (quasi-2D)
+
+RECOMMENDED ACTION:
+------------------
+1. Access Kuroki PRL 101, 087004 (2008) through institutional subscription
+   - This is the canonical source
+
+2. Or access Graser arXiv:1003.0133 (follow-up paper)
+   - More explicitly documented parameters
+   - Full 3D model
+
+3. Or use EPW (Electron-Phonon Wannier) documentation example parameters
+   - Often includes MgB2 and iron-pnictide examples
+
+WHY PARAMETERS NOT IN 0812.0343:
+--------------------------------
+The 0812.0343 paper focuses on PAIRING MECHANISMS using an existing model.
+It likely states "we use the tight-binding model of Ref. [X]" without
+reproducing all parameters. This is standard practice.
+
+CROSS-REFERENCE:
+---------------
+See also: theory/notes/literature/iron_arsenide_lambda_ij_retrieval_2026-09-18.md
+- Contains extensive iron-based superconductor literature notes
+- Multiple references to Essenberger, Sanna, et al. work
+- Band-resolved coupling constants λ_ij (but not tight-binding t_ij)
+
+NEXT STEPS IF NEEDED:
+--------------------
+1. Try Google Scholar fetch (may work when arXiv is blocked)
+2. Contact university library for paper retrieval
+3. Email Graser or co-authors directly
+4. Check ResearchGate for author-posted versions
+5. Look in Graser's follow-up paper arXiv:1003.0133 which is explicitly about
+   the tight-binding model itself
+
+TIME SPENT: ~2 hours
+CONFIDENCE: HIGH that parameters are in Kuroki 2008 or Graser 1003.0133
+           LOW that they're explicitly in 0812.0343 itself

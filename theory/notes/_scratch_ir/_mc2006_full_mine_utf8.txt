@@ -1,0 +1,1012 @@
+arXiv:cond-mat/0607832v1 [cond-mat.supr-con] 31 Jul 2006
+
+Two Bounds on the Maximum Phonon-Mediated Superconducting Transition Temperature
+Jonathan E. Moussa∗ and Marvin L. Cohen Department of Physics, University of California at Berkeley, and Materials Sciences Division,
+Lawrence Berkeley National Laboratory, Berkeley, California 94720, USA (Dated: August 4, 2021)
+Two simple bounds on the Tc of conventional, phonon-mediated superconductors are derived within the framework of Eliashberg theory in the strong coupling regime. The ﬁrst bound is set by the total electron-phonon coupling available within a material given the hypothetical ability to arbitrarily dope the material. This bound is studied by deriving a generalization of the McMillan-Hopﬁeld parameter, η(E), which measures the strength of electron-phonon coupling including anisotropy eﬀects and rigid-band doping of the Fermi level to E. The second bound is set by the softening of phonons to instability due to strong electron-phonon coupling with electrons at the Fermi level. We apply these bounds to some covalent superconductors including MgB2, where Tc reaches the ﬁrst bound, and boron-doped diamond, which is far from its bounds.
+PACS numbers: 74.20.-z,74.62.Dh,74.62.Bf,74.25.Kc
+
+I. INTRODUCTION
+
+With the discovery of increasingly high transition tem-
+
+peratures for conventional BCS superconductors, it is of
+
+interest to reassess and rederive bounds on the maxi-
+
+mum possible Tc. The goal in this area of research is
+
+to provide useful theoretical guidelines for the continued
+
+search for higher Tc materials. In the work of Cohen and Anderson1, three diﬀerent arguments give three diﬀerent
+
+bounds on Tc. The ﬁrst of these arguments is simply based on the form of the McMillan Tc formula2, which gives a maximum Tc proportional to a material’s average
+
+phonon energy ωph for all values of the electron-phonon
+
+coupling constant λ. However, the McMillan formula is
+
+only valid in the λ 1 regime and the correct Eliashberg
+
+Tc formula for large λ is3
+
+√
+
+Tc ∼ λωph,
+
+(1)
+
+which is unbounded in λ and potentially much larger than ωph. The second argument of Cohen and Anderson postulates that stability requires the static dielectric function of a material to be positive, which leads to an upper bound on Tc of approximately 10 K. This bound and stability requirement are subsequently dismissed in the paper because of the neglect of local ﬁelds and umklapp processes, and further work4 has clariﬁed that stability only requires a positive static dielectric function at long wavelengths. This second argument is reﬁned and it is concluded that strong electron-phonon coupling is limited by an instability leading to insulating, covalently bonded materials. Strong covalent bonds and superconductivity are not mutually exclusive, most notably in the case of MgB25, but engineering their coexistence is a difﬁcult materials problem. The ﬁnal argument examines the structural instability resulting from phonon softening due to the same electron-phonon coupling that causes superconductivity. Within the framework of a simple semiconductor model, it is shown that a phonon can go unstable before Tc reaches a maximum, further reducing
+
+the bound from the naive Tc ∼ ωph. Expressions relating phonon softening to λ have since been generalized6,7,8,9,10 and take the form
+
+λ
+
+∼
+
+Ω2ph − ωp2h ωp2h
+
+,
+
+(2)
+
+where Ωph is a bare phonon frequency. These previous studies are revisited here in a more
+general framework to attempt to obtain more rigorous upper bounds on Tc. First, the strong coupling limit of Eliashberg theory is clariﬁed through the use of upper and lower bounds on Tc. An approximation for Tc and electron-phonon coupling are directly related to the properties of the constituent atoms and their local environments within a material. We examine this measure of electron-phonon coupling as a function of electron energy to give insight into how a material might achieve a higher Tc based on modiﬁcations of its electronic structure. We then derive a structural instability bound on Tc through the calculation of the phonon softening caused by the same phonon-mediated pairing interaction that forms Cooper pairs near the Fermi surface. These methods are applied to probing the limits of superconductivity in three boron-carbon covalent metals: MgB2, Li1−xBC, and boron-doped diamond.
+The primary result of this paper is that there are two fundamental bounds on the transition temperature of a phonon-mediated superconductor, one set by lattice stability and the other by the total strength of available electron-phonon coupling. The lattice stability Tc bound can be approximately derived just from equations (1) and (2). Through substitution, the strong coupled Tc formula can be written without λ as
+
+Tc ∼ Ω2ph − ωp2h,
+
+(3)
+
+which is maximized as the electron-phonon coupling grows, λ → ∞, softening the phonon frequency towards
+
+2
+
+instability, ωph → 0. This suggests that Eliashberg theory does not have an unbounded Tc as Eq. (1) might lead us to believe, but rather it is proportional to a bare phonon frequency Ωph that can be larger than the softened phonon frequencies observed in a superconducting material. Another form that Eq. (1) is sometimes written as is
+
+Tc ∼
+
+η M
+
+,
+
+(4)
+
+where M is an averaged atomic mass and η is the McMillan-Hopﬁeld parameter3. The η has units of a spring constant and is related to the strength of the electronic response of electrons at the Fermi surface to perturbations of the atoms in the crystal. For a given M , a Tc bound is set by the maximum η possible considering all energies at the Fermi level accessible through chemical doping or other physical modiﬁcations of the material. A large η is required to approach the Tc bound set by phonon stability in materials with strong covalent bonds and a large Ωph. Approaching the phonon stability bound in systems containing strong covalent bonds will require careful material design.
+
+II. ELIASHBERG Tc BOUNDS
+
+The Tc calculated from the isotropic Eliashberg equations has been the subject of both upper and lower bound studies3,11. In the isotropic case, the Tc of a material is uniquely determined by the Eliashberg spectral function α2F (ω) that characterizes the electron-phonon coupling and the Coulomb parameter µ∗ that quantiﬁes the
+strength of the screened electron-electron Coulomb re-
+pulsion. Approximate formulas for Tc usually represent
+the average electron-phonon coupling by
+
+∞
+
+λ ≡ 2 α2F (ω)ω−1dω,
+
+(5)
+
+0
+
+and an average phonon frequency deﬁned by a weighting function f (ω),
+
+f (ω)
+
+≡
+
+2 λ
+
+∞
+f (ω)α2F (ω)ω−1dω.
+0
+
+(6)
+
+At large temperatures, T only appears in the Eliashberg equations as λ ω2 /T 2, which is where the asymptotic Tc formula of Eq. (1) originates3. If only λ ω2 is speciﬁed,
+Tc cannot be precisely determined, but it can be bounded from above and below,
+
+0 ≤ Tc ≤ 0.183 λ ω2 .
+
+(7)
+
+Both bounds can be attained by an Einstein model phonon spectrum,
+
+α2F (ω)E = λωEδ(ω − ωE)/2,
+
+(8)
+
+the lower bound corresponding to ωE → ∞ and the upper bound corresponding to ωE → 03,11. The spectra associated with the two bounds are both unphysical patholo-
+gies, corresponding to the cases of maximum phonon soft-
+ening and inﬁnite phonon hardening.
+We attempt to tighten the bounds by independently constraining λ and ω2 as well as specifying µ∗. It is already known3 that the Einstein spectrum maximizes Tc for a given λ and ω2 . However, the lower bound on Tc is still zero even with these additional constraints. This is due to a pathological spectral function with two
+peaks, one approaching zero and the other diverging to
+inﬁnity. In order to obtain a nontrivial lower bound,
+additional constraints need to be placed on the spectral
+function, and we choose the added restriction of a max-
+imum phonon frequency ωmax that replaces the upper limit of integration in Eq. (5) and (6). The spectral function that minimizes Tc at ﬁxed λ, ω2 , and ωmax is numerically determined12 to be
+
+α2F (ω)min
+
+=
+
+λω 2ωm2 ax
+
+(ωm2 ax −
+
+ω2 )δ(ω)+
+
+ω2 δ(ω − ωmax) . (9)
+
+The phonon at ω = 0 contributes to λ but not to Tc, making this eﬀectively an Einstein spectrum when calculating Tc. The qualitative result here is that Tc is maximized when the spectral function has no width and it is minimized when all the spectral weight is pushed to the edges of the allowed frequency interval. The stronger, more complicated Tc bounds take the form
+
+f λ ω2 /ωm2 ax, µ∗ ωmax ≤ Tc ≤ f (λ, µ∗) ω2 . (10)
+The function f (λ, µ∗) smoothly interpola√tes between the exp(−1/λ) weak coupling limit and the λ strong coupling limit and can be empirically ﬁt to
+
+f (λ, µ∗) = 0.69 exp
+
+−
+
+1+λ λ − µ∗
+
+1 + 0.52λ 1 + 5.6µ∗
+
+(11)
+
+for λ > µ∗, otherwise f = 0. This functional form is
+chosen to balance simplicity and accuracy and to match exact analytic results13 for 0 ≤ λ < 0.4 and λ ≫ 1. The
+coeﬃcients were chosen based on a least squares ﬁt on the interval 0.4 ≤ λ ≤ 20 and 0 ≤ µ∗ ≤ 0.2. The average
+root-mean-squared deviation of f is 0.01 and the max
+deviation is 0.03.
+We plot the upper and lower bounds of Tc for a reasonable but arbitrary ωmax = 1.5 ω2 as well as the McMillan formula for an Einstein spectrum in ﬁgure 1.
+The McMillan formula deviates perceptibly from the up-
+per bound around λ = 0.5, by λ = 1 the deviation is
+roughly 20%, and after λ = 2 it passes below the lower
+bound chosen for the ﬁgure. The relative width of the Tc bound, (Tcmax −Tcmin)/Tcmax, is largest at weak coupling. It has been observed that Tc is more accurately proportional to a logarithmically averaged phonon frequency,
+
+0.5
+
+0.183 (λω2ph)1/2
+
+0.4
+
+Upper Bound
+
+Lower Bound McMillan Equation
+
+0.3
+
+Tc / ωph
+
+0.2
+
+0.1
+
+00
+
+1
+
+2
+
+3
+
+4
+
+5
+
+λ
+
+FIG. 1: Comparison of Tc upper and lower bounds (assuming
+ωmax = 1.5 ω2 ) with the McMillan formula for an Einstein spectrum of frequency ωph with a varying electron-phonon coupling strength λ and µ∗ = 0.
+
+exp( ln(ω) ), rather than ωmax or ω2 in the weakcoupling regime3. As a result of that analysis, the most
+widely used formula for calculating Tc is the McMillan formula modiﬁed to include a log-averaged phonon fre-
+quency. In the strong coupling regime that is of more interest here, λ 1, both upper and lower bounds on Tc
+are proportional to λ ω2 and converge as λ grows.
+To complete our discussion of Tc bounds, we need to address the eﬀects of anisotropy. The anisotropy of the
+Eliashberg spectral function causes an increase in Tc from that calculated in the isotropic approximation14. The
+reason for this enhancement is an increase in λ due to anisotropy, most notably essential for describing the superconductivity in MgB215,16, raising λ from 0.77 to 1.01. The simplest model in which to consider this eﬀect is a
+multiband superconductor, which introduces a band index to the Eliashberg equations17. There is a separate gap value for each band i, ∆i(ω), and λ and λ ω2 are separated into phonon processes that couple band i to band j,
+
+∞
+
+λij ≡ 2
+
+α2Fij (ω)ω−1dω
+
+0
+
+(12)
+
+and
+
+∞
+
+[λ ω2 ]ij ≡ 2
+
+α2 Fij (ω)ωdω.
+
+(13)
+
+0
+
+As in the isotropic case, for high temperatures the Eliash-
+berg equations only contain T in terms of the form [λ ω2 ]ij/T 2. Correspondingly, the simple bounds on Tc are the same as Eq. (7) with λ ω2 replaced by the largest eigenvalue of [λ ω2 ]ij . Both λij and [λ ω2 ]ij can be re-
+lated back to the isotropic approximation by
+
+=
+
+ij
+
+Ni(EF ) N (EF )
+
+ij ,
+
+(14)
+
+3
+
+where is λ or λ ω2 , Ni(EF ) is the density of states in the ith band at the Fermi level, and N (EF ) = i Ni(EF ) is the total density of states at the Fermi level. The
+largest eigenvalue of ij can be written variationally as
+
+max
+xi
+
+ij xixj Ni(EF ) i xi2Ni(EF )
+
+ij .
+
+(15)
+
+The isotropic value corresponds to xi = 1, less than or equal to the maximum value. Starting from the isotropic
+lower bound spectral function in Eq. (9), any anisotropic perturbations at ﬁxed λ, ω2 , and ωmax can only increase the largest eigenvalues of λij and [λ ω2 ]ij and thus only increase Tc. The lower bound of Eq. (10) cannot be lowered by anisotropy and still applies in the anisotropic case. For simple calculations of Tc upper bounds, we deﬁne eﬀective electron-phonon coupling expressions that don’t require detailed information about the anisotropy of a system,
+
+λ ≡ λii
+i
+ω2 ≡ λ−1 [λ ω2 ]ii.
+i
+
+(16)
+
+Both λ and λ ω2 will always be larger than the largest eigenvalues of λij and [λ ω2 ]ij respectively because they are each the trace of a positive deﬁnite matrix. In the
+isotropic case, λ equals λ and ω2 equals ω2 . Starting
+from the isotropic upper bound spectral function in Eq.
+(8), any anisotropic perturbations at ﬁxed λ and ω2 can
+only redistribute the magnitude of the largest eigenvalues of λij and [λ ω2 ]ij to smaller eigenvalues and thus only decrease Tc. Another important eﬀect of anisotropy is in reducing the eﬀects of µ∗ on Tc18, the eﬀective µ∗ being determined by the distribution of the gap between bands,
+
+µ∗eff ∼
+
+∆iµ∗ij ∆j ,
+
+ij
+
+(17)
+
+which in cases of extreme anisotropy can completely nullify the eﬀect of µ∗. The end result is that the upper bound of Eq. (10) still applies to the anisotropic case
+provided that λ and ω2 replace the isotropic values and µ∗ is set to zero.
+The anisotropic case now provides additional diﬃculty in the strong coupling limit because λ ω2 and λ ω2 don’t necessarily converge to each other and there is no unique simple measure of Tc that is independent of anisotropic details. Rather than resort to a more compli-
+cated expression, we examine the accuracy of λ and λ in a common anisotropic scenario. Most conventional BCS superconductors are reasonably isotropic and one of the most anisotropic BCS superconductors known, MgB2, ﬁts well into a two band model15,16. In this model, there is a strongly coupled σ-band Fermi sheet and a more weakly coupled π-band sheet. We take a more extreme
+
+4
+
+version of this two band case, where the second band has no electron-phonon coupling at the Fermi surface. In this case, the correct anisotropic result is [λ ω2 ]11, which is also equal to the upper bound λ ω2 . The isotropic approximation λ ω2 equals N1(EF )/N (EF )[λ ω2 ]11 and can substantially underestimate the correct result depending on how much of the density of states at the
+Fermi level lies in the decoupled band. In general, λ will be correct for single-gap superconductors and the error for multi-gap superconductors will be proportional to the total magnitude of all gaps excluding the largest. For this reason, we consider λ ω2 to be a better approximation than λ ω2 for calculations of anisotropic superconductivity.
+Assuming that we are able to enter the strong coupling regime, we are guaranteed to increase Tc uniformly if we focus solely on increasing λ ω2 . This approach works especially well if we consider classes of materials with similar Ωph because Eq. (2) shows that increasing λ ω2
+also increases λ due to phonon softening. It can also be detrimental to independently consider λ and ω2 in classes of materials such as is portrayed in Eq. (9). Increasing the coupling to the very low frequency modes
+of a system most eﬃciently increases λ but doesn’t raise Tc. In such an extreme case, it is more useful to have a metric for superconductivity that is insensitive to low frequency coupling, which is true of λ ω2 . We make no attempts to model µ∗ as it is typically between 0.1 and 0.15 in metals19 and variations of this magnitude can only change Tc by a few percent in the strong coupling regime. We are left with a single quantity to optimize, λ ω2 , that serves as a simple metric for enhancing Tc.
+
+III. LOCAL APPROXIMATIONS
+
+As was ﬁrst pointed out by McMillan2, the quantity λ ω2 is independent of the details of the phonon spec-
+trum. It can be written as a sum of atomic contributions
+
+λ ω2
+
+=
+
+i
+
+ηi Mi
+
+,
+
+(18)
+
+where i is summed over all atoms in the unit cell, Mi are the atomic masses, and ηi are the McMillan-Hopﬁeld parameters of the atoms. The quantity λ ω2 is also independent of the phonon spectrum and can also be written as a sum of eﬀective McMillan-Hopﬁeld parameters,
+
+λ ω2
+
+=
+
+i
+
+ηi Mi
+
+.
+
+(19)
+
+From the deﬁnition of λ ω2 in Eq. (16) and McMillan’s derivation of η it follows that
+
+ηi =
+nk
+
+n,
+
+k|
+
+∂ VS C F ∂Ri
+
+|n,
+
+k
+
+2
+δ(EF − Enk),
+
+(20)
+
+where ∂VSCF /∂Ri is the change in the self-consistent potential due to a change in the ith atomic position, and |n, k and Enk are the Bloch wave function and band
+energy for band n and wavevector k. Just as with λ, ηi is less than or equal to ηi with equality occurring in the isotropic case. We can generalize the electron-phonon coupling parameter ηi to electrons away from the Fermi surface, at an energy E, simply by substituting EF → E,
+
+ηi(E) ≡
+nk
+
+n, k| ∂VSCF |n, k ∂Ri
+
+2
+δ(E − Enk).
+
+(21)
+
+This expression has the form of a density of states weighted by the sensitivity of the electronic states to atomic displacements. Whereas λ = 0 and ηi(EF ) = 0 for all non-metallic materials, ηi(E) will have non-zero values and potentially interesting features for all materials. By looking at this coupling parameter as a function of energy, we can immediately examine rigid-band doping scenarios and get a better sense of the magnitude of hypothetical electron-phonon couplings.
+The eﬀects of anisotropy have been considered in deriving ηi, but so far neglected is phonon anharmonicity, which can be of equal importance in materials such as MgB215. Anharmonicity is important for “soft” phonon modes where the average displacement of atoms is large enough that it samples the non-harmonic terms of the potential energy surface. Eliashberg theory can be formally reformulated to account for anharmonicity20, where the largest eﬀect is typically an increase in phonon frequencies and other corrections contain multi-phonon processes and Debye-Waller factors. The most common approach taken is the inclusion of anharmonic phonon frequencies wherever phonon frequencies appear in Eliashberg theory. At this level of correction, ηi and thus the quantity λ ω2 are unchanged as they are independent of the phonon spectrum. Anharmonic corrections can of course shift the average phonon frequency ω2 , but λ will correspondingly change such that their product remains constant. Taking into account more anharmonic eﬀects, ηi can also change because VSCF in Eq. (20) is dependent on atomic positions and will be aﬀected by large atomic displacements. The anharmonic phonon frequency correction is signiﬁcant because as a phonon softens the harmonic change in energy with phonon displacement, d2E/dξ2, gets small and the phonon frequency becomes dominated by anharmonic corrections proportional to (d4E/dξ4)∆R2, where ∆R is the magnitude of the average phonon mode displacement. In contrast, the anharmonic ηi correction typically will not be important because the harmonic value does not get small as phonons soften and as is shown in section IV, one mechanism of phonon softening is actually related to large ηi values. The only anharmonic eﬀects we will consider are corrections to ω2 and not ηi.
+To calculate ηi(E) using a modern electronic structure code, we must ﬁnd an approximation to ∂VSCF /∂Ri in
+
+Eq. (21). The potential due to the displacement of a single atom in a crystal breaks translational symmetry and is a diﬃcult quantity to compute using codes that rely on periodicity. A reasonable approximation to this single atom displacement is the displacement of a single atom per unit cell within a suﬃciently large supercell of the material of interest. This displacement is a zonecenter perturbation and the matrix elements in Eq. (21) are simply obtained from ﬁrst order perturbation theory on the band energies,
+
+ηi(E) =
+nk
+
+∂ Enk ∂Ri
+
+2
+δ(E
+
+− Enk).
+
+(22)
+
+This calculation is no more diﬃcult than decomposing the force on each atom into its individual band and k-point contributions and then calculating a density of states. The ηi obtained from this procedure does not require the rigid-muﬃn-tin approximation (RMTA) often made in other more simpliﬁed calculations of electronphonon coupling21,22. By utilizing a supercell approximation, we assume spatial locality of electron-phonon coupling as in the RMTA, but here this assumption can be systematically veriﬁed and improved by increasing the size of the supercell. The calculations in this paper are performed using the pwscf electronic structure code23 with the provided default norm-conserving pseudopotentials and converged planewave cutoﬀs. Unless otherwise noted, calculations are performed with experimental lattice constants. Density of states and ηi(E) calculations are performed using gaussian smearing and ∂Enk/∂Ri values based on multiple calculations with displaced atomic coordinates and a ﬁnite diﬀerence approximation. The gaussian smearing width and k-point grid utilized in each calculation are noted with the results. The ηi(E) values depend on the choice of unit cell, and for easier comparison we use a unit cell-independent η(E) value that is summed over the atoms in the unit cell. The summed η(E) value can be used in Eq. (19) with an appropriate average atomic mass. As an example, we calculate η(E) for diamond in ﬁgure 2. Within the precision of the calculation, there is no diﬀerence between η(E) calculated in one unit cell and in a 2 × 2 × 2 supercell. This demonstrates the locality of the electron-phonon coupling that results from a strong covalent bond. Because a large supercell isn’t required for accurate η(E)’s, this is a computationally eﬃcient methodology for calculating electron-phonon couplings in systems of this type.
+Based on this analysis, we can now write Tc in the strongly coupled limit as
+
+Tc ∼
+
+N (EF )
+
+i
+
+√FiF S , Mi
+
+(23)
+
+where FiF S is the average root-mean-square force on atom i from electrons on the Fermi surface. This relation reﬂects the common wisdom based on the BCS model that a large density of states at EF and light elements are what lead to a high Tc. It also helps to give a
+
+~η(E) (eV/Å2)
+
+200
+C (diamond)
+150
+
+100
+
+50
+
+0
+
+-20
+
+-10
+
+0
+
+E - EF (eV)
+
+5
+1 0.8 0.6 0.4 0.2 100
+
+DOS (states / (eV cell))
+
+FIG. 2: Density of states (DOS) (dashed line) and η(E) (solid line) for diamond. This calculation is performed on one unit cell of diamond with a 24 × 24 × 24 k-grid and 0.03 Rydberg gaussian smearing.
+
+40
+
+2
+
+Si (diamond)
+
+30
+
+1.5
+
+DOS (states / (eV cell))
+
+~η(E) (eV/Å2)
+
+20
+
+1
+
+10
+
+0.5
+
+0
+
+-10
+
+-5
+
+0
+
+50
+
+E - EF (eV)
+
+FIG. 3: Density of states (dashed line) and η(E) (solid line) for silicon in the diamond structure. This calculation is performed on one unit cell with a 24 × 24 × 24 k-grid and 0.015 Rydberg gaussian smearing.
+
+simple qualitative picture of electron-phonon coupling by allowing us to focus on a single electronic state and atom at a time. If the electron occupies a single orbital of this atom, its charge distribution will be symmetric about the atomic center and it will contribute no net force to the atom. This is related to the l → l′±1 angular momentum sum rule in the electron-phonon coupling calculations of Hopﬁeld24. Nonzero coupling arises from deviations from spherical symmetry around an atom and the length scale for this deviation is the inter-atomic spacing. In terms of a tight-binding model with inter-atom hopping parameter t, we can use a simple chain rule argument to relate η to t, dE/dR = (dE/dt)(dt/dR), whereby a atomic displacement perturbs the neighboring hopping parameters and they in turn perturb the band energies. Strong electron-phonon coupling is related to a large sensitivity
+
+6
+
+DOS (states / (Dt site))
+
+~η(E) (eV/Å2)
+
+100
+BN (zinc-blende)
+75
+
+50
+
+25
+
+0
+
+-20
+
+-10
+
+0
+
+E - EF (eV)
+
+1.25 1 0.75 0.5 0.25 100
+
+FIG. 4: Density of states (dashed line) and η(E) (solid line) for cubic boron nitride. This calculation is performed on one unit cell with a 24 × 24 × 24 k-grid and 0.03 Rydberg gaussian smearing. In a single unit cell approximation, ηi(E) is identical for boron and nitrogen.
+
+DOS (states / (eV cell))
+
+~η(E) (eV/Å2)
+
+150
+
+1
+
+C (graphite)
+125 0.75
+100
+
+75
+
+0.5
+
+50 0.25
+25
+
+0-20
+
+-10
+
+0
+
+0
+
+E - EF (eV)
+
+FIG. 5: Density of states (dashed line) and η(E) (solid line) for graphite. This calculation is performed on one unit cell of AA-stacked graphite with a 24 × 24 × 12 k-grid and 0.03 Rydberg gaussian smearing. Only in-plane motions of the carbon atoms are considered; the out of plane motions do not contribute signiﬁcantly to η(E).
+
+in t with respect to atomic displacements, dt/dR, and not directly to a large t.
+To study the eﬀects of covalent bonding on electronphonon coupling, we compare η(E) values of several related materials. As an example of changing bond length and strength, we compare the η(E) of diamond in ﬁgure 2 with silicon in a diamond structure in ﬁgure 3. Carbon has η(E) values between two and ten times larger than silicon presumably due to a shorter, stronger covalent bond and less core screening. The density of states of silicon is twice that of carbon and within a tight-binding picture this is associated with a factor of two reduction in t. Although we generally associate larger λ values to larger density of states values at the Fermi surface, this
+
+DOS (states / (eV cell)) ~η(E) (t-1|dt/dR|2)
+
+D=1 D=2 D=3
+
+1
+
+0.5
+
+0-2
+
+-1
+
+0
+
+1
+
+E (Dt)
+
+0.75 0.5 0.25 0
+2
+
+FIG. 6: Density of states and η(E) for simple cubic tight binding in D=1,2,3 dimensions.
+
+reduction in t is concurrent with a reduction in dt/dR that leads to an overall decrease in η(E). We can next examine the eﬀect of bond ionicity on η by comparing diamond with boron nitride in a zinc-blende structure in ﬁgure 4. Although their bond lengths are very similar, boron nitride has a more ionic, less covalent bond than diamond and the dt/dR and η values are correspondingly reduced. All these materials share the diamond (zinc-blende) structure and contain similar peaks in η(E) above and below the Fermi level, due to strong coupling associated with the anti-bonding and bonding states respectively.
+Besides changes in bond strength and ionicity, we can also change the character of a covalent bond by changing the structure of a system. Carbon in graphite has sp2 bonding instead of the sp3 bonding of the diamond structure. In this structure there are only three bonds per atom rather than four in diamond, but the bond lengths are shorter and the bonds are stronger. In ﬁgure 5 we plot the density of states and η(E) of graphite. The η(E) for valence states of diamond and graphite are more similar in shape and magnitude than their density of states. The biggest diﬀerence in valence electron-phonon coupling between these systems is the peak in coupling of diamond being replaced by a smaller, wider plateau in graphite. The features of η(E) do not directly correspond to density of states features in the diamond-structure examples, and the deviation is even more pronounced in graphite. In particular, the maximum in the valence density of states of graphite associated with a van Hove singularity of graphene is not associated with a maximum in electron-phonon coupling.
+To understand the fundamental diﬀerence between N (E) and η(E), we calculate both for a simple cubic nearest-neighbor tight binding model with no on-site energy and a hopping energy t in one, two, and three dimensions. Electron-phonon coupling is modeled by assuming that atomic displacements at a site correspond to changes in hoppings from that site parameterized by a constant dt/dR dotted with the unit normal vector in the direction of the hopping. The N (E) and η(E) of these
+
+7
+
+~η(E) (eV/Å2) DOS (states / (eV cell))
+
+2
+
+0.6
+
+Al (fcc)
+
+1.5 0.4
+
+1
+
+0.2 0.5
+
+0 -10
+
+-5
+
+0
+
+5
+
+100
+
+E - EF (eV)
+
+FIG. 7: Density of states in the primitive cell (solid line) and η(E) of fcc aluminum for a 2 × 2 × 2 supercell with an 18 × 18 × 18 k-grid (dotted line) and a 3 × 3 × 3 supercell with a 12 × 12 × 12 k-grid (dashed line). The experimental value of η at EF is 2 eV/A˚2.
+
+three systems are plotted in ﬁgure 6, showing that van Hove singularities characteristic of low dimensionality do not cause divergences of η(E). The shape of η(E) is relatively insensitive to dimensionality and is proportional in all cases to a generic tight binding result,
+
+η
+
+∼
+
+1 t
+
+dt dR
+
+2
+.
+
+(24)
+
+This result suggests that the traditional decomposition of the electron-phonon coupling parameter λ into N (EF )Vep is possibly misleading in the vicinity of band edges and van Hove singularities.
+In metallic systems without covalent bonding, there is a signiﬁcant convergence problem in our method for calculating η(E). For example in a simple metal such as aluminum, as shown in ﬁgure 7, we cannot converge an answer with respect to either k-point sampling or supercell size. The physical phenomenon causing this problem is that charge density changes in a metal such as the displacement of an atom lead to long range Friedel oscillations which are diﬃcult to sample with the necessary precision. The magnitude of the electron-phonon coupling associated with this phenomenon is much smaller than the coupling due to strong covalent bonds. Any sampling errors associated with Friedel oscillations are negligible in systems with larger electron-phonon coupling contributions coming from covalent bonds.
+There is a large variation of electron-phonon coupling in the examples studied, a factor of ﬁve increase in the maximum of η(E) in going from aluminum to silicon and another factor of ﬁve increase in carbon over silicon. These variations of magnitude can be approximately reproduced based on scaling arguments. The ﬁrst approximation we make is to assume that ∂Enk/∂Ri in Eq. (22) is independent of n and k variations. This allows us to separate out the nk sum and equate it to the density
+
+of states per spin times the variation in the electronic energy,
+
+ηi(E) ≈ N↑(E)
+
+∂ Eel ∂Ri
+
+2
+.
+
+(25)
+
+The sensitivity of electronic energy to atomic displace-
+
+ments is approximately related to the hydrostatic defor-
+
+mation potential - the sensitivity of electronic energy to
+
+change in the volume of the unit cell times the volume -
+
+divided by a length scale, in this case the bond length. In
+
+a free electron gas, the standard result25 for the hydro-
+
+static deformation potential is
+
+2 3
+
+EF
+
+.
+
+Our simple model
+
+for η(E) is thus
+
+η(E)
+
+≈
+
+4 9
+
+N↑(E)
+
+EF Rbond
+
+2
+.
+
+(26)
+
+The N↑(E) is taken from ﬁgures 2 and 3 at the maximum of η(E) and from ﬁgure 7 at EF . The value of EF in this model is taken to be the bandwidth of occupied valence states again taken from the ﬁgures: 22 eV for carbon, 15 eV for silicon, and 12 eV for aluminum. With the experimental bond lengths, we get ηmax values of 27 eV/˚A2 for carbon, 11 eV/˚A2 for silicon, and 1.6 eV/˚A2 for aluminum. While these values are not quantitatively correct, they reasonable reproduce the trend of increasing electron-phonon coupling in these three materials. The large variations in η are just magniﬁcations of the variations in bond lengths and strengths.
+The possibility of a high Tc becomes more probable with increasing ηi(E) and decreasing Mi for the atoms constituting a material. In going from silicon to carbon in a diamond structure we see that both these parameters favor the lighter element. The lightest elements that can form strong covalent bonds under ambient conditions are hydrogen, beryllium, boron, carbon, nitrogen, oxygen, and ﬂuorine. These are the elements that should make up the covalent framework central to the idea of a covalent metal superconductor. A hypothetical covalent metal superconductor need not exclude other elements; they might play a role as dopants or be themselves bonded to one of the strong covalent elements. This encompasses a broad class of materials, but two important considerations must guide and constrain the search for strong electron-phonon coupling. The features of η(E) associated with covalent bonds are peaked in a relatively narrow range of energies. Bonds between diﬀerent pairs of elements of diﬀerent lengths and strengths will contribute to η(E) at diﬀerent energies. Only electrons at the Fermi energy can contribute to the superconducting state, therefore it is important to choose a material with bonds that primarily contribute their electron-phonon coupling to one energy. Additionally, if a material has bonds of diﬀerent strengths, the weakest bonds will typically have their bonding and anti-bonding states closest to the undoped Fermi level. If the Fermi level change required to bring η(EF ) to the strong bonding (antibonding) states crosses weaker bonding (anti-bonding)
+
+8
+
+states, it might suﬃciently deplete (ﬁll) the weak bond enough to break it and destabilize the material. In some cases this problem can be averted by shifting the relative energy levels of bonds through charge transfer such as that which occurs with the σ and π states of MgB226.
+For a given material we can now roughly bound the maximum possible Tc by rigidly shifting the Fermi level and using η(E), Eq. (19), and Eq. (10) to tune to the largest Tc. There are several caveats to this approach, the primary one being that synthesizing heavily doped materials can be very diﬃcult. This diﬃculty arises from the presence of more energetically favorable structures or structural instability in the candidate material. Even if it is possible to physically modify a system and eﬀectively shift its Fermi level, the modiﬁcation might also change η(E) from its initial value, for better or worse. An additional problem arises in molecular crystals where weakening intermolecular hopping and narrow bands can cause a divergence in both N (E) and η(E) and a breakdown of Eliashberg theory. In the case of doped C60 solids, it is believed27 that non-adiabatic eﬀects and a Mott insulator transition are required to fully account for some observed behavior. These are electronic eﬀects beyond the scope of this paper that potentially bound Tc by electronic energy scales. More relevant to non-molecular crystals with a wider electronic bandwidth, we next examine a fundamental instability of the phonon-mediated superconducting state that bounds Tc by a smaller, phonon energy scale.
+
+IV. PHONON SOFTENING
+
+The phonon softening due to electron-phonon interactions can lead to a structural instability that sets an upper limit to the possible Tc of a material. Phonon softening is deﬁned as a change in phonon frequencies from some well-deﬁned bare frequency to the actual frequencies present in a material. The early research on phonon softening took the bare phonons to be of purely electrostatic origin, as either coming from a screened ion-ion interaction9 or the ions and frozen valence electrons7. A recent study10 has included quantum eﬀects in the deﬁnition of the bare phonons, using metallic screening with an insulating electronic susceptibility. Since superconductivity is the result of interactions between phonons and electrons near the Fermi surface, we will deﬁne the bare phonon frequencies here by isolating and removing all electronic contributions to phonon frequencies coming from the Fermi surface.
+To calculate the phonon spectrum of a material we must ﬁrst consider its dynamical matrix,
+
+Diαjβ
+
+≡
+
+∂2E ∂ Riα ∂ Rjβ
+
+=
+
+∂ 2 Eion−ion ∂ Riα ∂ Rjβ
+
++
+
+ρel
+
+(r)
+
+∂2Vion(r) ∂ Riα ∂ Rjβ
+
+dr
+
++
+
+∂ρel(r) ∂ Riα
+
+∂Vion(r) ∂ Rjβ
+
+dr,
+
+(27)
+
+where i, j are the atom indices and α, β are the Cartesian coordinate indices. The ﬁrst two terms are the classical electrostatic contribution between ions and a ﬁxed electronic charge background, while the third contains contributions coming from the electronic response. All Fermi surface contributions are contained within the third term of the dynamical matrix, and we rewrite it in a more symmetric manner using the chain rule,
+
+∂ρel(r) ∂ Riα
+
+∂Vion(r) ∂ Rjβ
+
+dr
+
+=
+
+∂
+
+Vion (r′ ) ∂ Riα
+
+∂ρel(r) ∂V (r′)
+
+∂
+
+Vion(r) ∂ Rjβ
+
+drdr′.
+
+(28)
+
+The middle term, ∂ρ/∂V , is the electron susceptibility, usually denoted as χ, that quantiﬁes the response of the electron density to a change in the background potential. If the contribution to χ due to the Fermi surface is small, then it can be related to the Fermi surface contribution to the irreducible susceptibility χ0 through perturbation theory28,
+
+∆χF S ≈ ǫ−†∆χ0F S ǫ−1,
+
+(29)
+
+where ǫ−1 is the inverse dielectric function of the material and ǫ−† is its Hermitian conjugate. The irreducible
+susceptibility can be expressed analytically in terms of
+electronic states,
+
+χ0(r, r′) = 2
+
+nk|r r|n′k′ n′k′|r′ r′|nk
+
+nk,n′k′
+
+× fn′k′ En′ k′
+
+− −
+
+fnk Enk
+
+,
+
+(30)
+
+for Fermi occupations fnk. The susceptibility contains contributions from all pairs of electronic states, and to restrict these pairings to the vicinity of the Fermi sur-
+face we introduce energy cutoﬀs, EF − ∆E ≤ E ≤ EF + ∆E, to both sums over states. For suﬃciently small ∆E, the second term in Eq. (30) can be approximated by dfnk/dE, which can in turn be approximated by −δ(EF −Enk) for suﬃciently low temperatures. With this as our expression for ∆χF0 S , we can now approximate the contribution of the Fermi surface electrons to the dy-
+namical matrix using Eq. (29) and Eq. (28),
+
+∆Diαjβ,F S
+
+≈
+
+−2
+nk,n′k′
+
+n,
+
+k|
+
+∂ VS C F ∂ Riα
+
+|n′, k′
+
+×
+
+n′,
+
+k′
+
+|
+
+∂ VS C F ∂ Rjβ
+
+|n, k
+
+δ(EF
+
+−
+
+Enk)
+
+×θ (∆E)2 − (EF − En′k′ )2 . (31)
+
+Here, the screened self-consistent potentials are the result of the inverse dielectric function acting on the bare ionic potentials,
+
+∂ VS C F ∂ Riα
+
+=
+
+ǫ−1
+
+∂ Vion ∂ Riα
+
+,
+
+(32)
+
+9
+
+and θ is the unit step function. As ∆E → 0, the ∆DF S term vanishes. The Fermi
+surface does not have an inﬁnitesimal eﬀect on phonon frequencies, but rather it aﬀects an inﬁnitesimal number
+of phonons. For a phonon of wavevector q, we would calculate the softening due to the Fermi surface by taking the expectation value of ∆DF S with respect to the phonon displacement vector. This leads to a substitution in Eq. (31) of k′ → k+q due to momentum conservation. For suﬃciently small q or in special cases of Fermi surface
+nesting, the condition |EF − En(k+q)| ≤ ∆E holds for k over a ﬁnite area of the Fermi surface and lead to ﬁnite
+phonon softening. As ∆E is made larger, more phonons will be softened by ∆DF S but the approximations made
+in deriving Eq. (31) eventually break down and the correspondence with electrons at the Fermi surface is lost.
+All the electrons in a material can play a role in softening the phonon frequencies from the ionic plasma frequencies,
+and the Fermi surface is not independent of the rest of the electronic structure. These additional phonon softening eﬀects are not directly related to the Fermi surface and
+must be handled separately for diﬀerent classes of materials. For example, in metallic Li1−xBC29,30 there is an essentially constant softening for phonons from q = 0 to |q| = 2kF . We imagine that for a hypothetical wellengineered superconductor, all material-speciﬁc phonon softening is designed so that it doesn’t lead to any structural instabilities, leaving only ∆DF S as the fundamentally limiting cause of phonon instability.
+With several more manipulations, the phonon softening due to electron-phonon coupling can be directly related back to a bound on Tc. We ﬁrst relate ∆DF S to the softening of an individual phonon mode with displacement vector ξiα,
+
+(∆ω2)F S
+
+=
+
+iα,jβ
+
+√ξiα Mi
+
+∆Diαjβ,F
+
+S
+
+ξjβ . Mj
+
+(33)
+
+Summing over all phonon modes at the gamma point, we have a complete basis of gamma point atomic displacements and can relate the phonon softening back to the total electron phonon coupling,
+
+(∆ωi2)F S ≈ 2λ ω2 ,
+
+(34)
+
+i
+
+assuming ηi has been calculated using Eq. (22) within the supercell approximation. This leads to a bound on Tc by invoking the weak upper bound of Eq. (7) to get
+
+Tc ≤ 0.13
+
+(∆ωi2)F S .
+
+(35)
+
+i
+
+This phonon softening Tc bound gets large as more phonons are softened and as the magnitude of the softening increases. However, the total phonon softening is related to the total electron-phonon coupling strength, which is itself independent of the phonon spectrum.
+
+Phonon softening becomes the relevant bound on Tc only when there is enough electron-phonon coupling in a material to drive a phonon mode to instability before the electron-phonon coupling strength is maximized. The identiﬁcation of this one “Achilles’ heel” mode and its subsequent destabilization are required to correctly interpret Eq. (35). The degree to which a phonon mode can even be softened by the Fermi surface has to do with its overlap in Eq. (33) with ∆DF S; one has to evaluate these overlaps to determine the relative softening of various phonon modes. This “Achilles’ heel” might not even be determined by softening due to electrons at the Fermi surface - other valence electrons and physical modiﬁcations required to dope a material might both play an important material-speciﬁc role in the softening of phonons. A caveat to this phonon softening argument is that it has been made based on the harmonic phonon approximation which will cease to hold if some phonon modes are suﬃciently softened. Anharmonic corrections to phonon frequencies can stabilize locally unstable modes, further delaying the onset of a true instability and raising the associated Tc bound.
+A simple application of Eq. (35) is the case of diamond. In diamond, the gamma point has three zero frequency acoustic modes and three equal frequency optical modes at the gamma point. The maximum phonon softening allowed in a stable structure is full softening to zero of the optical modes. The gamma point optical modes have an experimentally measured frequency of 165 meV31, which from Eq. (35) gives a Tc bound of 430 K. According to ﬁgure 2, the maximum Tc possible with rigid hole doping is 290 K and with electron doping it is 420 K. Within a rigid doping scheme, the theoretical limit of superconductivity in diamond is set by the amount of available electron-phonon coupling and not by a fundamental lattice instability, due to the extreme stiﬀness of the undoped structure.
+V. Tc BOUNDS OF COVALENT METALS
+Originating from the discovery of superconductivity in MgB2 in 20015, there has been a growing interest in covalent metals. One goal of this area of research is to determine, if possible, how to increase Tc in already superconducting materials and how to drive insulating covalent materials into a metallic, superconducting regime. The most prominent materials in these studies are two layered materials, metallic MgB2 and semiconducting (at x = 0) Li1−xBC, and one isotropic material, boron-doped diamond BxC1−x. The ηi(E)-based analysis derived in section III provides a clear picture of the Tc bounds inherent in these materials.
+In MgB2, neither hole-doping nor electron-doping have been successful in increasing Tc10. This has been explained theoretically in terms of the magnitude of the phonon softening of the E2g phonon mode as a function of doping level. Because it is near to the strongly
+
+DOS (states / (eV cell))
+
+DOS (states / (eV cell)) ~η(E) (eV/Å2)
+
+~η(E) (eV/Å2)
+
+40
+MgB2
+30
+20
+10
+
+1.5
+
+100
+
+LiBC
+80
+
+1 60
+
+40 0.5
+20
+
+10
+1.25 1 0.75 0.5 0.25
+
+0
+
+-10
+
+-5
+
+0
+
+50
+
+E - EF (eV)
+
+0-15
+
+-10
+
+-5
+
+0
+
+50
+
+E - EF (eV)
+
+FIG. 8: Density of states (dashed line) and η(E) (solid line) for MgB2. This calculation is performed on one unit cell with a 24 × 24 × 24 k-grid and 0.03 Rydberg gaussian smearing. Only in-plane motions of the boron atoms are considered; the out of plane boron motions and magnesium atoms do not contribute signiﬁcantly to η(E) in the valence bands.
+coupled regime, λ ≈ 1, the variation of Tc with doping should follow η(E), shown in ﬁgure 8. This ﬁgure clearly shows that MgB2 is an optimally doped superconductor and that Tc should dramatically decrease with electrondoping and gradually decrease with hole-doping, which accurately reproduces the results of Zhang et al10. As for the magnitude of Tc at optimal doping, our calculation gives Tc = 29 ∼ 39 K using the Einstein spectrum Tc formula of Eq. (10) with µ∗ = 0.1 ∼ 0.15 and λ = 0.75 determined by setting ω2 = 76 meV, the anharmonic frequency of the E2g phonon mode32. This range of Tc values encompasses the experimental value of 39 K for a physical range of µ∗ values.
+In LiBC, it has been predicted that superconductivity will occur upon uniform deintercalation of the lithium to the level of greater than ∼ 10% and Tc will plateau at ∼ 50% deintercalation with values as low as 65 K30 and as high as 100 K33. The plot of η(E) for LiBC in ﬁgure 9 shows a magnitude of electron-phonon coupling twice that of MgB2 in ﬁgure 8 but less than half that of graphite in ﬁgure 5. Upon hole doping to the peak of η(E) in the valence states, we predict a transition temperature in the range Tc = 90 ∼ 100 K using the Einstein spectrum Tc formula of Eq. (10) with µ∗ = 0.1 ∼ 0.15 and λ = 1.6 determined by setting ω2 = 85 meV, the calculated frequency of the E2g phonon mode after doping29 (softened from 150 meV). The broad plateau in η(E) for a wide range of doping levels corresponds to the Tc plateau found in prior predictions30,33. An experimental method for removing lithium or synthesizing lithium-deﬁcient LiBC without degrading the structure has not yet been discovered and remains the barrier to fulﬁlling these predictions.
+In diamond, it has been observed that heavy boron
+
+FIG. 9: Density of states (dashed line) and η(E) (solid line) for LiBC. DOS is scaled to half the actual (LiBC)2 unit cell to be comparable to the unit cells of AA-stacked graphite and MgB2. This calculation is performed on one unit cell with a 24 × 24 × 12 k-grid and 0.03 Rydberg gaussian smearing. Only in-plane motions of the boron and carbon atoms are considered; their out of plane motions and lithium atoms do not contribute signiﬁcantly to η(E) in the valence bands. In a single unit cell approximation, ηi(E) is identical for boron and carbon.
+
+100
+
+1.25
+
+BC (zinc-blende)
+
+80
+
+1
+
+DOS (states / (eV cell))
+
+~η(E) (eV/Å2)
+
+60
+
+0.75
+
+40
+
+0.5
+
+20
+
+0.25
+
+0-20
+
+-10
+
+0
+
+10
+
+0
+
+E - EF (eV)
+
+FIG. 10: Density of states (dashed line) and η(E) (solid line) for zinc-blende boron carbide. This calculation is performed on one unit cell with a 24 × 24 × 24 k-grid and 0.03 Rydberg gaussian smearing. The equilibrium lattice constant is calculated to be 3.72 ˚A. In a single unit cell approximation, ηi(E) is identical for boron and carbon.
+
+doping, up to the solubility limit, leads to superconductivity with Tc ≈ 4 K in bulk diamond34 and Tc ≈ 9 K in diamond thin ﬁlms35. This doping level corresponds to
+∼ 3% boron substitution and is still far from the optimal
+value of 50% boron substitution estimated from integrat-
+ing the DOS from EF to the valence band peak of η(E) in ﬁgure 2. A small unit cell material corresponding to
+this optimal doping level is BC in a zinc-blende structure,
+which has been examined previous in the context of material strength36. We calculate η(E) for zinc-blende BC
+
+11
+
+in ﬁgure 10 and verify the optimal doping, but there is a substantial drop in the overall scale of electron-phonon coupling from the strong C-C bonds in diamond to the weaker B-C bonds. The scale of the electron-phonon coupling is comparable to the graphitic sheets of boron and carbon in LiBC, but the peak in the zinc-blende structure is narrower and ∼ 20% higher. This material is stable, unlike BC in a graphitic structure, with a dramatic softening of the gamma point optical mode from 165 meV in diamond to a calculated value of 55 meV in BC. This phonon calculation is performed using the frozen phonon method with anharmonic corrections; the total energy as a function of phonon displacement is ﬁt to a 6th order polynomial and the frequency is calculated as the energy diﬀerence between the ﬁrst excited state and ground state of the associated anharmonic oscillator. From the calculated phonon frequency, we get
+λ = 3.6 and using the Einstein spectrum Tc formula of Eq. (10) with µ∗ = 0.1 ∼ 0.15, we predict the transition temperature of this material to be in the range Tc = 140 ∼ 160 K. The barrier to reaching Tc values of this magnitude in diamond is the diﬃculty of including boron into the material beyond the solubility limit and the formation of boron-based impurities that don’t act as acceptors37.
+A recent study38 has examined the possibility of electron-doping in diamond, which they conclude might lead to larger Tc values than hole-doping. This study was based on small doping levels, less than 6%, and we continue this argument to the doping limits. The η(E) peak in the conduction band of diamond is more than twice as large as the valence peak, but requires signiﬁcantly more doping to reach. Electron-doping is presumed to be achieved by nitrogen substitution and a material representative of 50% doping is CN in a zinc-blende structure, which is known to be structurally unstable39. The η(EF ) of zinc-blende CN is smaller than in zinc-blende BC and still far from the peak in the conduction band. We conclude from this that hole doping is the best prospect for exploring the limits of Tc in superconducting diamond.
+VI. CONCLUSIONS
+The phonon frequency being a bound on Tc is an obvious conclusion from the weak coupling limit of conventional electron-phonon superconductivity. It takes a great deal more eﬀort to show that this is still a bound in the strong coupling limit where Tc at ﬁrst glance appears
+
+not to have a bound. This bound is caused by the softening of phonon modes to instability due to strong electronphonon coupling. In a simpliﬁed Eliashberg framework, the variation with doping and hypothetical maximum of electron-phonon coupling can be studied through a single eﬃciently calculable metric, η(E). In a material with strong covalent bonds, such as diamond, we can see that the Tc bound due to softening cannot be reached because there is not enough electron-phonon coupling strength available to soften the phonons to instability. In such a material, an upper bound on Tc is set by the maximum available electron-phonon coupling.
+Of the materials studied, only MgB2 has maximized its electron-phonon coupling within an as-yet experimentally realizable material. Careful materials design and synthesis will be required to increase the maximum available electron-phonon coupling and approach the Tc limits set by structural stability. For some materials containing carbon-carbon and equally strong bonds and light atomic masses, this Tc limit is higher than room temperature. These hypothetical materials are likely to need weak links to enhance N (EF ) and therefore η(EF ) and interstitial regions to contain donor or acceptor atoms or molecules that don’t play a role in the stability of the lattice and can be removed or added to chemically dope the covalent network into a metallic regime. Molecular crystals ﬁt this description, but intermolecular hopping is often too weak and prevents conduction. Polymerization of some of the constituent molecules might serve to increase hopping and enhance conduction. These criteria constitute a broad class of hypothetical materials, and further theoretical progress can be directed and stimulated by the experimental realization of such materials much as the recent interest in phonon-mediated superconductivity in covalent metals has been motivated by the discovery of superconductivity in MgB2.
+Acknowledgments
+This work was supported by National Science Foundation Grant No. DMR04-39768 and by the Director, Oﬃce of Science, Oﬃce of Basic Energy Sciences, Division of Materials Sciences and Engineering Division, U.S. Department of Energy under Contract No. DE-AC0205CH11231.
+Calculations in this work have been done using the Quantum-ESPRESSO package23.
+
+∗ Electronic address: jmoussa@civet.berkeley.edu 1 M. L. Cohen and P. W. Anderson, in Superconductivity in
+d- and f-Band Metals, edited by D. H. Douglass (AIP, New
+York, 1972), p. 17. 2 W. L. McMillan, Phys. Rev. 167, 331 (1968). 3 P. B. Allen and R. C. Dynes, Phys. Rev. B 12, 905 (1975).
+
+4 O. V. Dolgov, D. A. Kirzhnits, and E. G. Maksimov, Rev.
+Mod. Phys. 53, 81 (1981). 5 J. Nagamatsu, N. Nakagawa, T. Muranaka, Y. Zenitani
+and J. Akimitsu, Nature (London) 410, 63 (2001). 6 P. B. Allen and M. L. Cohen, Phys. Rev. Lett. 29, 1593
+(1972).
+
+12
+
+7 P. B. Allen and R. C. Dynes, Phys. Rev. B 11, 1895 (1975). 8 W. E. Pickett and P. B. Allen, Phys. Rev. B 16, 3127
+(1977). 9 I. R. Gomersall and B. L. Gyorﬀy, Phys. Rev. Lett. 33,
+1286 (1974). 10 P. Zhang, S. G. Louie, M. L. Cohen, Phys. Rev. Lett. 94,
+225502 (2005). 11 C. R. Leavens, J. Phys. F 7, 1911 (1977). 12 The dTc/dα2F (ω) response for ﬁxed λ and ω2 is numer-
+ically calculated to be positive in the frequency interval
+from zero to ωmax. 13 G. Varelogiannis, Phys. Rev. B 51, 3941 (1995). 14 H. Suhl, B. T. Matthias, and L. R. Walker, Phys. Rev.
+Lett. 3, 552 (1959). 15 A. Y. Liu, I. I. Mazin, and J. Kortus, Phys. Rev. Lett. 87,
+087005 (2001). 16 H. J. Choi, M. L. Cohen, and S. G. Louie, Phys. Rev. B
+73, 104520 (2006). 17 E. J. Nicol and J. P. Carbotte, Phys. Rev. B 71, 054501
+(2005). 18 M. D. Whitmore, J. P. Carbotte, and E. Schachinger, Phys.
+Rev. B 29, 2510 (1984). 19 P. Morel and P. W. Anderson, Phys. Rev. 125, 1263
+(1962). 20 A. E. Karakozov and E. G. Maksimov, Sov. Phys. JETP
+74, 401 (1978). 21 G. D. Gaspari and B. L. Gyorﬀy, Phys. Rev. Lett. 28, 801
+(1972). 22 W. E. Pickett, Phys. Rev. B 25, 745 (1982). 23 S. Baroni, A. Dal Corso, S. de Gironcoli, P. Giannozzi,
+C. Cavazzoni, G. Ballabio, S. Scandolo, G. Chiarotti, P.
+Focher, A. Pasquarello, K. Laasonen, A. Trave, R. Car, N.
+
+Marzari, A. Kokalj, http://www.pwscf.org/. 24 J. J. Hopﬁeld, Phys. Rev. B 186, 443 (1969). 25 J. M. Ziman, Principle of the Theory of Solids (Cambridge
+University Press, Cambridge, 1965), p. 209. 26 J. M. An and W. E. Pickett, Phys. Rev. Lett. 86, 4366
+(2001). 27 J. E. Han, O. Gunnarsson, and V. H. Crespi, Phys. Rev.
+Lett. 90, 167006 (2003). 28 C. Falter and M. Selmke, Phys. Rev. B 24, 586 (1981). 29 J. M. An, S. Y. Savrasov, H. Rosner, and W. E. Pickett,
+Phys. Rev. B 66, 220502(R) (2002). 30 J. K. Dewhurst, S. Sharma, C. Ambrosch-Draxl, and B.
+Johansson, Phys. Rev. B 68, 020504(R) (2003). 31 J. C. Phillips, Bonds and Bands in Semiconductors (Aca-
+demic, New York, 1973). 32 H. J. Choi, D. Roundy, H. Sun, M. L. Cohen, and S. G.
+Louie, Phys. Rev. B 66, 020513(R) (2002). 33 H. Rosner, A. Kitaigorodsky, and W. E. Pickett, Phys.
+Rev. Lett. 88, 127001 (2002). 34 E. A. Ekimov, V. A. Sidorov, E. D. Bauer, N. N. Mel’nik,
+N. J. Curro, J. D. Thompson, and S. M. Stishov et al.,
+Nature (London) 428, 542 (2004). 35 Y. Takano, M. Nagao, T. Takenouchi, H. Umezawa, I. Sak-
+aguchi, M. Tachiki, and H. Kawarada , Diamond Relat.
+Mater. 14, 1936 (2005). 36 J. E. Lowther, J. Phys.: Condens. Matter 17, 3221 (2005). 37 J. P. Goss and P. R. Briddon, Phys. Rev. B 73, 085204
+(2006). 38 Y. Ma, J. S. Tse, T. Cui, D. D. Klug, L. Zhang, Y. Xie,
+Y. Niu, and G. Zou, Phys. Rev. B 72, 014306 (2005). 39 M. Cˆot´e and M. L. Cohen, Phys. Rev. B 55, 5684 (1997).
+
+

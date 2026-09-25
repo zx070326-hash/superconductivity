@@ -1,0 +1,1435 @@
+Editors’ Suggestion
+
+PHYSICAL REVIEW B 104, 054501 (2021)
+
+High-throughput discovery of high-temperature conventional superconductors
+Alice M. Shipley ,*,† Michael J. Hutcheon ,*,‡ and Richard J. Needs Theory of Condensed Matter Group, Cavendish Laboratory, J. J. Thomson Avenue, Cambridge CB3 0HE, United Kingdom
+Chris J. Pickard§ Department of Materials Science and Metallurgy, 27 Charles Babbage Rd., Cambridge CB3 0FS, United Kingdom and Advanced Institute for Materials Research, Tohoku University, 2-1-1 Katahira, Aoba, Sendai 980-8577, Japan
+(Received 9 April 2021; revised 21 May 2021; accepted 22 July 2021; published 4 August 2021)
+We survey the landscape of binary hydrides across the entire periodic table from 10 to 500 GPa using a crystal structure prediction method. Building a critical temperature (Tc) model, with inputs arising from density of states calculations and Gaspari-Gyorffy theory, allows us to predict which energetically competitive candidates are most promising for high-Tc superconductivity. Implementing optimizations, which lead to an order of magnitude speedup for electron-phonon calculations, then allows us to perform an unprecedented number of “high-throughput” calculations of Tc based on these predictions and to reﬁne the model in an iterative manner. Converged electron-phonon calculations are performed for 121 of the best candidates from the ﬁnal model. From these, we identify 36 above-100 K dynamically stable superconductors. To the best of our knowledge, superconductivity has not been previously studied in 27 of these. Of the 36, 18 exhibit superconductivity above 200 K, including structures of NaH6 (248–279 K) and CaH6 (216–253 K) at the relatively low pressure of 100 GPa.
+DOI: 10.1103/PhysRevB.104.054501
+
+I. INTRODUCTION
+A number of dense metal hydrides have been shown to be conventional superconductors with high critical temperatures (Tc) [1–6]. However, electron-phonon calculations, used to determine the Tc of such materials from ﬁrst principles, remain computationally expensive. It is not necessarily clear before performing these calculations which particular systems and structures might exhibit high-temperature superconductivity. Coupled with this, a huge variety of hydride stoichiometries and structures are either stable or metastable under pressure, even when the discussion is limited solely to binaries. This means that exhaustive theoretical investigation of this class of materials is a huge challenge. A combined searching and screening protocol could therefore provide a desirable and efﬁcient way to discover new high-Tc superconductors.
+In this work, we use a crystal structure prediction method to explore binary hydrides of elements from across the entire periodic table over a 10–500 GPa pressure range. Stable and metastable structures are screened using a model built to predict Tc from inputs including electronic density of states (DOS) ratios and electron-phonon coupling estimates from Gaspari-Gyorffy theory [7]. High-throughput electronphonon calculations are then performed for a large number of structures, selected based on the predictions of this model.
+*These authors contributed equally to this work. †ams277@cam.ac.uk ‡mjh261@cam.ac.uk §cjp20@cam.ac.uk
+
+This provides more Tc results which can be fed back into the training set, allowing us to improve the model iteratively. The results of this high-throughput model-training stage allow us to identify the most promising candidate systems at each pressure; more thorough structure searching is then carried out for each of these systems and fully converged electron-phonon calculations are performed for the best predicted candidates. A large number of high-Tc superconductors are efﬁciently identiﬁed, including many not reported in previous work.
+II. METHODOLOGY
+A. Initial structure searching
+The structure searching calculations in this work were performed using ab initio random structure searching (AIRSS) [8,9] and the plane-wave pseudopotential code CASTEP [10]. The Perdew-Burke-Ernzerhof generalized gradient approximation [11], CASTEP QC5 pseudopotentials, a 340-eV plane-wave cutoff, and a k-point spacing of 2π × 0.07 Å−1 were used. For the initial searches, sp-AIRSS [12] was utilized and structures with 8–48 symmetry operations were generated. This served the dual purpose of (1) reducing the computational cost of the searches and subsequent calculations during the training phase and (2) putting additional focus on high-symmetry structures (which may be metastable or stabilized at nonzero temperatures). Throughout this work, we aim to consider the broadest set of compositions possible. To this end, we construct a convex hull for binary hydrides of the form XnHm for every element X in the periodic table at 10, 100, 200, 300, and 500 GPa in order to assess their
+
+2469-9950/2021/104(5)/054501(13)
+
+054501-1
+
+©2021 American Physical Society
+
+SHIPLEY, HUTCHEON, NEEDS, AND PICKARD
+
+PHYSICAL REVIEW B 104, 054501 (2021)
+
+stability. Structures on or near these static-lattice convex hulls were then selected for further investigation at the relevant pressure. In particular, in the training phase, stoichiometries within 80 meV/f.u. of the hull were selected (for each of these stoichiometries just the lowest energy structure was chosen). In order to discuss stability more clearly in this work, we introduce two quantities: Estoic, the distance of the given stoichiometry from the static-lattice convex hull, and Estruc, the distance of the given structure from the lowest energy structure of the same stoichiometry. Here, for example, we are selecting structures with Estoic 80 meV/f.u. and Estruc = 0.
+
+B. Electron-phonon coupling estimates
+McMillan [13] showed that for strong-coupled superconductors the electron-phonon coupling constant, λ, can be expressed as
+
+λ=
+
+N (EF ) I2 M ω2
+
+,
+
+(1)
+
+where N (EF ) is the DOS at the Fermi level, I2 is the Fermi
+
+surface averaged electron-phonon matrix element, M is the
+
+atomic mass, and ω2 is the average squared phonon fre-
+
+quency. The numerator in this expression can be relabeled as
+
+η, the so-called Hopﬁeld parameter. In situations where the
+
+vibrational modes can be well separated into those of different
+
+atomic character (as we typically see in binary hydrides) we
+
+can write
+
+λ=
+
+λj =
+j
+
+j
+
+ηj , M j ω2j
+
+(2)
+
+where j is the atom type. Hopﬁeld established that, in a local phonon representation,
+electron-phonon interactions mainly consist of scatterings that change the electronic angular momentum l [14]; building on this observation, Gaspari-Gyorffy theory [7] then provides a way to approximate I2 in Eq. (1). Beginning from a multiple-scattering Green’s function formalism, adopting the rigid mufﬁn-tin approximation [15] allows a number of approximations concerning the potential and wave function to be applied [16]. These approximations reduce the expression for the Hopﬁeld parameter to a combination of electronic scattering phase shifts and (partial) electronic densities of states [16]. Recent work has emerged using Gaspari-Gyorffy theory for metal hydrides under high pressure [16,17].
+The ﬁnal form of the rigid-ion Gaspari-Gyorffy formula is
+
+I2 =
+
+EF
+
+π 2N 2(EF )
+
+×
+
+l
+
+2(l
+
++
+
+1)
+
+sin2(δl+1 − δl )Nl (EF Nl(1)Nl(+1)1
+
+)Nl +1 (EF
+
+),
+
+(3)
+
+where Nl(1) is the free-scatterer DOS—the DOS at the Fermi level for a single mufﬁn-tin potential in a zero-potential background—and δl are the scattering phase shifts.
+The scattering phase shifts can be obtained by matching
+the logarithmic derivative for solutions inside and outside the mufﬁn tin at the mufﬁn-tin radius, r = RMT, as detailed in
+
+Ref. [18]. The free scatterer DOS can also be easily computed from properties of the radial wave function. From a self-consistent DOS calculation, partitioned by both atom and angular momentum l, we therefore have all the components needed to approximate I2 for each atom type. These quantities can then be multiplied by N (EF ) to give each η j.
+Gaspari-Gyorffy theory was implemented in the ELK code [19] in Ref. [20]; this modiﬁed version of the code is used in this work to calculate ηH and ηX . The traditional way to use these approximate Hopﬁeld parameters (or “Gaspari-Gyorffy electron-phonon coupling estimates”) is to calculate the average phonon frequency and use this to estimate λ via Eq. (1) [or, in our case, Eq. (2)]. This λ value can in turn be used to obtain Tc from the McMillan [13] or Allen-Dynes [21] equations. However, the phonon calculation required to obtain ω2 means that this approach would be too expensive to be useful in a high-throughput screening scenario. Therefore, in this work, we do not obtain direct estimates of λ or Tc from Gaspari-Gyorffy theory and instead use the η j values themselves as descriptors in our Tc model.
+C. Electron-phonon coupling calculations
+At several stages during this work electron-phonon coupling calculations are performed using density functional perturbation theory (DFPT) in the QUANTUM ESPRESSO code [22,23] and the results treated using Migdal-Eliashberg theory [24] to obtain Tc values from ﬁrst principles. Within the theory, an electron in an occupied state |n, k is coupled to an unoccupied state |m, k + q by a phonon with momentum q and frequency ωq,ν. At the temperatures of interest for superconductivity, we will have ωqν ∼ kbT 1 eV, so the initial and ﬁnal electronic states will lie very close to the Fermi energy. However, on the ﬁnite k-point grids used in DFT calculations, Kohn-Sham states will rarely lie this close to the Fermi level. To overcome this, we follow the method used in Ref. [25] and smear out the electronic energies using Gaussians with a characteristic smearing width σ , chosen according to the procedure outlined in Ref. [26].
+Both the initial (k) and ﬁnal (k + q) states must be present in the k-point grid. To ensure that this is the case, we take our k-point grids to be ﬁxed multiples of the q-point grids, increasing the multiplicative factor until convergence is achieved (typically this results in k-point grids larger than 30 × 30 × 30). Coupling strengths are then interpolated onto a ﬁner q-point grid (eight times larger in each direction) to construct the Eliashberg function, α2F (ω). From α2F (ω), we obtain the superconducting critical temperature either by direct solution of the Eliashberg equations using the ELK code [19] or using the Allen-Dynes equation [21]. We compare these two methods in Sec. IV F.
+Throughout this work, we proﬁled the electron-phonon coupling calculations in the QUANTUM ESPRESSO code and implemented optimizations [27]. In particular, through optimized symmetrization of the electron-phonon matrix elements and evaluation of Gaussian smearing, we reduced the time to calculate Tc for our F m3¯m-LaH10 test system by a factor of 8. Combined with the selective ability of our screening method, this near-order-of-magnitude speedup enables us to perform the present wide-ranging study.
+
+054501-2
+
+HIGH-THROUGHPUT DISCOVERY OF HIGH-TEMPERATURE …
+
+PHYSICAL REVIEW B 104, 054501 (2021)
+
+III. Tc MODEL AND TRAINING PHASE
+Our Tc model is a Gaussian process regression model, initially trained using a set of 160 structures and corresponding Tc values from the literature (collected from Refs. [20,26,28– 71]). The model inputs are the Gaspari-Gyorffy electronphonon coupling estimates for hydrogen and element X (ηH and ηX ), the mass of atom X in atomic units (MX ), the total DOS at the Fermi energy [N (EF ), normalized by cell volume], and the hydrogen DOS divided by the total DOS at the Fermi energy [NH (EF )/N (EF )]. Throughout this work, whether the structure originated from the literature or from our own searches, these inputs were computed using the modiﬁed version of ELK [19] from Ref. [20]. In cases where a literature structure was not given at the same pressure as Tc was reported, the structure was relaxed at the correct pressure using CASTEP [10]. References [1–3,72] and the data tables within were found to be helpful for identifying additional points to include in the original literature set.
+The model was trained via optimization of model parameters and hyperparameters in MATLAB [73] and was tested using nested cross-validation, with an inner loop used to optimize the parameters and an outer loop used to monitor the ﬁt of the resulting model to unseen data. The correlation was evaluated in this way, repeated over several different random splittings of the data each time.
+The overall process used in the training phase was iterative; structures at a given pressure were selected for further study based on the predictions of the model, with Tc values for the best predicted structures calculated explicitly using DFPT and fed back into the model’s training set for use in the next iteration (provided the structure was found to be dynamically stable). The model was then retrained and predictions were made for a set of search structures at the next pressure until all pressures had been considered. To make performing a large number of electron-phonon calculations feasible, a relatively sparse q-point sampling was used in the training stage, chosen to reproduce the known result for F m3¯m-LaH10 [26,74]. This corresponds to a q-point spacing of 2π × 0.15 Å−1 (a 2 × 2 × 2 grid for F m3¯m-LaH10 at 200 GPa). In keeping with the initial literature training set, the Allen-Dynes equation was used to estimate Tc throughout the training phase.
+Our method is summarized in Fig. 1. Figure 2 shows the number of structures considered in total at each stage of the training process—given the relatively large cost of electronphonon calculations (even in high-throughput operation), this ﬁgure highlights the importance of the stability ﬁltering and model-based screening steps in our workﬂow. In total, 119 new DFPT data points were added to the training set in this work. Predictions for all previously considered search structures were recalculated using the ﬁnal model to ensure nothing of interest had been missed in earlier iterations. Most of the electron-phonon calculations performed in the training phase were for structures with a high predicted Tc according to our model; however, occasionally these calculations were performed for structures with midrange or low Tc predictions in order to improve the behavior of the model. The correlation of the predicted Tc values with the calculated Tc values across the training set decreased slightly on addition of more data (see Fig. 1). This is not surprising for two reasons: (1) as
+
+Run calculations for literature structures to produce initial
+training set
+
+Train GPR Tc model with inputs {ηH, ηX, MX, NH(EF)/N(EF), N(EF)}
+Initial model has a correlation of 0.868
+
+Include new results in training set
+
+Structure search across whole periodic table at
+pressure of interest
+
+FILTER
+
+Electron-phonon calculations performed (largely, but not exclusively, focused on best
+predicted structures)
+FILTER
+
+Select structures on, or just above, the convex hull and calculate GPR model inputs,
+Predict Tc using these
+
+Final model has a correlation of 0.710
+FIG. 1. A ﬂowchart summarizing our methodology.
+
+mentioned previously, the results we add to the training set are computed in a high-throughput manner and therefore will be somewhat underconverged compared to typical values found in the literature, and (2) the ﬁnal training set contains a wider range of elements and pressures than the original literaturebased training set.
+During the training of our model, we were able to efﬁciently rediscover a number of binary hydrides (with relatively high Tc values) which had been reported previously, including the structures Im3¯m-H3S [44,45,75],
+
+105 104
+
+Found in searches
+Screened T calculated using DFPT
+
+Number of structures
+
+103
+
+102
+
+101
+
+0
+10
+
+100
+
+200
+
+300
+
+500
+
+Pressure/GPa
+
+FIG. 2. A summary of the number of structures studied at each stage of the training process—note the logarithmic scale.
+
+054501-3
+
+SHIPLEY, HUTCHEON, NEEDS, AND PICKARD
+
+PHYSICAL REVIEW B 104, 054501 (2021)
+
+s=1
+
+s=3 s=2
+
+Im3¯m-LaH6 [76], I4/mmm-AcH12 [28], Im3¯m-SeH3
+
+350
+
+[46], R3¯m-SrH6 [72], R3¯m-LiH6 [77,78], F m3¯m-LaH10
+
+[26,50,74,76,79,80], F m3¯m-YH10 [26,76], Im3¯m-ScH6
+
+[57,76,81], P63/mmc-ThH9 [63], R3¯m-SrH10 [82],
+
+300
+
+Pm3¯m-SiH3 [58], C2/m-LaH7 [50], Im3¯m-CaH6 [35],
+
+Im3¯m-MgH6 [83], F m3¯m-ThH10 [62,63], and the stoi-
+
+250
+
+chiometries KH6 [49], LaH8 [50,79], BaH12 [70], LaH5 [50],
+
+AcH10 [28], LiH8 [77], LaH11 [50], MgH12 [84], YH9 [76,85],
+
+and ScH12 [57]. Although found previously, only half of these
+
+200
+
+Critical Temperature (K)
+
+26 stoichiometries appeared in our original training set; the
+
+other half were repredicted, highlighting the capabilities of
+
+our method. We also identiﬁed a number of other systems
+
+150
+
+with the potential to exhibit high-Tc superconductivity. The
+most promising systems overall are studied further in Sec. IV.
+100
+
+IV. FOCUSED SEARCHES AND FINAL RESULTS
+From the Tc results obtained during training, the most promising candidate systems could be identiﬁed and studied in more depth. More focused structure searches were performed for hydrides of Na, Ca, La, Ac, and K at 100 GPa, hydrides of La, Ac, S, Mg, and Na at 200 GPa, hydrides of Li, Sr, K, Mg, Na, and Sc at 300 GPa, and hydrides of Li, Sr, Mg, Na, Yb, Y, and Ca at 500 GPa. For these calculations, the earlier symmetry constraints were relaxed, but all other parameters remained the same. These composition choices reﬂect a bias towards elements from the left-hand side of the periodic table amongst the most promising candidates from the training stage. However, this is not to say that only the compositions that we study further in this work are capable of supporting high-Tc superconductivity. Future studies, with a different focus, could potentially identify more candidates. No additional searches were performed at 10 GPa as the highest Tc calculated at this pressure in the training phase was only 12–15 K (belonging to F m3¯m-CaH2) and a large proportion of the 245 structures screened were only weakly metallic (in fact, 48 of them were insulating).
+On completion of the focused searches, we again calculated ηH , ηX , N (EF ), and NH (EF )/N (EF ) for the stable and metastable structures found. Stoichiometries with Estoic 25 meV/f.u. were selected for further study. For the stoichiometries on the hull (Estoic = 0), two to ﬁve of the most stable structures were chosen. For the selected off-hull stoichiometries, only the lowest energy structure (Estruc = 0) was chosen. The inputs were then fed into the ﬁnal Tc model trained in Sec. III and fully converged electron-phonon calculations were performed for the structures with the highest predicted Tc values at each pressure (as well as for the most promising candidates already identiﬁed during training). These results are shown in Figs. 3 and 4. Promising structures that remained dynamically stable after convergence of the q-point grids are listed in Table I. We ﬁnd near room-temperature superconductors at every pressure considered, which we elaborate on in the following sections. Unless otherwise stated, all critical temperatures reported in the following sections are from direct solution of the Eliashberg equations.
+A. 100 GPa
+Of particular note at 100 GPa is a Pm3¯m structure of NaH6, a stoichiometry which we ﬁnd to lie above the convex
+
+50
+0 0
+
+100
+
+200
+
+300
+
+Pressure (GPa)
+
+400
+
+Literature data Unstable results Stable results
+500
+
+FIG. 3. Critical temperatures obtained from converged DFPT calculations for the most promising candidates according to our screening process (calculated using the Allen-Dynes equation to facilitate comparison with the literature). Both dynamically stable and dynamically unstable results are shown. The background is shaded according to the ﬁgure of merit S, introduced in Ref. [6].
+
+hull, in agreement with Ref. [92] (although they ﬁnd that the Pm3¯m structure is not the lowest energy structure until 150 GPa). This structure consists of a cubic lattice of H octahedra with Na at the body-centered positions (see Fig. 5). Indeed, as we will see throughout this work, many of the best candidate systems contain hydrogen in such polyhedral clusters. While experimental synthesis of sodium polyhydrides has been demonstrated [93], superconductivity in the system seems understudied given its promise here with a calculated Tc of 248–279 K. This places the structure at a crucial position in pressure-Tc space, strongly inﬂuencing the apparent low-pressure trend of maximum Tc (see Figs. 3 and 4) and hinting at the exciting possibility of other low-pressure high-Tc superconductors. Such high-temperature superconductivity is only possible with both high average phonon frequencies and strong electron-phonon coupling. Indeed, the logarithmic average phonon frequency, ωln = 870 cm−1, and electron-phonon coupling constant, λ = 2.54, of Pm3¯m-NaH6 at 100 GPa are comparable to the values for the F m3¯m-LaH10 clathrate superconductor at 250 GPa (ωln = 871 cm−1, λ = 2.29 [50]). The ability of Pm3¯m-NaH6 to maintain a high average phonon frequency at such low pressures is due to its compact structure, with a shortest hydrogen-hydrogen bond length of only dHH = 0.85 Å (shown in Fig. 5)—signiﬁcantly shorter than in F m3¯m-LaH10, where dHH > 1 Å up to pressures as high as 300 GPa [94].
+Also of interest at 100 GPa is a cagelike Im3¯m structure of CaH6 (see Fig. 3 of Ref. [35]). As was the case with NaH6, this stoichiometry is found to be slightly above the static-lattice convex hull, in agreement with previous calculations [35].
+
+054501-4
+
+HIGH-THROUGHPUT DISCOVERY OF HIGH-TEMPERATURE …
+
+PHYSICAL REVIEW B 104, 054501 (2021)
+
+TABLE I. Allen-Dynes and Eliashberg Tc values for dynamically stable superconductors found in this work, along with calculated λ and stability measures. Structures that are underlined have a calculated Tc above 100 K and have either not been reported in the literature before or have not had their superconducting properties studied before (to the best of our knowledge); more details are given in the Supplemental Material [90]. Structures are available online [91].
+
+Stoichiometry Space group Pressure (GPa) Allen-Dynes Tc (K) Eliashberg Tc (K) λ Estoic (meV/unit) Estruc (meV/unit)
+
+NaH6
+
+Pm3¯ m
+
+100
+
+228–267
+
+248–279
+
+2.54
+
+28
+
+0
+
+CaH6
+
+I m3¯ m
+
+100
+
+150–179
+
+216–253
+
+5.81
+
+9
+
+137
+
+Na2 H11
+
+Cmmm
+
+100
+
+127–156
+
+134–161
+
+1.28
+
+0
+
+0
+
+KH10
+
+C2/m
+
+100
+
+105–124
+
+134–157
+
+2.45
+
+0
+
+0
+
+NaH16
+
+F mm2
+
+100
+
+47–60
+
+61–75
+
+1.10
+
+0
+
+0
+
+AcH5
+
+P1¯
+
+100
+
+48–65
+
+49–69
+
+0.91
+
+0
+
+0
+
+LaH5
+
+P1¯
+
+100
+
+37–55
+
+40–58
+
+0.83
+
+0
+
+0
+
+NaH24
+
+R3¯
+
+100
+
+40–57
+
+40–55
+
+0.82
+
+0
+
+0
+
+AcH11
+
+C2/m
+
+100
+
+14–23
+
+13–20
+
+0.71
+
+0
+
+0
+
+NaH6
+
+Pm3¯ m
+
+200
+
+235–275
+
+260–288
+
+2.06
+
+39
+
+16
+
+AcH12
+
+P63mc
+
+200
+
+197–231
+
+245–280
+
+3.92
+
+11
+
+0
+
+MgH
+
+F m3¯m
+
+200
+
+179–210
+
+196–224
+
+1.98
+
+17
+
+635
+
+13
+SH3
+
+I m3¯ m
+
+200
+
+173–203
+
+196–219
+
+1.77
+
+0
+
+0
+
+AcH6
+
+F mmm
+
+200
+
+110–140
+
+169–204
+
+2.01
+
+0
+
+14
+
+NaH8
+
+I 4/mmm
+
+200
+
+146–171
+
+152–175
+
+1.63
+
+26
+
+124
+
+Na2 H11
+
+Cmmm
+
+200
+
+120–156
+
+129–162
+
+1.11
+
+0
+
+0
+
+MgH
+
+P1¯
+
+200
+
+106–132
+
+112–134
+
+1.35
+
+23
+
+0
+
+14
+
+LaH7
+
+C2/m
+
+200
+
+98–120
+
+105–134
+
+1.23
+
+3
+
+0
+
+MgH4
+
+I 4/mmm
+
+200
+
+63–88
+
+73–94
+
+0.98
+
+0
+
+101
+
+SH7
+
+F mmm
+
+200
+
+57–78
+
+58–78
+
+0.91
+
+29
+
+0
+
+Mg2H7
+
+C2/m
+
+200
+
+55–75
+
+56–75
+
+0.98
+
+22
+
+0
+
+AcH4
+
+Cmcm
+
+200
+
+35–54
+
+42–58
+
+0.99
+
+19
+
+0
+
+Mg2H5
+
+R3¯ m
+
+200
+
+22–39
+
+24–39
+
+0.74
+
+139
+
+21
+
+MgH6
+
+I m3¯ m
+
+300
+
+248–284
+
+271–301
+
+2.28
+
+19
+
+437
+
+YH9
+
+F 4¯3m
+
+300
+
+220–255
+
+261–293
+
+2.58
+
+2
+
+0
+
+ScH8
+
+Immm
+
+300
+
+185–217
+
+212–233
+
+2.06
+
+3
+
+0
+
+LiH2
+
+P6/mmm
+
+300
+
+162–193
+
+177–207
+
+1.45
+
+40
+
+75
+
+NaH7
+
+C2/m
+
+300
+
+157–190
+
+167–198
+
+1.48
+
+3
+
+0
+
+ScH12
+
+P1¯
+
+300
+
+127–157
+
+137–165
+
+1.28
+
+0
+
+103
+
+NaH5
+
+P4/mmm
+
+300
+
+121–144
+
+138–164
+
+1.92
+
+1
+
+0
+
+LiH6
+
+C2/m
+
+300
+
+109–142
+
+130–163
+
+1.16
+
+0
+
+14
+
+LiH6
+
+R3¯ m
+
+300
+
+121–152
+
+130–161
+
+1.30
+
+0
+
+0
+
+ScH6
+
+I m3¯ m
+
+300
+
+118–150
+
+135–161
+
+1.26
+
+0
+
+0
+
+LiH3
+
+Cmcm
+
+300
+
+104–137
+
+112–140
+
+1.06
+
+1
+
+0
+
+ScH14
+
+P1¯
+
+300
+
+87–109
+
+91–115
+
+1.20
+
+6
+
+0
+
+MgH4
+
+I 4/mmm
+
+300
+
+53–81
+
+59–84
+
+0.76
+
+0
+
+0
+
+MgH
+
+Pm3¯
+
+500
+
+294–340
+
+360–402
+
+2.65
+
+0
+
+259
+
+12
+SrH10
+
+F m3¯m
+
+500
+
+239–275
+
+285–319
+
+2.22
+
+8
+
+120
+
+MgH
+
+P3m1
+
+500
+
+239–275
+
+257–287
+
+2.21
+
+12
+
+0
+
+13
+
+MgH
+
+C2/m
+
+500
+
+209–250
+
+232–270
+
+1.63
+
+9
+
+0
+
+10
+
+NaH9
+
+P63/mmc
+
+500
+
+218–256
+
+235–269
+
+1.67
+
+0
+
+0
+
+YH18
+
+P1¯
+
+500
+
+179–212
+
+213–246
+
+1.99
+
+25
+
+0
+
+SrH24
+
+R3¯
+
+500
+
+195–227
+
+218–245
+
+1.88
+
+9
+
+0
+
+YH20
+
+P1¯
+
+500
+
+176–205
+
+212–244
+
+2.21
+
+39
+
+0
+
+SrH10
+
+R3¯ m
+
+500
+
+165–199
+
+190–228
+
+1.31
+
+8
+
+0
+
+CaH10
+
+R3¯ m
+
+500
+
+155–187
+
+184–220
+
+1.51
+
+3
+
+0
+
+Na2 H11
+
+Cmmm
+
+500
+
+132–166
+
+141–180
+
+1.12
+
+0
+
+0
+
+CaH15
+
+P6¯ 2m
+
+500
+
+120–160
+
+134–167
+
+1.01
+
+0
+
+0
+
+SrH15
+
+P6¯ 2m
+
+500
+
+100–136
+
+110–139
+
+0.93
+
+0
+
+0
+
+MgH
+
+C2/m
+
+500
+
+82–110
+
+91–121
+
+0.96
+
+0
+
+0
+
+8
+
+Na2 H11
+
+I 4/mmm
+
+500
+
+72–105
+
+76–104
+
+0.80
+
+0
+
+297
+
+054501-5
+
+SHIPLEY, HUTCHEON, NEEDS, AND PICKARD
+
+PHYSICAL REVIEW B 104, 054501 (2021)
+
+FIG. 4. As Fig. 3, but showing the Eliashberg results from Table I (dynamically stable structures only) alongside experimental results for speciﬁc superconductors (in order of increasing Tc: [86–88,74,75,89].
+However, despite strong electron-phonon coupling, its critical temperature (216–253 K) is found to be slightly lower than that of Pm3¯m-NaH6 due to a lower average phonon frequency. Indeed, our CaH6 phonons are signiﬁcantly softer than those calculated at 150 GPa in Ref. [35], resulting in a much higher λ value (5.81 vs 2.69 from [35]), suggesting that the structure is on the verge of a mechanical instability at 100 GPa. Figure 6 illustrates this, highlighting the strong dependence of both λ and the Allen-Dynes Tc on the low-frequency portion of α2F (ω) and, in particular, the appearance of a peak in α2F (ω) at very low frequencies. This is unsurprising as the AllenDynes equation is known to be sensitive to small changes in α2F (ω) at low frequencies [in particular, the functional derivative δTc(AD)/δα2F (ω) diverges as ω → 0 [95], in this case towards −∞]. However, the full Eliashberg calculation of Tc is much less sensitive and the 100 GPa result calculated here (216–253 K) is comparable to the critical temperature
+
+4.0 3.5 3.0 2.5 2.0 1.5
+
+= 2.69 Tc = 210.5 K (Allen-Dynes)
+227.5 K (Eliashberg)
+(red region)
+= 5.91 Tc = 175.5 K (Allen-Dynes)
+246.6 K (Eliashberg)
+(grey and black regions together)
+= 4.74 Tc = 227.9 K (Allen-Dynes)
+234.9 K (Eliashberg)
+(grey region only)
+
+2F( )
+
+1.0
+
+0.5
+
+0.0
+
+0
+
+250 500 750 1000 1250 1500 1750
+
+(cm 1)
+
+FIG. 6. Gray and black: The Eliashberg function of Im3¯m CaH6 at 100 GPa, demonstrating the suppression of the Allen-Dynes Tc relative to the one obtained by solving the Eliashberg equations. This suppression is due to electrons coupling to soft phonon modes. Red: The Eliashberg function of the same material at 150 GPa from Ref. [35].
+
+of 220–235 K calculated at 150 GPa in Ref. [35], also via
+solution of the Eliashberg equations.
+Figure 7 also demonstrates that while the next best structures, Cmmm-Na2H11 and C2/m-KH10, have similar average phonon frequencies to Pm3¯m-NaH6, they do not exhibit such high coupling strengths. This leads to lower Tc values of 134– 161 K and 134–157 K, respectively. KH10 adopts a cagelike structure, while the Na2H11 structure contains broken octahedral hydrogen clusters (see Fig. 7 inset). Superconductivity in
+
+4.5
+
+Pm-3m NaH6
+
+Im-3m CaH6
+
+4.0
+
+Cmmm Na2H11
+
+C2/m KH10
+
+3.5
+
+3.0
+
+2.5
+
+2F( )
+
+2.0
+
+1.5
+
+1.0
+
+0.5
+
+FIG. 5. The 100 GPa structure of Pm3¯m NaH6 as viewed along the (a) [100] and (b) [111] directions of the standardized cell.
+
+0.0
+0 500 1000 1500 2000 2500 3000 3500 Phonon frequency ( , cm 1)
+FIG. 7. The highest-Tc structures and corresponding Eliashberg functions at 100 GPa.
+
+054501-6
+
+HIGH-THROUGHPUT DISCOVERY OF HIGH-TEMPERATURE …
+
+PHYSICAL REVIEW B 104, 054501 (2021)
+
+FIG. 8. The 200 GPa P63mc structure of AcH12 as viewed along the [001] direction of the standardized cell.
+the KH10 stoichiometry has been studied previously [70]; it was found to be on the convex hull at 150 GPa (and off-hull at 50 GPa) where an Allen-Dynes Tc of 148 K was calculated for an Immm structure. Reference [96] found KH10 to be above the convex hull at 100 GPa and instead found metastable metallic structures of other stoichiometries, but superconductivity was not directly investigated.
+B. 200 GPa At 200 GPa, the Pm3¯m structure of NaH6 remains the highest Tc structure found, rising slightly from its 100 GPa value to 260–288 K. However, as pressure increases we ﬁnd this stoichiometry to be less stable with respect to decomposition. Similarly to Ref. [28], we ﬁnd several actinium hydrides to be high-temperature superconductors at this pressure, most notably a P63mc structure of AcH12 with a critical temperature of 245–280 K. This structure is best described as cagelike, but with hydrogen atoms concentrated along speciﬁc channels along the c axis (see Fig. 8). 200 GPa also marks the appearance of magnesium hydrides, which become increasingly prevalent in our results with pressure. Of particular note is a cubic structure of MgH13 with the space group F m3¯m, which possesses a slightly higher calculated Tc (196–224 K) than the experimentally veriﬁed [75] Im3¯m-H3S at the same pressure (196–219 K). The MgH13 structure consists of axis-aligned cuboctahedral hydrogen clusters (see Fig. 9). In agreement with Ref. [84], we ﬁnd MgH13 to lie above the convex hull at 200 GPa.
+FIG. 9. The 200 GPa F m3¯m structure of MgH13. The structure consists of Mg atoms and axis-aligned cuboctahedra of hydrogen in a checkerboard pattern. Each cuboctahedra has an additional hydrogen atom at its center to make up the necessary 13.
+
+FIG. 10. (a) The 300 GPa F 4¯3m structure of YH9 as viewed along the [110] direction of the standardized cell. (b) The 300 GPa Immm structure of ScH8 as viewed along the [100] direction of the standardized cell.
+They report signiﬁcantly lower critical temperatures for onhull structures.
+A notable absence from the 200 GPa results is LaH10. Several structures of LaH10 (including the experimentally veriﬁed F m3¯m structure [74,80]) were found in our structure searches and ﬂagged as good candidates by our Tc model, but were dynamically unstable at the harmonic level. This has been noted previously for the cubic structure [26,97,98]. We elaborate on our treatment of structures with dynamical instabilities in Sec. IV E.
+C. 300 GPa
+At 300 GPa, an Im3¯m structure of MgH6 exhibits the highest Tc value, 271–301 K (in agreement with previous work [83]). This structure can be obtained by substituting Ca for Mg in the CaH6 structure investigated at 100 GPa. By instead substituting only half of the Ca atoms at 200 GPa, it has been reported that one obtains an even higher critical temperature ternary superconductor [99]. Hybridizing compatible binary crystal structures in this way could provide an efﬁcient method to design future high-temperature ternary hydride superconductors.
+With a critical temperature of 261–293 K, a cagelike F 4¯3m structure of YH9 [shown in Fig. 10(a)] is the next highest temperature superconductor found at 300 GPa. This stoichiometry (although with P63/mmc symmetry) has been synthesized experimentally, conﬁrming theoretical predictions [76], and was found to exhibit a critical temperature of 243 K at 201 GPa [85]. Y-H systems have been extensively studied [26,100– 102] with critical temperatures in excess of 200 K predicted over large pressure ranges.
+We ﬁnd that an Immm structure of ScH8 with a similar motif to F 4¯3m-YH9 [see Fig. 10(b)] is also a high-temperature superconductor at this pressure with a Tc of 212–233 K. This is signiﬁcantly higher than the (Allen-Dynes) value of ∼115 K obtained in Ref. [103]; we elaborate on the source of this discrepancy in the Supplemental Material [90].
+The next structure of note is a metastable P6/mmm structure of LiH2, which is interesting both because of its relatively low hydrogen content and because its structure is analogous to the well-known ambient-pressure superconductor, MgB2 [86] (see Fig. 11). Superconductivity in Li-H systems has
+
+054501-7
+
+SHIPLEY, HUTCHEON, NEEDS, AND PICKARD
+
+PHYSICAL REVIEW B 104, 054501 (2021)
+
+FIG. 11. The 300 GPa P6/mmm structure of LiH2 as viewed with perspective along the [001] direction of the standardized cell.
+been investigated previously at lower pressures [77], where it was found that the LiH2 stoichiometry did not exhibit superconductivity at 150 GPa. We ﬁnd that the LiH2 stoichiometry lies above the static-lattice convex hull at 300 GPa. However, we ﬁnd this stoichiometry is stabilized (and lies on the hull, in agreement with Ref. [104]) when using harder pseudopotentials with denser k-point grids.
+D. 500 GPa As we increase pressure further, hydrides with higher hydrogen content can be metallized. In particular, at 500 GPa we see the appearance of several MgHn structures with n > 10. The highest critical temperature of these belongs to MgH12, which we ﬁnd to be on the convex hull at this pressure, where a Pm3¯ structure [see Fig. 12(a)] exhibits hot superconductivity with a critical temperature of 360–402 K (87–129 ◦C). This extremely high critical temperature is due to strong electron-phonon coupling that persists over the entire phonon spectrum, extending to very high frequencies (see Fig. 13). Despite increased hydrogen content, P3m1-MgH13 [see Fig. 12(b)] exhibits a lower Tc of 257–287 K due to reduced (but still extended) electron-phonon coupling (see Fig. 13). Superconductivity in the Mg-H system appears to be enhanced substantially with increased pressure; the MgH12 stoichiometry has been previously investigated at lower pressures [84], where it was also found to lie on the convex hull, but with a much reduced Tc of 47–60 K at 140 GPa. At 500 GPa, we also ﬁnd that a high-symmetry metastable F m3¯m phase of SrH10 exhibits room-temperature superconductivity with a Tc of 285–319 K (12–46 ◦C). This is
+FIG. 12. (a) The 500 GPa Pm3¯ structure of MgH12 as viewed along the [010] direction of the standardized cell. (b) The 500 GPa P3m1 structure of MgH13 as viewed along the [001] direction of the standardized cell.
+
+2.00
+
+1.75
+
+1.50
+
+1.25
+
+2F( )
+
+1.00
+
+0.75
+
+0.50
+
+0.25
+
+0.00 0
+
+500 1000 1500 2000 2500 3000 3500 Phonon frequency ( , cm 1)
+
+FIG. 13. The Eliashberg functions of the Pm3¯ structure of
+MgH12 (a hot superconductor with a Tc of 360–402 K) and the P3m1 structure of MgH13, both at 500 GPa.
+
+signiﬁcantly higher than the 190–228 K we calculate for the
+ground-state structure of this stoichiometry, which we ﬁnd to have R3¯m symmetry in agreement with previous calculations
+at 300 GPa [105]. A Tc of 259 K had been calculated for the R3¯m structure previously at this lower pressure [82].
+
+E. Dynamically unstable structures
+Structures that are found to be dynamically unstable correspond to saddle points, rather than minima, of the potential energy surface. Such structures can be stabilized by anharmonic or thermal effects, as is the case in F m3¯m-LaH10 at 200 GPa [26,74,106], and locating them is the goal of sp-AIRSS [12]. The calculations required to ﬁlter out, or correctly treat [107–110], dynamically unstable superconductors are expensive; the solution of this problem will be important in the further development of high-throughput workﬂows. However, one can roughly establish the promise of a saddle-point superconductor by simply neglecting unstable modes in the calculation of the Eliashberg function [26,111]. We provide the results of this procedure for dynamically unstable structures that were ﬂagged by the ﬁnal model in the Supplemental Materil [90] (see also Fig. 3), along with a short discussion of the validity of this procedure.
+
+F. A modiﬁed Allen-Dynes equation
+
+Having a large number of superconductors for which the Eliashberg equations have been solved directly (see Table I) provides a unique opportunity to test the Allen-Dynes equation. This comparison is made in Fig. 14(a), where it is clear to see that, while the Allen-Dynes result correlates well with the Eliashberg result, it systematically underestimates its value (at least for the binary hydride superconductors studied in this work). We ﬁt a modiﬁed version of the Allen-Dynes equation of the form
+
+Tc = Tc(AD)(a + bλ)
+
+(4)
+
+to the data given in Table I, which gives a = 1.0061 and b = 0.0663. As we can see in Fig. 14(b) this removes the
+
+054501-8
+
+HIGH-THROUGHPUT DISCOVERY OF HIGH-TEMPERATURE …
+
+PHYSICAL REVIEW B 104, 054501 (2021)
+
+Allen-Dynes Tc (K)
+
+350 (a) 300 250 200 150 100
+50 0 0
+350 (b) 300 250 200 150 100
+50 0 0
+
+X=Y Linear fit
+
+100
+
+200
+
+300
+
+Eliashberg Tc (K)
+
+X=Y
+
+100
+
+200
+
+300
+
+Eliashberg Tc (K)
+
+Modified Allen-Dynes Tc (K)
+
+1
+
+2
+
+3
+
+4
+
+5
+
+FIG. 14. (a) Allen-Dynes critical temperatures, plotted against critical temperatures from solution of the Eliashberg equations (data from Table I). (b) The same as (a), but using the modiﬁed AllenDynes equation [Eq. (4)].
+
+systematic underestimation and slightly reduces the variance of the prediction. However, given access to α2F (ω), we recommend that the Eliashberg equations be solved directly, to remove the need for approximate Tc predictors entirely.
+V. CONCLUSIONS
+In this work, we demonstrate a high-throughput method to efﬁciently discover high-Tc binary hydrides. We construct a Tc model based on physically motivated descriptors, trained initially on superconductivity data from the literature and iteratively updated using the results of our own DFPT calculations. Following extensive structure searching, a two-step screening process (based on stability criteria and the predictions of our model) allows us to identify energetically competitive high-Tc candidates from the large volume of
+
+search data. The best candidates include hydrides of sodium, calcium, actinium, lanthanum, magnesium, yttrium, scandium, lithium, and strontium.
+We have performed a total of 240 Tc calculations using DFPT, split roughly equally between the training phase and ﬁnal results. This was made possible by optimizing the QUANTUM ESPRESSO electron-phonon code. In the ﬁnal results, we identify 36 dynamically stable superconductors with Tc > 100 K of which 18 have Tc > 200 K (see Table I). To the best of our knowledge, superconductivity has not been investigated previously in 27 of the 36 (see Table I and the Supplemental Material [90]). These ﬁndings add considerably to the known pressure-Tc behavior of the binary hydrides. Of particular note, we ﬁnd a Pm3¯m structure of NaH6 to have a Tc of 248–279 K at 100 GPa, suggesting the exciting possibility of other low-pressure high-Tc hydride superconductors. We also identify Pm3¯-MgH12 and F m3¯m-SrH10 as above-roomtemperature superconductors at 500 GPa, as well as several near-room-temperature superconductors at lower pressures.
+Throughout this work, our aim has been to consider as wide a range of binary compositions as possible; since our focus is on breadth, we make no claim that this study is exhaustive. Despite this, we identify a large number of high-Tc candidates, suggesting the binaries have more to offer in future, more focused, studies. We also note that the highest critical temperature results at each pressure arise from metastable structures or off-hull stoichiometries. Many of these were introduced into the study during the training phase by focusing on high-symmetry structures using sp-AIRSS. This suggests that the additional freedom afforded by allowing some degree of metastability can reveal higher critical temperature superconductors. For example, in the case of SrH10 at 500 GPa we see that the ground state R3¯m structure has a critical temperature nearly 100 K lower than a metastable F m3¯m structure. Exploring avenues such as metastability will be important in future work in order to push the boundaries of high-temperature superconductivity.
+Future work on superconducting hydrides is likely to focus on ternary hydrides and higher order systems. Given the increased complexity of these systems, high-throughput screening approaches, such as the one presented here, are likely to become increasingly important. Our high-throughput methodology could be extended to ternary hydrides, although it may be desirable to redeﬁne these systems as effective binaries in order make use of the extensive binary hydride literature data during model training.
+ACKNOWLEDGMENTS
+A.M.S. is funded by an EPSRC studentship. M.J.H. acknowledges the EPSRC Centre for Doctoral Training in Computational Methods for Materials Science for funding under Grant No. EP/L015552/1. R.J.N. is supported by EPSRC under Critical Mass Grant No. EP/P034616/1 and the UKCP consortium Grant No. EP/P022596/1. C.J.P. was supported by the Royal Society through a Royal Society Wolfson Research Merit award. This work has been performed using resources provided by the Cambridge Tier-2 system operated by the University of Cambridge Research Computing Service funded by EPSRC Tier-2 capital Grant No. EP/P020259/1.
+
+054501-9
+
+SHIPLEY, HUTCHEON, NEEDS, AND PICKARD
+
+PHYSICAL REVIEW B 104, 054501 (2021)
+
+[1] D. Duan, Y. Liu, Y. Ma, Z. Shao, B. Liu, and T. Cui, Structure and superconductivity of hydrides at high pressures, Natl. Sci. Rev. 4, 121 (2017).
+[2] E. Zurek and T. Bi, High-temperature superconductivity in alkaline and rare earth polyhydrides at high pressure: A theoretical perspective, J. Chem. Phys. 150, 050901 (2019).
+[3] J. A. Flores-Livas, L. Boeri, A. Sanna, G. Profeta, R. Arita, and M. Eremets, A perspective on conventional high-temperature superconductors at high pressure: Methods and materials, Phys. Rep. 856, 1 (2020).
+[4] L. Boeri and G. B. Bachelet, Viewpoint: The road to room-temperature conventional superconductivity, J. Phys.: Condens. Matter 31, 234002 (2019).
+[5] A. R. Oganov, C. J. Pickard, Q. Zhu, and R. J. Needs, Structure prediction drives materials discovery, Nat. Rev. Mater. 4, 331 (2019).
+[6] C. J. Pickard, I. Errea, and M. I. Eremets, Superconducting hydrides under pressure, Annu. Rev. Condens. Matter Phys. 11, 57 (2020).
+[7] G. D. Gaspari and B. L. Gyorffy, Electron-Phonon Interactions, d Resonances, and Superconductivity in Transition Metals, Phys. Rev. Lett. 28, 801 (1972).
+[8] C. J. Pickard and R. J. Needs, High-Pressure Phases of Silane, Phys. Rev. Lett. 97, 045504 (2006).
+[9] C. J. Pickard and R. J. Needs, Ab initio random structure searching, J. Phys.: Condens. Matter 23, 053201 (2011).
+[10] S. J. Clark, M. D. Segall, C. J. Pickard, P. J. Hasnip, M. I. J. Probert, K. Refson, and M. C. Payne, First principles methods using CASTEP, Z. Kristallogr.-Cryst. Mater. 220, 567 (2005).
+[11] J. P. Perdew, K. Burke, and M. Ernzerhof, Generalized Gradient Approximation Made Simple, Phys. Rev. Lett. 77, 3865 (1996).
+[12] B. Monserrat, N. D. Drummond, P. Dalladay-Simpson, R. T. Howie, P. López Ríos, E. Gregoryanz, C. J. Pickard, and R. J. Needs, Structure and Metallicity of Phase V of Hydrogen, Phys. Rev. Lett. 120, 255701 (2018).
+[13] W. L. McMillan, Transition temperature of strong-coupled superconductors, Phys. Rev. 167, 331 (1968).
+[14] J. J. Hopﬁeld, Angular momentum and transition-metal superconductivity, Phys. Rev. 186, 443 (1969).
+[15] J. C. Slater, Wave functions in a periodic potential, Phys. Rev. 51, 846 (1937).
+[16] D. A. Papaconstantopoulos, B. Klein, M. J. Mehl, and W. E. Pickett, Cubic H3S around 200 GPa: An atomic hydrogen superconductor stabilized by sulfur, Phys. Rev. B 91, 184511 (2015).
+[17] P.-H. Chang, S. Silayi, D. Papaconstantopoulos, and M. Mehl, Pressure-induced high-temperature superconductivity in hypothetical H3X (X=As, Se, Br, Sb, Te, and I) in the H3S structure with Im3¯m symmetry, J. Phys. Chem. Solids 139, 109315 (2020).
+[18] J. J. Sakurai and J. Napolitano, Scattering theory, in Modern Quantum Mechanics, 2nd ed. (Cambridge University Press, Cambridge, UK, 2017), pp. 386–445.
+[19] The ELK FP-LAPW code, http://elk.sourceforge.net/. [20] M. J. Hutcheon, A. M. Shipley, and R. J. Needs, Predicting
+novel superconducting hydrides using machine learning approaches, Phys. Rev. B 101, 144505 (2020).
+
+[21] P. B. Allen and R. C. Dynes, Transition temperature of strongcoupled superconductors reanalyzed, Phys. Rev. B 12, 905 (1975).
+[22] P. Giannozzi, S. Baroni, N. Bonini, M. Calandra, R. Car, C. Cavazzoni, D. Ceresoli, G. L. Chiarotti, M. Cococcioni, I. Dabo et al., QUANTUM ESPRESSO: A modular and opensource software project for quantum simulations of materials, J. Phys.: Condens. Matter 21, 395502 (2009).
+[23] P. Giannozzi, O. Andreussi, T. Brumme, O. Bunau, M. B. Nardelli, M. Calandra, R. Car, C. Cavazzoni, D. Ceresoli, M. Cococcioni et al., Advanced capabilities for materials modelling with QUANTUMESPRESSO, J. Phys.: Condens. Matter 29, 465901 (2017).
+[24] G. M. Eliashberg, Interactions between electrons and lattice vibrations in a superconductor, Sov. Phys. JETP 11, 696 (1960).
+[25] M. Wierzbowska, S. de Gironcoli, and P. Giannozzi, Origins of low-and high-pressure discontinuities of Tc in niobium, arXiv:cond-mat/0504077.
+[26] A. M. Shipley, M. J. Hutcheon, M. S. Johnson, R. J. Needs, and C. J. Pickard, Stability and superconductivity of lanthanum and yttrium decahydrides, Phys. Rev. B 101, 224511 (2020).
+[27] The optimizations to QUANTUM ESPRESSO resulting from this work have been submitted to the developers (see https://gitlab. com/miicck/q-e for implementation details).
+[28] D. V. Semenok, A. G. Kvashnin, I. A. Kruglov, and A. R. Oganov, Actinium hydrides AcH10, AcH12, and AcH16 as high-temperature conventional superconductors, J. Phys. Chem. Lett. 9, 1920 (2018).
+[29] P. Hou, X. Zhao, F. Tian, D. Li, D. Duan, Z. Zhao, B. Chu, B. Liu, and T. Cui, High pressure structures and superconductivity of AlH3(H2) predicted by ﬁrst principles, RSC Adv. 5, 5096 (2015).
+[30] Y. Fu, X. Du, L. Zhang, F. Peng, M. Zhang, C. J. Pickard, R. J. Needs, D. J. Singh, W. Zheng, and Y. Ma, High-pressure phase stability and superconductivity of pnictogen hydrides and chemical trends for compressed hydrides, Chem. Mater. 28, 1746 (2016).
+[31] K. Abe and N. W. Ashcroft, Crystalline diborane at high pressures, Phys. Rev. B 84, 104118 (2011).
+[32] S. Yu, Q. Zeng, A. R. Oganov, C. Hu, G. Frapper, and L. Zhang, Exploration of stable compounds, crystal structures, and superconductivity in the Be-H system, AIP Adv. 4, 107118 (2014).
+[33] C.-H. Hu, A. R. Oganov, Q. Zhu, G.-R. Qian, G. Frapper, A. O. Lyakhov, and H.-Y. Zhou, Pressure-Induced Stabilization and Insulator-Superconductor Transition of BH, Phys. Rev. Lett. 110, 165504 (2013).
+[34] Y. Ma, D. Duan, D. Li, Y. Liu, F. Tian, H. Yu, C. Xu, Z. Shao, B. Liu, and T. Cui, High-pressure structures and superconductivity of bismuth hydrides, arXiv:1511.05291.
+[35] H. Wang, S. T. John, K. Tanaka, T. Iitaka, and Y. Ma, Superconductive sodalite-like clathrate calcium hydride at high pressures, Proc. Natl. Acad. Sci. USA 109, 6463 (2012).
+[36] N. P. Salke, M. M. D. Esfahani, Y. Zhang, I. A. Kruglov, J. Zhou, Y. Wang, E. Greenberg, V. B. Prakapenka, J. Liu, A. R. Oganov, and J.-F. Lin, Synthesis of clathrate cerium superhydride CeH9 at 80–100 GPa with atomic hydrogen sublattice, Nat. Commun. 10, 1 (2019).
+
+054501-10
+
+HIGH-THROUGHPUT DISCOVERY OF HIGH-TEMPERATURE …
+
+PHYSICAL REVIEW B 104, 054501 (2021)
+
+[37] S. Yu, X. Jia, G. Frapper, D. Li, A. R. Oganov, Q. Zeng, and L. Zhang, Pressure-driven formation and stabilization of superconductive chromium hydrides, Sci. Rep. 5, 17764 (2015).
+[38] C. Heil, G. B. Bachelet, and L. Boeri, Absence of superconductivity in iron polyhydrides at high pressures, Phys. Rev. B 97, 214510 (2018).
+[39] M. M. Davari Esfahani, A. R. Oganov, H. Niu, and J. Zhang, Superconductivity and unexpected chemistry of germanium hydrides under pressure, Phys. Rev. B 95, 134506 (2017).
+[40] G. Gao, A. R. Oganov, A. Bergara, M. Martinez-Canales, T. Cui, T. Iitaka, Y. Ma, and G. Zou, Superconducting High Pressure Phase of Germane, Phys. Rev. Lett. 101, 107002 (2008).
+[41] G. Zhong, C. Zhang, X. Chen, Y. Li, R. Zhang, and H. Lin, Structural, electronic, dynamical, and superconducting properties in dense GeH4(H2 )2, J. Phys. Chem. C 116, 5225 (2012).
+[42] D. Duan, F. Tian, Y. Liu, X. Huang, D. Li, H. Yu, Y. Ma, B. Liu, and T. Cui, Enhancement of Tc in the atomic phase of iodine-doped hydrogen at high pressures, Phys. Chem. Chem. Phys. 17, 32335 (2015).
+[43] A. Shamp and E. Zurek, Superconducting high-pressure phases composed of hydrogen and iodine, J. Phys. Chem. Lett. 6, 4067 (2015).
+[44] D. Duan, Y. Liu, F. Tian, D. Li, X. Huang, Z. Zhao, H. Yu, B. Liu, W. Tian, and T. Cui, Pressure-induced metallization of dense (H2s)2H2 with high-Tc superconductivity, Sci. Rep. 4, 6968 (2014).
+[45] I. Errea, M. Calandra, C. J. Pickard, J. Nelson, R. J. Needs, Y. Li, H. Liu, Y. Zhang, Y. Ma, and F. Mauri, High-Pressure Hydrogen Sulﬁde from First Principles: A Strongly Anharmonic Phonon-Mediated Superconductor, Phys. Rev. Lett. 114, 157004 (2015).
+[46] S. Zhang, Y. Wang, J. Zhang, H. Liu, X. Zhong, H.-F. Song, G. Yang, L. Zhang, and Y. Ma, Phase diagram and high-temperature superconductivity of compressed selenium hydrides, Sci. Rep. 5, 15433 (2015).
+[47] Y. Liu, D. Duan, F. Tian, C. Wang, G. Wu, Y. Ma, H. Yu, D. Li, B. Liu, and T. Cui, Prediction of stoichiometric PoHn compounds: Crystal structures and properties, RSC Adv. 5, 103445 (2015).
+[48] X. Zhong, H. Wang, J. Zhang, H. Liu, S. Zhang, H.-F. Song, G. Yang, L. Zhang, and Y. Ma, Tellurium Hydrides at High Pressures: High-Temperature Superconductors, Phys. Rev. Lett. 116, 057002 (2016).
+[49] D. Zhou, X. Jin, X. Meng, G. Bao, Y. Ma, B. Liu, and T. Cui, Ab initio study revealing a layered structure in hydrogen-rich KH6 under high pressure, Phys. Rev. B 86, 014118 (2012).
+[50] I. A. Kruglov, D. V. Semenok, H. Song, R. Szcze¸s´niak, I. A. Wrona, R. Akashi, M. M. Davari Esfahani, D. Duan, T. Cui, A. G. Kvashnin, and A. R. Oganov, Superconductivity of LaH10 and LaH16 polyhydrides, Phys. Rev. B 101, 024508 (2020).
+[51] G. Gao, R. Hoffmann, N. W. Ashcroft, H. Liu, A. Bergara, and Y. Ma, Theoretical study of the ground-state structures and properties of niobium hydrides under pressure, Phys. Rev. B 88, 184104 (2013).
+[52] D. Zhou, D. V. Semenok, H. Xie, X. Huang, D. Duan, A. Aperis, P. M. Oppeneer, M. Galasso, A. I. Kartsev, A. G. Kvashnin, A. R. Oganov, and T. Cui, High-pressure synthesis of magnetic neodymium polyhydrides, J. Am. Chem. Soc. 142, 2803 (2020).
+
+[53] Y. Liu, D. Duan, X. Huang, F. Tian, D. Li, X. Sha, C. Wang, H. Zhang, T. Yang, B. Liu, and T. Cui, Structures and properties of osmium hydrides under pressure from ﬁrst principle calculation, J. Phys. Chem. C 119, 15905 (2015).
+[54] D. Zhou, D. V. Semenok, D. Duan, H. Xie, W. Chen, X. Huang, X. Li, B. Liu, A. R. Oganov, and T. Cui, Superconducting praseodymium superhydrides, Sci. Adv. 6, eaax6849 (2020).
+[55] Y. Liu, D. Duan, F. Tian, C. Wang, Y. Ma, D. Li, X. Huang, B. Liu, and T. Cui, Stability and properties of the Ru–H system at high pressure, Phys. Chem. Chem. Phys. 18, 1516 (2016).
+[56] Y. Ma, D. Duan, D. Li, Y. Liu, F. Tian, X. Huang, Z. Zhao, H. Yu, B. Liu, and T. Cui, The unexpected binding and superconductivity in SbH4 at high pressure, arXiv:1506.03889.
+[57] X. Ye, N. Zariﬁ, E. Zurek, R. Hoffmann, and N. Ashcroft, High hydrides of scandium under pressure: Potential superconductors, J. Phys. Chem. C 122, 6298 (2018).
+[58] X. Jin, X. Meng, Z. He, Y. Ma, B. Liu, T. Cui, G. Zou, and H.-k. Mao, Superconducting high-pressure phases of disilane, Proc. Natl. Acad. Sci. USA 107, 9969 (2010).
+[59] M. M. D. Esfahani, Z. Wang, A. R. Oganov, H. Dong, Q. Zhu, S. Wang, M. S. Rakitin, and X.-F. Zhou, Superconductivity of novel tin hydrides (SnnHm) under pressure, Sci. Rep. 6, 22873 (2016).
+[60] Q. Zhuang, X. Jin, T. Cui, Y. Ma, Q. Lv, Y. Li, H. Zhang, X. Meng, and K. Bao, Pressure-stabilized superconductive ionic tantalum hydrides, Inorg. Chem. 56, 3901 (2017).
+[61] X. Li, H. Liu, and F. Peng, Crystal structures and superconductivity of technetium hydrides under pressure, Phys. Chem. Chem. Phys. 18, 28791 (2016).
+[62] A. G. Kvashnin, D. V. Semenok, I. A. Kruglov, I. A. Wrona, and A. R. Oganov, High-temperature superconductivity in a Th–H system under pressure conditions, ACS Appl. Mater. Interfaces 10, 43809 (2018).
+[63] D. V. Semenok, A. G. Kvashnin, A. G. Ivanova, V. Svitlyk, V. Y. Fominski, A. V. Sadakov, O. A. Sobolevskiy, V. M. Pudalov, I. A. Troyan, and A. R. Oganov, Superconductivity at 161 K in thorium hydride ThH10: Synthesis and properties, Mater. Today 33, 36 (2020).
+[64] I. A. Kruglov, A. G. Kvashnin, A. F. Goncharov, A. R. Oganov, S. S. Lobanov, N. Holtgrewe, S. Jiang, V. B. Prakapenka, E. Greenberg, and A. V. Yanilkin, Uranium polyhydrides at moderate pressures: Prediction, synthesis, and expected superconductivity, Sci. Adv. 4, eaat9776 (2018).
+[65] X. Li and F. Peng, Superconductivity of pressure-stabilized vanadium hydrides, Inorg. Chem. 56, 13759 (2017).
+[66] S. Zheng, S. Zhang, Y. Sun, J. Zhang, J. Lin, G. Yang, and A. Bergara, Structural and superconducting properties of tungsten hydrides under high pressure, Frontiers Phys. 6, 101 (2018).
+[67] L.-L. Liu, H.-J. Sun, C. Wang, and W.-C. Lu, High-pressure structures of yttrium hydrides, J. Phys.: Condens. Matter 29, 325401 (2017).
+[68] X.-F. Li, Z.-Y. Hu, and B. Huang, Phase diagram and superconductivity of compressed zirconium hydrides, Phys. Chem. Chem. Phys. 19, 3538 (2017).
+[69] K. Abe, High-pressure properties of dense metallic zirconium hydrides studied by ab initio calculations, Phys. Rev. B 98, 134103 (2018).
+[70] D. V. Semenok, I. A. Kruglov, I. A. Savkin, A. G. Kvashnin, and A. R. Oganov, On distribution of superconductivity in
+
+054501-11
+
+SHIPLEY, HUTCHEON, NEEDS, AND PICKARD
+
+PHYSICAL REVIEW B 104, 054501 (2021)
+
+metal hydrides, Curr. Opin. Solid State Mater. Sci. 24, 100808 (2020). [71] Q. Gu, P. Lu, K. Xia, J. Sun, and D. Xing, High-temperature superconducting phase of HBr under pressure predicted by ﬁrst-principles calculations, Phys. Rev. B 96, 064517 (2017). [72] T. Bi, N. Zariﬁ, T. Terpstra, and E. Zurek, The search for superconductivity in high pressure hydrides, Reference Module in Chemistry, Molecular Sciences and Chemical Engineering (Elsevier, New York, 2019). [73] MATLAB GPR ﬁtting documentation, https://uk. mathworks.com/help/stats/ﬁtrgp.html. [74] A. Drozdov, P. Kong, V. Minkov, S. Besedin, M. Kuzovnikov, S. Mozaffari, L. Balicas, F. Balakirev, D. Graf, V. Prakapenka et al., Superconductivity at 250 K in lanthanum hydride under high pressures, Nature (London) 569, 528 (2019). [75] A. Drozdov, M. Eremets, I. Troyan, V. Ksenofontov, and S. Shylin, Conventional superconductivity at 203 kelvin at high pressures in the sulfur hydride system, Nature (London) 525, 73 (2015). [76] F. Peng, Y. Sun, C. J. Pickard, R. J. Needs, Q. Wu, and Y. Ma, Hydrogen Clathrate Structures in Rare Earth Hydrides at High Pressures: Possible Route to Room-Temperature Superconductivity, Phys. Rev. Lett. 119, 107001 (2017). [77] Y. Xie, Q. Li, A. Oganov, and H. Wang, Superconductivity of lithium-doped hydrogen under high pressure, Acta Crystallogr., Section. C: Struct. Chem. 70, 104 (2014). [78] R. T. Howie, O. Narygina, C. L. Guillaume, S. Evans, and E. Gregoryanz, High-pressure synthesis of lithium hydride, Phys. Rev. B 86, 064108 (2012). [79] H. Liu, I. I. Naumov, R. Hoffmann, N. Ashcroft, and R. J. Hemley, Potential high-Tc superconducting lanthanum and yttrium hydrides at high pressure, Proc. Natl. Acad. Sci. USA 114, 6990 (2017). [80] M. Somayazulu, M. Ahart, A. K. Mishra, Z. M. Geballe, M. Baldini, Y. Meng, V. V. Struzhkin, and R. J. Hemley, Evidence for Superconductivity Above 260 K in Lanthanum Superhydride at Megabar Pressures, Phys. Rev. Lett. 122, 027001 (2019). [81] K. Abe, Hydrogen-rich scandium compounds at high pressures, Phys. Rev. B 96, 144108 (2017). [82] K. Tanaka, J. S. Tse, and H. Liu, Electron-phonon coupling mechanisms for hydrogen-rich metals at high pressure, Phys. Rev. B 96, 100502(R) (2017). [83] X. Feng, J. Zhang, G. Gao, H. Liu, and H. Wang, Compressed sodalite-like MgH6 as a potential high-temperature superconductor, RSC Adv. 5, 59292 (2015). [84] D. C. Lonie, J. Hooper, B. Altintas, and E. Zurek, Metallization of magnesium polyhydrides under pressure, Phys. Rev. B 87, 054107 (2013). [85] P. Kong, V. Minkov, M. Kuzovnikov, S. Besedin, A. Drozdov, S. Mozaffari, L. Balicas, F. Balakirev, V. Prakapenka, E. Greenberg et al., Superconductivity up to 243 K in yttrium hydrides under high pressure, arXiv:1909.10482. [86] J. Nagamatsu, N. Nakagawa, T. Muranaka, Y. Zenitani, and J. Akimitsu, Superconductivity at 39 K in magnesium diboride, Nature (London) 410, 63 (2001). [87] G. Wu, Y. L. Xie, H. Chen, M. Zhong, R. H. Liu, B. C. Shi, Q. J. Li, X. F. Wang, T. Wu, Y. J. Yan et al., Superconductivity at 56 K in samarium-doped SrFeAsF, J. Phys.: Condens. Matter 21, 142203 (2009).
+
+[88] A. Schilling, M. Cantoni, J. D. Guo, and H. R. Ott, Superconductivity above 130 K in the Hg–Ba–Ca–Cu–O system, Nature (London) 363, 56 (1993).
+[89] E. Snider, N. Dasenbrock-Gammon, R. McBride, M. Debessai, H. Vindana, K. Vencatasamy, K. V. Lawler, A. Salamat, and R. P. Dias, Room-temperature superconductivity in a carbonaceous sulfur hydride, Nature (London) 586, 373 (2020).
+[90] See Supplemental Material at http://link.aps.org/ supplemental/10.1103/PhysRevB.104.054501, which includes Refs. [112–121]. This contains a discussion of computational parameters for ScH8 and results for dynamically unstable superconductors alongside a brief discussion. Tables listing previous investigations (where they exist) of structures from this work are also provided along with convex hulls for various systems at various pressures.
+[91] Crystal structures for the superconductors in Table 1. are available in the Cambridge online data repository, https://doi.org/ 10.17863/CAM.72574.
+[92] P. Baettig and E. Zurek, Pressure-Stabilized Sodium Polyhydrides: NaHn (n > 1), Phys. Rev. Lett. 106, 237002 (2011).
+[93] V. V. Struzhkin, D. Y. Kim, E. Stavrou, T. Muramatsu, H.-k. Mao, C. J. Pickard, R. J. Needs, V. B. Prakapenka, and A. F. Goncharov, Synthesis of sodium polyhydrides at high pressures, Nat. Commun. 7, 12267 (2016).
+[94] C. Wang, S. Yi, and J.-H. Cho, Pressure dependence of the superconducting transition temperature of compressed LaH10, Phys. Rev. B 100, 060502(R) (2019).
+[95] G. Bergmann and D. Rainer, The sensitivity of the transition temperature to changes in α2 f (ω), Z. Phys. 263, 59 (1973).
+[96] J. Hooper and E. Zurek, High pressure potassium polyhydrides: A chemical perspective, J. Phys. Chem. C 116, 13322 (2012).
+[97] Z. M. Geballe, H. Liu, A. K. Mishra, M. Ahart, M. Somayazulu, Y. Meng, M. Baldini, and R. J. Hemley, Synthesis and stability of lanthanum superhydrides, Angew. Chem., Int. Ed. 57, 688 (2018).
+[98] H. Liu, I. I. Naumov, Z. M. Geballe, M. Somayazulu, J. S. Tse, and R. J. Hemley, Dynamics and superconductivity in compressed lanthanum superhydride, Phys. Rev. B 98, 100102(R) (2018).
+[99] W. Sukmas, P. Tsuppayakorn-aek, U. Pinsook, and T. Bovornratanaraks, Near-room-temperature superconductivity of Mg/Ca substituted metal hexahydride under pressure, J. Alloys Compd. 849, 156434 (2020).
+[100] C. Heil, S. di Cataldo, G. B. Bachelet, and L. Boeri, Superconductivity in sodalite-like yttrium hydride clathrates, Phys. Rev. B 99, 220502(R) (2019).
+[101] I. A. Troyan, D. V. Semenok, A. G. Kvashnin, A. V. Sadakov, O. A. Sobolevskiy, V. M. Pudalov, A. G. Ivanova, V. B. Prakapenka, E. Greenberg, A. G. Gavriliuk et al., Anomalous high-temperature superconductivity in YH6, Adv. Mater. 33, 2006832 (2021).
+[102] Y. Li, J. Hao, H. Liu, S. T. John, Y. Wang, and Y. Ma, Pressurestabilized superconductive yttrium hydrides, Sci. Rep. 5, 9948 (2015).
+[103] S. Qian, X. Sheng, X. Yan, Y. Chen, and B. Song, Theoretical study of stability and superconductivity of ScHn (n = 4–8) at high pressure, Phys. Rev. B 96, 094513 (2017).
+
+054501-12
+
+HIGH-THROUGHPUT DISCOVERY OF HIGH-TEMPERATURE …
+
+PHYSICAL REVIEW B 104, 054501 (2021)
+
+[104] E. Zurek, R. Hoffmann, N. W. Ashcroft, A. R. Oganov, and A. O. Lyakhov, A little bit of lithium does a lot for hydrogen, Proc. Natl. Acad. Sci. USA 106, 17640 (2009).
+[105] Y. Wang, H. Wang, S. T. John, T. Iitaka, and Y. Ma, Structural morphologies of high-pressure polymorphs of strontium hydrides, Phys. Chem. Chem. Phys. 17, 19379 (2015).
+[106] I. Errea, F. Belli, L. Monacelli, A. Sanna, T. Koretsune, T. Tadano, R. Bianco, M. Calandra, R. Arita, F. Mauri, and J. A. Flores-Livas, Quantum crystal structure in the 250-K superconducting lanthanum hydride, Nature (London) 578, 66 (2020).
+[107] I. Errea, M. Calandra, C. J. Pickard, J. R. Nelson, R. J. Needs, Y. Li, H. Liu, Y. Zhang, Y. Ma, and F. Mauri, Quantum hydrogen-bond symmetrization in the superconducting hydrogen sulﬁde system, Nature (London) 532, 81 (2016).
+[108] I. Errea, M. Calandra, and F. Mauri, Anharmonic free energies and phonon dispersions from the stochastic self-consistent harmonic approximation: Application to platinum and palladium hydrides, Phys. Rev. B 89, 064302 (2014).
+[109] J. C. K. Hui and P. B. Allen, Effect of lattice anharmonicity on superconductivity, J. Phys. F 4, L42 (1974).
+[110] V. Meregalli and S. Y. Savrasov, Electron-phonon coupling and properties of doped BaBiO3, Phys. Rev. B 57, 14453 (1998).
+[111] X. Wan, H.-C. Ding, S. Y. Savrasov, and C.-G. Duan, Electron-phonon superconductivity near charge-density-wave instability in LaO0.5F0.5BiS2: Density-functional calculations, Phys. Rev. B 87, 115124 (2013).
+[112] H. Xie, D. Duan, Z. Shao, H. Song, Y. Wang, X. Xiao, D. Li, F. Tian, B. Liu, and T. Cui, High-temperature superconductivity in ternary clathrate YCaH12 under high pressures, J. Phys.: Condens. Matter 31, 245404 (2019).
+
+[113] Y. Sun, J. Lv, Y. Xie, H. Liu, and Y. Ma, Route to a Superconducting Phase Above Room Temperature in Electron-Doped Hydride Compounds under High Pressure, Phys. Rev. Lett. 123, 097001 (2019).
+[114] R. Szczesniak and A. Durajski, Superconductivity well above room temperature in compressed MgH6, Front. Phys. 11, 117406 (2016).
+[115] Y. Chen, H. Y. Geng, X. Yan, Y. Sun, Q. Wu, and X. Chen, Prediction of stable ground-state lithium polyhydrides under high pressures, Inorg. Chem. 56, 3867 (2017).
+[116] J. A. Camargo-Martínez, G. I. González-Pedreros, and F. Mesa, The higher superconducting transition temperature Tc and the functional derivative of Tc with α2F (ω) for electron–phonon superconductors, J. Phys.: Condens. Matter 32, 505901 (2020).
+[117] Y.-K. Wei, J.-N. Yuan, F. I. Khan, G.-F. Ji, Z.-W. Gu, and D.-Q. Wei, Pressure induced superconductivity and electronic structure properties of scandium hydrides using ﬁrst principles calculations, RSC Adv. 6, 81534 (2016).
+[118] J. S. Smith, S. Desgreniers, D. D. Klug, and S. T. John, Highdensity strontium hydride: An experimental and theoretical study, Solid State Commun. 149, 830 (2009).
+[119] Z. Shao, D. Duan, Y. Ma, H. Yu, H. Song, H. Xie, D. Li, F. Tian, B. Liu, and T. Cui, Unique phase diagram and superconductivity of calcium hydrides at high pressures, Inorg. Chem. 58, 2558 (2019).
+[120] H. Xie, Y. Yao, X. Feng, D. Duan, H. Song, Z. Zhang, S. Jiang, S. A. T. Redfern, V. Z. Kresin, C. J. Pickard, and T. Cui, Hydrogen Pentagraphenelike Structure Stabilized by Hafnium: A High-Temperature Conventional Superconductor, Phys. Rev. Lett. 125, 217001 (2020).
+[121] J. Hooper, T. Terpstra, A. Shamp, and E. Zurek, Composition and constitution of compressed strontium polyhydrides, J. Phys. Chem. C 118, 6433 (2014).
+
+054501-13
+
+

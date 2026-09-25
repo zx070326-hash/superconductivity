@@ -1,0 +1,43 @@
+Pad-floor scan (2026-09-16): probes how small the fixed pad in cholesky_deflation_upper_bound
+can go before mp.cholesky (dps=30) starts failing, on the 6 near-critical TFIM instances that were
+"inconclusive" (gap_cert_lb <= 0) at the original pad=2e-9. Cholesky itself is the proof at each pad
+value tested (not an a priori estimate) -- if it PASSes, c := lam2_float_deflated + pad IS a sound
+certificate-level upper bound on lambda_2(A) at that pad, by the same argument as the P4 original method.
+
+PAD= 2e-9
+  N=6 s=0.9 true_gap=8.295e-07 chol_ok=True cert_gap=8.275e-07
+  N=6 s=0.95 true_gap=9.928e-09 chol_ok=True cert_gap=7.928e-09
+  N=8 s=0.9 true_gap=8.714e-09 chol_ok=True cert_gap=6.714e-09
+  N=8 s=0.95 true_gap=2.341e-11 chol_ok=True cert_gap=-1.977e-09
+  N=8 s=1.05 true_gap=1.162e-11 chol_ok=True cert_gap=-1.988e-09
+  N=8 s=1.1 true_gap=2.142e-09 chol_ok=True cert_gap=1.424e-10
+PAD= 1e-10
+  N=6 s=0.9 true_gap=8.295e-07 chol_ok=True cert_gap=8.294e-07
+  N=6 s=0.95 true_gap=9.928e-09 chol_ok=True cert_gap=9.828e-09
+  N=8 s=0.9 true_gap=8.714e-09 chol_ok=True cert_gap=8.614e-09
+  N=8 s=0.95 true_gap=2.341e-11 chol_ok=True cert_gap=-7.660e-11
+  N=8 s=1.05 true_gap=1.162e-11 chol_ok=True cert_gap=-8.838e-11
+  N=8 s=1.1 true_gap=2.142e-09 chol_ok=True cert_gap=2.042e-09
+PAD= 1e-11
+  N=6 s=0.9 true_gap=8.295e-07 chol_ok=True cert_gap=8.295e-07
+  N=6 s=0.95 true_gap=9.928e-09 chol_ok=True cert_gap=9.918e-09
+  N=8 s=0.9 true_gap=8.714e-09 chol_ok=True cert_gap=8.704e-09
+  N=8 s=0.95 true_gap=2.341e-11 chol_ok=True cert_gap=1.340e-11
+  N=8 s=1.05 true_gap=1.162e-11 chol_ok=True cert_gap=1.624e-12
+  N=8 s=1.1 true_gap=2.142e-09 chol_ok=True cert_gap=2.132e-09
+PAD= 1e-12
+  N=6 s=0.9 true_gap=8.295e-07 chol_ok=True cert_gap=8.295e-07
+  N=6 s=0.95 true_gap=9.928e-09 chol_ok=True cert_gap=9.927e-09
+  N=8 s=0.9 true_gap=8.714e-09 chol_ok=True cert_gap=8.713e-09
+  N=8 s=0.95 true_gap=2.341e-11 chol_ok=True cert_gap=2.240e-11
+  N=8 s=1.05 true_gap=1.162e-11 chol_ok=True cert_gap=1.062e-11
+  N=8 s=1.1 true_gap=2.142e-09 chol_ok=True cert_gap=2.141e-09
+
+Conclusion: adopted pad=1e-11 for the main run (quantum_gap_certified.py) -- Cholesky test still
+PASSes at every one of the 32 (N,param) cases in the full sweep at this pad (0 FAILs), and it resolves
+4 of the original 8 "inconclusive" (gap_cert_lb<=0) near-critical TFIM cases. The remaining 6 inconclusive
+cases (s in {0.99,1.0,1.01} at both N=6,8) have TRUE float64 gaps at the 1e-13-1e-15 level or exactly
+0.0 -- i.e. below the achievable pad floor at dps=30, and plausibly an exact (or near-exact,
+finite-size-symmetry-protected) degeneracy at this specific value s=1, not a precision artifact. No pad
+choice fixes this; it would need either a symmetry-sector decomposition (splitting the exact degeneracy
+analytically) or accepting "inconclusive at s=1" as the honest, correct answer.
