@@ -1,0 +1,8 @@
+lam=   5.0  Tc(N=40,60,90)=[np.float64(0.4086851614803967), np.float64(0.4086313598821214), np.float64(0.40860744481206923)]  Tc_extrap=0.408560  Tc/(w0*sqrt(lam))=0.182713
+lam=  10.0  Tc(N=40,60,90)=[np.float64(0.5779680981074826), np.float64(0.5778920111575241), np.float64(0.5778581901411113)]  Tc_extrap=0.577791  Tc/(w0*sqrt(lam))=0.182713
+lam=  20.0  Tc(N=40,60,90)=[np.float64(0.8173703229643775), np.float64(0.8172627197678265), np.float64(0.8172148896277219)]  Tc_extrap=0.817119  Tc/(w0*sqrt(lam))=0.182713
+lam=  40.0  Tc(N=40,60,90)=[np.float64(1.1559361962200336), np.float64(1.1557840223201163), np.float64(1.15571638028729)]  Tc_extrap=1.155581  Tc/(w0*sqrt(lam))=0.182713
+lam=  80.0  Tc(N=40,60,90)=[np.float64(1.6347406459359224), np.float64(1.6345254395428195), np.float64(1.6344297792626097)]  Tc_extrap=1.634238  Tc/(w0*sqrt(lam))=0.182713
+
+Reference: Hofmann et al. quote Tc = 0.1827 w0 sqrt(lam) for 1<<lam<<N (their Eq. 33, citing Allen-Dynes 1975).
+Repo-certified C_inf = 0.1827262477 (asymptotic Allen-Dynes strong-coupling constant).
