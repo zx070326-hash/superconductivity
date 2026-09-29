@@ -1,7 +1,7 @@
 # theory/notes/ 分诊索引
 
 > 生成于 2026-09-18，初版覆盖 `theory/notes/` 下当时全部 116 个笔记文件（不含 `_scratch_ir/` 脚本目录、不含本文件自身）。
-> **2026-09-25 实测（当日多次，随他会话新增而变）：现为 275 篇，本索引收录 275 篇、未收录 0 篇、死链 0 条**（见下方目录表脚注）。
+> **2026-09-25 实测（当日多次，随他会话新增而变）：现为 278 篇，本索引收录 278 篇、未收录 0 篇、死链 0 条**（见下方目录表脚注）。
 > 另有 10 篇本索引生成之后新增（均 2026-09-18）、原未覆盖的文件，已于 2026-09-18 那轮重组补入——**这 10 篇的严格性/状态已由主会话 2026-09-18 逐篇补判**（读证明链，不转引篇内自述）；其余各行仍是 notes-tidy 各 batch 的原样判定。
 > 列含义：**严格性**＝该文件 headline 结论的等级（analytic / rational-exact / certificate / numerical-evidence / mixed，`mixed` 时括注哪部分是哪级）；**状态**＝`live`（当前最佳陈述）/ `superseded by X.md`（被取代）/ `retracted`（撤回）/ `exploratory`（未闭合）/ `unclear`（判不准，见文末）；**依据**＝支持状态判定的文件内原文引用或章节指针（不是判定者的主观印象）。
 > 状态判定方法：仅依据文件自身内容（撤回/订正横幅、自述判决）或另一篇已读文件对它的明确指认（"撤回 X"/"取代 X"），不臆测。四个分诊 batch 由并行 agent 各自独立产出后原样合并于此，未做二次改写；如发现两个 agent 对同一文件判定冲突，已在下方标注并列入「待人工裁定」。
@@ -27,7 +27,7 @@
 | [`lemmaC/`](lemmaC/) | 19 | 引理 C（H 凹性）与 λ₂ 上界的历次证书、路线尝试 |
 | [`coulomb/`](coulomb/) | 20 | μ*>0 库仑：极值性、窗内唯一性、CE/CE′ 阈值、谱隙塌缩机制、H_μ 的托尔马乔夫透镜、(E-env) 凹包络三明治核验、μ\* 分辨天花板 Φ 与 Leavens 零阶矩界的关系 |
 | [`gamma/`](gamma/) | 17 | γ-model + Coulomb：c₁²、Davis–Kahan/Schur 证书、渐近；非声子机制结构相容性侦察 |
-| [`materials/`](materials/) | 40 | 亏损预算证书化、材料数据核验、Eliashberg 交叉核验；Tier 1 材料检索与否定结论 |
+| [`materials/`](materials/) | 42 | 亏损预算证书化、材料数据核验、Eliashberg 交叉核验；Tier 1 材料检索与否定结论 |
 | [`isotope/`](isotope/) | 16 | 同位素指数（P1 系列）与 2Δ/kTc 第二观测量 |
 | [`vertex/`](vertex/) | 10 | 顶角符号判据（P2 系列）与非绝热顶角定理 |
 | [`meta/`](meta/) | 47 | SCDFT 形式论与顶角修正机制深挖（FeSe 铁基路线）；RPA 非对角正性深挖（三队研究计划 + Team A/B/C 独立分析，2026-09-22）；跨文档一致性审查、闭合状态盘点、会话恢复/triage 记录、`CLAUDE.md` 架构级提案、相消叙事三线裁决 |
@@ -39,8 +39,8 @@
 > **2026-09-25 主会话订正（本表两处结构缺陷）**：① 原表有**两行 `meta/`**（1 与 21），已合并为一行；
 > ② 全部 12 个计数**自 2026-09-18 起未随新增笔记更新**（原合计 126，首次重测 **250**；
 > **同日多次重测随他会话新增，现为 270**——该数一天内变过三次，读者应以门禁当次实测为准，不以本行为准）。
-> 本次计数用 `os.walk('theory/notes')` 排除 `_scratch_ir/`、`INDEX.md`、`CLAUDE.md` 实测，逐目录之和 = **275** 与总数自洽（ceiling 42→47，含本轮 shape_factor 与 hofmann 各一篇）。
-> 等级 `numerical-evidence`（文件系统计数）。**同轮实测：磁盘 275 篇笔记，被本索引收录 275 篇，未收录 0 篇；
+> 本次计数用 `os.walk('theory/notes')` 排除 `_scratch_ir/`、`INDEX.md`、`CLAUDE.md` 实测，逐目录之和 = **278** 与总数自洽（ceiling 42→47，含本轮 shape_factor 与 hofmann 各一篇；2026-09-29 接线合入分支：materials 40→42、coulomb 19→20）。
+> 等级 `numerical-evidence`（文件系统计数）。**同轮实测：磁盘 278 篇笔记，被本索引收录 278 篇，未收录 0 篇；
 > 本索引指向不存在 `.md` 的链接 0 条。**
 > ⚠ **`sh tools/check_index_structure.sh --poison` 成功时退出码是 0，不是 1**——它打印的「退出码 1」
 > 指的是**内层被投毒检测器**的码，外层在四项判词齐全时报 `POISON OK` 并 `exit 0`。
@@ -137,7 +137,7 @@
 | [hmu_tolmachev_lens_2026-09-18.md](coulomb/hmu_tolmachev_lens_2026-09-18.md) | 2026-09-18 | μ*>0 极值性 ⟺ H_μ 凹性（双向）；H_μ 的「托尔马乔夫透镜」（s=ϖ/N_c∈[0.07,0.55]、阈值 μ̃≳0.545）；凹包络替代定理 (E-env) | mixed（§1.2 必要性、§1.3 (SAND)、§2.6 领头阶、§4.1 (E-env)、§4.4 极点计数为 **analytic**（建立在仓库 (CVX) 与引理 C 之上）；**其余全部 numerical-evidence**，零 certificate / 零 rational-exact） | live（exploratory：Ĥ_μ 无证书，R1/R3 未做） | §2.4 订正「类 II = 谱隙塌缩」（实测 gap/λ₁=1.0039，不降反升）；§3.4(a) 把仓库两参数拟合 s_c 换坐标后塌成 μ̃_c=0.553–0.585（跨度 138%→5.7%）；§4.3 自陈物理点预算 = 0 |
 | [mustar_failure_common_mechanism_2026-09-18.md](coulomb/mustar_failure_common_mechanism_2026-09-18.md) | 2026-09-18 | μ*>0 五处失效是否共享同一控制量：统一坐标、共同祖先（锥）与四个互不相干阈值 | mixed（§1 久期恒等式 (U1)(U2)、§2.5 (★A)、§3 命题 P1/P2/P3、§5.2 对数导数为 analytic；**其余全部 numerical-evidence**，零 certificate / 零 rational-exact） | live（「大统一」假说被本文自己证伪：是四类互不相干阈值，不是一个控制量） | §4.1 直接证伪「锥 / η / tanΘ 是同一个量」；§6 诚实清单自承 N≲3400 与 §5.2 未达笔记 N 规模 |
 | [hmu_tolmachev_lens_review_2026-09-18.md](coulomb/hmu_tolmachev_lens_review_2026-09-18.md) | 2026-09-18 | 对抗核验：peer agent（未提交，另一 worktree）宣称的 (E-env) 凹包络三明治定理（𝔨≤Ĥ_μ≤h₀，对一切 μ*≥0 无条件） | analytic（(CVX)、Weyl 单调、三明治逻辑）+ numerical-evidence（旗舰数字 +5.751e-3、Tc(P)/Tc(E)=1.0286 独立复现） | live（核心链条全 CONFIRMED，2 项因预算未复核，未计入通过率） | 总评「无 CHALLENGED；净收益=覆盖范围（无条件性），非数值收紧，已独立核实」 |
-| [mustar_resolved_ceiling_PhiE_2026-09-21.md](coulomb/mustar_resolved_ceiling_PhiE_2026-09-21.md) | 2026-09-21 | μ\* 分辨的一阶矩天花板 Φ：定理 (Φ-A) 给出**有证明**的 μ\* 因子（文献里 μ\*>0 天花板均非定理形态）；与 Leavens 1975 / Carbotte (2.50) 零阶矩界的精确比值恒等式 (★) 与判别曲线 ρ_crit；猜想 (FA) 证伪 | mixed（§9.2 (Φ-A) 不等式、§5.1 互不蕴含、§5.2 恒等式 (★)、§8 λ→∞ 机制为 **analytic**；`Φ_E` 网格 **109/112 certificate**；`c(μ*,r)`、ρ_crit、CE′ 56/56、(FA) 证伪为 **numerical-evidence**；零 rational-exact） | live（UNMERGED；(Φ-A) 常数待区间化，见 §12 项 2） | §0 显式写明新颖性只剩「一阶矩版 + 严格性」；§1 预算自陈 `Φ_E` 在 H₃S 格**不承重**（1.354×→min 1.310×）；§5.4 六条真实谱面积界 6/6 更紧；§13.1 (FA) 34/100 反例且 N 收敛 |
+| [mustar_resolved_ceiling_PhiE_2026-09-21.md](coulomb/mustar_resolved_ceiling_PhiE_2026-09-21.md) | 2026-09-21 | μ\* 分辨的一阶矩天花板 Φ：定理 (Φ-A) 给出**有证明**的 μ\* 因子（文献里 μ\*>0 天花板均非定理形态）；与 Leavens 1975 / Carbotte (2.50) 零阶矩界的精确比值恒等式 (★) 与判别曲线 ρ_crit；猜想 (FA) 证伪 | mixed（§9.2 (Φ-A) 不等式、§5.1 互不蕴含、§5.2 恒等式 (★)、§8 λ→∞ 机制为 **analytic**；`Φ_E` 网格 **109/112 certificate**；`c(μ*,r)`、ρ_crit、CE′ 56/56、(FA) 证伪为 **numerical-evidence**；零 rational-exact） | live（2026-09-29 合入 master；(Φ-A) 常数待区间化，见 §12 项 2；后续 `ceiling/phiA_roomT_threshold_rescale_correction_2026-09-23.md` 订正的是**后来脚本**对 (Φ-A) 标度约定的混用，未推翻本笔记的定理原文） | §0 显式写明新颖性只剩「一阶矩版 + 严格性」；§1 预算自陈 `Φ_E` 在 H₃S 格**不承重**（1.354×→min 1.310×）；§5.4 六条真实谱面积界 6/6 更紧；§13.1 (FA) 34/100 反例且 N 收敛 |
 
 ## γ-model
 
@@ -204,6 +204,7 @@
 | [ad_proxy_bias_mainsession_verification_2026-09-20.md](materials/ad_proxy_bias_mainsession_verification_2026-09-20.md) | 2026-09-20 | **主会话从零复核上一行**：三行偏差逐位复现（+4.22/+1.77/+3.69），闭式 `δ_BRD^AD = 1−f₂/r` [analytic]；**三处不成立**：①阈值 [12%,28%] 全仓库无来源；②只校正 δ_BRD 不校正 δ_COU（+5.8 pp 更大），一致校正后 29.5/33.2/16.5、定性句仍成立但数字须挂 caveat；③「下估 ⟹ 安全」对双侧带形式错误；预算 ≈ ∞（派活前该算） | numerical-evidence + analytic（闭式） | live | `_lead_verify_ad_proxy_bias_2026-09-20.py` |
 | [cerqueira_theorem2_test_void_2026-09-21.md](materials/cerqueira_theorem2_test_void_2026-09-21.md) | 2026-09-21 | **主会话从零审计 t5 的 Cerqueira batch-q「定理 2（Einstein 极值性）检验」⟹ §4.1 整节作废**，三条独立缺陷任一足够：①两侧解的不是同一个方程（实谱走 AD75 完整对称矩阵「最大本征值=0」，参考侧走对角单模 `max_n K_nn=1`）；②参考侧 `K_nn=(π/T)λ_n/(2ω_n)` 把 `T` 放在**分母**（松原核里 `T` 在分子）⟹ 判据退化为 `λ_0/(2T²)=1`、低温解 `T=√(λ/2)` meV ⟹ **`ω̄₂` 完全不进来**，`Tc_E ≡ 8.2057√λ` K 零谱信息（验收门：t5 自己附录印 Al₂CoNi `Tc_E=3.84`，闭式给 **3.8470**，逐位命中）⟹ 「Einstein 极值性检验」从未测到 Einstein 谱（第五起「先数自由度」事故）；③`find_tc_bisection` 只守高端不守低端，两端同号时返回 `T_low=1e-12` ⟹ **CSV 里 211/248 行（85.1%）`Tc_real=0`**，「通过率 235/248」把 211 个求解失败计成通过，而 §4.1 印出的 13 个「表面违反」（1.001246 等）是**量纲 bug 修复前的旧输出、现行数据里根本不存在**。**方向审计**：缺陷③使 `Tc` 被低估 ⟹ 上界判据只会更易 PASS ⟹ §4.3 的两个「0/249 违反」是单边行，**不构成确证**（且 `Tc_ceiling ≡ Tc_moment` 逐位相同、248 行最大差 0.0，两个「独立检验」实为一个）。**附带**：§5「dos5」与 §4.3「dos6」自相矛盾，数据站 dos6（`Al2CoNi λ=0.210864` 逐位）；batch-q **100/249** 材料含负 α²F，而 `λ=2∫α²F/ω` 用 `1/ω` 放大小频率噪声 ⟹ 截断与否让 λ 最大变 **56.15%**（未声明的约定选择）。**⟹ 仍然成立、不随之倒**：§4.3 中不经过 `Tc` 的部分（面积界 vs 矩界孰紧、`m≡2s/λ` 恒等式、闭式 `0.63173√(λ/s)`，已从零复现偏差 3.0e−6）。**★ 正面产出（与订正分开计账）**：固定 `N` 的**可解 λ 下限** `λ_c(N)=1/(ln N+2ln2+γ−1)` ——`T→0` 时 AD75 塌成 `2λJ+diag(λ−(2n+1)−2nλ)`，秩一试探给过零条件 `(λ/(1+λ))·2Σ_{m<N}1/(2m+1)=1`；物理读法是**固定 `N` 可取的库珀对数只有 `ln N`、不是 `ln(ω/T)`**，松原窗口够不到声子标度。实测 N∈[50,1600] 与闭式比值 **1.0000**（6 位）；`λ_c(400)=0.143782` **恰落在数据集实测空隙 (0.1380, 0.1442) 内**（失败行全 ≤0.1380、成功行全 ≥0.1442）⟹ 那道通过/失败分界线是**截断画的、零材料信息**。覆盖 batch-q 最小 `λ=0.0202` 需 `N≈1.21e21` ⟹ **弱耦合端不是精度不够，是结构性不可达**；与已知「6912 太弱耦合、检验空洞」结论一致但**理由不同**（障碍是截断对数，不是 float64 精度）。**⚠ 一条我自己的假设被实测否掉（如实记录）**：我原预期「37 个成功行的 `Tc` 也是 N 赝物」——**否定**，Al₂CoNi 在 N=800 起收敛到 6 位（0.566908→0.566934，`ν_N/ω_max` 4.9→19.7）⟹ λ≥λ_c 的行数值本身是好的，缺的只是「它是上界」的证明 | numerical-evidence（全部数值 + `λ_c(N)` 闭式，其推导用秩一试探与调和和渐近、**不是定理，不得简称 analytic**）；`√λ·ω̄₂=√(2M₁)` 与 `m≡2s/λ` 为 analytic 恒等式 | live | 被审笔记 `cerqueira6912_eliashberg_theorem2_verification_2026-09-21.md` （t5 分支 `worktree-agent-a251c94abbc4f0ae2`，已于 2026-09-29 合入 master），**本文只记录审计结论、不代改他人交付**；13 个「违反」既非 PASS 也非 FAIL（其 `Tc_real` 从未被解出）；负 α²F 口径**未判**，凡引用 batch-q 的 λ 须声明 |
 | [cerqueira6912_eliashberg_theorem2_verification_2026-09-21.md](materials/cerqueira6912_eliashberg_theorem2_verification_2026-09-21.md) | 2026-09-21 | t5 分支交付：Cerqueira 6912 batch-q（248–249 材料）自解各向同性 Eliashberg（μ\*=0，N=400）上的 Einstein 极值性定理 2 弱耦合检验 + Carbotte–Leavens 面积界 vs 矩界比较；含量纲 bug 订正（矩界多开一次方/漏 meV→K；`m` 漏因子 2 ⟹ 中位 2.36 订正为 25.46） | **仅 §4.3 非 Tc 部分成立**：`m≡2s/λ`、`0.63173√(λ/s)` 为 analytic 恒等式，面积界 vs 矩界孰紧为 numerical-evidence；**§4.1「定理 2 检验」已作废**、§4.3 涉 Tc 的「0/249 违反」无信息量（见 [cerqueira_theorem2_test_void](materials/cerqueira_theorem2_test_void_2026-09-21.md)，主会话从零复现） | ⚠ 部分作废（勿引 §4.1） | 接线时依 void 笔记 §0 判决分级；**分支自带 INDEX 行的旧数（m 中位 2.36「逼近饱和」）已被该分支自己的订正推翻，未沿用**；脚本 `_cerqueira_*_2026-09-21.py`、`_analyze_bounds_comparison*_2026-09-21.py` 随分支入库 |
+| [cerqueira6912_full_shape_deficit_2026-09-21.md](materials/cerqueira6912_full_shape_deficit_2026-09-21.md) | 2026-09-21 | Cerqueira 6912 数据管线的「谱形状亏损分布 + 定理 2 紧检验」前提验证：batch-p（500 材料，λ∈[0.107,0.213]）Eliashberg `Tc(μ*)` 仅 2/500 有数、只覆盖 μ*=0；batch-q（249）0/249 ⟹ 该数据集**不支持**形状亏损研究与定理 2 紧检验（唯一非退化外部效度来源是 SuperCon 交叉匹配） | 待主会话补判定（数据可得性普查，未见判据/脚本存档，分支自述） | BLOCKED（前提被证伪，形状亏损方向 ABANDONED；分支 p4-conj2 worktree a251c94，2026-09-29 合入 master） | 与同批 `cerqueira6912_eliashberg_theorem2_verification` 互补：后者自解 Eliashberg 绕开了数据缺失；计划中的分析脚本 `_chk_cerqueira_shape_deficit_2026-09-21.py` 未完成、不存在 |
 
 ## 同位素与第二观测量
 

@@ -1,6 +1,6 @@
 # μ\* 分辨的天花板 Φ_E：一阶矩归一版，及它与 Leavens/Carbotte 零阶矩版的关系
 
-> 2026-09-21 · 分支 `p4-conj2`（worktree `agent-a5f49f6237a25ab99`）· UNMERGED
+> 2026-09-21 · 分支 `p4-conj2`（worktree `agent-a5f49f6237a25ab99`）· 2026-09-29 已合入 master（接线）
 > 本篇的**每条结论都显式标级**（analytic / rational-exact / certificate / numerical-evidence）。
 > 所有承重数字**在本 worktree 从零重算**，不转引 peer / subagent / 仓库既有表。
 
