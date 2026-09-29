@@ -480,7 +480,7 @@ python p4d_coulomb_certify.py        # 8420 检查 / 609s
 
 ### 7.3 数据请求（可选）
 
-**邮件草稿**已准备（`theory/notes/literature/draft_email_mishra_margine.md`）：
+**邮件草稿**已准备（`theory/notes/literature/draft_email_mishra_margine_2026-09-18.md`）：
 - 收件人：Hari Paudyal, Mitsuaki Kawamura（Mishra/Margine 组）
 - 内容：请求 H3S/D3S 双频 λ^V 数据（非 factorized 核）
 - 理由：定量化顶角符号判据
