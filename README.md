@@ -119,7 +119,7 @@ superconductivity/
 - [x] 2026-09-08 **P2 v0.7：符号问题解决（`p2_schrodi_fsr.py`，12 测试）**。Schrödi Eq.(24) 转录更正（第 3、4 项 Δ/ω，reviewer+implementer 6× 放大双核对）后，两通道数值裁决：Z 升 Tc(+2333 δ/P)、Δ 压 Tc(−4847) 且约 2× 主导、净负(−2506)，符号与 EPW FSR(−0.21/−0.15) 一致，同位素比 δ_D/δ_H≈0.67 vs 0.71。**负号在两通道结构、不在顶角函数**；量级因 factorized 核过估 3–4× 不作定论 → `theory/notes/vertex/P2_round2_2026-09-08.md`
 - [x] 2026-09-08 H3S q 分布（Errea 2015）：耦合"fairly uniform" in q，非大 q 主导 → 各向同性路线给不出负号，佐证机制在通道结构 → `surveys/h3s_q_distribution_2026-09-08.md`
 - [ ] P2 下一步：精确双频 λ^V（非 factorized）定量级——需 Mishra/Margine 数据；跨材料检验（数据缺）；LaH10 自身顶角 DFT（判据层面已关闭）
-- [ ] 用户决定：是否向 Mishra/Margine 发数据请求（`theory/notes/literature/draft_email_mishra_margine.md`）
+- [ ] 用户决定：是否向 Mishra/Margine 发数据请求（`theory/notes/literature/draft_email_mishra_margine_2026-09-18.md`）
 - [x] 用 Mishra 的 H3S.dos 标定求解器 DOS 实现（非谐 <1 K，谐波 5–7 K）
 - [ ] 用求解器扫 DOS×顶角交叉项
 - [x] 2026-09-08 D1–D4 方向卡填入现状摘要与切入点（commit 15fd936）；D5–D7 保留为参考

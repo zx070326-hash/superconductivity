@@ -856,7 +856,7 @@ Einstein 代理把它设为 0，两块模型给 `−0.18 ~ −0.31`——**这�
 有了它，`⟨ω²⟩`、`δ_BRD` 同时定死，`α_budget` 的区间宽度从 0.12 塌到 `μ*` 的不确定度上，
 这个测试就从「机制演示」升级为「判别性检验」。
 （获取途径需用户授权：向 Errea/Calandra/Mauri 索取，或用 SSCHA 重算。
-仓库已有 `theory/notes/literature/draft_email_errea_lah10_alpha2F.md` 这类模板。）
+仓库已有 `theory/notes/literature/draft_email_errea_lah10_alpha2F_2026-09-18.md` 这类模板。）
 
 ---
 
