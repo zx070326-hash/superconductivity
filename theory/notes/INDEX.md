@@ -25,7 +25,7 @@
 |---|---|---|
 | [`theoremI/`](theoremI/) | 9 | 定理 I（配对通道排斥/秩一主导性免疫）与 𝔤(2) 证书 |
 | [`lemmaC/`](lemmaC/) | 19 | 引理 C（H 凹性）与 λ₂ 上界的历次证书、路线尝试 |
-| [`coulomb/`](coulomb/) | 19 | μ*>0 库仑：极值性、窗内唯一性、CE/CE′ 阈值、谱隙塌缩机制、H_μ 的托尔马乔夫透镜、(E-env) 凹包络三明治核验 |
+| [`coulomb/`](coulomb/) | 20 | μ*>0 库仑：极值性、窗内唯一性、CE/CE′ 阈值、谱隙塌缩机制、H_μ 的托尔马乔夫透镜、(E-env) 凹包络三明治核验、μ\* 分辨天花板 Φ 与 Leavens 零阶矩界的关系 |
 | [`gamma/`](gamma/) | 17 | γ-model + Coulomb：c₁²、Davis–Kahan/Schur 证书、渐近；非声子机制结构相容性侦察 |
 | [`materials/`](materials/) | 40 | 亏损预算证书化、材料数据核验、Eliashberg 交叉核验；Tier 1 材料检索与否定结论 |
 | [`isotope/`](isotope/) | 16 | 同位素指数（P1 系列）与 2Δ/kTc 第二观测量 |
@@ -137,6 +137,7 @@
 | [hmu_tolmachev_lens_2026-09-18.md](coulomb/hmu_tolmachev_lens_2026-09-18.md) | 2026-09-18 | μ*>0 极值性 ⟺ H_μ 凹性（双向）；H_μ 的「托尔马乔夫透镜」（s=ϖ/N_c∈[0.07,0.55]、阈值 μ̃≳0.545）；凹包络替代定理 (E-env) | mixed（§1.2 必要性、§1.3 (SAND)、§2.6 领头阶、§4.1 (E-env)、§4.4 极点计数为 **analytic**（建立在仓库 (CVX) 与引理 C 之上）；**其余全部 numerical-evidence**，零 certificate / 零 rational-exact） | live（exploratory：Ĥ_μ 无证书，R1/R3 未做） | §2.4 订正「类 II = 谱隙塌缩」（实测 gap/λ₁=1.0039，不降反升）；§3.4(a) 把仓库两参数拟合 s_c 换坐标后塌成 μ̃_c=0.553–0.585（跨度 138%→5.7%）；§4.3 自陈物理点预算 = 0 |
 | [mustar_failure_common_mechanism_2026-09-18.md](coulomb/mustar_failure_common_mechanism_2026-09-18.md) | 2026-09-18 | μ*>0 五处失效是否共享同一控制量：统一坐标、共同祖先（锥）与四个互不相干阈值 | mixed（§1 久期恒等式 (U1)(U2)、§2.5 (★A)、§3 命题 P1/P2/P3、§5.2 对数导数为 analytic；**其余全部 numerical-evidence**，零 certificate / 零 rational-exact） | live（「大统一」假说被本文自己证伪：是四类互不相干阈值，不是一个控制量） | §4.1 直接证伪「锥 / η / tanΘ 是同一个量」；§6 诚实清单自承 N≲3400 与 §5.2 未达笔记 N 规模 |
 | [hmu_tolmachev_lens_review_2026-09-18.md](coulomb/hmu_tolmachev_lens_review_2026-09-18.md) | 2026-09-18 | 对抗核验：peer agent（未提交，另一 worktree）宣称的 (E-env) 凹包络三明治定理（𝔨≤Ĥ_μ≤h₀，对一切 μ*≥0 无条件） | analytic（(CVX)、Weyl 单调、三明治逻辑）+ numerical-evidence（旗舰数字 +5.751e-3、Tc(P)/Tc(E)=1.0286 独立复现） | live（核心链条全 CONFIRMED，2 项因预算未复核，未计入通过率） | 总评「无 CHALLENGED；净收益=覆盖范围（无条件性），非数值收紧，已独立核实」 |
+| [mustar_resolved_ceiling_PhiE_2026-09-21.md](coulomb/mustar_resolved_ceiling_PhiE_2026-09-21.md) | 2026-09-21 | μ\* 分辨的一阶矩天花板 Φ：定理 (Φ-A) 给出**有证明**的 μ\* 因子（文献里 μ\*>0 天花板均非定理形态）；与 Leavens 1975 / Carbotte (2.50) 零阶矩界的精确比值恒等式 (★) 与判别曲线 ρ_crit；猜想 (FA) 证伪 | mixed（§9.2 (Φ-A) 不等式、§5.1 互不蕴含、§5.2 恒等式 (★)、§8 λ→∞ 机制为 **analytic**；`Φ_E` 网格 **109/112 certificate**；`c(μ*,r)`、ρ_crit、CE′ 56/56、(FA) 证伪为 **numerical-evidence**；零 rational-exact） | live（UNMERGED；(Φ-A) 常数待区间化，见 §12 项 2） | §0 显式写明新颖性只剩「一阶矩版 + 严格性」；§1 预算自陈 `Φ_E` 在 H₃S 格**不承重**（1.354×→min 1.310×）；§5.4 六条真实谱面积界 6/6 更紧；§13.1 (FA) 34/100 反例且 N 收敛 |
 
 ## γ-model
 
