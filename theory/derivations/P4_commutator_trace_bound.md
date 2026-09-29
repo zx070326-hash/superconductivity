@@ -1,5 +1,7 @@
 # P4 · 交换子 Frobenius 范数上界 —— 尝试记录 + Gap 1 闭合 + 绕道方案
 
+> **2026-09-29 接线注**：本稿正文里的「未合并」是写作当时的状态。`worktree-agent-af21da55…` 现已合入 master（`P4_concavity_q_route.md` Phase 2，`p4_concavity_gap2_gates.py`）；`worktree-agent-a8932ec4…` 未单独合入——其与 af21da5 冲突的文件取了 af21da5 的订正版，a8932ec 原版仅作为合并提交的第二父保留（`git show worktree-agent-a8932ec4c14045b28:theory/derivations/p4_concavity_gap2_gates.py` 可复原）。正文未改。
+
 > 本稿的两个子目标：
 > (i) 为 `‖[A,B]‖_F` 找一个 ≤2× 的解析/认证上界（`P4_concavity_q_route.md` §4.3 缺口 3）；
 > (ii) 闭合 §4.3 的 ϖ∈[1.46,1.63] 解析隙界缺口（「Gap 1」）。

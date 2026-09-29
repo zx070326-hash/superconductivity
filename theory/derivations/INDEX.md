@@ -3,13 +3,13 @@
 > **这是什么**：`theory/derivations/` 下每篇推导稿的一句话地图 —— 证了什么 / 严格性等级 / 数值门 / 版本状态。
 > 目的是让任何一个新的 Claude Code 会话（或人）在不通读全部文件的情况下，快速定位「哪条结论硬、硬到什么程度、门在哪、下一步在哪」。
 > **本索引只记录已入库（tracked，在 `p4-conj2` 分支上）稿件的 committed 状态**；六方向深挖轮的更深版本**部分已并入 `p4-conj2` 集成分支、部分仍 held 在各自 `deep-*` 分支**，逐分支合并状态见文末 §5 与 auto-memory。（`p4-conj2` 本身仍**未合并到 `master`**——仓库当前无 `main` 分支，只有 `master`；`p4-conj2` 领先 `master` 数十个提交，2026-09-19 复核确认。）
-> 维护：改动某稿的严格性/门/结论时，同步改这里对应行。最后更新 2026-09-19。
+> 维护：改动某稿的严格性/门/结论时，同步改这里对应行。最后更新 2026-09-29（接线合并）。
 
 ## 图例
 
 > 严格性等级定义与维护规则已搬至本目录的 [`CLAUDE.md`](CLAUDE.md)（单一真源，自动加载）。下方标注的是各稿「承重结论」的等级。
 
-**状态**：全部 **37 篇**（= 目录内 `.md` 39 个减去 `INDEX.md`/`CLAUDE.md`）均在 `p4-conj2` 分支（**未合并到 `master`**，按用户指令 hold）。版本号取自各稿头部。
+**状态**：全部 **41 篇**（= 目录内 `.md` 43 个减去 `INDEX.md`/`CLAUDE.md`）均在 `p4-conj2` 分支（**未合并到 `master`**，按用户指令 hold）。版本号取自各稿头部。　*（2026-09-29 接线：+4 篇 = `P4_cone_coercivity` / `P4_lemmaC_var_bound` / `P4_mustar_uniqueness_strategy` / `P4_strat_pi2_tower`，已合入 master。）*
 
 > **2026-09-20 记账订正**：此处原写「29 篇」，但**逐文件核对发现 7 篇从未入索引**
 > （`P4_commutator_trace_bound` / `P4_profile_upper_bound` / `P4_eta_over_M` 三篇是**旧欠账**，
@@ -57,7 +57,9 @@
 ### 4.2 μ\*=0 唯一性与核心引理
 
 - **`P4_uniqueness_strategy.md`**（v0.3，已证已审）—— **Conjecture 2 剩余半句（μ\*=0 唯一性）**：T↦𝔨(P,T) 严格单调递减，锥不变性 + Abel 分解把问题化为两条与 P、T 无关的组合不等式。引理 A/B 已初等证明，reviewer PROVED 无 CHALLENGED。严格性：**解析**。门：`p4_uniqueness_lemmas.py`（37）。
-- **`P4_concavity_q_route.md`**（102 检查）—— **引理 C 的 q-单调化路线**：(Q1)(Q2)(A) 解析证成；(B) 归约为两个明确解析缺口（ϖ∈[1.46,1.63] 谱隙下界 + 交换子 Frobenius 范数上界），真隙下 (B) 全程闭合、余量 4.4 倍。严格性：**部分解析 + 认证缺口**。门：`p4_concavity_q_route.py`（102 ck / 9.9s）。
+- **`P4_concavity_q_route.md`**（102 检查）—— **引理 C 的 q-单调化路线**：(Q1)(Q2)(A) 解析证成；(B) 归约为两个明确解析缺口（ϖ∈[1.46,1.63] 谱隙下界 + 交换子 Frobenius 范数上界），真隙下 (B) 全程闭合、余量 4.4 倍。严格性：**部分解析 + 认证缺口**。门：`p4_concavity_q_route.py`（102 ck / 9.9s）。 **2026-09-29 合入 Phase 2**（`worktree-agent-af21da55…`，含 bf7b1bc「Fix overclaim」）：`p4_concavity_gap2_gates.py` **165 ck / 0 fail（主会话 2026-09-29 复跑）**；谱隙下界 γ_lo>0 **仅 ϖ>1.3188 纯解析**（引理 7.2a，e₀ 单试探 + Θ\* + φ 单调性），ϖ∈[1.0,1.3188] 证书级、ϖ<1.0 含证书级输入；**并行分支 a8932ec 的「γ_lo>0 对一切 ϖ 成立」正是被订正的过度声称——冲突取订正侧，原版留在合并的第二父提交**。
+- **`P4_cone_coercivity.md`**（分支 `g2-cone-coercivity`，2026-09-29 合入；分支自注「勿合并」已由用户放行覆盖）—— **锥-矫顽性引理**：把 `P4_concavity_q_route.md` §3 定理 A 的定性 `E(x)>0` 升级为定量 `E(x) ≥ κ(x) > 0`（三条由弱到强的界 + 残余障碍图，§7.4 缺口 #4）。严格性：**稿内自述 rigorous（analytic），本会话未逐条复核**。门：`p4_cone_coercivity_probe.py`——稿内写 191 ck，**主会话 2026-09-29 复跑为 196 ck / 0 fail**（计数漂移，未影响通过）。被 `P4_concentration_bound.md` 单向引用。
+- **`P4_lemmaC_var_bound.md`**（分支 `worktree-agent-ae6c83eb…`，2026-09-29 合入）—— **引理 C 方差腿**：把 `Var_v(B)<γ·xE/2`（`P4_concavity_q_route.md` §4 终端不等式）归约为单个非负核算子 `M:=𝒪[f−f²]` 的标量谱不等式；三条精确恒等式用 mpmath dps=30 验证。严格性：**归约 + 精确恒等式为稿内自述证明/证书级；残余为已知瓶颈、数值证据**。门：`p4_lemmaC_var_gate.py` **217 ck / 0 fail（主会话 2026-09-29 复跑）**。
 - **`P4_gap_via_variance.md`**（54 检查）—— **Gap 1 闭合（方差路线，绕开交换子 Frobenius 范数）**：定理 F（bound1≤bound2）+ 引理 V（Bhatia–Davis）+ 定理 G（|C|<E 判据）；B NOT ⪰ 0（β_min<0），全程闭合（worst 0.29）。严格性：定理 F/引理 V **analytic**，β_max/β_min/定理 G **numerical-evidence**。门：`p4_gap_via_variance.py`（54 ck / 1.4s）。
 - **`P4_concentration_bound.md`**（123 检查）—— **顶本征向量集中界**（引理 C 与 smooth-coulomb 的共享瓶颈）：结构恒等式 (★)(★★)、先验界全部解析；主廓线下界 v_n ≥ c·v₀·u_n 在 **ϖ≥5** 给显式正常数 c；小 ϖ 仅数值证据。严格性：**解析（ϖ≥5）+ 数值证据（小 ϖ）**。门：`p4_concentration_bound.py`（**123 ck**，2026-09-15 主会话在 318cfe2 复跑 0 fail）。
 - **`P4_lemmaC_final_status.md`**（235 行，2026-09-20 由 `deep-lemmaC-analytic` 并入）—— **引理 C 的终局盘点：答案是「证书级，不是完全解析」**。链条 `引理 C ⟸ H″<0 ⟺ q′>0 ⟸ E>0 且 |C|<E` 中 `E>0` 已解析；`|C|<E` 归约到单一标量不等式 `(★) Var_v(B) < γ(q−m₃)`，证书级恒真（余量 ≥4×），但换成已知解析下界（cone-coercivity）只捕获真值 **0.58–0.73**，需 ≳0.90。本稿新做**三条**闭合尝试**全部失败**。严格性：结构 **analytic** + 残差边界 **numerical-evidence**。门：`p4_lemmaC_residual_gate.py`（**8 ck**，2026-09-20 主会话合并后从零复跑 0 fail）。
@@ -66,7 +68,8 @@
 
 ### 4.3 弱耦合 / 矩量塔展开
 
-- **`P4_weak_coupling_series.md`**（v1.0）—— **定理 W（双侧包围）+ W′（三项渐近）**，弱耦合久期级数，b₁ 闭式。严格性：**解析**。门：数值门（见稿内）。
+- **`P4_weak_coupling_series.md`**（**v1.1**，2026-09-29 合入 W″ 折入版）—— **定理 W（双侧包围）+ W′（三项渐近）+ W″（矩量塔：Λ 变量下 γ-free 全阶展开 + b₂ 首算 + π²-塔猜想收回）**，弱耦合久期级数，b₁ 闭式。严格性：W/W′ **解析**；W″/b₂ 部分见稿内分级（b₂ 判决为**证据级**，条件于开问题 γ∉ℚ[π²]）。门：`p4_moment_tower.py` **21 检查全过（主会话 2026-09-29 复跑，87 s）**。
+- **`P4_strat_pi2_tower.md`**（strategy + lemma-skeleton，分支 `worktree-agent-a0987668…`，2026-09-29 合入）—— **π²-塔猜想对 h(ϖ)**：约化、b₂、对抗性判决；**原猜想在 n=2 处被强证据否定（非严格证伪，条件于开问题 γ∉ℚ[π²]）**。严格性：**证据级**。探针 `pi2_tower_*.py`（已入库，本会话未复跑）。
 - **`P4_b1_closed_form.md`**（v1.0）—— **b₁ = 49π²/144 − 3**（闭式 + 存在性引理 + 三路交叉验证）。严格性：**解析**。门：`p4_b1_closed_form.py`（84 检查 / 187s）。
 - **`P4_b3_tower_weight4.md`**（EVIDENCE-LEVEL）—— 矩量塔 weight-4 档 κ₃/b₃/b₃^Tc：数值全阶可算，**PSLQ 双精度落空 ⟹ 无严格闭式**（已修一次求积偏差 bug）。严格性：**数值证据**。门：`p4_b3_tower.py`（22 检查）。⚠ 见 auto-memory `quadrature-bias-not-caught-by-dps-agreement`。
 
@@ -86,6 +89,7 @@
 
 - **`P4D_coulomb_operator.md`**（v0.6）—— 攻 U4：库仑赝势的严格算子形式 **𝔎_c = 2|u⟩⟨u|（秩一、半正定）**，首版 −D 项已证伪并订正；换序区间定理据 μ̃=μ\*/λ 单参族认证。严格性：**解析算子形式 + 认证轮**。门：`p4d_coulomb_falsify.py`（134）+ `verify_coulomb_fold.py`（30）。
 - **`P4D_coulomb_uniqueness.md`**（v0.2）—— **μ\*>0 唯一性（Conjecture 2 库仑推广）**：秩一预解式阈值策略；**窗内定理已给解析论证**（常数 float64、有限 N 为高估），跨窗全局唯一性在 r=3 处真实失效、已量化。严格性：**窗内解析 + 数值证据边界**。门：`p4d_coulomb_uniqueness.py`（**432 检查 / 371s**，PN=400，覆盖 11 物理锚点）。
+- **`P4_mustar_uniqueness_strategy.md`**（v0.1，分支 `worktree-agent-aa561c3a…`，2026-09-29 合入）—— **μ\*>0 唯一性/极值：Perron–Frobenius 与不可约性能否破除简并**（策略稿，**自述非定理**）：归并两种猜想的精确陈述，定位简并/双根发生位置与「锥/单指标 k=1」机制失效原因。严格性：**策略 + 诚实评估，无承重结论**。探针 `p4_mustar_pf_probe.py`（已按毕业规则入库）。
 - **`P4D_coulomb_extremal_threshold.md`**（v0.2）—— **库仑阈值定理（Einstein 极值版）** Q(P)≤Q(E) 的显式条件（六常数全在 A_P 上求值，可证形式）。严格性：定理陈述 **analytic**；阈值数值 **numerical-evidence**（float64、N 有限、六常数未区间化）。**§6 定理 CE′（久期精确根）**：Davis–Kahan 整段可去，14/14 锚点认证（旧 13/14），最劣余量 1.377（旧 1.002），κ<1 前提解除。门：`p4d_coulomb_extremal_threshold.py`（G1–G4，PN=300，≤10min）。
 - **`P4_coulomb_global_tc_certified.md`**（v0.2）—— **【方向 B 库仑】** 物理库仑（μ\*>0）**首个严格认证全局 Tc(λ) 双侧包围**。严格性：**认证**。门：`p4_coulomb_global_tc_certified.py`（自检 44 / 主管线 78）。
 - **`P4D_coulomb_multiatom_status.md`**（v0.1，177 行，2026-09-20 由 `deep-mustar-completion` 并入）—— **开放引理 L\*\* 的多原子数值探测（自标：探测报告，非定理）**：在姊妹探针找到的危险谱 `P=0.8δ(0.3s)+0.2δ(4.0s)` 上重算六常数，(a) 唯一性机制**逐字推广**、阈值 μ̃\*^{CE} 正确排除全部 7 个窗内非单调系列（**7/7**）；(b) 多原子极值刚性 Q(P)≤Q(E) 在 μ̃<μ̃\*^{CE} 时 233/233 成立、μ̃≥阈值时 24/24 正确排除。L\*（κ≥1 近交叉）诚实 **OPEN**。严格性：**numerical-evidence**。门：`probe_Lstarstar_uniqueness_multiatom.py`（**7/7**，2026-09-20 主会话合并后从零复跑 45.2s）+ `probe_Lstarstar_extremal_multiatom.py` + `probe_Lstarstar_extremal_search.py`（三个探针按毕业规则已 `git add -f` 入 `theory/notes/_scratch_ir/`；原稿写的 worktree 绝对路径已订正为仓库相对路径）。

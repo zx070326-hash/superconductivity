@@ -1,7 +1,7 @@
 # P4 · Moment tower, weight-4 rung: κ₃, b₃, b₃^Tc
 
 建立：2026-09-14　状态：EVIDENCE-LEVEL（数值全阶可算；PSLQ 双精度落空，非严格闭式证否）**——2026-09-14 二次订正（求积偏差 bug 修复并重跑，22/22 检查通过，见 §0）**
-上游（矩量塔 §2′/定理 W″ 与其数值门 `p4_moment_tower.py`，21 检查 κ₁/κ₂/b₂/b₂^Tc 首算）目前位于**未合并**分支 `f1b455d`（worktree-agent-ac2ddd8a83db416b2），尚未并入主线；本稿不依赖该文件——下方数值门自足。
+上游（矩量塔 §2′/定理 W″ 与其数值门 `p4_moment_tower.py`，21 检查 κ₁/κ₂/b₂/b₂^Tc 首算）原位于分支 `f1b455d`（worktree-agent-ac2ddd8a83db416b2），**已于 2026-09-29 合入 master**（`P4_weak_coupling_series.md` v1.1 §2′；门 21 检查复跑全过）；本稿不依赖该文件——下方数值门自足。
 本稿数值门：`theory/derivations/p4_b3_tower.py`（独立、只 import mpmath、dps 30→45→60、22 检查，≈40 分钟单线程，含两项结构性求积偏差诊断）。
 
 ## 0. 订正记录（务必先读）
